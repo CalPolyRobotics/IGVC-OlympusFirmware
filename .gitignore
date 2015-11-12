@@ -1,0 +1,10 @@
+
+*.o
+*.d
+*.elf
+*.bin
+*.out
+*.hex
+
+build/*
+
