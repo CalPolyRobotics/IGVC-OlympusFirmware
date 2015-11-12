@@ -1,0 +1,7 @@
+If SWD
+Device STM32F205RG
+r
+h
+loadbin build/program.bin, 0x08000000
+r
+q
