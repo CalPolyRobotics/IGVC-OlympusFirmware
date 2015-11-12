@@ -59,6 +59,8 @@ LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
 
+FLASH_SCRIPT = buildTools/flash.jlink
+
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
 
@@ -77,7 +79,7 @@ $(BUILDDIR)/%.o: %.s
 	$(CC) -c $(CFLAGS) $< -o $@
 
 flash: $(BIN)
-	JLinkExe -Device STM32F205RG -CommanderScript flash.jlink
+	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
 
 clean:
 	rm -rf build
