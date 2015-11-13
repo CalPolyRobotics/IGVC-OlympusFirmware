@@ -14,7 +14,8 @@ SOURCES += $(PERIPH)/src/stm32f2xx_gpio.c \
 		   $(PERIPH)/src/stm32f2xx_exti.c \
 		   $(PERIPH)/src/stm32f2xx_syscfg.c \
 		   $(PERIPH)/src/misc.c \
-		   $(PERIPH)/src/stm32f2xx_usart.c
+		   $(PERIPH)/src/stm32f2xx_usart.c \
+		   $(PERIPH)/src/stm32f2xx_tim.c \
 
 SOURCES += startup_stm32f2xx.s
 SOURCES += $(CONFIG)/stm32f2xx_it.c
@@ -25,6 +26,7 @@ SOURCES += main.c
 SOURCES += $(DRIVERS)/usart.c
 
 SOURCES += $(UTILS)/buffer8.c
+SOURCES += $(UTILS)/timer.c
 
 SOURCES += $(CONFIG)/newlib_hooks.c
 
