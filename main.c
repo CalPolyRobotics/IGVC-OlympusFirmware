@@ -4,6 +4,12 @@
 
 static __IO uint32_t TimingDelay;
 
+Timer_Return LEDBlink(void* pin)
+{
+  GPIO_ToggleBits(GPIOA, *(uint32_t*)pin);
+  return CONTINUE_TIMER;
+}
+
 int main(void)
 {
   RCC_ClocksTypeDef RCC_Clocks;
@@ -28,15 +34,22 @@ int main(void)
 
   GPIO_Init(GPIOA, &gpio);
 
-  GPIO_ResetBits(GPIOA, GPIO_Pin_4);
+  GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+  GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 
   initIGVCUsart();
   initIGVCCallbackTimer();
 
+  uint32_t pin4 = (1 << 4);
+  uint32_t pin5 = (1 << 5);
+  uint32_t pin7 = (1 << 7);
+
+  addCallbackTimer(2000, LEDBlink, &pin4);
+  addCallbackTimer(1000, LEDBlink, &pin5);
+  addCallbackTimer(500, LEDBlink, &pin7);
   while(1)
   {
-    printf("%d\r\n", TIM9->CNT);
-    Delay(5);
+    Delay(100);
   }
 
   while(1);
