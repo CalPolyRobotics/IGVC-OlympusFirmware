@@ -27,7 +27,6 @@ void initIGVCCallbackTimer()
     NVIC_SetPriority(TIM1_BRK_TIM9_IRQn, 2);
     NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
 
-
     CALLBACK_TIMER->CR1 = TIM_CR1_CEN | TIM_CR1_ARPE;
 
     uint32_t ndx;

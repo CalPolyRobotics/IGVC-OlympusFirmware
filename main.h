@@ -33,6 +33,7 @@
 #include "stm32f2xx.h"
 #include "stm32f2xx_hal_conf.h"
 #include <stdio.h>
+#include "config.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

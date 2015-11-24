@@ -3,7 +3,8 @@
 
 #include "main.h"
 
-#include "utils/buffer8.h"
+#include "buffer8.h"
+#include "gpio.h"
 
 
 static uint8_t rxBuffer[64];
@@ -44,7 +45,7 @@ void initIGVCUsart()
 
 void HAL_USART_MspInit(USART_HandleTypeDef* husart)
 {
-  GPIO_InitTypeDef gpio;
+  /*GPIO_InitTypeDef gpio;
 
   gpio.Pin = GPIO_PIN_6 | GPIO_PIN_7;
   gpio.Mode = GPIO_MODE_AF_PP;
@@ -52,7 +53,10 @@ void HAL_USART_MspInit(USART_HandleTypeDef* husart)
   gpio.Speed = GPIO_SPEED_FREQ_HIGH;
   gpio.Alternate = GPIO_AF7_USART1;
 
-  HAL_GPIO_Init(GPIOB, &gpio);
+  HAL_GPIO_Init(GPIOB, &gpio);*/
+
+  initGPIOAlternate_PP(GPIO_USART_TX, USART_TX_AF);
+  initGPIOAlternate_PP(GPIO_USART_RX, USART_RX_AF);
 }
 
 void usartPut(uint8_t data)

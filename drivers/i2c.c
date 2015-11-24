@@ -1,4 +1,5 @@
 #include "main.h"
+#include "gpio.h"
 
 #define IGVC_I2C I2C2
 
@@ -24,15 +25,18 @@ void initIGVCI2C()
 
 void HAL_I2C_MspInit(I2C_HandleTypeDef *hi2c)
 {
-   GPIO_InitTypeDef gpio;
+  // GPIO_InitTypeDef gpio;
 
-  gpio.Pin = GPIO_PIN_10 | GPIO_PIN_11;
-  gpio.Mode = GPIO_MODE_AF_OD;
-  gpio.Pull = GPIO_NOPULL;
-  gpio.Speed = GPIO_SPEED_FREQ_HIGH;
-  gpio.Alternate = GPIO_AF4_I2C1;
+  // gpio.Pin = GPIO_PIN_10 | GPIO_PIN_11;
+  // gpio.Mode = GPIO_MODE_AF_OD;
+  // gpio.Pull = GPIO_NOPULL;
+  // gpio.Speed = GPIO_SPEED_FREQ_HIGH;
+  // gpio.Alternate = GPIO_AF4_I2C1;
 
-  HAL_GPIO_Init(GPIOB, &gpio); 
+  // HAL_GPIO_Init(GPIOB, &gpio); 
+
+  initGPIOAlternate_OD(GPIO_I2C_SDA, I2C_SDA_AF);
+  initGPIOAlternate_OD(GPIO_I2C_SCL, I2C_SCL_AF);
 }
 
 void testI2C()
