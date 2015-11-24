@@ -54,7 +54,7 @@ LD = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
  	
-CFLAGS  = -O0 -g -Wall -I.\
+CFLAGS  = -O0 -g -Wall -Werror -I.\
    -mcpu=cortex-m3 -mthumb \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER

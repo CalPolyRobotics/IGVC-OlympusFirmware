@@ -1,6 +1,7 @@
 #include "main.h"
 #include "timer.h"
 #include "i2c.h"
+#include "usart.h"
 
 
 static __IO uint32_t TimingDelay;

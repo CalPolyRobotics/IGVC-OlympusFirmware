@@ -161,10 +161,10 @@
 /** @addtogroup USART_Private_Functions
   * @{
   */
-static HAL_StatusTypeDef USART_Transmit_IT(USART_HandleTypeDef *husart);
-static HAL_StatusTypeDef USART_EndTransmit_IT(USART_HandleTypeDef *husart);
-static HAL_StatusTypeDef USART_Receive_IT(USART_HandleTypeDef *husart);
-static HAL_StatusTypeDef USART_TransmitReceive_IT(USART_HandleTypeDef *husart);
+// static HAL_StatusTypeDef USART_Transmit_IT(USART_HandleTypeDef *husart);
+// static HAL_StatusTypeDef USART_EndTransmit_IT(USART_HandleTypeDef *husart);
+// static HAL_StatusTypeDef USART_Receive_IT(USART_HandleTypeDef *husart);
+// static HAL_StatusTypeDef USART_TransmitReceive_IT(USART_HandleTypeDef *husart);
 static void USART_SetConfig (USART_HandleTypeDef *husart);
 static void USART_DMATransmitCplt(DMA_HandleTypeDef *hdma);
 static void USART_DMATxHalfCplt(DMA_HandleTypeDef *hdma);
@@ -673,157 +673,157 @@ HAL_StatusTypeDef HAL_USART_TransmitReceive(USART_HandleTypeDef *husart, uint8_t
   }
 }
 
-/**
-  * @brief  Simplex Send an amount of data in non-blocking mode. 
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @param  pTxData: Pointer to data buffer
-  * @param  Size: Amount of data to be sent
-  * @retval HAL status
-  * @note   The USART errors are not managed to avoid the overrun error.
-  */
-HAL_StatusTypeDef HAL_USART_Transmit_IT(USART_HandleTypeDef *husart, uint8_t *pTxData, uint16_t Size)
-{
-  if(husart->State == HAL_USART_STATE_READY)
-  {
-    if((pTxData == NULL) || (Size == 0)) 
-    {
-      return HAL_ERROR;
-    }
+// /**
+//   * @brief  Simplex Send an amount of data in non-blocking mode. 
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @param  pTxData: Pointer to data buffer
+//   * @param  Size: Amount of data to be sent
+//   * @retval HAL status
+//   * @note   The USART errors are not managed to avoid the overrun error.
+//   */
+// HAL_StatusTypeDef HAL_USART_Transmit_IT(USART_HandleTypeDef *husart, uint8_t *pTxData, uint16_t Size)
+// {
+//   if(husart->State == HAL_USART_STATE_READY)
+//   {
+//     if((pTxData == NULL) || (Size == 0)) 
+//     {
+//       return HAL_ERROR;
+//     }
 
-    /* Process Locked */
-    __HAL_LOCK(husart);
+//     /* Process Locked */
+//     __HAL_LOCK(husart);
 
-    husart->pTxBuffPtr = pTxData;
-    husart->TxXferSize = Size;
-    husart->TxXferCount = Size;
+//     husart->pTxBuffPtr = pTxData;
+//     husart->TxXferSize = Size;
+//     husart->TxXferCount = Size;
 
-    husart->ErrorCode = HAL_USART_ERROR_NONE;
-    husart->State = HAL_USART_STATE_BUSY_TX;
+//     husart->ErrorCode = HAL_USART_ERROR_NONE;
+//     husart->State = HAL_USART_STATE_BUSY_TX;
 
-    /* The USART Error Interrupts: (Frame error, Noise error, Overrun error) 
-       are not managed by the USART transmit process to avoid the overrun interrupt
-       when the USART mode is configured for transmit and receive "USART_MODE_TX_RX"
-       to benefit for the frame error and noise interrupts the USART mode should be
-       configured only for transmit "USART_MODE_TX"
-       The __HAL_USART_ENABLE_IT(husart, USART_IT_ERR) can be used to enable the Frame error,
-       Noise error interrupt */
+//     /* The USART Error Interrupts: (Frame error, Noise error, Overrun error) 
+//        are not managed by the USART transmit process to avoid the overrun interrupt
+//        when the USART mode is configured for transmit and receive "USART_MODE_TX_RX"
+//        to benefit for the frame error and noise interrupts the USART mode should be
+//        configured only for transmit "USART_MODE_TX"
+//        The __HAL_USART_ENABLE_IT(husart, USART_IT_ERR) can be used to enable the Frame error,
+//        Noise error interrupt */
 
-    /* Process Unlocked */
-    __HAL_UNLOCK(husart);
+//     /* Process Unlocked */
+//     __HAL_UNLOCK(husart);
 
-    /* Enable the USART Transmit Data Register Empty Interrupt */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_TXE);
+//     /* Enable the USART Transmit Data Register Empty Interrupt */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_TXE);
 
-    return HAL_OK;
-  }
-  else
-  {
-    return HAL_BUSY;
-  }
-}
+//     return HAL_OK;
+//   }
+//   else
+//   {
+//     return HAL_BUSY;
+//   }
+// }
 
-/**
-  * @brief  Simplex Receive an amount of data in non-blocking mode. 
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @param  pRxData: Pointer to data buffer
-  * @param  Size: Amount of data to be received
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USART_Receive_IT(USART_HandleTypeDef *husart, uint8_t *pRxData, uint16_t Size)
-{
-  if(husart->State == HAL_USART_STATE_READY)
-  {
-    if((pRxData == NULL) || (Size == 0)) 
-    {
-      return HAL_ERROR;
-    }
-    /* Process Locked */
-    __HAL_LOCK(husart);
+// /**
+//   * @brief  Simplex Receive an amount of data in non-blocking mode. 
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @param  pRxData: Pointer to data buffer
+//   * @param  Size: Amount of data to be received
+//   * @retval HAL status
+//   */
+// HAL_StatusTypeDef HAL_USART_Receive_IT(USART_HandleTypeDef *husart, uint8_t *pRxData, uint16_t Size)
+// {
+//   if(husart->State == HAL_USART_STATE_READY)
+//   {
+//     if((pRxData == NULL) || (Size == 0)) 
+//     {
+//       return HAL_ERROR;
+//     }
+//     /* Process Locked */
+//     __HAL_LOCK(husart);
 
-    husart->pRxBuffPtr = pRxData;
-    husart->RxXferSize = Size;
-    husart->RxXferCount = Size;
+//     husart->pRxBuffPtr = pRxData;
+//     husart->RxXferSize = Size;
+//     husart->RxXferCount = Size;
 
-    husart->ErrorCode = HAL_USART_ERROR_NONE;
-    husart->State = HAL_USART_STATE_BUSY_RX;
+//     husart->ErrorCode = HAL_USART_ERROR_NONE;
+//     husart->State = HAL_USART_STATE_BUSY_RX;
 
-    /* Process Unlocked */
-    __HAL_UNLOCK(husart);
+//     /* Process Unlocked */
+//     __HAL_UNLOCK(husart);
 
-    /* Enable the USART Data Register not empty Interrupt */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_RXNE); 
+//     /* Enable the USART Data Register not empty Interrupt */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_RXNE); 
 
-    /* Enable the USART Parity Error Interrupt */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_PE);
+//     /* Enable the USART Parity Error Interrupt */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_PE);
 
-    /* Enable the USART Error Interrupt: (Frame error, noise error, overrun error) */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_ERR);
+//     /* Enable the USART Error Interrupt: (Frame error, noise error, overrun error) */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_ERR);
 
-    /* Send dummy byte in order to generate the clock for the slave to send data */
-    husart->Instance->DR = (DUMMY_DATA & (uint16_t)0x01FF);    
+//     /* Send dummy byte in order to generate the clock for the slave to send data */
+//     husart->Instance->DR = (DUMMY_DATA & (uint16_t)0x01FF);    
 
-    return HAL_OK;
-  }
-  else
-  {
-    return HAL_BUSY;
-  }
-}
+//     return HAL_OK;
+//   }
+//   else
+//   {
+//     return HAL_BUSY;
+//   }
+// }
 
-/**
-  * @brief  Full-Duplex Send receive an amount of data in full-duplex mode (non-blocking). 
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @param  pTxData: Pointer to data transmitted buffer
-  * @param  pRxData: Pointer to data received buffer 
-  * @param  Size: Amount of data to be received
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_USART_TransmitReceive_IT(USART_HandleTypeDef *husart, uint8_t *pTxData, uint8_t *pRxData,  uint16_t Size)
-{
-  if(husart->State == HAL_USART_STATE_READY)
-  {
-    if((pTxData == NULL) || (pRxData == NULL) || (Size == 0)) 
-    {
-      return HAL_ERROR;
-    }
-    /* Process Locked */
-    __HAL_LOCK(husart);
+// /**
+//   * @brief  Full-Duplex Send receive an amount of data in full-duplex mode (non-blocking). 
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @param  pTxData: Pointer to data transmitted buffer
+//   * @param  pRxData: Pointer to data received buffer 
+//   * @param  Size: Amount of data to be received
+//   * @retval HAL status
+//   */
+// HAL_StatusTypeDef HAL_USART_TransmitReceive_IT(USART_HandleTypeDef *husart, uint8_t *pTxData, uint8_t *pRxData,  uint16_t Size)
+// {
+//   if(husart->State == HAL_USART_STATE_READY)
+//   {
+//     if((pTxData == NULL) || (pRxData == NULL) || (Size == 0)) 
+//     {
+//       return HAL_ERROR;
+//     }
+//     /* Process Locked */
+//     __HAL_LOCK(husart);
 
-    husart->pRxBuffPtr = pRxData;
-    husart->RxXferSize = Size;
-    husart->RxXferCount = Size;
-    husart->pTxBuffPtr = pTxData;
-    husart->TxXferSize = Size;
-    husart->TxXferCount = Size;
+//     husart->pRxBuffPtr = pRxData;
+//     husart->RxXferSize = Size;
+//     husart->RxXferCount = Size;
+//     husart->pTxBuffPtr = pTxData;
+//     husart->TxXferSize = Size;
+//     husart->TxXferCount = Size;
 
-    husart->ErrorCode = HAL_USART_ERROR_NONE;
-    husart->State = HAL_USART_STATE_BUSY_TX_RX;
+//     husart->ErrorCode = HAL_USART_ERROR_NONE;
+//     husart->State = HAL_USART_STATE_BUSY_TX_RX;
 
-    /* Process Unlocked */
-    __HAL_UNLOCK(husart);
+//     /* Process Unlocked */
+//     __HAL_UNLOCK(husart);
     
-    /* Enable the USART Data Register not empty Interrupt */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_RXNE); 
+//     /* Enable the USART Data Register not empty Interrupt */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_RXNE); 
 
-    /* Enable the USART Parity Error Interrupt */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_PE);
+//     /* Enable the USART Parity Error Interrupt */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_PE);
 
-    /* Enable the USART Error Interrupt: (Frame error, noise error, overrun error) */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_ERR);
+//     /* Enable the USART Error Interrupt: (Frame error, noise error, overrun error) */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_ERR);
 
-    /* Enable the USART Transmit Data Register Empty Interrupt */
-    __HAL_USART_ENABLE_IT(husart, USART_IT_TXE);
+//     /* Enable the USART Transmit Data Register Empty Interrupt */
+//     __HAL_USART_ENABLE_IT(husart, USART_IT_TXE);
 
-    return HAL_OK;
-  }
-  else
-  {
-    return HAL_BUSY; 
-  }
-}
+//     return HAL_OK;
+//   }
+//   else
+//   {
+//     return HAL_BUSY; 
+//   }
+// }
 
 /**
   * @brief  Simplex Send an amount of data in non-blocking mode. 
@@ -1528,247 +1528,247 @@ static HAL_StatusTypeDef USART_WaitOnFlagUntilTimeout(USART_HandleTypeDef *husar
 }
 
   
-/**
-  * @brief  Simplex Send an amount of data in non-blocking mode. 
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @retval HAL status
-  * @note   The USART errors are not managed to avoid the overrun error.
-  */
-static HAL_StatusTypeDef USART_Transmit_IT(USART_HandleTypeDef *husart)
-{
-  uint16_t* tmp;
+// /**
+//   * @brief  Simplex Send an amount of data in non-blocking mode. 
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @retval HAL status
+//   * @note   The USART errors are not managed to avoid the overrun error.
+//   */
+// static HAL_StatusTypeDef USART_Transmit_IT(USART_HandleTypeDef *husart)
+// {
+//   uint16_t* tmp;
  
-  if(husart->State == HAL_USART_STATE_BUSY_TX)
-  {
-    if(husart->Init.WordLength == USART_WORDLENGTH_9B)
-    {
-      tmp = (uint16_t*) husart->pTxBuffPtr;
-      husart->Instance->DR = (uint16_t)(*tmp & (uint16_t)0x01FF);
-      if(husart->Init.Parity == USART_PARITY_NONE)
-      {
-        husart->pTxBuffPtr += 2;
-      }
-      else
-      {
-        husart->pTxBuffPtr += 1;
-      }
-    } 
-    else
-    { 
-      husart->Instance->DR = (uint8_t)(*husart->pTxBuffPtr++ & (uint8_t)0x00FF);
-    }
+//   if(husart->State == HAL_USART_STATE_BUSY_TX)
+//   {
+//     if(husart->Init.WordLength == USART_WORDLENGTH_9B)
+//     {
+//       tmp = (uint16_t*) husart->pTxBuffPtr;
+//       husart->Instance->DR = (uint16_t)(*tmp & (uint16_t)0x01FF);
+//       if(husart->Init.Parity == USART_PARITY_NONE)
+//       {
+//         husart->pTxBuffPtr += 2;
+//       }
+//       else
+//       {
+//         husart->pTxBuffPtr += 1;
+//       }
+//     } 
+//     else
+//     { 
+//       husart->Instance->DR = (uint8_t)(*husart->pTxBuffPtr++ & (uint8_t)0x00FF);
+//     }
     
-    if(--husart->TxXferCount == 0)
-    {
-      /* Disable the USART Transmit data register empty Interrupt */
-      __HAL_USART_DISABLE_IT(husart, USART_IT_TXE);
+//     if(--husart->TxXferCount == 0)
+//     {
+//       /* Disable the USART Transmit data register empty Interrupt */
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_TXE);
 
-      /* Enable the USART Transmit Complete Interrupt */    
-      __HAL_USART_ENABLE_IT(husart, USART_IT_TC);
-    }
-    return HAL_OK;
-  }
-  else
-  {
-    return HAL_BUSY;
-  }
-}
+//       /* Enable the USART Transmit Complete Interrupt */    
+//       __HAL_USART_ENABLE_IT(husart, USART_IT_TC);
+//     }
+//     return HAL_OK;
+//   }
+//   else
+//   {
+//     return HAL_BUSY;
+//   }
+// }
 
-/**
-  * @brief  Wraps up transmission in non blocking mode.
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @retval HAL status
-  */
-static HAL_StatusTypeDef USART_EndTransmit_IT(USART_HandleTypeDef *husart)
-{
-  /* Disable the USART Transmit Complete Interrupt */    
-  __HAL_USART_DISABLE_IT(husart, USART_IT_TC);
+// /**
+//   * @brief  Wraps up transmission in non blocking mode.
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @retval HAL status
+//   */
+// static HAL_StatusTypeDef USART_EndTransmit_IT(USART_HandleTypeDef *husart)
+// {
+//   /* Disable the USART Transmit Complete Interrupt */    
+//   __HAL_USART_DISABLE_IT(husart, USART_IT_TC);
   
-  /* Disable the USART Error Interrupt: (Frame error, noise error, overrun error) */
-  __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
+//   /* Disable the USART Error Interrupt: (Frame error, noise error, overrun error) */
+//   __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
     
-  husart->State = HAL_USART_STATE_READY;
+//   husart->State = HAL_USART_STATE_READY;
    
-  HAL_USART_TxCpltCallback(husart);
+//   HAL_USART_TxCpltCallback(husart);
   
-  return HAL_OK;
-}
+//   return HAL_OK;
+// }
 
-/**
-  * @brief  Simplex Receive an amount of data in non-blocking mode. 
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @retval HAL status
-  */
-static HAL_StatusTypeDef USART_Receive_IT(USART_HandleTypeDef *husart)
-{
-  uint16_t* tmp;
-  if(husart->State == HAL_USART_STATE_BUSY_RX)
-  {
-    if(husart->Init.WordLength == USART_WORDLENGTH_9B)
-    {
-      tmp = (uint16_t*) husart->pRxBuffPtr;
-      if(husart->Init.Parity == USART_PARITY_NONE)
-      {
-        *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x01FF);
-        husart->pRxBuffPtr += 2;
-      }
-      else
-      {
-        *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x00FF);
-        husart->pRxBuffPtr += 1;
-      }
-      if(--husart->RxXferCount != 0x00) 
-      {
-        /* Send dummy byte in order to generate the clock for the slave to send the next data */
-        husart->Instance->DR = (DUMMY_DATA & (uint16_t)0x01FF); 
-      }
-    } 
-    else
-    {
-      if(husart->Init.Parity == USART_PARITY_NONE)
-      {
-        *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x00FF);
-      }
-      else
-      {
-        *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x007F);
-      }
+// /**
+//   * @brief  Simplex Receive an amount of data in non-blocking mode. 
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @retval HAL status
+//   */
+// static HAL_StatusTypeDef USART_Receive_IT(USART_HandleTypeDef *husart)
+// {
+//   uint16_t* tmp;
+//   if(husart->State == HAL_USART_STATE_BUSY_RX)
+//   {
+//     if(husart->Init.WordLength == USART_WORDLENGTH_9B)
+//     {
+//       tmp = (uint16_t*) husart->pRxBuffPtr;
+//       if(husart->Init.Parity == USART_PARITY_NONE)
+//       {
+//         *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x01FF);
+//         husart->pRxBuffPtr += 2;
+//       }
+//       else
+//       {
+//         *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x00FF);
+//         husart->pRxBuffPtr += 1;
+//       }
+//       if(--husart->RxXferCount != 0x00) 
+//       {
+//         /* Send dummy byte in order to generate the clock for the slave to send the next data */
+//         husart->Instance->DR = (DUMMY_DATA & (uint16_t)0x01FF); 
+//       }
+//     } 
+//     else
+//     {
+//       if(husart->Init.Parity == USART_PARITY_NONE)
+//       {
+//         *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x00FF);
+//       }
+//       else
+//       {
+//         *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x007F);
+//       }
 
-      if(--husart->RxXferCount != 0x00) 
-      {
-        /* Send dummy byte in order to generate the clock for the slave to send the next data */
-        husart->Instance->DR = (DUMMY_DATA & (uint16_t)0x00FF);  
-      }
-    }
+//       if(--husart->RxXferCount != 0x00) 
+//       {
+//         /* Send dummy byte in order to generate the clock for the slave to send the next data */
+//         husart->Instance->DR = (DUMMY_DATA & (uint16_t)0x00FF);  
+//       }
+//     }
 
-    if(husart->RxXferCount == 0)
-    {
-      /* Disable the USART RXNE Interrupt */
-      __HAL_USART_DISABLE_IT(husart, USART_IT_RXNE);
+//     if(husart->RxXferCount == 0)
+//     {
+//       /* Disable the USART RXNE Interrupt */
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_RXNE);
 
-      /* Disable the USART Parity Error Interrupt */
-      __HAL_USART_DISABLE_IT(husart, USART_IT_PE);
+//       /* Disable the USART Parity Error Interrupt */
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_PE);
 
-      /* Disable the USART Error Interrupt: (Frame error, noise error, overrun error) */
-      __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
+//       /* Disable the USART Error Interrupt: (Frame error, noise error, overrun error) */
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
 
-      husart->State = HAL_USART_STATE_READY;
-      HAL_USART_RxCpltCallback(husart);
+//       husart->State = HAL_USART_STATE_READY;
+//       HAL_USART_RxCpltCallback(husart);
       
-      return HAL_OK;
-    }
-    return HAL_OK;
-  }
-  else
-  {
-    return HAL_BUSY; 
-  }
-}
+//       return HAL_OK;
+//     }
+//     return HAL_OK;
+//   }
+//   else
+//   {
+//     return HAL_BUSY; 
+//   }
+// }
 
-/**
-  * @brief  Full-Duplex Send receive an amount of data in full-duplex mode (non-blocking). 
-  * @param  husart: pointer to a USART_HandleTypeDef structure that contains
-  *                the configuration information for the specified USART module.
-  * @retval HAL status
-  */
-static HAL_StatusTypeDef USART_TransmitReceive_IT(USART_HandleTypeDef *husart)
-{
-  uint16_t* tmp;
+// /**
+//   * @brief  Full-Duplex Send receive an amount of data in full-duplex mode (non-blocking). 
+//   * @param  husart: pointer to a USART_HandleTypeDef structure that contains
+//   *                the configuration information for the specified USART module.
+//   * @retval HAL status
+//   */
+// static HAL_StatusTypeDef USART_TransmitReceive_IT(USART_HandleTypeDef *husart)
+// {
+//   uint16_t* tmp;
 
-  if(husart->State == HAL_USART_STATE_BUSY_TX_RX)
-  {
-    if(husart->TxXferCount != 0x00)
-    {
-      if(__HAL_USART_GET_FLAG(husart, USART_FLAG_TXE) != RESET)
-      {
-        if(husart->Init.WordLength == USART_WORDLENGTH_9B)
-        {
-          tmp = (uint16_t*) husart->pTxBuffPtr;
-          husart->Instance->DR = (uint16_t)(*tmp & (uint16_t)0x01FF);
-          if(husart->Init.Parity == USART_PARITY_NONE)
-          {
-            husart->pTxBuffPtr += 2;
-          }
-          else
-          {
-            husart->pTxBuffPtr += 1;
-          }
-        } 
-        else
-        {
-          husart->Instance->DR = (uint8_t)(*husart->pTxBuffPtr++ & (uint8_t)0x00FF);
-        }
-        husart->TxXferCount--;
+//   if(husart->State == HAL_USART_STATE_BUSY_TX_RX)
+//   {
+//     if(husart->TxXferCount != 0x00)
+//     {
+//       if(__HAL_USART_GET_FLAG(husart, USART_FLAG_TXE) != RESET)
+//       {
+//         if(husart->Init.WordLength == USART_WORDLENGTH_9B)
+//         {
+//           tmp = (uint16_t*) husart->pTxBuffPtr;
+//           husart->Instance->DR = (uint16_t)(*tmp & (uint16_t)0x01FF);
+//           if(husart->Init.Parity == USART_PARITY_NONE)
+//           {
+//             husart->pTxBuffPtr += 2;
+//           }
+//           else
+//           {
+//             husart->pTxBuffPtr += 1;
+//           }
+//         } 
+//         else
+//         {
+//           husart->Instance->DR = (uint8_t)(*husart->pTxBuffPtr++ & (uint8_t)0x00FF);
+//         }
+//         husart->TxXferCount--;
 
-        /* Check the latest data transmitted */
-        if(husart->TxXferCount == 0)
-        {
-           __HAL_USART_DISABLE_IT(husart, USART_IT_TXE);
-        }
-      }
-    }
+//         /* Check the latest data transmitted */
+//         if(husart->TxXferCount == 0)
+//         {
+//            __HAL_USART_DISABLE_IT(husart, USART_IT_TXE);
+//         }
+//       }
+//     }
 
-    if(husart->RxXferCount != 0x00)
-    {
-      if(__HAL_USART_GET_FLAG(husart, USART_FLAG_RXNE) != RESET)
-      {
-        if(husart->Init.WordLength == USART_WORDLENGTH_9B)
-        {
-          tmp = (uint16_t*) husart->pRxBuffPtr;
-          if(husart->Init.Parity == USART_PARITY_NONE)
-          {
-            *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x01FF);
-            husart->pRxBuffPtr += 2;
-          }
-          else
-          {
-            *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x00FF);
-            husart->pRxBuffPtr += 1;
-          }
-        } 
-        else
-        {
-          if(husart->Init.Parity == USART_PARITY_NONE)
-          {
-            *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x00FF);
-          }
-          else
-          {
-            *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x007F);
-          }
-        }
-        husart->RxXferCount--;
-      }
-    }
+//     if(husart->RxXferCount != 0x00)
+//     {
+//       if(__HAL_USART_GET_FLAG(husart, USART_FLAG_RXNE) != RESET)
+//       {
+//         if(husart->Init.WordLength == USART_WORDLENGTH_9B)
+//         {
+//           tmp = (uint16_t*) husart->pRxBuffPtr;
+//           if(husart->Init.Parity == USART_PARITY_NONE)
+//           {
+//             *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x01FF);
+//             husart->pRxBuffPtr += 2;
+//           }
+//           else
+//           {
+//             *tmp = (uint16_t)(husart->Instance->DR & (uint16_t)0x00FF);
+//             husart->pRxBuffPtr += 1;
+//           }
+//         } 
+//         else
+//         {
+//           if(husart->Init.Parity == USART_PARITY_NONE)
+//           {
+//             *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x00FF);
+//           }
+//           else
+//           {
+//             *husart->pRxBuffPtr++ = (uint8_t)(husart->Instance->DR & (uint8_t)0x007F);
+//           }
+//         }
+//         husart->RxXferCount--;
+//       }
+//     }
 
-    /* Check the latest data received */
-    if(husart->RxXferCount == 0)
-    {
-      __HAL_USART_DISABLE_IT(husart, USART_IT_RXNE);
+//     /* Check the latest data received */
+//     if(husart->RxXferCount == 0)
+//     {
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_RXNE);
 
-      /* Disable the USART Parity Error Interrupt */
-      __HAL_USART_DISABLE_IT(husart, USART_IT_PE);
+//       /* Disable the USART Parity Error Interrupt */
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_PE);
 
-      /* Disable the USART Error Interrupt: (Frame error, noise error, overrun error) */
-      __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
+//       /* Disable the USART Error Interrupt: (Frame error, noise error, overrun error) */
+//       __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
       
-      husart->State = HAL_USART_STATE_READY;
+//       husart->State = HAL_USART_STATE_READY;
 
-      HAL_USART_TxRxCpltCallback(husart);
+//       HAL_USART_TxRxCpltCallback(husart);
 
-      return HAL_OK;
-    }
+//       return HAL_OK;
+//     }
 
-    return HAL_OK;
-  }
-  else
-  {
-    return HAL_BUSY; 
-  }
-}
+//     return HAL_OK;
+//   }
+//   else
+//   {
+//     return HAL_BUSY; 
+//   }
+// }
 
 /**
   * @brief  Configures the USART peripheral. 

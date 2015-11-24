@@ -84,7 +84,7 @@ void usartWrite(uint8_t* data, uint32_t size)
 
 void usartPrint(char* data)
 {
-   usartWrite(data, strlen(data));
+   usartWrite((uint8_t*)data, strlen(data));
 }
 
 uint8_t usartGet()

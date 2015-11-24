@@ -45,6 +45,7 @@
  extern "C" {
 #endif
 
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
@@ -226,6 +227,12 @@
 /**
   * @brief Include module's header file 
   */
+
+#include "stm32f2xx_hal_def.h"
+
+#ifdef HAL_MODULE_ENABLED
+  #include "stm32f2xx_hal.h"
+#endif
 
 #ifdef HAL_RCC_MODULE_ENABLED
   #include "stm32f2xx_hal_rcc.h"
