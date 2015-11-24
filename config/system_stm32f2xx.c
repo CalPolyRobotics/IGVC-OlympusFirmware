@@ -136,6 +136,15 @@
   * @{
   */
 
+#if !defined  (HSE_VALUE) 
+  #define HSE_VALUE    ((uint32_t)20000000) /*!< Value of the External oscillator in Hz */
+#endif /* HSE_VALUE */
+
+#if !defined  (HSI_VALUE)
+  #define HSI_VALUE    ((uint32_t)16000000) /*!< Value of the Internal oscillator in Hz*/
+#endif /* HSI_VALUE */       
+
+#define HSE_STARTUP_TIMEOUT 10000
 /*!< Uncomment the following line if you need to use external SRAM mounted
      on STM322xG_EVAL board as data memory  */
 /* #define DATA_IN_ExtSRAM */

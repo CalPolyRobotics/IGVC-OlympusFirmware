@@ -7,15 +7,16 @@ UTILS = utils
 DRIVERS = drivers
 CONFIG = config
 
-SOURCES += $(PERIPH)/src/stm32f2xx_gpio.c \
-		   $(PERIPH)/src/stm32f2xx_i2c.c \
-		   $(PERIPH)/src/stm32f2xx_rcc.c \
-		   $(PERIPH)/src/stm32f2xx_spi.c \
-		   $(PERIPH)/src/stm32f2xx_exti.c \
-		   $(PERIPH)/src/stm32f2xx_syscfg.c \
-		   $(PERIPH)/src/misc.c \
-		   $(PERIPH)/src/stm32f2xx_usart.c \
-		   $(PERIPH)/src/stm32f2xx_tim.c \
+SOURCES += $(PERIPH)/src/stm32f2xx_hal_gpio.c \
+		   $(PERIPH)/src/stm32f2xx_hal_i2c.c \
+		   $(PERIPH)/src/stm32f2xx_hal_rcc.c \
+		   $(PERIPH)/src/stm32f2xx_hal_spi.c \
+		   $(PERIPH)/src/stm32f2xx_hal_usart.c \
+		   $(PERIPH)/src/stm32f2xx_hal_tim.c \
+		   $(PERIPH)/src/stm32f2xx_hal_tim_ex.c \
+		   $(PERIPH)/src/stm32f2xx_hal_dma.c \
+		   $(PERIPH)/src/stm32f2xx_hal_cortex.c \
+		   $(PERIPH)/src/stm32f2xx_hal.c \
 
 SOURCES += startup_stm32f2xx.s
 SOURCES += $(CONFIG)/stm32f2xx_it.c
@@ -24,6 +25,7 @@ SOURCES += $(CONFIG)/system_stm32f2xx.c
 SOURCES += main.c
 
 SOURCES += $(DRIVERS)/usart.c
+SOURCES += $(DRIVERS)/i2c.c
 
 SOURCES += $(UTILS)/buffer8.c
 SOURCES += $(UTILS)/timer.c

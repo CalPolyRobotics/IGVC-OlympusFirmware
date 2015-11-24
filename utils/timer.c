@@ -19,19 +19,10 @@ CallbackTimer timerList[MAX_NUM_CALLBACK_TIMERS];
 
 void initIGVCCallbackTimer()
 {
-    RCC_ClocksTypeDef clocks;
-
-    RCC_GetClocksFreq(&clocks);
-
     CALLBACK_TIMER->DIER = TIM_DIER_UIE;
 
-    CALLBACK_TIMER->PSC = clocks.PCLK2_Frequency / TIMER_FREQUENCY;
+    CALLBACK_TIMER->PSC = HAL_RCC_GetPCLK2Freq() / TIMER_FREQUENCY;
     CALLBACK_TIMER->ARR = (TIMER_FREQUENCY / CALLBACK_FREQUENCY); 
-
-    NVIC_InitTypeDef timerInt;
-    timerInt.NVIC_IRQChannel = TIM1_BRK_TIM9_IRQn;
-    timerInt.NVIC_IRQChannelPreemptionPriority = 0xF;
-    timerInt.NVIC_IRQChannelSubPriority = 0xF;
 
     NVIC_SetPriority(TIM1_BRK_TIM9_IRQn, 2);
     NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
@@ -102,6 +93,6 @@ void TIM1_BRK_TIM9_IRQHandler()
         }
     }
 
-
-    TIM_ClearITPendingBit(CALLBACK_TIMER, TIM_EventSource_Update);
+    CALLBACK_TIMER->SR &= ~(TIM_SR_UIF);
+    //TIM_ClearITPendingBit(CALLBACK_TIMER, TIM_EventSource_Update);
 }

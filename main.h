@@ -31,7 +31,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx.h"
-#include "stm32f2xx_conf.h"
+#include "stm32f2xx_hal_conf.h"
 #include <stdio.h>
 
 /* Exported types ------------------------------------------------------------*/

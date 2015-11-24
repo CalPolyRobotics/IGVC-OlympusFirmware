@@ -1,21 +1,22 @@
 #include "main.h"
 #include "timer.h"
+#include "i2c.h"
 
 
 static __IO uint32_t TimingDelay;
 
 Timer_Return LEDBlink(void* pin)
 {
-  GPIO_ToggleBits(GPIOA, *(uint32_t*)pin);
+  HAL_GPIO_TogglePin(GPIOA, *(uint32_t*)pin);
   return CONTINUE_TIMER;
 }
 
 int main(void)
 {
-  RCC_ClocksTypeDef RCC_Clocks;
 
-  RCC_GetClocksFreq(&RCC_Clocks);
-  SysTick_Config(RCC_Clocks.HCLK_Frequency / 100);
+  HAL_Init();
+
+  SysTick_Config(HAL_RCC_GetHCLKFreq() / 100);
 
   RCC->AHB1ENR |= 0xFFFFFFFF;
   RCC->AHB2ENR |= 0xFFFFFFFF;
@@ -26,19 +27,22 @@ int main(void)
 
   GPIO_InitTypeDef gpio;
 
-  gpio.GPIO_Pin = GPIO_Pin_All;
-  gpio.GPIO_Mode = GPIO_Mode_OUT;
-  gpio.GPIO_Speed = GPIO_Speed_2MHz;
-  gpio.GPIO_OType = GPIO_OType_PP;
-  gpio.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  gpio.Pin = GPIO_PIN_All;
+  gpio.Mode = GPIO_MODE_OUTPUT_PP;
+  gpio.Pull = GPIO_NOPULL;
+  gpio.Speed = GPIO_SPEED_FREQ_LOW;
 
-  GPIO_Init(GPIOA, &gpio);
+  HAL_GPIO_Init(GPIOA, &gpio);
 
-  GPIO_ResetBits(GPIOA, GPIO_Pin_5);
-  GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_7, 0);
 
   initIGVCUsart();
+
+  printf("Test!\r\n");
+
   initIGVCCallbackTimer();
+
+  initIGVCI2C();
 
   uint32_t pin4 = (1 << 4);
   uint32_t pin5 = (1 << 5);
@@ -49,6 +53,7 @@ int main(void)
   addCallbackTimer(500, LEDBlink, &pin7);
   while(1)
   {
+    testI2C();
     Delay(100);
   }
 
@@ -80,10 +85,10 @@ void TimingDelay_Decrement(void)
   }
 }
 
-void assert_param(int x)
+/*void assert_param(int x)
 {
 
-}
+}*/
 
 #ifdef  USE_FULL_ASSERT
 
