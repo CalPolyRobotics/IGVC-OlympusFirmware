@@ -26,6 +26,7 @@ SOURCES += main.c
 
 SOURCES += $(DRIVERS)/usart.c
 SOURCES += $(DRIVERS)/i2c.c
+SOURCES += $(DRIVERS)/gpio.c
 
 SOURCES += $(UTILS)/buffer8.c
 SOURCES += $(UTILS)/timer.c
