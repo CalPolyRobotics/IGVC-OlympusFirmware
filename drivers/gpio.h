@@ -5,7 +5,13 @@
 
 //The following functions are meant to be used with the defines in config.h
 //The port and pinNum arguments should be replaced with one of the GPIO defines
-//which defines poth of these parameters in one preprocessor statement.
+//in config.h which defines both of these parameters in one preprocessor 
+//statement. The alternate argument is also defined in the config.h GPIO defines.
+
+//PP: Push Pull
+//OD: Open Drain
+//PU: Pull Up
+//PD: Pull Down
 void initGPIOOutput_PP(GPIO_TypeDef* port, uint8_t pinNum);
 void initGPIOOutput_OD(GPIO_TypeDef* port, uint8_t pinNum);
 void initGPIOOutput_OD_PU(GPIO_TypeDef* port, uint8_t pinNum);

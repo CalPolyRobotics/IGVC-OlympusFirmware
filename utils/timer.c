@@ -1,12 +1,6 @@
 #include "main.h"
+#include "config.h"
 #include "timer.h"
-
-#define CALLBACK_TIMER TIM9
-#define CALLBACK_FREQUENCY 1000
-#define TIMER_FREQUENCY 1000000
-#define TIMER_MAX_VALUE 0xFFFF
-
-#define MAX_NUM_CALLBACK_TIMERS 10
 
 typedef struct CallbackTimer_t {
     uint32_t currentValue;
@@ -24,8 +18,8 @@ void initIGVCCallbackTimer()
     CALLBACK_TIMER->PSC = HAL_RCC_GetPCLK2Freq() / TIMER_FREQUENCY;
     CALLBACK_TIMER->ARR = (TIMER_FREQUENCY / CALLBACK_FREQUENCY); 
 
-    NVIC_SetPriority(TIM1_BRK_TIM9_IRQn, 2);
-    NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
+    NVIC_SetPriority(CALLBACK_TIMER_IRQ, 2);
+    NVIC_EnableIRQ(CALLBACK_TIMER_IRQ);
 
     CALLBACK_TIMER->CR1 = TIM_CR1_CEN | TIM_CR1_ARPE;
 
@@ -72,7 +66,7 @@ int32_t addCallbackTimer(uint32_t count, timerCallback callback, void* parameter
     return 0;
 }
 
-void TIM1_BRK_TIM9_IRQHandler()
+void CALLBACK_TIMER_ISR()
 {
     uint32_t ndx;
     for (ndx = 0; ndx < MAX_NUM_CALLBACK_TIMERS; ndx++)

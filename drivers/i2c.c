@@ -1,16 +1,14 @@
 #include "main.h"
+#include "config.h"
 #include "gpio.h"
 
-#define IGVC_I2C I2C2
-
 static I2C_HandleTypeDef i2c;
-
 
 void initIGVCI2C()
 {
     i2c.Instance = IGVC_I2C;
 
-    i2c.Init.ClockSpeed = 100000;
+    i2c.Init.ClockSpeed = I2C_CLOCK_SPEED;
     i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
     i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
     i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;

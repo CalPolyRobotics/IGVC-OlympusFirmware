@@ -2,13 +2,14 @@
 #include <string.h>
 
 #include "main.h"
+#include "config.h"
 
 #include "buffer8.h"
 #include "gpio.h"
 
 
-static uint8_t rxBuffer[64];
-static uint8_t txBuffer[64];
+static uint8_t rxBuffer[COMMS_RX_FIFO_SIZE];
+static uint8_t txBuffer[COMMS_TX_FIFO_SIZE];
 
 static buffer8_t rxFifo;
 static buffer8_t txFifo;
@@ -17,9 +18,9 @@ static USART_HandleTypeDef usart;
 void initIGVCUsart()
 {
 
-  usart.Instance = USART1;
+  usart.Instance = COMMS_USART;
 
-  usart.Init.BaudRate = 115200;
+  usart.Init.BaudRate = COMMS_BAUDRATE;
   usart.Init.WordLength = USART_WORDLENGTH_8B;
   usart.Init.StopBits = USART_STOPBITS_1;
   usart.Init.Parity = USART_PARITY_NONE;
@@ -30,8 +31,8 @@ void initIGVCUsart()
 
   HAL_USART_Init(&usart);
 
-  NVIC_SetPriority(USART1_IRQn, 2);
-  NVIC_EnableIRQ(USART1_IRQn);
+  NVIC_SetPriority(COMMS_IRQ, 2);
+  NVIC_EnableIRQ(COMMS_IRQ);
 
   __HAL_USART_ENABLE_IT(&usart, USART_IT_RXNE);
 
@@ -39,8 +40,8 @@ void initIGVCUsart()
   //USART_Cmd(USART1, ENABLE);
 
 
-  buffer8_init(&rxFifo, rxBuffer, 64);
-  buffer8_init(&txFifo, txBuffer, 64);
+  buffer8_init(&rxFifo, rxBuffer, COMMS_RX_FIFO_SIZE);
+  buffer8_init(&txFifo, txBuffer, COMMS_TX_FIFO_SIZE);
 }
 
 void HAL_USART_MspInit(USART_HandleTypeDef* husart)
@@ -61,19 +62,19 @@ void HAL_USART_MspInit(USART_HandleTypeDef* husart)
 
 void usartPut(uint8_t data)
 {
-   if(USART1->CR1 & USART_CR1_TXEIE)
+   if(COMMS_USART->CR1 & USART_CR1_TXEIE)
    {
       buffer8_put(&txFifo, data);
    } else {
       //USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
       __HAL_USART_ENABLE_IT(&usart, USART_IT_TXE);
-      USART1->DR = data;
+      COMMS_USART->DR = data;
    }
 }
 
 void usartWrite(uint8_t* data, uint32_t size)
 {
-   if (USART1->CR1 & USART_CR1_TXEIE)
+   if (COMMS_USART->CR1 & USART_CR1_TXEIE)
    {
       buffer8_write(&txFifo, data, size);
    } else {
@@ -81,7 +82,7 @@ void usartWrite(uint8_t* data, uint32_t size)
       __disable_irq();
       //USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
       __HAL_USART_ENABLE_IT(&usart, USART_IT_TXE);
-      USART1->DR = *data;
+      COMMS_USART->DR = *data;
       __enable_irq();
    }
 }
@@ -109,7 +110,7 @@ uint32_t usartHaveBytes()
    return buffer8_bytes(&rxFifo);
 }
 
-void USART1_IRQHandler()
+void COMMS_ISR()
 {
    //if (USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
    if (__HAL_USART_GET_FLAG(&usart, USART_FLAG_TXE) != RESET)
@@ -120,13 +121,13 @@ void USART1_IRQHandler()
         __HAL_USART_DISABLE_IT(&usart, USART_IT_TXE);
       } else {
          uint8_t data = buffer8_get(&txFifo);
-         USART1->DR = data;
+         COMMS_USART->DR = data;
       }
       //USART_ClearITPendingBit(USART1, USART_IT_TXE);
       __HAL_USART_CLEAR_FLAG(&usart, USART_FLAG_TXE);
    //} else if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
     } else if (__HAL_USART_GET_FLAG(&usart, USART_FLAG_RXNE) != RESET) {
-      buffer8_put(&rxFifo, USART1->DR);
+      buffer8_put(&rxFifo, COMMS_USART->DR);
     }
 }
 
