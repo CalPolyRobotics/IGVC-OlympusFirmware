@@ -1,4 +1,5 @@
 #include "main.h"
+#include "gpio.h"
 #include "timer.h"
 #include "i2c.h"
 #include "usart.h"
@@ -28,7 +29,7 @@ int main(void)
 
   GPIO_InitTypeDef gpio;
 
-  gpio.Pin = GPIO_PIN_All;
+  gpio.Pin = GPIO_PIN_All & ~(GPIO_PIN_13 | GPIO_PIN_14);
   gpio.Mode = GPIO_MODE_OUTPUT_PP;
   gpio.Pull = GPIO_NOPULL;
   gpio.Speed = GPIO_SPEED_FREQ_LOW;
@@ -38,8 +39,6 @@ int main(void)
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_7, 0);
 
   initIGVCUsart();
-
-  printf("Test!\r\n");
 
   initIGVCCallbackTimer();
 
@@ -52,14 +51,19 @@ int main(void)
   addCallbackTimer(2000, LEDBlink, &pin4);
   addCallbackTimer(1000, LEDBlink, &pin5);
   addCallbackTimer(500, LEDBlink, &pin7);
+
   while(1)
   {
+
     testI2C();
+
     Delay(100);
   }
 
   while(1);
 }
+
+
 
 /**
   * @brief  Inserts a delay time.
