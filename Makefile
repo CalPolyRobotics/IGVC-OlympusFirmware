@@ -1,43 +1,38 @@
 BUILDDIR = build
 
-DEVICE = Libraries/CMSIS/Device
-CORE = Libraries/CMSIS
-PERIPH = Libraries/periph
+DEVICE = Drivers/CMSIS/Device/ST/STM32F2xx
+CORE = Drivers/CMSIS
+PERIPH = Drivers/STM32F2xx_HAL_Driver
 UTILS = utils
 DRIVERS = drivers
 CONFIG = config
 
-SOURCES += $(PERIPH)/src/stm32f2xx_hal_gpio.c \
-		   $(PERIPH)/src/stm32f2xx_hal_i2c.c \
-		   $(PERIPH)/src/stm32f2xx_hal_rcc.c \
-		   $(PERIPH)/src/stm32f2xx_hal_spi.c \
-		   $(PERIPH)/src/stm32f2xx_hal_usart.c \
-		   $(PERIPH)/src/stm32f2xx_hal_tim.c \
-		   $(PERIPH)/src/stm32f2xx_hal_tim_ex.c \
-		   $(PERIPH)/src/stm32f2xx_hal_dma.c \
-		   $(PERIPH)/src/stm32f2xx_hal_cortex.c \
-		   $(PERIPH)/src/stm32f2xx_hal.c \
+SOURCES += $(PERIPH)/Src/stm32f2xx_hal_gpio.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_i2c.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_rcc.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_spi.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_usart.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_uart.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_tim.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_tim_ex.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_dma.c \
+		   $(PERIPH)/Src/stm32f2xx_hal_cortex.c \
+		   $(PERIPH)/Src/stm32f2xx_hal.c \
 
+SOURCES += system_stm32f2xx.c
 SOURCES += startup_stm32f2xx.s
-SOURCES += $(CONFIG)/stm32f2xx_it.c
-SOURCES += $(CONFIG)/system_stm32f2xx.c
-
 SOURCES += main.c
-
-SOURCES += $(DRIVERS)/usart.c
-SOURCES += $(DRIVERS)/i2c.c
-SOURCES += $(DRIVERS)/gpio.c
-
-SOURCES += $(UTILS)/buffer8.c
-SOURCES += $(UTILS)/timer.c
-
-SOURCES += $(CONFIG)/newlib_hooks.c
+SOURCES += gpio.c
+SOURCES += stm32f2xx_hal_msp.c
+SOURCES += stm32f2xx_it.c
+SOURCES += usart.c
+SOURCES += dma.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-INCLUDES += -I$(DEVICE)/include \
+INCLUDES += -I$(DEVICE)/Include \
 			-I$(CORE)/include \
-			-I$(PERIPH)/include \
+			-I$(PERIPH)/Inc \
 			-I$(DISCOVERY)/include \
 			-I$(USB)/include \
 			-I$(CONFIG)\
@@ -54,10 +49,11 @@ LD = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
  	
-CFLAGS  = -O0 -g -Wall -Werror -I.\
+CFLAGS  = -O0 -g -Wall -I.\
    -mcpu=cortex-m3 -mthumb \
    -mfloat-abi=soft \
-   $(INCLUDES) -DUSE_STDPERIPH_DRIVER
+   $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
+   -D STM32F205xx
 
 LDSCRIPT = buildTools/stm32_flash.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -LbuildTools
