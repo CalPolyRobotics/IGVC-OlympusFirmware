@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32f2xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * File Name          : TIM.h
+  * Description        : This file provides code for the configuration
+  *                      of the TIM instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -30,31 +31,63 @@
   *
   ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F2xx_IT_H
-#define __STM32F2xx_IT_H
-
+#ifndef __tim_H
+#define __tim_H
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+#include "stm32f2xx_hal.h"
 
-void NMI_Handler(void);
-void SysTick_Handler(void);
-void ADC_IRQHandler(void);
-void USART1_IRQHandler(void);
-void DMA2_Stream2_IRQHandler(void);
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim8;
+extern TIM_HandleTypeDef htim9;
+extern TIM_HandleTypeDef htim10;
+extern TIM_HandleTypeDef htim12;
+extern TIM_HandleTypeDef htim13;
+extern TIM_HandleTypeDef htim14;
+
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
+
+void MX_TIM1_Init(void);
+void MX_TIM2_Init(void);
+void MX_TIM3_Init(void);
+void MX_TIM4_Init(void);
+void MX_TIM5_Init(void);
+void MX_TIM8_Init(void);
+void MX_TIM9_Init(void);
+void MX_TIM10_Init(void);
+void MX_TIM12_Init(void);
+void MX_TIM13_Init(void);
+void MX_TIM14_Init(void);
+
+/* USER CODE BEGIN Prototypes */
+
+/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
+#endif /*__ tim_H */
 
-#endif /* __STM32F2xx_IT_H */
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -40,12 +40,29 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern DMA_HandleTypeDef hdma_usart3_rx;
-extern UART_HandleTypeDef huart3;
+extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern UART_HandleTypeDef huart1;
+extern PCD_HandleTypeDef hpcd;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
+
+/**
+* @brief This function handles Non maskable interrupt.
+*/
+void NMI_Handler(void)
+{
+  /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+
+  /* USER CODE END NonMaskableInt_IRQn 0 */
+  HAL_RCC_NMI_IRQHandler();
+  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+
+  /* USER CODE END NonMaskableInt_IRQn 1 */
+}
 
 /**
 * @brief This function handles System tick timer.
@@ -70,34 +87,63 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-* @brief This function handles DMA1 stream1 global interrupt.
+* @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
 */
-void DMA1_Stream1_IRQHandler(void)
+void ADC_IRQHandler(void)
 {
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+  /* USER CODE BEGIN ADC_IRQn 0 */
 
-  /* USER CODE END DMA1_Stream1_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart3_rx);
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+  /* USER CODE END ADC_IRQn 0 */
+  //HAL_ADC_IRQHandler(&hadc1);
+  //HAL_ADC_IRQHandler(&hadc2);
+  /* USER CODE BEGIN ADC_IRQn 1 */
 
-  /* USER CODE END DMA1_Stream1_IRQn 1 */
+  //printf("ADC2: %d\r\n", (&hadc2)->Instance->DR);
+  printf("E\r\n");
+
+  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_EOC);
+  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_OVR);
+  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_STRT);
+  /* USER CODE END ADC_IRQn 1 */
 }
 
 /**
-* @brief This function handles USART3 global interrupt.
+* @brief This function handles USART1 global interrupt.
 */
-void USART3_IRQHandler(void)
+void USART1_IRQHandler(void)
 {
-  /* USER CODE BEGIN USART3_IRQn 0 */
+  /* USER CODE BEGIN USART1_IRQn 0 */
 
-  /* USER CODE END USART3_IRQn 0 */
-  HAL_UART_IRQHandler(&huart3);
-  /* USER CODE BEGIN USART3_IRQn 1 */
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
 
-  /* USER CODE END USART3_IRQn 1 */
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
+* @brief This function handles DMA2 Stream2 global interrupt.
+*/
+void DMA2_Stream2_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream2_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
+void OTG_FS_IRQHandler(void)
+{
+  HAL_PCD_IRQHandler(&hpcd);
+}
 
+void WWDG_IRQHandler(void)
+{
+  while(1);
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

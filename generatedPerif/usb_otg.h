@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32f2xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * File Name          : USB_OTG.h
+  * Description        : This file provides code for the configuration
+  *                      of the USB_OTG instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -30,31 +31,43 @@
   *
   ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F2xx_IT_H
-#define __STM32F2xx_IT_H
-
+#ifndef __usb_otg_H
+#define __usb_otg_H
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+#include "stm32f2xx_hal.h"
+#include "buffer8.h"
 
-void NMI_Handler(void);
-void SysTick_Handler(void);
-void ADC_IRQHandler(void);
-void USART1_IRQHandler(void);
-void DMA2_Stream2_IRQHandler(void);
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
+
+void MX_USB_OTG_FS_USB_Init(void);
+
+/* USER CODE BEGIN Prototypes */
+extern buffer8_t usbRecieveBuffer;
+void usbWrite(uint8_t* data, uint32_t len);
+/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
+#endif /*__ usb_otg_H */
 
-#endif /* __STM32F2xx_IT_H */
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

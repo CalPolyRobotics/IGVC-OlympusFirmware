@@ -6,18 +6,18 @@
 #include "main.h"
 
 #include "comms.h"
-#include "buffer8.h"
 #include "usart.h"
+#include "usb_otg.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
 #define MAX_PACKET_SIZE 64
 
-#define START_BYTE_1 0xF0
-#define START_BYTE_2 0x5A
+//#define START_BYTE_1 0xF0
+//#define START_BYTE_2 0x5A
 
-//#define START_BYTE_1 'A'
-//#define START_BYTE_2 'B'
+#define START_BYTE_1 'A'
+#define START_BYTE_2 'B'
 
 typedef enum {
     WAITING_FOR_START_1 = 0,
@@ -37,23 +37,26 @@ typedef struct {
 
 void toggleLED(Packet_t* packet)
 {
-    STM_EVAL_LEDToggle(LED6);
+    //STM_EVAL_LEDToggle(LED6);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
 }
 
 void toggleLED2(Packet_t* packet)
 {
-    STM_EVAL_LEDToggle(LED8);
+    //STM_EVAL_LEDToggle(LED8);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 }
 
 void toggleLED3(Packet_t* packet)
 {
-    STM_EVAL_LEDToggle(LED10);
+    //STM_EVAL_LEDToggle(LED10);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
 }
 
 static uint8_t testBuf[64];
 
 packetResponse_t response[] = {
-    {48,  testBuf, 48,  testBuf, toggleLED},    //Status
+    {0,  NULL, 0,  NULL, toggleLED},           //Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED2},           //Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                 //Get all Sonars
     {0,  NULL, 0,  NULL, toggleLED},            //Set FNR
@@ -118,7 +121,8 @@ static void sendResponse(Packet_t* packet)
         outPacket->data[idx] = response[packetType].responseData[idx];
     }
 
-    usartWrite(packetBuffer, outPacket->header.packetLen);
+    printf("Sent Response\r\n");
+    usbWrite(packetBuffer, outPacket->header.packetLen);
 }
 
 void runCommsFSM(char data)

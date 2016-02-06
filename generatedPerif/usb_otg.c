@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32f2xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * File Name          : USB_OTG.c
+  * Description        : This file provides code for the configuration
+  *                      of the USB_OTG instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -31,30 +32,89 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F2xx_IT_H
-#define __STM32F2xx_IT_H
-
-#ifdef __cplusplus
- extern "C" {
-#endif 
-
 /* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+#include "usb_otg.h"
+#include "gpio.h"
+#include "usart.h"
+#include "main.h"
+#include "comms.h"
+#include <string.h>
 
-void NMI_Handler(void);
-void SysTick_Handler(void);
-void ADC_IRQHandler(void);
-void USART1_IRQHandler(void);
-void DMA2_Stream2_IRQHandler(void);
+/* USER CODE BEGIN 0 */
+USBD_HandleTypeDef  USBD_Device;
+uint8_t myBuffer[128];
+//buffer8_t usbRecieveBuffer;
 
-#ifdef __cplusplus
+static int8_t usbReceive(uint8_t* data, uint32_t* len)
+{
+  //buffer8_write(&usbRecieveBuffer, data, len);
+
+  //usbWrite("Read bytes\r\n", 12);
+  while ((*len)--)
+  {
+    runCommsFSM(*data++);
+  }
+
+  USBD_CDC_ReceivePacket(&USBD_Device);
+
+  return USBD_OK;
 }
-#endif
 
-#endif /* __STM32F2xx_IT_H */
+static int8_t tunnelInit(void)
+{
+  memset(myBuffer, 0, 128);
+
+  //buffer8_init(&usbRecieveBuffer, myBuffer, 128);
+
+  USBD_CDC_SetRxBuffer(&USBD_Device, myBuffer);
+  return USBD_OK;
+}
+
+static int8_t dummyFunc(void)
+{
+  return USBD_OK;
+}
+
+USBD_CDC_ItfTypeDef itfTest = {tunnelInit, dummyFunc, dummyFunc, usbReceive};
+
+void usbWrite(uint8_t* data, uint32_t len)
+{
+  USBD_CDC_SetTxBuffer(&USBD_Device, data, len);
+  USBD_CDC_TransmitPacket(&USBD_Device);
+}
+/* USER CODE END 0 */
+
+/* USB_OTG_FS init function */
+
+void MX_USB_OTG_FS_USB_Init(void)
+{
+  /* Init Device Library */
+  USBD_Init(&USBD_Device, &VCP_Desc, 0);
+  
+  /* Add Supported Class */
+  USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
+  
+  /* Add CDC Interface Class */
+  //USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
+  USBD_CDC_RegisterInterface(&USBD_Device, &itfTest);
+ 
+  USB_OTG_FS->GCCFG |= USB_OTG_GCCFG_NOVBUSSENS;
+
+  /* Start Device Process */
+  USBD_Start(&USBD_Device);
+
+
+}
+
+/* USER CODE BEGIN 1 */
+/* USER CODE END 1 */
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

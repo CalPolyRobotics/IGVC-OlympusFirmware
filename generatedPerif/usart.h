@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32f2xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * File Name          : USART.h
+  * Description        : This file provides code for the configuration
+  *                      of the USART instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -30,31 +31,44 @@
   *
   ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F2xx_IT_H
-#define __STM32F2xx_IT_H
-
+#ifndef __usart_H
+#define __usart_H
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+#include "stm32f2xx_hal.h"
 
-void NMI_Handler(void);
-void SysTick_Handler(void);
-void ADC_IRQHandler(void);
-void USART1_IRQHandler(void);
-void DMA2_Stream2_IRQHandler(void);
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+extern UART_HandleTypeDef huart1;
+
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
+
+void MX_USART1_UART_Init(void);
+
+/* USER CODE BEGIN Prototypes */
+/* USER CODE BEGIN Prototypes */
+void usartWrite(uint8_t *buf, uint16_t len);
+/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
+#endif /*__ usart_H */
 
-#endif /* __STM32F2xx_IT_H */
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
