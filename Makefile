@@ -36,6 +36,7 @@ SOURCES += newlib_hooks.c
 SOURCES += stm32f2xx_hal_msp.c
 SOURCES += stm32f2xx_it.c
 SOURCES += comms.c
+SOURCES += fnr.c
 #SOURCES += $(UTILS)/buffer8.c
 SOURCES += $(GENERATED)/gpio.c
 SOURCES += $(GENERATED)/usart.c

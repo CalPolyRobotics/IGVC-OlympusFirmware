@@ -8,6 +8,7 @@
 #include "comms.h"
 #include "usart.h"
 #include "usb_otg.h"
+#include "fnr.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
@@ -59,7 +60,7 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleLED},           //Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED2},           //Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                 //Get all Sonars
-    {0,  NULL, 0,  NULL, toggleLED},            //Set FNR
+    {0,  NULL, 0,  NULL, FNRCommsHandler},            //Set FNR
     {0,  NULL, 0,  NULL, toggleLED2},           //Set Throttle  
     {0,  NULL, 0,  NULL, toggleLED},                 //Set Speed
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Speed
