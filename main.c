@@ -45,6 +45,7 @@
 #include "steering.h"
 #include "main.h"
 #include "buffer8.h"
+#include "speedDAC.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -88,27 +89,28 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  /*MX_DMA_Init();
-  MX_ADC1_Init();
-  MX_ADC2_Init();
-  //MX_DAC_Init();
+  // MX_DMA_Init();
+  // MX_ADC1_Init();
+  // MX_ADC2_Init();
+  // MX_DAC_Init();
   MX_I2C2_Init();
-  MX_SPI3_Init();
-  MX_TIM1_Init();
-  MX_TIM2_Init();
-  MX_TIM3_Init();
-  MX_TIM4_Init();
-  MX_TIM5_Init();
-  MX_TIM8_Init();
-  MX_TIM9_Init();
-  MX_TIM10_Init();
-  MX_TIM12_Init();
-  MX_TIM13_Init();
-  MX_TIM14_Init();*/
+  // MX_SPI3_Init();
+  // MX_TIM1_Init();
+  // MX_TIM2_Init();
+  // MX_TIM3_Init();
+  // MX_TIM4_Init();
+  // MX_TIM5_Init();
+  // MX_TIM8_Init();
+  // MX_TIM9_Init();
+  // MX_TIM10_Init();
+  // MX_TIM12_Init();
+  // MX_TIM13_Init();
+  // MX_TIM14_Init();
   MX_USART1_UART_Init();
   MX_USB_OTG_FS_USB_Init();
 
-  //usartWrite("Hello\r\n", 7);
+  initSpeedDAC();
+  usartWrite("Hello\r\n", 7);
   //printf("Test\r\n");
   //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 

@@ -9,16 +9,17 @@
 #include "usart.h"
 #include "usb_otg.h"
 #include "fnr.h"
+#include "speedDAC.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
 #define MAX_PACKET_SIZE 64
 
-//#define START_BYTE_1 0xF0
-//#define START_BYTE_2 0x5A
+#define START_BYTE_1 0xF0
+#define START_BYTE_2 0x5A
 
-#define START_BYTE_1 'A'
-#define START_BYTE_2 'B'
+//#define START_BYTE_1 'A'
+//#define START_BYTE_2 'B'
 
 typedef enum {
     WAITING_FOR_START_1 = 0,
@@ -61,8 +62,8 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleLED2},           //Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                 //Get all Sonars
     {0,  NULL, 0,  NULL, FNRCommsHandler},            //Set FNR
-    {0,  NULL, 0,  NULL, toggleLED2},           //Set Throttle  
-    {0,  NULL, 0,  NULL, toggleLED},                 //Set Speed
+    {0,  NULL, 0,  NULL, speedDACHandler},           //Set Throttle  
+    {0,  NULL, 0,  NULL, toggleSpeedDAC},                 //Set Speed
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Speed
     {0,  NULL, 0,  NULL, toggleLED3},           //Set Steering
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Steering Angle

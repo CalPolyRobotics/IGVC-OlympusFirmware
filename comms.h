@@ -1,7 +1,8 @@
 #ifndef __COMMS_H__
 #define __COMMS_H__
 
-
+#include <stdint.h>
+#include <stddef.h>
 
 typedef struct {
     uint8_t startByte[2];
