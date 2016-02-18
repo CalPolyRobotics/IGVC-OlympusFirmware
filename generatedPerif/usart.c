@@ -43,7 +43,7 @@
 
 #define COMMS_USART USART1
 #define TX_BUFFER_SIZE (8 * 1024)
-#define RX_BUFFER_SIZE 1024
+#define RX_BUFFER_SIZE (1024)
 
 static uint8_t txBuffer[TX_BUFFER_SIZE];
 static uint8_t rxBuffer[RX_BUFFER_SIZE];
@@ -196,7 +196,6 @@ void usartPut(uint8_t data)
 
 void usartWrite(char* data, uint16_t size)
 {
-  //HAL_UART_Transmit(&huart1, (uint8_t*)buf, len, 10000);
   if (size > 0)
   {
     if (COMMS_USART->CR1 & USART_CR1_TXEIE)

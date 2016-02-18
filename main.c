@@ -49,6 +49,7 @@
 #include "kill.h"
 #include "sevenSeg.h"
 #include "led.h"
+#include "console.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -114,7 +115,7 @@ int main(void)
 
   initSpeedDAC();
   printf("Hello.\r\n");
-  i2cScan();
+  //i2cScan();
 
   //printf("Test\r\n");
   //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
@@ -130,6 +131,10 @@ int main(void)
 
   //killBoard();
 
+  while(1)
+  {
+    consoleProcessBytes();
+  }
 
   uint8_t buf[32];
   uint32_t bytesRead;
@@ -151,7 +156,6 @@ int main(void)
   uint8_t j = 0;
   uint8_t k = 1;
 
-  char i = 0;
   while(1)
   {
     if (i == 7)
