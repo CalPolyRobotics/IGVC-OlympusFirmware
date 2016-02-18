@@ -112,7 +112,8 @@ int main(void)
   MX_USB_OTG_FS_USB_Init();
 
   initSpeedDAC();
-  usartWrite("Hello\r\n", 7);
+  printf("Hello.\r\n");
+  i2cScan();
   //printf("Test\r\n");
   //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 

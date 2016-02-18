@@ -34,7 +34,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "i2c.h"
-
+#include <stdio.h>
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
@@ -120,6 +120,18 @@ void i2cTransmit(uint8_t address, uint8_t* data, uint32_t len)
 }
 
 /* USER CODE END 1 */
+void i2cScan()
+{
+  uint8_t address;
+  
+  for(address = 0; address < 0x80; address++)
+  {
+    if (HAL_I2C_IsDeviceReady(&hi2c2, address << 1, 1, 10000) == HAL_OK)
+    {
+      printf("Device found at address 0x%X.\r\n", address);
+    }  
+  }
+}
 
 /**
   * @}
