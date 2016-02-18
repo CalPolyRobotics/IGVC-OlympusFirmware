@@ -33,10 +33,23 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "usart.h"
+#include "main.h"
+#include "stm32f2xx_hal_usart.h"
 
+#include "usart.h"
 #include "gpio.h"
 #include "dma.h"
+#include "utils/buffer8.h"
+
+#define COMMS_USART USART1
+#define TX_BUFFER_SIZE (8 * 1024)
+#define RX_BUFFER_SIZE 1024
+
+static uint8_t txBuffer[TX_BUFFER_SIZE];
+static uint8_t rxBuffer[RX_BUFFER_SIZE];
+
+static buffer8_t txFifo;
+static buffer8_t rxFifo;
 
 /* USER CODE BEGIN 0 */
 
@@ -50,7 +63,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 void MX_USART1_UART_Init(void)
 {
 
-  huart1.Instance = USART1;
+  huart1.Instance = COMMS_USART;
   huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
@@ -60,6 +73,12 @@ void MX_USART1_UART_Init(void)
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   HAL_UART_Init(&huart1);
 
+  __USART_ENABLE(&huart1);
+
+  buffer8_init(&txFifo, txBuffer, TX_BUFFER_SIZE);
+  buffer8_init(&rxFifo, rxBuffer, RX_BUFFER_SIZE);
+
+  __USART_ENABLE_IT(&huart1, USART_IT_RXNE);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef* huart)
@@ -87,26 +106,26 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 
     /* Peripheral DMA init*/
   
-    hdma_usart1_rx.Instance = DMA2_Stream2;
-    hdma_usart1_rx.Init.Channel = DMA_CHANNEL_4;
-    hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma_usart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-    hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_usart1_rx.Init.Mode = DMA_NORMAL;
-    hdma_usart1_rx.Init.Priority = DMA_PRIORITY_HIGH;
-    hdma_usart1_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    hdma_usart1_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
-    hdma_usart1_rx.Init.MemBurst = DMA_MBURST_SINGLE;
-    hdma_usart1_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
-    HAL_DMA_Init(&hdma_usart1_rx);
+    // hdma_usart1_rx.Instance = DMA2_Stream2;
+    // hdma_usart1_rx.Init.Channel = DMA_CHANNEL_4;
+    // hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    // hdma_usart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    // hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
+    // hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    // hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    // hdma_usart1_rx.Init.Mode = DMA_NORMAL;
+    // hdma_usart1_rx.Init.Priority = DMA_PRIORITY_HIGH;
+    // hdma_usart1_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    // hdma_usart1_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+    // hdma_usart1_rx.Init.MemBurst = DMA_MBURST_SINGLE;
+    // hdma_usart1_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
+    // HAL_DMA_Init(&hdma_usart1_rx);
 
-    __HAL_LINKDMA(huart,hdmarx,hdma_usart1_rx);
+    // __HAL_LINKDMA(huart,hdmarx,hdma_usart1_rx);
 
-    /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(USART1_IRQn);
+    // /* Peripheral interrupt init*/
+    NVIC_SetPriority(USART1_IRQn, 2);
+    NVIC_EnableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspInit 1 */
 
   /* USER CODE END USART1_MspInit 1 */
@@ -142,10 +161,76 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   /* USER CODE END USART1_MspDeInit 1 */
 } 
 
-/* USER CODE BEGIN 1 */
-void usartWrite(char* buf, uint16_t len)
+void buffer_USART1_IRQHandler()
 {
-  HAL_UART_Transmit(&huart1, (uint8_t*)buf, len, 10000);
+  if (__HAL_USART_GET_FLAG(&huart1, USART_FLAG_TXE) != RESET &&
+      COMMS_USART->CR1 & USART_CR1_TXEIE)
+  {
+    if (buffer8_empty(&txFifo))
+    {
+       __USART_DISABLE_IT(&huart1, USART_IT_TXE);
+    } else {
+       uint8_t data = buffer8_get(&txFifo);
+       COMMS_USART->DR = data;
+    }
+    __HAL_USART_CLEAR_FLAG(&huart1, USART_FLAG_TXE);
+  }
+  if (__HAL_USART_GET_FLAG(&huart1, USART_FLAG_RXNE) != RESET) {
+    buffer8_put(&rxFifo, COMMS_USART->DR);
+    __HAL_USART_CLEAR_FLAG(&huart1, USART_FLAG_RXNE);
+  } 
+}
+
+/* USER CODE BEGIN 1 */
+
+void usartPut(uint8_t data)
+{
+  if(COMMS_USART->CR1 & USART_CR1_TXEIE)
+  {
+    buffer8_put(&txFifo, data);
+  } else {
+    __USART_ENABLE_IT(&huart1, USART_IT_TXE);
+    COMMS_USART->DR = data;
+  } 
+}
+
+void usartWrite(char* data, uint16_t size)
+{
+  //HAL_UART_Transmit(&huart1, (uint8_t*)buf, len, 10000);
+  if (size > 0)
+  {
+    if (COMMS_USART->CR1 & USART_CR1_TXEIE)
+    {
+      buffer8_write(&txFifo, (uint8_t*)data, size);
+    } else {
+      buffer8_write(&txFifo, (uint8_t*)data + 1, size - 1);
+      __disable_irq();
+      COMMS_USART->DR = *data;
+      __USART_ENABLE_IT(&huart1, USART_IT_TXE);
+      __enable_irq();
+    }
+  }
+}
+
+char usartGet()
+{
+  while (buffer8_empty(&rxFifo))
+    ;
+
+  return buffer8_get(&rxFifo);
+}
+
+uint32_t usartRead(uint8_t* data, uint32_t len)
+{
+  uint32_t bytesRead = 0;
+
+  while(!buffer8_empty(&rxFifo) && bytesRead < len)
+  {
+    *data++ = buffer8_get(&rxFifo);
+    bytesRead++;
+  }
+
+  return bytesRead;
 }
 
 /* USER CODE END 1 */

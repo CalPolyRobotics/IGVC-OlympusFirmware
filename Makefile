@@ -41,7 +41,8 @@ SOURCES += speedDAC.c
 SOURCES += kill.c
 SOURCES += sevenSeg.c
 SOURCES += led.c
-#SOURCES += $(UTILS)/buffer8.c
+
+SOURCES += $(UTILS)/buffer8.c
 SOURCES += $(GENERATED)/gpio.c
 SOURCES += $(GENERATED)/usart.c
 SOURCES += $(GENERATED)/dma.c

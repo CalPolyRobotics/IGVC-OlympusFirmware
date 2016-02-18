@@ -53,9 +53,13 @@ extern UART_HandleTypeDef huart1;
 
 void MX_USART1_UART_Init(void);
 
-/* USER CODE BEGIN Prototypes */
+void buffer_USART1_IRQHandler();
+
 /* USER CODE BEGIN Prototypes */
 void usartWrite(char *buf, uint16_t len);
+void usartPut(uint8_t data);
+char usartGet();
+uint32_t usartRead(uint8_t* data, uint32_t len);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

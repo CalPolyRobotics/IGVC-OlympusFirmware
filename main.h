@@ -31,6 +31,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
+#include "stm32f2xx_hal_conf.h"
 #include "usbd_desc.h"
 #include "usbd_cdc.h" 
 

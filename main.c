@@ -130,6 +130,19 @@ int main(void)
 
   //killBoard();
 
+
+  uint8_t buf[32];
+  uint32_t bytesRead;
+
+  while(1)
+  {
+
+    HAL_Delay(2000);
+
+    bytesRead = usartRead(buf, 32);
+    usartWrite((char*)buf, bytesRead);
+  }
+
 //-------------------------------------------------------------------
 // This makes a fancy "loading" pattern on the 7segment display
   char sequence[] = {'A','B','G','E','D','C','G','F'};
@@ -138,6 +151,7 @@ int main(void)
   uint8_t j = 0;
   uint8_t k = 1;
 
+  char i = 0;
   while(1)
   {
     if (i == 7)
