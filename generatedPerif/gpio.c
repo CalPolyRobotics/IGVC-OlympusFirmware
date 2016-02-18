@@ -34,6 +34,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
+#include "kill.h"
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -67,10 +68,13 @@ void MX_GPIO_Init(void)
   __GPIOB_CLK_ENABLE();
   __GPIOD_CLK_ENABLE();
 
+
+  HAL_GPIO_WritePin(BOARD_KILL_PORT, BOARD_KILL_PIN, GPIO_PIN_SET);
+
   /*Configure GPIO pins : PC13 PC14 PC6 PC7 
                            PC8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_6|GPIO_PIN_7 
-                          |GPIO_PIN_8;
+  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_15|GPIO_PIN_6|GPIO_PIN_7 
+                          |GPIO_PIN_8|GPIO_PIN_14;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
@@ -94,6 +98,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  HAL_GPIO_WritePin(BOARD_KILL_PORT, BOARD_KILL_PIN, GPIO_PIN_SET);
 
   /*Configure GPIO pins : PA10 PA11 PA12 */
   GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
