@@ -48,6 +48,7 @@
 #include "speedDAC.h"
 #include "kill.h"
 #include "sevenSeg.h"
+#include "led.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -114,6 +115,7 @@ int main(void)
   initSpeedDAC();
   printf("Hello.\r\n");
   i2cScan();
+
   //printf("Test\r\n");
   //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 
@@ -128,13 +130,46 @@ int main(void)
 
   //killBoard();
 
-  char i = 0;
+//-------------------------------------------------------------------
+// This makes a fancy "loading" pattern on the 7segment display
+  char sequence[] = {'A','B','G','E','D','C','G','F'};
+  uint8_t ledSequence[] = {1,2,3,7,8,9,10,11,4,5,6};
+  uint8_t i = 0;
+  uint8_t j = 0;
+  uint8_t k = 1;
+
   while(1)
   {
-    setSevenSeg(i);
-    i++;
-    HAL_Delay(500);
+    if (i == 7)
+    {
+      i = 0;
+    } else {
+      i++;
+    }
+    
+    if (j == 10)
+    {
+      j = 0;
+    } else {
+      j++;
+    }
+
+    if (k == 10)
+    {
+      k = 0;
+    } else {
+      k++;
+    }
+
+
+    setLED(ledSequence[j],0);
+    setLED(ledSequence[k],1);
+    setSevenSeg(sequence[i]);
+    HAL_Delay(50);
+      
   }
+//-------------------------------------------------------------------
+
 
   while(1);
 
