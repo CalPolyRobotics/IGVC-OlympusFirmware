@@ -46,6 +46,8 @@
 #include "main.h"
 #include "buffer8.h"
 #include "speedDAC.h"
+#include "kill.h"
+#include "sevenSeg.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -122,6 +124,16 @@ int main(void)
   initIGVCCallbackTimer();
   initSteering();*/
   /* USER CODE END 2 */
+
+  //killBoard();
+
+  char i = 0;
+  while(1)
+  {
+    setSevenSeg(i);
+    i++;
+    HAL_Delay(500);
+  }
 
   while(1);
 
