@@ -465,6 +465,8 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
   __IO uint16_t tmpreg;
   uint32_t tmp = 0;
 
+  (void)tmpreg;
+
   if(hspi->State == HAL_SPI_STATE_READY)
   {
     if((pData == NULL ) || (Size == 0)) 
@@ -639,6 +641,8 @@ HAL_StatusTypeDef HAL_SPI_TransmitReceive(SPI_HandleTypeDef *hspi, uint8_t *pTxD
   __IO uint16_t tmpreg;
   uint32_t tmp = 0;
   
+  (void)tmpreg;
+
   tmp = hspi->State; 
   if((tmp == HAL_SPI_STATE_READY) || (tmp == HAL_SPI_STATE_BUSY_RX))
   {
@@ -1620,6 +1624,8 @@ static void SPI_RxCloseIRQHandler(SPI_HandleTypeDef *hspi)
 {
   __IO uint16_t tmpreg;
 
+  (void)tmpreg;
+
   if(hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLED)
   {
     /* Wait until RXNE flag is set to send data */
@@ -1801,6 +1807,8 @@ static void SPI_DMAReceiveCplt(DMA_HandleTypeDef *hdma)
 {
   __IO uint16_t tmpreg;
 
+  (void)tmpreg;
+
   SPI_HandleTypeDef* hspi = ( SPI_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
 
   if((hspi->Init.Mode == SPI_MODE_MASTER)&&((hspi->Init.Direction == SPI_DIRECTION_1LINE)||(hspi->Init.Direction == SPI_DIRECTION_2LINES_RXONLY)))
@@ -1860,6 +1868,8 @@ static void SPI_DMAReceiveCplt(DMA_HandleTypeDef *hdma)
 static void SPI_DMATransmitReceiveCplt(DMA_HandleTypeDef *hdma)   
 {
   __IO uint16_t tmpreg;
+
+  (void)tmpreg;
 
   SPI_HandleTypeDef* hspi = ( SPI_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
 

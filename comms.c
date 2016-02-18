@@ -40,23 +40,18 @@ typedef struct {
 
 void toggleLED(Packet_t* packet)
 {
-    //STM_EVAL_LEDToggle(LED6);
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
 }
 
 void toggleLED2(Packet_t* packet)
 {
-    //STM_EVAL_LEDToggle(LED8);
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 }
 
 void toggleLED3(Packet_t* packet)
 {
-    //STM_EVAL_LEDToggle(LED10);
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
 }
-
-static uint8_t testBuf[64];
 
 packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleLED},           //Get 1 Sonar
@@ -168,7 +163,7 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
             packetIdx++;
-            printf("Waiting HEADER %u == %u\r\n", packetIdx, sizeof(PacketHeader_t));
+            printf("Waiting HEADER %lu == %u\r\n", packetIdx, sizeof(PacketHeader_t));
             if (packetIdx == sizeof(PacketHeader_t))
             {
                 if (packetIdx == packet->header.packetLen)
@@ -188,7 +183,7 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
             packetIdx++;
-            printf("Waiting DATA %u == %u\r\n", packetIdx, packet->header.packetLen);
+            printf("Waiting DATA %lu == %u\r\n", packetIdx, packet->header.packetLen);
             if (packetIdx == packet->header.packetLen)
             {
                 checkPacket(packet);

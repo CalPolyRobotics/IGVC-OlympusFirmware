@@ -55,7 +55,7 @@ void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 /* USER CODE BEGIN Prototypes */
-void usartWrite(uint8_t *buf, uint16_t len);
+void usartWrite(char *buf, uint16_t len);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

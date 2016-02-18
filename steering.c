@@ -2,9 +2,9 @@
 #include "adc.h"
 #include "timerCallback.h"
 
-static uint16_t steeringTarget = 0x8000;
+//static uint16_t steeringTarget = 0x8000;
 
-static void steeringControlCallback(void* dummy);
+static Timer_Return steeringControlCallback(void* dummy);
 
 void initSteering()
 {
@@ -20,7 +20,8 @@ void initSteering()
     //Duty in CCRx
 }
 
-void steeringControlCallback(void* dummy)
+Timer_Return steeringControlCallback(void* dummy)
 {
     //printf("ADC: %d\r\n", getSteeringValue());
+    return CONTINUE_TIMER;
 }

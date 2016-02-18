@@ -143,9 +143,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 } 
 
 /* USER CODE BEGIN 1 */
-void usartWrite(uint8_t* buf, uint16_t len)
+void usartWrite(char* buf, uint16_t len)
 {
-  HAL_UART_Transmit_IT(&huart1, buf, len);
+  HAL_UART_Transmit_IT(&huart1, (uint8_t*)buf, len);
 }
 
 /* USER CODE END 1 */

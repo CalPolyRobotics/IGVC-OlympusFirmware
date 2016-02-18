@@ -70,12 +70,17 @@ static int8_t tunnelInit(void)
   return USBD_OK;
 }
 
-static int8_t dummyFunc(void)
+static int8_t dummyDeinit(void)
 {
   return USBD_OK;
 }
 
-USBD_CDC_ItfTypeDef itfTest = {tunnelInit, dummyFunc, dummyFunc, usbReceive};
+static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len)
+{
+  return USBD_OK;
+}
+
+USBD_CDC_ItfTypeDef itfTest = {tunnelInit, dummyDeinit, dummyControl, usbReceive};
 
 void usbWrite(uint8_t* data, uint32_t len)
 {

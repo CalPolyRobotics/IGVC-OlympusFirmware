@@ -336,6 +336,7 @@
 
 #ifdef HAL_PCD_MODULE_ENABLED
  #include "stm32f2xx_hal_pcd.h"
+ #include "stm32f2xx_hal_pcd_ex.h"
 #endif /* HAL_PCD_MODULE_ENABLED */
 
 #ifdef HAL_HCD_MODULE_ENABLED

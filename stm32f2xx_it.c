@@ -99,7 +99,6 @@ void ADC_IRQHandler(void)
   /* USER CODE BEGIN ADC_IRQn 1 */
 
   //printf("ADC2: %d\r\n", (&hadc2)->Instance->DR);
-  printf("E\r\n");
 
   __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_EOC);
   __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_OVR);
