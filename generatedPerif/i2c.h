@@ -55,6 +55,7 @@ void MX_I2C2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void i2cTransmit(uint8_t address, uint8_t* data, uint32_t len);
+void i2cScan(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
