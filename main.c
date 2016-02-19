@@ -116,7 +116,7 @@ int main(void)
   initSpeedDAC();
   printf("Hello.\r\n");
   //i2cScan();
-
+  //usbWrite((uint8_t*)"USBTest\r\n", 9);
   //printf("Test\r\n");
   //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 

@@ -128,7 +128,7 @@ void i2cScan()
   {
     if (HAL_I2C_IsDeviceReady(&hi2c2, address << 1, 1, 10000) == HAL_OK)
     {
-      printf("Device found at address 0x%X.\r\n", address);
+      printf("0x%X ", address);
     }  
   }
 }

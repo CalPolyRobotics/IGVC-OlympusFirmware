@@ -6,6 +6,13 @@
 #include "main.h"
 #include "usart.h"
 #include "led.h"
+#include "i2c.h"
+#include "sevenSeg.h"
+#include "kill.h"
+#include "fnr.h"
+#include "comms.h"
+#include "speedDAC.h"
+#include "usb_otg.h"
 
 #define CONSOLE_MAX_CMD_LEN     255
 #define CONSOLE_MAX_NUM_ARGS    32
@@ -35,6 +42,7 @@ static void console_readSpeed(uint32_t, char**);
 static void console_readBatt(uint32_t, char**);
 static void console_emulateUSB(uint32_t, char**);
 static void console_setSteerAngle(uint32_t, char**);
+static void console_USBWrite(uint32_t, char**);
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
@@ -52,6 +60,7 @@ static ConsoleCommand commands[] = {
     {"readBatt", 1, console_readBatt},
     {"emulateUSB", 1, console_emulateUSB},
     {"setSteerAngle", 1, console_setSteerAngle},
+    {"USBWrite", 1, console_USBWrite},
     {NULL, 0, NULL}
 };
 
@@ -152,7 +161,18 @@ void consoleProcessBytes()
 
 static void console_i2cWrite(uint32_t argc, char** argv)
 {
+    uint8_t addr;
+    uint8_t dataBytes[CONSOLE_MAX_NUM_ARGS];
+    uint32_t i;
 
+    addr = atoi(argv[0]);
+
+    for (i = 1; i < argc; i++)
+    {
+        dataBytes[i-1] = atoi(argv[i]);
+    }
+
+    i2cTransmit(addr, dataBytes, argc-1);
 }
 
 static void console_i2cRead(uint32_t argc, char** argv) 
@@ -162,7 +182,7 @@ static void console_i2cRead(uint32_t argc, char** argv)
 
 static void console_i2cScan(uint32_t argc, char** argv)
 {
-
+    i2cScan();
 }
 
 static void console_setGPIO(uint32_t argc, char** argv)
@@ -187,7 +207,14 @@ static void console_setLED(uint32_t argc, char** argv)
 
 static void console_setSegment(uint32_t argc, char** argv)
 {
-
+    if (*argv[0] >= '0' && *argv[0] <= '9')
+    {
+        setSevenSeg(*argv[0] - '0');
+    } else if(*argv[0] >= 'A' && *argv[0] <= 'F') {
+        setSevenSeg(*argv[0] - 'A' + 0xA);
+    } else {
+        setSevenSeg(*argv[0]);
+    }
 }
 
 static void console_measPower(uint32_t argc, char** argv)
@@ -197,12 +224,30 @@ static void console_measPower(uint32_t argc, char** argv)
 
 static void console_kill(uint32_t argc, char** argv)
 {
-
+    killBoard();
 }
 
 static void console_writeFNR(uint32_t argc, char** argv)
 {
-
+    FNR_t fnr = atoi(argv[0]);
+    if (fnr >= 0 && fnr <= 2)
+    {
+        setFNR(fnr);
+        switch(fnr)
+        {
+            case FNR_NEUTRAL:
+                printf("Neutral");
+                break;
+            case FNR_FORWARD:
+                printf("Forward");
+                break;
+            case FNR_REVERSE:
+                printf("Reverse");
+                break;
+        }
+    } else {
+        printf("Invalid State");
+    }
 }
 
 static void console_readFNR(uint32_t argc, char** argv)
@@ -212,7 +257,7 @@ static void console_readFNR(uint32_t argc, char** argv)
 
 static void console_writeSpeed(uint32_t argc, char** argv)
 {
-
+    setSpeedDAC(atoi(argv[0]));
 }
 
 static void console_readSpeed(uint32_t argc, char** argv)
@@ -227,10 +272,36 @@ static void console_readBatt(uint32_t argc, char** argv)
 
 static void console_emulateUSB(uint32_t argc, char** argv)
 {
+    uint32_t i;
+    uint32_t numPacketArgs = argc - 1;
 
+    char buf[sizeof(PacketHeader_t)];
+    PacketHeader_t* header = (PacketHeader_t*)buf;;
+    header->startByte[0] = 0xF0;
+    header->startByte[1] = 0x5A;
+    header->CRC8 = 0;
+    header->msgType = atoi(argv[0]);
+    header->seqNumber = 0;
+    header->packetLen = sizeof(PacketHeader_t) + numPacketArgs;
+
+    for (i = 0; i < sizeof(PacketHeader_t); i++)
+    {
+        runCommsFSM(buf[i]);
+    }
+
+    for (i = 0; i < numPacketArgs; i++)
+    {
+        runCommsFSM(strtol(argv[i + 1], NULL, 16) & 0xFF);
+    }
 }
 
 static void console_setSteerAngle(uint32_t argc, char** argv)
 {
 
+}
+
+static void console_USBWrite(uint32_t argc, char** argv)
+{
+    printf("%s", argv[0]);
+    usbWrite((uint8_t*)argv[0], strlen(argv[0]));
 }
