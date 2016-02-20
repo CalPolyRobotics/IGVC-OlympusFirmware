@@ -4,7 +4,7 @@ DEVICE = drivers/CMSIS/device/ST/STM32F2xx
 CORE = drivers/CMSIS
 PERIPH = drivers/STM32F2xx_HAL_Driver
 UTILS = utils
-DRIVERS = drivers
+DRIVERS = Drivers
 CONFIG = config
 GENERATED = generatedPerif
 USB = generatedPerif/USB
@@ -64,11 +64,11 @@ SOURCES += $(USB)/usbd_ioreq.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-INCLUDES += -I$(DEVICE)/include \
-			-I$(CORE)/include \
-			-I$(PERIPH)/inc \
+INCLUDES += -I$(DEVICE)/Include \
+			-I$(CORE)/Include \
+			-I$(PERIPH)/Inc \
 			-I$(DISCOVERY)/include \
-			-I$(USB)/include \
+			-I$(USB)/Include \
 			-I$(CONFIG)\
 			-I$(DRIVERS)\
 			-I$(UTILS)\
