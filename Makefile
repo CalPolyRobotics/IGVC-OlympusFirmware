@@ -1,8 +1,8 @@
 BUILDDIR = build
 
-DEVICE = Drivers/CMSIS/Device/ST/STM32F2xx
-CORE = Drivers/CMSIS
-PERIPH = Drivers/STM32F2xx_HAL_Driver
+DEVICE = drivers/CMSIS/Device/ST/STM32F2xx
+CORE = drivers/CMSIS
+PERIPH = drivers/STM32F2xx_HAL_Driver
 UTILS = utils
 DRIVERS = drivers
 CONFIG = config
