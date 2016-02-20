@@ -1,6 +1,6 @@
 BUILDDIR = build
 
-DEVICE = drivers/CMSIS/Device/ST/STM32F2xx
+DEVICE = drivers/CMSIS/device/ST/STM32F2xx
 CORE = drivers/CMSIS
 PERIPH = drivers/STM32F2xx_HAL_Driver
 UTILS = utils
@@ -10,24 +10,24 @@ GENERATED = generatedPerif
 USB = generatedPerif/USB
 
 
-SOURCES += $(PERIPH)/Src/stm32f2xx_hal_gpio.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_i2c.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_rcc.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_spi.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_usart.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_uart.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_tim.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_tim_ex.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_dma.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_cortex.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_adc.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_adc_ex.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_dac.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_dac_ex.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_pcd.c \
-		   $(PERIPH)/Src/stm32f2xx_hal_pcd_ex.c \
-		   $(PERIPH)/Src/stm32f2xx_ll_usb.c \
-		   $(PERIPH)/Src/stm32f2xx_hal.c \
+SOURCES += $(PERIPH)/src/stm32f2xx_hal_gpio.c \
+		   $(PERIPH)/src/stm32f2xx_hal_i2c.c \
+		   $(PERIPH)/src/stm32f2xx_hal_rcc.c \
+		   $(PERIPH)/src/stm32f2xx_hal_spi.c \
+		   $(PERIPH)/src/stm32f2xx_hal_usart.c \
+		   $(PERIPH)/src/stm32f2xx_hal_uart.c \
+		   $(PERIPH)/src/stm32f2xx_hal_tim.c \
+		   $(PERIPH)/src/stm32f2xx_hal_tim_ex.c \
+		   $(PERIPH)/src/stm32f2xx_hal_dma.c \
+		   $(PERIPH)/src/stm32f2xx_hal_cortex.c \
+		   $(PERIPH)/src/stm32f2xx_hal_adc.c \
+		   $(PERIPH)/src/stm32f2xx_hal_adc_ex.c \
+		   $(PERIPH)/src/stm32f2xx_hal_dac.c \
+		   $(PERIPH)/src/stm32f2xx_hal_dac_ex.c \
+		   $(PERIPH)/src/stm32f2xx_hal_pcd.c \
+		   $(PERIPH)/src/stm32f2xx_hal_pcd_ex.c \
+		   $(PERIPH)/src/stm32f2xx_ll_usb.c \
+		   $(PERIPH)/src/stm32f2xx_hal.c \
 
 SOURCES += system_stm32f2xx.c
 SOURCES += startup_stm32f2xx.s
@@ -64,9 +64,9 @@ SOURCES += $(USB)/usbd_ioreq.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-INCLUDES += -I$(DEVICE)/Include \
+INCLUDES += -I$(DEVICE)/include \
 			-I$(CORE)/include \
-			-I$(PERIPH)/Inc \
+			-I$(PERIPH)/inc \
 			-I$(DISCOVERY)/include \
 			-I$(USB)/include \
 			-I$(CONFIG)\

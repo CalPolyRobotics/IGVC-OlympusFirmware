@@ -4,7 +4,7 @@
 
 #include "buffer8.h"
 
-CRITICAL_VAL;
+//CRITICAL_VAL;
 
 void buffer8_init(buffer8_t* buffer, uint8_t* base, uint32_t size)
 {
@@ -17,7 +17,7 @@ void buffer8_init(buffer8_t* buffer, uint8_t* base, uint32_t size)
 void buffer8_put(buffer8_t* buffer, uint8_t data)
 {
 
-   ENTER_CRITICAL();
+   //ENTER_CRITICAL();
    if (!(buffer8_full(buffer)))
    {
       *buffer->start = data;
@@ -27,13 +27,13 @@ void buffer8_put(buffer8_t* buffer, uint8_t data)
          buffer->start = buffer->base;
       }
    }
-   EXIT_CRITICAL();
+   //EXIT_CRITICAL();
 }
 
 void buffer8_write(buffer8_t* buffer, uint8_t* data, uint32_t len)
 {
 
-   ENTER_CRITICAL();
+   //ENTER_CRITICAL();
    if (buffer8_space(buffer) >= len)
    {
       while (len--)
@@ -45,13 +45,13 @@ void buffer8_write(buffer8_t* buffer, uint8_t* data, uint32_t len)
          }
       }
    }
-   EXIT_CRITICAL();
+   //EXIT_CRITICAL();
 }
 
 uint8_t buffer8_get(buffer8_t* buffer)
 {
    uint8_t retVal = 0;
-   ENTER_CRITICAL();
+   // ENTER_CRITICAL();
    if(!buffer8_empty(buffer))
    {
       retVal = *buffer->end;
@@ -61,7 +61,7 @@ uint8_t buffer8_get(buffer8_t* buffer)
          buffer->end = buffer->base;
       }
    }
-   EXIT_CRITICAL();
+   // EXIT_CRITICAL();
    return retVal;
 }
 
