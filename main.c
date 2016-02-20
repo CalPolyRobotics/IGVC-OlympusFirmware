@@ -51,6 +51,8 @@
 #include "led.h"
 #include "console.h"
 
+#include <stddef.h>
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */

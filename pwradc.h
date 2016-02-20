@@ -1,7 +1,9 @@
 #ifndef ADC_H
 #define ADC_H
 
-enum dac_periph {
+#include <stdint.h>
+
+enum adc_periph {
     batt_i = 0, /* Ain0 */
     fv_v,       /* Ain1 */
     thr_v,      /* Ain2 */
@@ -12,6 +14,6 @@ enum dac_periph {
     thr_i       /* Ain7 */
 };
 
-void dac_init();
-uint16_t dac_read(dac_periph periph);
+void adc_init();
+uint16_t adc_read(enum adc_periph periph);
 #endif

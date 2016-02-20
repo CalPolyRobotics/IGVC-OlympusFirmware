@@ -42,6 +42,7 @@ SOURCES += kill.c
 SOURCES += sevenSeg.c
 SOURCES += led.c
 SOURCES += console.c
+SOURCES += pwradc.c
 
 SOURCES += $(UTILS)/buffer8.c
 SOURCES += $(GENERATED)/gpio.c
@@ -64,9 +65,9 @@ SOURCES += $(USB)/usbd_ioreq.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-INCLUDES += -I$(DEVICE)/Include \
-			-I$(CORE)/Include \
-			-I$(PERIPH)/Inc \
+INCLUDES += -I$(DEVICE)/include \
+			-I$(CORE)/include \
+			-I$(PERIPH)/inc \
 			-I$(DISCOVERY)/include \
 			-I$(USB)/Include \
 			-I$(CONFIG)\
