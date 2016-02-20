@@ -210,8 +210,8 @@ static void console_setSegment(uint32_t argc, char** argv)
     if (*argv[0] >= '0' && *argv[0] <= '9')
     {
         setSevenSeg(*argv[0] - '0');
-    } else if(*argv[0] >= 'A' && *argv[0] <= 'F') {
-        setSevenSeg(*argv[0] - 'A' + 0xA);
+    } else if(*argv[0] >= 'a' && *argv[0] <= 'f') {
+        setSevenSeg(*argv[0] - 'a' + 0xA);
     } else {
         setSevenSeg(*argv[0]);
     }

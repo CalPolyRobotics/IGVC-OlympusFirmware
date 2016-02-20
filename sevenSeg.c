@@ -14,6 +14,12 @@ void setSevenSeg(char a)
 
    if (a > 15) {
       switch(a) {
+         case ' ':
+            magicNumber = 0xFF;
+            break;
+         case 'h':
+            magicNumber = 0x4A;
+            break;
          case 'l': 
             magicNumber = 0xD6;
             break;
