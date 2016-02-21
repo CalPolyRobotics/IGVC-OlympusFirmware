@@ -50,6 +50,7 @@
 #include "sevenSeg.h"
 #include "led.h"
 #include "console.h"
+#include "motorControl.h"
 
 #include <stddef.h>
 
@@ -75,14 +76,17 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 
-
 /* USER CODE END 0 */
 
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  RCC->AHB1ENR |= 0xFFFFFFFF;
+  RCC->AHB2ENR |= 0xFFFFFFFF;
+  RCC->AHB3ENR |= 0xFFFFFFFF;
+  RCC->APB1ENR |= 0xFFFFFFFF;
+  RCC->APB2ENR |= 0xFFFFFFFF;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -95,9 +99,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  // MX_DMA_Init();
+  MX_DMA_Init();
   // MX_ADC1_Init();
-  // MX_ADC2_Init();
+  MX_ADC2_Init();
   // MX_DAC_Init();
   MX_I2C2_Init();
   // MX_SPI3_Init();
@@ -116,8 +120,13 @@ int main(void)
   MX_USB_OTG_FS_USB_Init();
 
   initSpeedDAC();
+
   adc_init();
   printf("Hello.\r\n");
+
+  initSteeringMotor();
+  //printf("Hello.\r\n");
+
   //i2cScan();
   //usbWrite((uint8_t*)"USBTest\r\n", 9);
   //printf("Test\r\n");
@@ -127,12 +136,10 @@ int main(void)
   //uart_relay();
   //while(1);
 
-  /*startConversion();
+  startConversion();
   initIGVCCallbackTimer();
-  initSteering();*/
+  initSteering();
   /* USER CODE END 2 */
-
-  //killBoard();
 
   while(1)
   {

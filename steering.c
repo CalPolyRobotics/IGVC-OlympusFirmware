@@ -1,8 +1,17 @@
-#include "config.h"
+#include <stdio.h>
 #include "adc.h"
 #include "timerCallback.h"
+#include "motorControl.h"
 
-//static uint16_t steeringTarget = 0x8000;
+#define GPIO_SPEED_PWM  PORTA, 6
+#define GPIO_STEERING_DIRECTION  GPIOC, 6
+#define GPIO_HEPHAESTUS_GPIO  PORTB, 15
+#define SPEED_PWM_AF    GPIO_AF9_TIM14
+#define STEERING_CONTROL_PERIOD 100
+
+#define STEERING_DEADZONE 10
+
+static uint32_t steeringPotTarget = 2000;
 
 static Timer_Return steeringControlCallback(void* dummy);
 
@@ -22,6 +31,32 @@ void initSteering()
 
 Timer_Return steeringControlCallback(void* dummy)
 {
-    //printf("ADC: %d\r\n", getSteeringValue());
+    uint16_t newSteeringValue = getSteeringValue();
+
+    if (newSteeringValue < (steeringPotTarget - STEERING_DEADZONE))
+    {
+        setSteeringMotorDir(STEERING_RIGHT);
+    } else if (newSteeringValue > (steeringPotTarget + STEERING_DEADZONE))
+    {
+        setSteeringMotorDir(STEERING_LEFT);
+    } else {
+        setSteeringMotorDir(STEERING_STOP);
+    }
+
     return CONTINUE_TIMER;
+}
+
+static uint32_t mapTargetToPot(uint16_t target)
+{
+    return target;
+}
+
+void setSteeringTarget(uint16_t newTarget)
+{
+    steeringPotTarget = mapTargetToPot(newTarget);
+}
+
+void setRawSteeringTarget(uint32_t newTarget)
+{
+    steeringPotTarget = newTarget;
 }

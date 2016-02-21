@@ -43,6 +43,7 @@ SOURCES += sevenSeg.c
 SOURCES += led.c
 SOURCES += console.c
 SOURCES += pwradc.c
+SOURCES += motorControl.c
 
 SOURCES += $(UTILS)/buffer8.c
 SOURCES += $(GENERATED)/gpio.c

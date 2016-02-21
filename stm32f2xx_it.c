@@ -31,6 +31,7 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
 #include "stm32f2xx_hal.h"
 #include "stm32f2xx.h"
 #include "stm32f2xx_it.h"
@@ -96,14 +97,12 @@ void ADC_IRQHandler(void)
 
   /* USER CODE END ADC_IRQn 0 */
   //HAL_ADC_IRQHandler(&hadc1);
-  //HAL_ADC_IRQHandler(&hadc2);
+  HAL_ADC_IRQHandler(&hadc2);
   /* USER CODE BEGIN ADC_IRQn 1 */
 
-  //printf("ADC2: %d\r\n", (&hadc2)->Instance->DR);
-
-  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_EOC);
-  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_OVR);
-  __HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_STRT);
+  //__HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_EOC);
+  //__HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_OVR);
+  //__HAL_ADC_CLEAR_FLAG(&hadc2, ADC_FLAG_STRT);
   /* USER CODE END ADC_IRQn 1 */
 }
 

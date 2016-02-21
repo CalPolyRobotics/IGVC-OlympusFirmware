@@ -14,6 +14,9 @@
 #include "comms.h"
 #include "speedDAC.h"
 #include "usb_otg.h"
+#include "adc.h"
+#include "steering.h"
+#include "motorControl.h"
 
 #define CONSOLE_MAX_CMD_LEN     255
 #define CONSOLE_MAX_NUM_ARGS    32
@@ -44,6 +47,9 @@ static void console_readBatt(uint32_t, char**);
 static void console_emulateUSB(uint32_t, char**);
 static void console_setSteerAngle(uint32_t, char**);
 static void console_USBWrite(uint32_t, char**);
+static void console_toggleSpeed(uint32_t, char**);
+static void console_readSteeringDir(uint32_t, char**);
+static void console_setRawSteerAngle(uint32_t, char**);
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
@@ -58,9 +64,12 @@ static ConsoleCommand commands[] = {
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
     {"readSpeed", 0, console_readSpeed},
+    {"toggleSpeed", 1, console_toggleSpeed},
+    {"readSteeringDir", 0, console_readSteeringDir},
     {"readBatt", 1, console_readBatt},
     {"emulateUSB", 1, console_emulateUSB},
     {"setSteerAngle", 1, console_setSteerAngle},
+    {"setRawSteerAngle", 1, console_setRawSteerAngle},
     {"USBWrite", 1, console_USBWrite},
     {NULL, 0, NULL}
 };
@@ -94,7 +103,7 @@ static void processCommand(char* cmd)
 
     while (commands[i].cmdStr != NULL)
     {
-        if (strncmp(cmd, commands[i].cmdStr, strlen(commands[i].cmdStr)) == 0)
+        if ((strncmp(cmd, commands[i].cmdStr, strlen(commands[i].cmdStr)) == 0))
         {
             argc = createArgv(cmd, argv);
 
@@ -298,6 +307,11 @@ static void console_readSpeed(uint32_t argc, char** argv)
 
 }
 
+static void console_toggleSpeed(uint32_t argc, char** argv)
+{
+    toggleSpeedDAC(NULL);
+}
+
 static void console_readBatt(uint32_t argc, char** argv)
 {
 
@@ -330,7 +344,18 @@ static void console_emulateUSB(uint32_t argc, char** argv)
 
 static void console_setSteerAngle(uint32_t argc, char** argv)
 {
+    setSteeringTarget(strtol(argv[0], NULL, 16));
+}
 
+static void console_setRawSteerAngle(uint32_t argc, char** argv)
+{
+    setRawSteeringTarget(strtol(argv[0], NULL, 16));
+}
+
+static void console_readSteeringDir(uint32_t argc, char** argv)
+{
+    uint32_t data = getSteeringValue();
+    printf("%lu", data);
 }
 
 static void console_USBWrite(uint32_t argc, char** argv)

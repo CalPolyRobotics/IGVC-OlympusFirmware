@@ -38,7 +38,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-
+uint16_t ADCData;
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc1;
@@ -134,8 +134,10 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(ADC_IRQn);
+    //HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
+    //HAL_NVIC_EnableIRQ(ADC_IRQn);
+    NVIC_SetPriority(ADC_IRQn, 4);
+    NVIC_EnableIRQ(ADC_IRQn);
   /* USER CODE BEGIN ADC1_MspInit 1 */
 
   /* USER CODE END ADC1_MspInit 1 */
@@ -234,7 +236,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
 /* USER CODE BEGIN 1 */
 void startConversion()
 {
-  HAL_ADC_Start(&hadc2);
+  HAL_ADC_Start_IT(&hadc2);
   /*if (HAL_ADC_Start(&hadc2) != HAL_OK)
   {
     printf("Error Starting\r\n");
@@ -252,7 +254,12 @@ uint32_t getSteeringValue()
   //while(HAL_ADC_PollForConversion(&hadc2, 10000) != HAL_OK)
   //{}
 
-  return HAL_ADC_GetValue(&hadc2);
+  return ADCData;
+}
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+  ADCData = HAL_ADC_GetValue(&hadc2);
 }
 
 /*void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
