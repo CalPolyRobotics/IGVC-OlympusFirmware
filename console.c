@@ -7,6 +7,7 @@
 #include "usart.h"
 #include "led.h"
 #include "i2c.h"
+#include "pwradc.h"
 #include "sevenSeg.h"
 #include "kill.h"
 #include "fnr.h"
@@ -51,7 +52,7 @@ static ConsoleCommand commands[] = {
     {"setGPIO", 3, console_setGPIO},
     {"setLED", 2, console_setLED},
     {"setSegment", 1, console_setSegment},
-    {"measPower", 2, console_measPower},
+    {"measPower", 1, console_measPower},
     {"kill", 0, console_kill},
     {"writeFNR", 1, console_writeFNR},
     {"readFNR", 0, console_readFNR},
@@ -217,9 +218,41 @@ static void console_setSegment(uint32_t argc, char** argv)
     }
 }
 
+struct adc_cmd {
+    char *cmd;
+    enum adc_periph per;
+};
+
+static const struct adc_cmd adc_dict[] = {
+    {"batt_i", batt_i},
+    {"fv_v",   fv_v},
+    {"thr_v",  thr_v},
+    {"batt_v", batt_v},
+    {"twlv_i", twlv_i},
+    {"twlv_v", twlv_v},
+    {"fv_i",   fv_i},
+    {"thr_i",  thr_i},
+    {0}
+};
+
 static void console_measPower(uint32_t argc, char** argv)
 {
+    int found = 0;
+    const struct adc_cmd *val;
+    //uint16_t res = adc_read(batt_i);
+    //printf("%d\n", res);
 
+    for (val = adc_dict; val->cmd && !found; val++) {
+        //printf("Val at %p", val);
+        if (!strncmp(val->cmd, argv[0], strlen(val->cmd))) {
+            found = 1;
+        }
+    }
+
+    if (found) {
+        val--;
+        printf("%s: %d", val->cmd, adc_read(val->per));
+    }
 }
 
 static void console_kill(uint32_t argc, char** argv)

@@ -32,7 +32,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
-#include "adc.h"
+#include "pwradc.h"
 #include "dac.h"
 #include "dma.h"
 #include "i2c.h"
@@ -116,6 +116,7 @@ int main(void)
   MX_USB_OTG_FS_USB_Init();
 
   initSpeedDAC();
+  adc_init();
   printf("Hello.\r\n");
   //i2cScan();
   //usbWrite((uint8_t*)"USBTest\r\n", 9);
