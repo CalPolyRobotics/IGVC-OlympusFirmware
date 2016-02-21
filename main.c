@@ -51,6 +51,7 @@
 #include "led.h"
 #include "console.h"
 #include "motorControl.h"
+#include "adc.h"
 
 #include <stddef.h>
 
