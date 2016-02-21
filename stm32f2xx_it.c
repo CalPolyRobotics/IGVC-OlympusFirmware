@@ -36,6 +36,7 @@
 #include "stm32f2xx.h"
 #include "stm32f2xx_it.h"
 #include "usart.h"
+#include "led.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -145,5 +146,12 @@ void WWDG_IRQHandler(void)
 {
   while(1);
 }
+
+void HardFault_Handler(void)
+{
+  setLED(10, 1);
+  while(1);
+}
+
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -50,6 +50,9 @@ static void console_USBWrite(uint32_t, char**);
 static void console_toggleSpeed(uint32_t, char**);
 static void console_readSteeringDir(uint32_t, char**);
 static void console_setRawSteerAngle(uint32_t, char**);
+static void console_getSteerTarget(uint32_t, char**);
+static void console_getSteerValue(uint32_t, char**);
+static void console_enableSteering(uint32_t, char**);
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
@@ -64,13 +67,16 @@ static ConsoleCommand commands[] = {
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
     {"readSpeed", 0, console_readSpeed},
-    {"toggleSpeed", 1, console_toggleSpeed},
+    {"toggleSpeed", 0, console_toggleSpeed},
     {"readSteeringDir", 0, console_readSteeringDir},
     {"readBatt", 1, console_readBatt},
     {"emulateUSB", 1, console_emulateUSB},
     {"setSteerAngle", 1, console_setSteerAngle},
     {"setRawSteerAngle", 1, console_setRawSteerAngle},
     {"USBWrite", 1, console_USBWrite},
+    {"getSteerTarget", 0, console_getSteerTarget},
+    {"getSteerValue", 0, console_getSteerValue},
+    {"enableSteering", 1, console_enableSteering},
     {NULL, 0, NULL}
 };
 
@@ -344,12 +350,22 @@ static void console_emulateUSB(uint32_t argc, char** argv)
 
 static void console_setSteerAngle(uint32_t argc, char** argv)
 {
-    setSteeringTarget(strtol(argv[0], NULL, 16));
+    setSteeringTarget(strtol(argv[0], NULL, 10));
 }
 
 static void console_setRawSteerAngle(uint32_t argc, char** argv)
 {
-    setRawSteeringTarget(strtol(argv[0], NULL, 16));
+    setRawSteeringTarget(strtol(argv[0], NULL, 10));
+}
+
+static void console_getSteerTarget(uint32_t argc, char** argv)
+{
+    printf("%u", getRawSteeringTarget());
+}
+
+static void console_getSteerValue(uint32_t argc, char** argv)
+{
+    printf("%u", getRawSteeringPotValue());
 }
 
 static void console_readSteeringDir(uint32_t argc, char** argv)
@@ -363,3 +379,9 @@ static void console_USBWrite(uint32_t argc, char** argv)
     printf("%s", argv[0]);
     usbWrite((uint8_t*)argv[0], strlen(argv[0]));
 }
+
+static void console_enableSteering(uint32_t argc, char** argv)
+{
+    enableSteering(atoi(argv[0]));
+}
+

@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include "speedDAC.h"
 #include "i2c.h"
 #include "comms.h"
@@ -26,6 +27,7 @@ void speedDACHandler(Packet_t* packet)
     if (packet->header.packetLen - sizeof(PacketHeader_t) == 2)
     {
         speed = packet->data[1];
-        setSpeedDAC(speed);
+        printf("%u\r\n", speed);
+        setSpeedDAC((speed << 2) & 0xFF);
     }
 }

@@ -11,6 +11,7 @@
 #include "fnr.h"
 #include "speedDAC.h"
 #include "kill.h"
+#include "steering.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
@@ -60,12 +61,12 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, FNRCommsHandler},            //Set FNR
     {0,  NULL, 0,  NULL, speedDACHandler},           //Set Throttle  
     {0,  NULL, 0,  NULL, toggleSpeedDAC},                 //Set Speed
-    {0,  NULL, 0,  NULL, killBoard},                 //Get Speed
-    {0,  NULL, 0,  NULL, toggleLED3},           //Set Steering
+    {0,  NULL, 0,  NULL, toggleLED},                 //Get Speed
+    {0,  NULL, 0,  NULL, setSteeringTargetFromComms},  //Set Steering
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Steering Angle
     {0,  NULL, 0,  NULL, toggleLED},                 //Set Lights
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Battery
-    {0,  NULL, 0,  NULL, toggleLED}                  //Send Stop
+    {0,  NULL, 0,  NULL, killBoard}                  //Send Stop
 };
 
 static bool checkPacket(Packet_t* packet)
