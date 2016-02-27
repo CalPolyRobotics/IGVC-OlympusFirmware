@@ -1,82 +1,86 @@
 BUILDDIR = build
 
-DEVICE = drivers/CMSIS/device/ST/STM32F2xx
-CORE = drivers/CMSIS
-PERIPH = drivers/STM32F2xx_HAL_Driver
+DEVICE = libraries/CMSIS/device/ST/STM32F2xx
+CMSIS = libraries/CMSIS
+LIBRARIES = libraries/STM32F2xx_HAL_Driver
 UTILS = utils
-DRIVERS = Drivers
+DRIVERS = drivers
 CONFIG = config
-GENERATED = generatedPerif
-USB = generatedPerif/USB
+PERIPHERALS = peripherals
+USB = peripherals/USB
+SYSTEM = system
 
-
-SOURCES += $(PERIPH)/src/stm32f2xx_hal_gpio.c \
-		   $(PERIPH)/src/stm32f2xx_hal_i2c.c \
-		   $(PERIPH)/src/stm32f2xx_hal_rcc.c \
-		   $(PERIPH)/src/stm32f2xx_hal_spi.c \
-		   $(PERIPH)/src/stm32f2xx_hal_usart.c \
-		   $(PERIPH)/src/stm32f2xx_hal_uart.c \
-		   $(PERIPH)/src/stm32f2xx_hal_tim.c \
-		   $(PERIPH)/src/stm32f2xx_hal_tim_ex.c \
-		   $(PERIPH)/src/stm32f2xx_hal_dma.c \
-		   $(PERIPH)/src/stm32f2xx_hal_cortex.c \
-		   $(PERIPH)/src/stm32f2xx_hal_adc.c \
-		   $(PERIPH)/src/stm32f2xx_hal_adc_ex.c \
-		   $(PERIPH)/src/stm32f2xx_hal_dac.c \
-		   $(PERIPH)/src/stm32f2xx_hal_dac_ex.c \
-		   $(PERIPH)/src/stm32f2xx_hal_pcd.c \
-		   $(PERIPH)/src/stm32f2xx_hal_pcd_ex.c \
-		   $(PERIPH)/src/stm32f2xx_ll_usb.c \
-		   $(PERIPH)/src/stm32f2xx_hal.c \
-
-SOURCES += system_stm32f2xx.c
-SOURCES += startup_stm32f2xx.s
 SOURCES += main.c
-SOURCES += newlib_hooks.c
-SOURCES += stm32f2xx_hal_msp.c
-SOURCES += stm32f2xx_it.c
-SOURCES += comms.c
-SOURCES += fnr.c
-SOURCES += speedDAC.c
-SOURCES += kill.c
-SOURCES += sevenSeg.c
-SOURCES += led.c
-SOURCES += console.c
-SOURCES += pwradc.c
-SOURCES += motorControl.c
 
-SOURCES += $(UTILS)/buffer8.c
-SOURCES += $(GENERATED)/gpio.c
-SOURCES += $(GENERATED)/usart.c
-SOURCES += $(GENERATED)/dma.c
-SOURCES += $(GENERATED)/dac.c
-SOURCES += $(GENERATED)/adc.c
-SOURCES += $(GENERATED)/spi.c
-SOURCES += $(GENERATED)/i2c.c
-SOURCES += $(GENERATED)/tim.c
-SOURCES += $(GENERATED)/usb_otg.c
-SOURCES += $(UTILS)/timerCallback.c
-SOURCES += steering.c
-SOURCES += $(USB)/usbd_cdc.c
-SOURCES += $(USB)/usbd_conf.c
-SOURCES += $(USB)/usbd_core.c
-SOURCES += $(USB)/usbd_ctlreq.c
-SOURCES += $(USB)/usbd_desc.c
-SOURCES += $(USB)/usbd_ioreq.c
+SOURCES += $(LIBRARIES)/source/stm32f2xx_hal_gpio.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_i2c.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_rcc.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_spi.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_usart.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_uart.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_tim.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_tim_ex.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_dma.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_cortex.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_adc.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_adc_ex.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_dac.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_dac_ex.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_pcd.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_pcd_ex.c \
+		   $(LIBRARIES)/source/stm32f2xx_ll_usb.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal.c
+
+SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
+		   $(SYSTEM)/stm32f2xx_hal_msp.c \
+		   $(SYSTEM)/stm32f2xx_it.c \
+		   $(SYSTEM)/system_stm32f2xx.c
+
+SOURCES += $(PERIPHERALS)/adc.c \
+		   $(PERIPHERALS)/dac.c \
+		   $(PERIPHERALS)/dma.c \
+		   $(PERIPHERALS)/gpio.c \
+		   $(PERIPHERALS)/i2c.c \
+		   $(PERIPHERALS)/spi.c \
+		   $(PERIPHERALS)/tim.c \
+		   $(PERIPHERALS)/usart.c \
+		   $(PERIPHERALS)/usb_otg.c
+
+SOURCES += $(USB)/usbd_cdc.c \
+		   $(USB)/usbd_conf.c \
+		   $(USB)/usbd_core.c \
+		   $(USB)/usbd_ctlreq.c \
+		   $(USB)/usbd_desc.c \
+		   $(USB)/usbd_ioreq.c
+
+SOURCES += $(DRIVERS)/comms.c \
+		   $(DRIVERS)/console.c \
+		   $(DRIVERS)/fnr. \
+		   $(DRIVERS)/kill.c \
+		   $(DRIVERS)/led.c \
+		   $(DRIVERS)/motorControl.c \
+		   $(DRIVERS)/pwradc.c \
+		   $(DRIVERS)/sevenSeg.c \
+		   $(DRIVERS)/speedDAC.c \
+		   $(DRIVERS)/steering.c
+
+SOURCES += $(UTILS)/buffer8.c \
+		   $(UTILS)/newlib_hooks.c \
+		   $(UTILS)/timerCallback.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(DEVICE)/include \
-			-I$(CORE)/include \
-			-I$(PERIPH)/inc \
-			-I$(DISCOVERY)/include \
-			-I$(USB)/Include \
+			-I$(LIBRARIES)/include \
+			-I$(CMSIS)/include \
+			-I$(USB)/include \
+			-I$(SYSTEM) \
 			-I$(CONFIG)\
 			-I$(DRIVERS)\
 			-I$(UTILS)\
-			-I$(GENERATED)\
+			-I$(PERIPHERALS)\
 			-I$(USB)\
-			-I\
+			-I.
 
 ELF = $(BUILDDIR)/program.elf
 HEX = $(BUILDDIR)/program.hex
@@ -86,12 +90,15 @@ CC = arm-none-eabi-gcc
 LD = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
- 	
-CFLAGS  = -O0 -g -Wall -Werror -I.\
+
+WARNINGS = -Wall -Werror
+	
+CFLAGS  = -O2 -g \
    -mcpu=cortex-m3 -mthumb \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
-   -D STM32F205xx -DUSE_USB_FS
+   -D STM32F205xx -DUSE_USB_FS \
+   $(WARNINGS)
 
 LDSCRIPT = buildTools/stm32_flash.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -LbuildTools
