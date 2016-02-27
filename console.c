@@ -71,7 +71,7 @@ static ConsoleCommand commands[] = {
     {"readSteeringDir", 0, console_readSteeringDir},
     {"readBatt", 1, console_readBatt},
     {"emulateUSB", 1, console_emulateUSB},
-    {"setSteerAngle", 1, console_setSteerAngle},
+    {"setSteerAngle", 2, console_setSteerAngle},
     {"setRawSteerAngle", 1, console_setRawSteerAngle},
     {"USBWrite", 1, console_USBWrite},
     {"getSteerTarget", 0, console_getSteerTarget},
@@ -351,6 +351,7 @@ static void console_emulateUSB(uint32_t argc, char** argv)
 static void console_setSteerAngle(uint32_t argc, char** argv)
 {
     setSteeringTarget(strtol(argv[0], NULL, 10));
+    enableSteering(atoi(argv[1]));
 }
 
 static void console_setRawSteerAngle(uint32_t argc, char** argv)
