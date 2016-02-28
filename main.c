@@ -119,9 +119,7 @@ int main(void)
   // MX_TIM14_Init();
   MX_USART1_UART_Init();
   MX_USB_OTG_FS_USB_Init();
-
-  initSpeedDAC();
-
+  
   adc_init();
   printf("Hello.\r\n");
 
@@ -140,6 +138,7 @@ int main(void)
   startConversion();
   initIGVCCallbackTimer();
   initSteering();
+  initSpeedDAC();
   /* USER CODE END 2 */
 
   while(1)

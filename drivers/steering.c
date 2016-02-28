@@ -10,10 +10,12 @@
 #define SPEED_PWM_AF    GPIO_AF9_TIM14
 #define STEERING_CONTROL_PERIOD 100
 
-#define STEERING_DEADZONE 100
+#define STEERING_DEADZONE 20
 
 static uint32_t steeringPotTarget = 3000;
 static uint32_t enableSteeringVar = 0;
+
+uint16_t commsCurrentSteeringValue = 0;
 
 static Timer_Return steeringControlCallback(void* dummy);
 
@@ -22,9 +24,28 @@ void initSteering()
     addCallbackTimer(STEERING_CONTROL_PERIOD, steeringControlCallback, NULL);
 }
 
+static uint32_t mapTargetToPot(uint16_t target)
+{
+    uint32_t left = 2510;
+    uint32_t right = 3520;
+
+    return ((right - left) * (uint32_t)target) / 65535 + left;
+}
+
+static uint32_t mapPotToTarget(uint16_t pot)
+{
+    uint32_t left = 2510;
+    uint32_t right = 3520;
+
+    return ((pot - left) * 65535) / (right - left);
+}
+
 Timer_Return steeringControlCallback(void* dummy)
 {
     uint16_t newSteeringValue = getSteeringValue();
+
+    commsCurrentSteeringValue = (uint16_t)mapPotToTarget(newSteeringValue);
+
     if (enableSteeringVar)
     {
         if (newSteeringValue < (steeringPotTarget - STEERING_DEADZONE))
@@ -42,14 +63,6 @@ Timer_Return steeringControlCallback(void* dummy)
     }
 
     return CONTINUE_TIMER;
-}
-
-static uint32_t mapTargetToPot(uint16_t target)
-{
-    uint32_t left = 2510;
-    uint32_t right = 3520;
-
-    return ((right - left) * (uint32_t)target) / 65535 + left;
 }
 
 void setSteeringTarget(uint16_t newTarget)

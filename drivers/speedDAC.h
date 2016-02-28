@@ -7,9 +7,11 @@
 #define SPEED_DAC_ENABLE_PORT   GPIOB
 
 void initSpeedDAC();
-void setSpeedDAC(uint8_t value);
+void writeSpeedDAC(uint8_t value);
 
+void setSpeedDACOutputEnable(uint8_t enable);
 void speedDACHandler(Packet_t* packet);
 void toggleSpeedDAC(Packet_t* packet);
+void resetSpeedDAC();
 
 #endif

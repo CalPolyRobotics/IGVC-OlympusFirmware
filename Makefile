@@ -93,7 +93,7 @@ OBJCOPY = arm-none-eabi-objcopy
 
 WARNINGS = -Wall -Werror
 	
-CFLAGS  = -O2 -g \
+CFLAGS  = -O0 -g \
    -mcpu=cortex-m3 -mthumb \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER \

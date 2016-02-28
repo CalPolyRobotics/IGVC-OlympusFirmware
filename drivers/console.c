@@ -305,7 +305,7 @@ static void console_readFNR(uint32_t argc, char** argv)
 
 static void console_writeSpeed(uint32_t argc, char** argv)
 {
-    setSpeedDAC(atoi(argv[0]));
+    writeSpeedDAC(atoi(argv[0]));
 }
 
 static void console_readSpeed(uint32_t argc, char** argv)

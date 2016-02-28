@@ -20,8 +20,7 @@
 #define START_BYTE_1 0xF0
 #define START_BYTE_2 0x5A
 
-//#define START_BYTE_1 'A'
-//#define START_BYTE_2 'B'
+extern uint16_t commsCurrentSteeringValue;
 
 typedef enum {
     WAITING_FOR_START_1 = 0,
@@ -63,6 +62,7 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleSpeedDAC},                 //Set Speed
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Speed
     {0,  NULL, 0,  NULL, setSteeringTargetFromComms},  //Set Steering
+    //{0,  NULL, 2,  commsCurrentSteeringValue, NULL},   //Get Steering Angle
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Steering Angle
     {0,  NULL, 0,  NULL, toggleLED},                 //Set Lights
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Battery
@@ -72,6 +72,12 @@ packetResponse_t response[] = {
 static bool checkPacket(Packet_t* packet)
 {
     return true;
+    // if (crc8(packet, packet->header.packetLen) == 0)
+    // {
+    //     return true;
+    // } else {
+    //     return false;
+    // }
 }
 
 static void runPacket(Packet_t* packet)
@@ -111,6 +117,7 @@ static void sendResponse(Packet_t* packet)
 
     outPacket->header.startByte[0] = START_BYTE_1;
     outPacket->header.startByte[1] = START_BYTE_2;
+    outPacket->header.CRC8 = 0;
     outPacket->header.msgType = packet->header.msgType | 1;
     outPacket->header.seqNumber = packet->header.seqNumber;
     outPacket->header.packetLen = response[packetType].responseDataLen + sizeof(PacketHeader_t);
@@ -120,7 +127,8 @@ static void sendResponse(Packet_t* packet)
         outPacket->data[idx] = response[packetType].responseData[idx];
     }
 
-    printf("Sent Response\r\n");
+    //outPacket->header.CRC8 = crc8(outPacket, outPacket->header.packetLen);
+
     usbWrite(packetBuffer, outPacket->header.packetLen);
 }
 
