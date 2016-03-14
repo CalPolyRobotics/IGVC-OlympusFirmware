@@ -31,7 +31,6 @@ void initSpeedDAC()
 
 static Timer_Return speedDACCallback(void* dummy)
 {
-    printf("speedDAC: %d\r\n", currentSpeed);
     if (enableSpeedOutput)
     {
         if (currentSpeed <= targetSpeed)
