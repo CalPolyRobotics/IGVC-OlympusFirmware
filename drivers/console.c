@@ -17,6 +17,7 @@
 #include "adc.h"
 #include "steering.h"
 #include "motorControl.h"
+#include "characterMapping.h"
 
 #define CONSOLE_MAX_CMD_LEN     255
 #define CONSOLE_MAX_NUM_ARGS    32
@@ -30,6 +31,8 @@ typedef struct {
 } ConsoleCommand;
 
 typedef enum {CONSOLE_START = 0, CONSOLE_READING} ConsoleState;
+
+typedef enum {CONSOLE_ECHO_OFF = 0, CONSOLE_ECHO_ON, CONSOLE_ECHO_MAP, CONSOLE_ECHO_DEBUG} EchoState;
 
 static void console_i2cWrite(uint32_t, char**);
 static void console_i2cRead(uint32_t, char**);
@@ -53,6 +56,7 @@ static void console_setRawSteerAngle(uint32_t, char**);
 static void console_getSteerTarget(uint32_t, char**);
 static void console_getSteerValue(uint32_t, char**);
 static void console_enableSteering(uint32_t, char**);
+static void console_hardmode(uint32_t, char**);
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
@@ -77,8 +81,58 @@ static ConsoleCommand commands[] = {
     {"getSteerTarget", 0, console_getSteerTarget},
     {"getSteerValue", 0, console_getSteerValue},
     {"enableSteering", 1, console_enableSteering},
+    {"hardmode", 1, console_hardmode},
     {NULL, 0, NULL}
 };
+
+static EchoState echoCharacters = CONSOLE_ECHO_ON;
+
+static void rewriteBuffer(char* characterBuffer, uint8_t color)
+{
+    // Move cursor left
+    printf("\033[%dD", strlen(characterBuffer));
+
+    if (color < 10)
+    {
+        // Set color
+        printf("\033[%dm", 30 + color);
+    }
+
+    printf("%s", characterBuffer);
+}
+
+static void clearStyle()
+{
+    printf("\033[0m");
+}
+
+static int32_t matchCommand(char* buffer)
+{
+    uint32_t i = 0;
+    uint32_t commandLen;
+    char* commaPtr;
+
+    commaPtr = strchr(buffer, ',');
+    if (commaPtr == NULL)
+    {
+        commandLen = strlen(buffer);
+    } else {
+        commandLen = commaPtr - buffer;
+    }
+
+    while (commands[i].cmdStr != NULL)
+    {
+        if (strncmp(buffer, commands[i].cmdStr, commandLen) == 0 &&
+            commandLen == strlen(commands[i].cmdStr))
+        {
+            return i;
+        }
+
+        i++;
+    }
+
+    return -1;
+}
 
 static uint32_t createArgv(char* cmd, char** argv)
 {
@@ -103,28 +157,24 @@ static uint32_t createArgv(char* cmd, char** argv)
 
 static void processCommand(char* cmd)
 {
-    int i = 0;
+    int32_t i = 0;
     char* argv[CONSOLE_MAX_NUM_ARGS];
     uint32_t argc;
 
-    while (commands[i].cmdStr != NULL)
+
+    if ((i = matchCommand(cmd)) >= 0)
     {
-        if ((strncmp(cmd, commands[i].cmdStr, strlen(commands[i].cmdStr)) == 0))
+        argc = createArgv(cmd, argv);
+
+        printf("\r\n<");
+        if (argc < commands[i].minArguments)
         {
-            argc = createArgv(cmd, argv);
-
-            printf("\r\n<");
-            if (argc < commands[i].minArguments)
-            {
-                printf("ERROR: Need %lu Args", commands[i].minArguments);
-            } else {
-                commands[i].callback(argc, argv);
-            }
-            printf(">\r\n");
-
-            break;
+            printf("ERROR: Need %lu Args", commands[i].minArguments);
+        } else {
+            commands[i].callback(argc, argv);
         }
-        i++;
+        printf(">\r\n");
+
     }
 
     if (commands[i].cmdStr == NULL)
@@ -138,12 +188,55 @@ void consoleProcessBytes()
     static ConsoleState state = CONSOLE_START;
     static char cmdBuffer[CONSOLE_MAX_CMD_LEN];
     static uint32_t cmdBufferIdx;
+    uint8_t tempMapping[10] = {0};
 
     uint8_t data;
 
     while (usartRead(&data, 1))
     {
-        usartPut(data);
+
+        if (data == 0x7F)
+        {
+            if (cmdBufferIdx > 0)
+            {
+                cmdBufferIdx--;
+                cmdBuffer[cmdBufferIdx] = 0;
+                printf("\033[1D\033[1X");
+
+                if (cmdBufferIdx > 0)
+                {
+                    if (matchCommand(cmdBuffer) != -1)
+                    {
+                        rewriteBuffer(cmdBuffer, 2);
+                    } else {
+                        rewriteBuffer(cmdBuffer, 1);
+                    } 
+                }
+            }
+
+            continue;
+
+        } else {
+            switch(echoCharacters)
+            {
+                case CONSOLE_ECHO_ON:
+                    printf("%c", data);
+                    break;
+                
+                case CONSOLE_ECHO_OFF:
+                    break;
+
+                case CONSOLE_ECHO_MAP:
+                    mapCharacter(data, tempMapping);
+                    printf("%s", tempMapping);
+                    break;
+
+                case CONSOLE_ECHO_DEBUG:
+                    printf("%d", data);
+                    break;
+            }   
+        }
+
         switch(state) {
             case CONSOLE_START:
                 if (data == '[')
@@ -156,6 +249,9 @@ void consoleProcessBytes()
             case CONSOLE_READING:
                 if (data == ']')
                 {
+                    clearStyle();
+                    //Redraw ] without style
+                    printf("\033[1D]");
                     processCommand(cmdBuffer);
                     state = CONSOLE_START;
                 } else {
@@ -165,6 +261,13 @@ void consoleProcessBytes()
                         cmdBufferIdx++;
                     } else {
                         state = CONSOLE_START;
+                    }
+
+                    if (matchCommand(cmdBuffer) != -1)
+                    {
+                        rewriteBuffer(cmdBuffer, 2);
+                    } else {
+                        rewriteBuffer(cmdBuffer, 1);
                     }
                 }
                 break;
@@ -386,3 +489,7 @@ static void console_enableSteering(uint32_t argc, char** argv)
     enableSteering(atoi(argv[0]));
 }
 
+static void console_hardmode(uint32_t argc, char** argv)
+{
+    echoCharacters = strtol(argv[0], NULL, 10);
+}

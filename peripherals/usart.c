@@ -41,6 +41,8 @@
 #include "dma.h"
 #include "utils/buffer8.h"
 
+#include <stdio.h>
+
 #define COMMS_USART USART1
 #define TX_BUFFER_SIZE (8 * 1024)
 #define RX_BUFFER_SIZE (1024)
@@ -62,6 +64,8 @@ DMA_HandleTypeDef hdma_usart1_rx;
 
 void MX_USART1_UART_Init(void)
 {
+
+  setbuf(stdout, NULL);
 
   huart1.Instance = COMMS_USART;
   huart1.Init.BaudRate = 115200;

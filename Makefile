@@ -66,7 +66,8 @@ SOURCES += $(DRIVERS)/comms.c \
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
-		   $(UTILS)/timerCallback.c
+		   $(UTILS)/timerCallback.c \
+		   $(UTILS)/characterMapping.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
