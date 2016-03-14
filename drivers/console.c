@@ -32,7 +32,7 @@ typedef struct {
 
 typedef enum {CONSOLE_START = 0, CONSOLE_READING} ConsoleState;
 
-typedef enum {CONSOLE_ECHO_OFF = 0, CONSOLE_ECHO_ON, CONSOLE_ECHO_MAP, CONSOLE_ECHO_DEBUG} EchoState;
+typedef enum {CONSOLE_ECHO_ON = 0, CONSOLE_ECHO_OFF, CONSOLE_ECHO_MAP, CONSOLE_ECHO_DEBUG} EchoState;
 
 static void console_i2cWrite(uint32_t, char**);
 static void console_i2cRead(uint32_t, char**);
@@ -89,16 +89,46 @@ static EchoState echoCharacters = CONSOLE_ECHO_ON;
 
 static void rewriteBuffer(char* characterBuffer, uint8_t color)
 {
-    // Move cursor left
-    printf("\033[%dD", strlen(characterBuffer));
+    uint32_t i;
+    uint8_t tempMapping[10] = {0};
 
-    if (color < 10)
+    if (echoCharacters != CONSOLE_ECHO_OFF)
     {
-        // Set color
-        printf("\033[%dm", 30 + color);
-    }
+        // Move cursor left
+        if (echoCharacters == CONSOLE_ECHO_MAP)
+        {
+            printf("\033[%dD", strlen(characterBuffer) * 3);
+        } else {
+            printf("\033[%dD", strlen(characterBuffer));
+        }
 
-    printf("%s", characterBuffer);
+        if (color < 10)
+        {
+            // Set color
+            printf("\033[%dm", 30 + color);
+        }
+
+        for (i = 0; i < strlen(characterBuffer); i++)
+        {
+            switch (echoCharacters)
+            {
+                case CONSOLE_ECHO_ON:
+                    printf("%c", characterBuffer[i]);
+                    break;
+
+                case CONSOLE_ECHO_MAP:
+                    memset(tempMapping, 0, 10);
+                    mapCharacter(characterBuffer[i], tempMapping);
+                    printf("%s", tempMapping);
+                    break;
+
+                case CONSOLE_ECHO_OFF:
+                case CONSOLE_ECHO_DEBUG:
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 static void clearStyle()
