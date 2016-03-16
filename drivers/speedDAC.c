@@ -23,10 +23,10 @@ static void setSpeedDAC(uint8_t value)
 
 void initSpeedDAC()
 {
-   HAL_GPIO_WritePin(SPEED_DAC_ENABLE_PORT, SPEED_DAC_ENABLE_PIN, GPIO_PIN_SET); 
-   setSpeedDAC(0);
+    HAL_GPIO_WritePin(SPEED_DAC_ENABLE_PORT, SPEED_DAC_ENABLE_PIN, GPIO_PIN_SET); 
+    setSpeedDAC(0);
 
-   addCallbackTimer(SPEED_DAC_PERIOD, speedDACCallback, NULL);
+    addCallbackTimer(SPEED_DAC_PERIOD, speedDACCallback, NULL);
 }
 
 static Timer_Return speedDACCallback(void* dummy)

@@ -4,10 +4,10 @@
 #include <stdint.h>
 
 typedef struct {
-   uint8_t* base;
-   uint32_t size;
-   uint8_t* start;
-   uint8_t* end; 
+    uint8_t* base;
+    uint32_t size;
+    uint8_t* start;
+    uint8_t* end; 
 } buffer8_t;
 
 void buffer8_init(buffer8_t* buffer, uint8_t* base, uint32_t size);

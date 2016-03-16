@@ -31,33 +31,22 @@
   *
   ******************************************************************************
   */
-/* Define to prevent recursive inclusion -------------------------------------*/
+
 #ifndef __i2c_H
 #define __i2c_H
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
-
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
 
 extern I2C_HandleTypeDef hi2c2;
 
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-
 void MX_I2C2_Init(void);
 
-/* USER CODE BEGIN Prototypes */
 void i2cTransmit(uint8_t address, uint8_t* data, uint32_t len);
 void i2cReceive(uint8_t address, uint8_t *data, uint32_t len);
 void i2cScan(void);
-/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }

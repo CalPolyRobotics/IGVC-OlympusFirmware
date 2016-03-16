@@ -31,43 +31,24 @@
   *
   ******************************************************************************
   */
-/* Define to prevent recursive inclusion -------------------------------------*/
+
 #ifndef __usb_otg_H
 #define __usb_otg_H
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
 #include "buffer8.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-
 void MX_USB_OTG_FS_USB_Init(void);
 
-/* USER CODE BEGIN Prototypes */
 extern buffer8_t usbRecieveBuffer;
 void usbWrite(uint8_t* data, uint32_t len);
-/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
 #endif /*__ usb_otg_H */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

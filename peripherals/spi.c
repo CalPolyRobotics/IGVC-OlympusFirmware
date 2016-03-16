@@ -32,110 +32,75 @@
   ******************************************************************************
   */
 
-/* Includes ------------------------------------------------------------------*/
 #include "spi.h"
 
 #include "gpio.h"
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi3;
 
 /* SPI3 init function */
 void MX_SPI3_Init(void)
 {
-
-  hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_MASTER;
-  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi3.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi3.Init.TIMode = SPI_TIMODE_DISABLED;
-  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
-  hspi3.Init.CRCPolynomial = 10;
-  HAL_SPI_Init(&hspi3);
-
+    hspi3.Instance = SPI3;
+    hspi3.Init.Mode = SPI_MODE_MASTER;
+    hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
+    hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi3.Init.NSS = SPI_NSS_HARD_OUTPUT;
+    hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+    hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    hspi3.Init.TIMode = SPI_TIMODE_DISABLED;
+    hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
+    hspi3.Init.CRCPolynomial = 10;
+    HAL_SPI_Init(&hspi3);
 }
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 {
+    GPIO_InitTypeDef GPIO_InitStruct;
+    if(hspi->Instance==SPI3)
+    {
+        /* Peripheral clock enable */
+        __SPI3_CLK_ENABLE();
 
-  GPIO_InitTypeDef GPIO_InitStruct;
-  if(hspi->Instance==SPI3)
-  {
-  /* USER CODE BEGIN SPI3_MspInit 0 */
+        /**SPI3 GPIO Configuration    
+        PA15     ------> SPI3_NSS
+        PC10     ------> SPI3_SCK
+        PC12     ------> SPI3_MOSI 
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_15;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* USER CODE END SPI3_MspInit 0 */
-    /* Peripheral clock enable */
-    __SPI3_CLK_ENABLE();
-  
-    /**SPI3 GPIO Configuration    
-    PA15     ------> SPI3_NSS
-    PC10     ------> SPI3_SCK
-    PC12     ------> SPI3_MOSI 
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_15;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_12;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN SPI3_MspInit 1 */
-
-  /* USER CODE END SPI3_MspInit 1 */
-  }
+        GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_12;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    }
 }
 
 void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
 {
+    if(hspi->Instance==SPI3)
+    {
+        /* Peripheral clock disable */
+        __SPI3_CLK_DISABLE();
 
-  if(hspi->Instance==SPI3)
-  {
-  /* USER CODE BEGIN SPI3_MspDeInit 0 */
+        /**SPI3 GPIO Configuration    
+        PA15     ------> SPI3_NSS
+        PC10     ------> SPI3_SCK
+        PC12     ------> SPI3_MOSI 
+        */
+        HAL_GPIO_DeInit(GPIOA, GPIO_PIN_15);
 
-  /* USER CODE END SPI3_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __SPI3_CLK_DISABLE();
-  
-    /**SPI3 GPIO Configuration    
-    PA15     ------> SPI3_NSS
-    PC10     ------> SPI3_SCK
-    PC12     ------> SPI3_MOSI 
-    */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_15);
-
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_12);
-
-  }
-  /* USER CODE BEGIN SPI3_MspDeInit 1 */
-
-  /* USER CODE END SPI3_MspDeInit 1 */
+        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_12);
+    }
 } 
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

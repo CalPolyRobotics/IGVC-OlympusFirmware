@@ -25,7 +25,6 @@
   ******************************************************************************
   */
   
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -34,11 +33,6 @@
 #include "stm32f2xx_hal_conf.h"
 #include "usbd_desc.h"
 #include "usbd_cdc.h" 
-
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/ 
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
 
 #define CRITICAL_VAL  static uint8_t criticalSectionSR;
 

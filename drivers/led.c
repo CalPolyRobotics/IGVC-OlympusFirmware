@@ -11,8 +11,8 @@
 
 typedef struct 
 {
-   GPIO_TypeDef* port;
-   uint16_t pin;
+    GPIO_TypeDef* port;
+    uint16_t pin;
 } LED_t;
 
 LED_t LEDtable[] = {{},
@@ -31,9 +31,9 @@ LED_t LEDtable[] = {{},
 
 void setLED(uint8_t ledNum, uint8_t state)
 {
-   if (((state == 0) || (state == 1)) && (ledNum > 0) && (ledNum <= 12))
-   {
-     HAL_GPIO_WritePin(LEDtable[ledNum].port,LEDtable[ledNum].pin,state);
-   }
+    if (((state == 0) || (state == 1)) && (ledNum > 0) && (ledNum <= 12))
+    {
+        HAL_GPIO_WritePin(LEDtable[ledNum].port,LEDtable[ledNum].pin,state);
+    }
 }
 

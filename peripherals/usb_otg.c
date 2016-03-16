@@ -32,7 +32,6 @@
   ******************************************************************************
   */
 
-/* Includes ------------------------------------------------------------------*/
 #include "usb_otg.h"
 #include "gpio.h"
 #include "usart.h"
@@ -40,86 +39,69 @@
 #include "comms.h"
 #include <string.h>
 
-/* USER CODE BEGIN 0 */
 USBD_HandleTypeDef  USBD_Device;
 uint8_t myBuffer[128];
 //buffer8_t usbRecieveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-  //buffer8_write(&usbRecieveBuffer, data, len);
+    //buffer8_write(&usbRecieveBuffer, data, len);
 
-  //usbWrite("Read bytes\r\n", 12);
-  while ((*len)--)
-  {
-    runCommsFSM(*data++);
-  }
+    //usbWrite("Read bytes\r\n", 12);
+    while ((*len)--)
+    {
+        runCommsFSM(*data++);
+    }
 
-  USBD_CDC_ReceivePacket(&USBD_Device);
+    USBD_CDC_ReceivePacket(&USBD_Device);
 
-  return USBD_OK;
+    return USBD_OK;
 }
 
 static int8_t tunnelInit(void)
 {
-  memset(myBuffer, 0, 128);
+    memset(myBuffer, 0, 128);
 
-  //buffer8_init(&usbRecieveBuffer, myBuffer, 128);
+    //buffer8_init(&usbRecieveBuffer, myBuffer, 128);
 
-  USBD_CDC_SetRxBuffer(&USBD_Device, myBuffer);
-  return USBD_OK;
+    USBD_CDC_SetRxBuffer(&USBD_Device, myBuffer);
+    return USBD_OK;
 }
 
 static int8_t dummyDeinit(void)
-{
-  return USBD_OK;
+{   
+    return USBD_OK;
 }
 
 static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len)
 {
-  return USBD_OK;
+    return USBD_OK;
 }
 
 USBD_CDC_ItfTypeDef itfTest = {tunnelInit, dummyDeinit, dummyControl, usbReceive};
 
 void usbWrite(uint8_t* data, uint32_t len)
 {
-  USBD_CDC_SetTxBuffer(&USBD_Device, data, len);
-  USBD_CDC_TransmitPacket(&USBD_Device);
+    USBD_CDC_SetTxBuffer(&USBD_Device, data, len);
+    USBD_CDC_TransmitPacket(&USBD_Device);
 }
-/* USER CODE END 0 */
-
-/* USB_OTG_FS init function */
 
 void MX_USB_OTG_FS_USB_Init(void)
 {
-  /* Init Device Library */
-  USBD_Init(&USBD_Device, &VCP_Desc, 0);
-  
-  /* Add Supported Class */
-  USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
-  
-  /* Add CDC Interface Class */
-  //USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
-  USBD_CDC_RegisterInterface(&USBD_Device, &itfTest);
- 
-  USB_OTG_FS->GCCFG |= USB_OTG_GCCFG_NOVBUSSENS;
+    /* Init Device Library */
+    USBD_Init(&USBD_Device, &VCP_Desc, 0);
 
-  /* Start Device Process */
-  USBD_Start(&USBD_Device);
+    /* Add Supported Class */
+    USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
 
+    /* Add CDC Interface Class */
+    //USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
+    USBD_CDC_RegisterInterface(&USBD_Device, &itfTest);
 
+    USB_OTG_FS->GCCFG |= USB_OTG_GCCFG_NOVBUSSENS;
+
+    /* Start Device Process */
+    USBD_Start(&USBD_Device);
 }
-
-/* USER CODE BEGIN 1 */
-/* USER CODE END 1 */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
