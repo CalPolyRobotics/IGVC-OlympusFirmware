@@ -1,13 +1,14 @@
 /**
-  ******************************************************************************
-  * File Name          : led.c
-  * Description        : This file provides code for the configuration
-  *                      of the GPIO LEDs.
-  ******************************************************************************
+ ******************************************************************************
+ * File Name          : led.c
+ * Description        : This file provides code for the configuration
+ *                      of the GPIO LEDs.
+ ******************************************************************************
 */
 
-#include <stdio.h>
 #include "gpio.h"
+#include "led.h"
+#include "config.h"
 
 typedef struct 
 {
@@ -16,24 +17,25 @@ typedef struct
 } LED_t;
 
 LED_t LEDtable[] = {{},
-                    {GPIOA, GPIO_PIN_4},
-                    {GPIOA, GPIO_PIN_5},
-                    {GPIOA, GPIO_PIN_7},
-                    {GPIOB, GPIO_PIN_3},
-                    {GPIOB, GPIO_PIN_4},
-                    {GPIOB, GPIO_PIN_5},
-                    {GPIOC, GPIO_PIN_4},
-                    {GPIOC, GPIO_PIN_5},
-                    {GPIOC, GPIO_PIN_7},
-                    {GPIOC, GPIO_PIN_8},
-                    {GPIOD, GPIO_PIN_2},
-                    {GPIOH, GPIO_PIN_1}};
+                    {GPIO_DEBUG_1},
+                    {GPIO_DEBUG_2},
+                    {GPIO_DEBUG_3},
+                    {GPIO_DEBUG_4},
+                    {GPIO_DEBUG_5},
+                    {GPIO_DEBUG_6},
+                    {GPIO_DEBUG_7},
+                    {GPIO_DEBUG_8},
+                    {GPIO_DEBUG_9},
+                    {GPIO_DEBUG_10},
+                    {GPIO_DEBUG_11},
+                    {GPIO_DEBUG_12}
+                   };
 
-void setLED(uint8_t ledNum, uint8_t state)
+void setLED(uint8_t ledNum, LEDState state)
 {
-    if (((state == 0) || (state == 1)) && (ledNum > 0) && (ledNum <= 12))
+    if (((state == LED_ON) || (state == LED_OFF)) && (ledNum > 0) && (ledNum <= NUM_DEBUG_PINS))
     {
-        HAL_GPIO_WritePin(LEDtable[ledNum].port,LEDtable[ledNum].pin,state);
+        HAL_GPIO_WritePin(LEDtable[ledNum].port, LEDtable[ledNum].pin, state);
     }
 }
 

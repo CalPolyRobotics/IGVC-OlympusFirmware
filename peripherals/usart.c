@@ -33,6 +33,7 @@
   */
 
 #include "main.h"
+#include "config.h"
 #include "stm32f2xx_hal_usart.h"
 
 #include "usart.h"
@@ -42,12 +43,8 @@
 
 #include <stdio.h>
 
-#define COMMS_USART USART1
-#define TX_BUFFER_SIZE (8 * 1024)
-#define RX_BUFFER_SIZE (1024)
-
-static uint8_t txBuffer[TX_BUFFER_SIZE];
-static uint8_t rxBuffer[RX_BUFFER_SIZE];
+static uint8_t txBuffer[COMMS_TX_BUFFER_SIZE];
+static uint8_t rxBuffer[COMMS_RX_BUFFER_SIZE];
 
 static buffer8_t txFifo;
 static buffer8_t rxFifo;
@@ -74,8 +71,8 @@ void MX_USART1_UART_Init(void)
 
     __USART_ENABLE(&huart1);
 
-    buffer8_init(&txFifo, txBuffer, TX_BUFFER_SIZE);
-    buffer8_init(&rxFifo, rxBuffer, RX_BUFFER_SIZE);
+    buffer8_init(&txFifo, txBuffer, COMMS_TX_BUFFER_SIZE);
+    buffer8_init(&rxFifo, rxBuffer, COMMS_RX_BUFFER_SIZE);
 
     __USART_ENABLE_IT(&huart1, USART_IT_RXNE);
 }
@@ -92,16 +89,16 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
         PB6     ------> USART1_TX
         PB7     ------> USART1_RX 
         */
-        GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+        GPIO_InitStruct.Pin = GPIO_USART_TX|GPIO_USART_RX;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_PULLUP;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-        GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+        GPIO_InitStruct.Alternate = GPIO_USART_AF;
+        HAL_GPIO_Init(GPIO_USART_PORT, &GPIO_InitStruct);
 
         // /* Peripheral interrupt init*/
-        NVIC_SetPriority(USART1_IRQn, 2);
-        NVIC_EnableIRQ(USART1_IRQn);
+        NVIC_SetPriority(COMMS_IRQ, 2);
+        NVIC_EnableIRQ(COMMS_IRQ);
     }
 }
 
@@ -116,14 +113,15 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
         PB6     ------> USART1_TX
         PB7     ------> USART1_RX 
         */
-        HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6|GPIO_PIN_7);
+        HAL_GPIO_DeInit(GPIO_USART_PORT, 
+                        GPIO_USART_TX|GPIO_USART_RX);
 
         /* Peripheral interrupt Deinit*/
-        HAL_NVIC_DisableIRQ(USART1_IRQn);
+        HAL_NVIC_DisableIRQ(COMMS_IRQ);
     }
 } 
 
-void buffer_USART1_IRQHandler()
+void COMMS_ISR()
 {
     if (__HAL_USART_GET_FLAG(&huart1, USART_FLAG_TXE) != RESET &&
         COMMS_USART->CR1 & USART_CR1_TXEIE)

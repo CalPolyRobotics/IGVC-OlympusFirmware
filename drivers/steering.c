@@ -1,16 +1,9 @@
-#include <stdio.h>
+
+#include "config.h"
 #include "adc.h"
 #include "timerCallback.h"
 #include "motorControl.h"
 #include "comms.h"
-
-#define GPIO_SPEED_PWM  PORTA, 6
-#define GPIO_STEERING_DIRECTION  GPIOC, 6
-#define GPIO_HEPHAESTUS_GPIO  PORTB, 15
-#define SPEED_PWM_AF    GPIO_AF9_TIM14
-#define STEERING_CONTROL_PERIOD 100
-
-#define STEERING_DEADZONE 20
 
 static uint32_t steeringPotTarget = 3000;
 static uint32_t enableSteeringVar = 0;
@@ -48,10 +41,10 @@ Timer_Return steeringControlCallback(void* dummy)
 
     if (enableSteeringVar)
     {
-        if (newSteeringValue < (steeringPotTarget - STEERING_DEADZONE))
+        if (newSteeringValue < (steeringPotTarget - STEERING_CONTROL_DEADZONE))
         {
             setSteeringMotorDir(STEERING_RIGHT);
-        } else if (newSteeringValue > (steeringPotTarget + STEERING_DEADZONE))
+        } else if (newSteeringValue > (steeringPotTarget + STEERING_CONTROL_DEADZONE))
         {
             setSteeringMotorDir(STEERING_LEFT);
         } else {

@@ -34,6 +34,7 @@
 
 #include "gpio.h"
 #include "kill.h"
+#include "config.h"
 
 /** Configure pins as 
         * Analog 
@@ -58,7 +59,7 @@ void MX_GPIO_Init(void)
     __GPIOD_CLK_ENABLE();
 
 
-    HAL_GPIO_WritePin(BOARD_KILL_PORT, BOARD_KILL_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIO_BOARD_KILL_PORT, GPIO_BOARD_KILL_PIN, GPIO_PIN_SET);
 
     GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_15|GPIO_PIN_6|GPIO_PIN_7 
                           |GPIO_PIN_8|GPIO_PIN_14;

@@ -2,15 +2,6 @@
 #include "config.h"
 #include "timerCallback.h"
 
-//Callback Timer
-#define CALLBACK_TIMER  TIM9
-#define CALLBACK_FREQUENCY 1000
-#define TIMER_FREQUENCY 1000000
-#define TIMER_MAX_VALUE    0xFFFF
-#define MAX_NUM_CALLBACK_TIMERS  10
-#define CALLBACK_TIMER_IRQ TIM1_BRK_TIM9_IRQn
-#define CALLBACK_TIMER_ISR TIM1_BRK_TIM9_IRQHandler
-
 typedef struct CallbackTimer_t {
     uint32_t currentValue;
     uint32_t resetValue;

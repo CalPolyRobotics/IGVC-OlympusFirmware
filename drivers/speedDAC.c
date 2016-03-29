@@ -1,14 +1,9 @@
 
-#include <stdio.h>
+#include "config.h"
 #include "speedDAC.h"
 #include "i2c.h"
 #include "comms.h"
 #include "timerCallback.h"
-
-#define SPEED_DAC_ADDRESS   0x62
-
-#define SPEED_DAC_PERIOD    201
-#define SPEED_DAC_INCR      2
 
 static uint16_t targetSpeed = 0;
 static uint16_t currentSpeed = 0;
@@ -18,15 +13,15 @@ static Timer_Return speedDACCallback(void* dummy);
 
 static void setSpeedDAC(uint8_t value)
 {
-    i2cTransmit(SPEED_DAC_ADDRESS, &value, 1);
+    i2cTransmit(HERMES_SPEED_DAC_I2C_ADDR, &value, 1);
 }
 
 void initSpeedDAC()
 {
-    HAL_GPIO_WritePin(SPEED_DAC_ENABLE_PORT, SPEED_DAC_ENABLE_PIN, GPIO_PIN_SET); 
+    HAL_GPIO_WritePin(GPIO_AUTO_THROTTLE_ENABLE, GPIO_PIN_SET); 
     setSpeedDAC(0);
 
-    addCallbackTimer(SPEED_DAC_PERIOD, speedDACCallback, NULL);
+    addCallbackTimer(SPEED_DAC_INCR_PERIOD, speedDACCallback, NULL);
 }
 
 static Timer_Return speedDACCallback(void* dummy)
@@ -53,7 +48,7 @@ static Timer_Return speedDACCallback(void* dummy)
 
 void toggleSpeedDAC(Packet_t* packet)
 {
-   HAL_GPIO_TogglePin(SPEED_DAC_ENABLE_PORT, SPEED_DAC_ENABLE_PIN);
+   HAL_GPIO_TogglePin(GPIO_AUTO_THROTTLE_ENABLE);
 }
 
 void setSpeedDACOutputEnable(uint8_t enable)

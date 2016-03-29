@@ -1,5 +1,6 @@
 
 #include "main.h"
+#include "config.h"
 #include "motorControl.h"
 
 #define PWM_TIM TIM13
@@ -38,14 +39,14 @@ void setSteeringMotorDir(MotorDirection dir)
 {
     if (dir == STEERING_LEFT)
     {
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIO_STEER_LEFT, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIO_STEER_RIGHT, GPIO_PIN_RESET);
     } else if (dir == STEERING_RIGHT) {
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIO_STEER_LEFT, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIO_STEER_RIGHT, GPIO_PIN_SET);
     } else {
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIO_STEER_LEFT, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIO_STEER_RIGHT, GPIO_PIN_RESET);
     }
 }
 

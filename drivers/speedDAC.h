@@ -3,9 +3,6 @@
 
 #include "comms.h"
 
-#define SPEED_DAC_ENABLE_PIN    GPIO_PIN_12
-#define SPEED_DAC_ENABLE_PORT   GPIOB
-
 void initSpeedDAC();
 void writeSpeedDAC(uint8_t value);
 

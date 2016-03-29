@@ -1,8 +1,7 @@
 
 #include "main.h"
+#include "config.h"
 #include "i2c.h"
-
-#define SEVEN_SEG_ADDR 0x27
 
 void setSevenSeg(char a)
 {
@@ -63,5 +62,5 @@ void setSevenSeg(char a)
         magicNumber = lookupTable[a & 0xF];
     }    
 
-    i2cTransmit((SEVEN_SEG_ADDR << 1), &magicNumber, 1);
+    i2cTransmit((IRIS_SEG_I2C_ADDR << 1), &magicNumber, 1);
 }

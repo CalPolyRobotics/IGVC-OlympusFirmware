@@ -90,12 +90,12 @@ void ADC_IRQHandler(void)
 
 /**
 * @brief This function handles USART1 global interrupt.
-*/
-void USART1_IRQHandler(void)
-{
-    //HAL_UART_IRQHandler(&huart1);
-    buffer_USART1_IRQHandler();
-}
+// */
+// void USART1_IRQHandler(void)
+// {
+//     //HAL_UART_IRQHandler(&huart1);
+//     buffer_USART1_IRQHandler();
+// }
 
 /**
 * @brief This function handles DMA2 Stream2 global interrupt.
