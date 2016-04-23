@@ -85,15 +85,20 @@ int main(void)
     adc_init();
 
     initSteeringMotor();
-    startConversion();
     initIGVCCallbackTimer();
     initSteering();
     initSpeedDAC();
 
     printf("Hello.\r\n");
+
     while(1)
     {
         consoleProcessBytes();
+
+        while (buffer8_space(&usbReceiveBuffer))
+        {
+            runCommsFSM(buffer8_get(&usbReceiveBuffer));
+        }
     }
 }
 
