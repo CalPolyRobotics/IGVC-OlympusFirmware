@@ -1,9 +1,12 @@
 
+#include <stdio.h>
+
 #include "config.h"
 #include "speedDAC.h"
 #include "i2c.h"
 #include "comms.h"
 #include "timerCallback.h"
+#include "adc.h"
 
 static uint16_t targetSpeed = 0;
 static uint16_t currentSpeed = 0;
@@ -24,23 +27,34 @@ void initSpeedDAC()
     addCallbackTimer(SPEED_DAC_INCR_PERIOD, speedDACCallback, NULL);
 }
 
+uint8_t isPedalDown()
+{
+    return getPedalValue() > 868;
+}
+
 static Timer_Return speedDACCallback(void* dummy)
 {
     if (enableSpeedOutput)
     {
-        if (currentSpeed <= targetSpeed)
+        if (isPedalDown())
         {
-            currentSpeed += SPEED_DAC_INCR;
-            if (currentSpeed > targetSpeed)
+            if (currentSpeed <= targetSpeed)
             {
+                currentSpeed += SPEED_DAC_INCR;
+                if (currentSpeed > targetSpeed)
+                {
+                    currentSpeed = targetSpeed;
+                }
+
+            } else if (currentSpeed > targetSpeed) {
                 currentSpeed = targetSpeed;
             }
 
-        } else if (currentSpeed > targetSpeed) {
-            currentSpeed = targetSpeed;
+            setSpeedDAC((uint8_t)currentSpeed);
+        } else {
+            currentSpeed = 0;
+            setSpeedDAC(0);
         }
-
-        setSpeedDAC((uint8_t)currentSpeed);
     }
 
     return CONTINUE_TIMER;
