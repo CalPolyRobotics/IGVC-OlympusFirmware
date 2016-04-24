@@ -30,6 +30,14 @@ static uint32_t mapPotToTarget(uint16_t pot)
     uint32_t left = 2510;
     uint32_t right = 3520;
 
+    if (pot < left)
+    {
+        pot = left;
+    } else if (pot > right)
+    {
+        pot = right;
+    }
+
     return ((pot - left) * 65535) / (right - left);
 }
 
@@ -83,6 +91,11 @@ uint16_t getRawSteeringTarget()
 uint16_t getRawSteeringPotValue()
 {
     return getSteeringValue();
+}
+
+uint16_t getSteeringDir()
+{
+    return mapPotToTarget(getSteeringValue());
 }
 
 void enableSteering(uint8_t enable)

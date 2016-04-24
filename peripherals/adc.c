@@ -1,42 +1,8 @@
-/**
-  ******************************************************************************
-  * File Name          : ADC.c
-  * Description        : This file provides code for the configuration
-  *                      of the ADC instances.
-  ******************************************************************************
-  *
-  * COPYRIGHT(c) 2016 STMicroelectronics
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
-/* Includes ------------------------------------------------------------------*/
 #include "adc.h"
 
 #include "gpio.h"
 
-uint16_t ADCData;
+static uint16_t ADCData[2*8];
 
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
@@ -72,30 +38,38 @@ void MX_ADC1_Init(void)
 /* ADC2 init function */
 void MX_ADC2_Init(void)
 {
-    ADC_ChannelConfTypeDef sConfig;
+    ADC2->CR1 = ADC_CR1_SCAN;
+    ADC2->CR2 = ADC_CR2_DDS | ADC_CR2_DMA | ADC_CR2_CONT | ADC_CR2_ADON;
+    ADC2->SMPR2 = (ADC_SMPR2_SMP0_2) | (ADC_SMPR2_SMP1_2);
 
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-    hadc2.Instance = ADC2;
-    hadc2.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV8;
-    hadc2.Init.Resolution = ADC_RESOLUTION12b;
-    hadc2.Init.ScanConvMode = DISABLE;
-    hadc2.Init.ContinuousConvMode = ENABLE;
-    hadc2.Init.DiscontinuousConvMode = DISABLE;
-    hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-    hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    hadc2.Init.NbrOfConversion = 1;
-    hadc2.Init.DMAContinuousRequests = DISABLE;
-    hadc2.Init.EOCSelection = EOC_SEQ_CONV;
-    HAL_ADC_Init(&hadc2);
+    ADC2->SQR1 = (ADC_SQR1_L_0);
+    ADC2->SQR3 = (10) | (11 << 5);
 
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-    sConfig.Channel = ADC_CHANNEL_10;
-    sConfig.Rank = 1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-    HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+    ADC->CCR = ADC_CCR_DMA_0 | ADC_CCR_DDS;
 
+    GPIO_InitTypeDef GPIO_InitStruct;
+
+    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    //Stream 3, Channel 1
+
+    DMA2_Stream3->CR = (DMA_SxCR_CHSEL_0) |\
+                 (DMA_SxCR_PL) | \
+                 (DMA_SxCR_MSIZE_0) |\
+                 (DMA_SxCR_PSIZE_0) |\
+                 (DMA_SxCR_MINC) |\
+                 (DMA_SxCR_CIRC);
+
+    DMA2_Stream3->NDTR = 2*8;
+    DMA2_Stream3->PAR = (uint32_t)&(ADC2->DR);
+    DMA2_Stream3->M0AR = (uint32_t)ADCData;
+
+    DMA2_Stream3->CR |= (DMA_SxCR_EN);
+
+    ADC2->CR2 |= ADC_CR2_SWSTART;
 }
 
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
@@ -179,19 +153,31 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     }
 } 
 
-void startConversion()
-{
-    HAL_ADC_Start_IT(&hadc2);
-}
-
 uint32_t getSteeringValue()
 {
-  return ADCData;
+    uint32_t steeringValue = 0;
+    uint32_t i;
+
+    for (i = 0; i < 8; i++)
+    {
+        steeringValue += ADCData[i * 2];
+    }
+
+    return steeringValue / 8;
 }
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+uint32_t getPedalValue()
 {
-  ADCData = HAL_ADC_GetValue(&hadc2);
+    uint32_t pedalValue = 0;
+    uint32_t i;
+
+    for (i = 0; i < 8; i++)
+    {
+        pedalValue += ADCData[(i * 2) + 1];
+    }
+
+    return pedalValue / 8;
 }
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

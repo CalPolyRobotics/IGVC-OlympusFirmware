@@ -47,8 +47,8 @@ extern ADC_HandleTypeDef hadc2;
 void MX_ADC1_Init(void);
 void MX_ADC2_Init(void);
 
-void startConversion();
 uint32_t getSteeringValue();
+uint32_t getPedalValue();
 
 #ifdef __cplusplus
 }
