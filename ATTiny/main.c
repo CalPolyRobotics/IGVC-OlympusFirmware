@@ -2,6 +2,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#include "usi.h"
+
 #define MCU_EN_PIN (1 << PB2)
 #define MCU_EN_PORT PORTB
 #define MCU_DIR_PIN (1 << PA7)
@@ -32,10 +34,18 @@ int main()
 {
    PORTB = 0;
 
+   //DDRA |= (1 << PA6) | (1 << PA4);
    DDRA = 0;
+   PORTA |= (1 << PA6) | (1 << PA4);
    DDRB = (1 << PB0) | (1 << PB1);
 
+
    PORTB = 0;
+
+   USIinit();
+   sei();
+
+   //while(1);
 
    /*while (1)
    {
@@ -92,6 +102,20 @@ int main()
                writeFNRState();
             }
          }
+      }
+
+      if (PINA & (1 << PA0))
+      {
+         PORTB |= (1 << PB2);
+      } else {
+         PORTB &= ~(1 << PB2);
+      }
+
+      if (PINA & (1 << PA1))
+      {
+         PORTA |= (1 << PA7);
+      } else {
+         PORTA &= ~(1 << PA7);
       }
    }
 }

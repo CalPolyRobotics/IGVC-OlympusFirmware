@@ -6,7 +6,6 @@
 
 void setFNR(FNR_t newState)
 {
-    resetSpeedDAC();
     switch (newState)
     {
         case FNR_FORWARD:
