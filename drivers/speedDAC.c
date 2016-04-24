@@ -29,7 +29,7 @@ void initSpeedDAC()
 
 uint8_t isPedalDown()
 {
-    return getPedalValue() > 868;
+    return getPedalValue() > 248;
 }
 
 static Timer_Return speedDACCallback(void* dummy)
@@ -83,6 +83,11 @@ void resetSpeedDAC()
 {
     currentSpeed = 0;
     setSpeedDAC(currentSpeed);
+}
+
+uint16_t getSpeedDAC()
+{
+    return targetSpeed;
 }
 
 void speedDACHandler(Packet_t* packet)

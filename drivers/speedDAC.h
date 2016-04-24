@@ -10,5 +10,6 @@ void setSpeedDACOutputEnable(uint8_t enable);
 void speedDACHandler(Packet_t* packet);
 void toggleSpeedDAC(Packet_t* packet);
 void resetSpeedDAC();
+uint16_t getSpeedDAC();
 
 #endif
