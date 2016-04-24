@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -57,6 +56,7 @@ static void console_getSteerTarget(uint32_t, char**);
 static void console_getSteerValue(uint32_t, char**);
 static void console_enableSteering(uint32_t, char**);
 static void console_hardmode(uint32_t, char**);
+static void console_getPower(uint32_t, char**);
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
@@ -82,6 +82,7 @@ static ConsoleCommand commands[] = {
     {"getSteerValue", 0, console_getSteerValue},
     {"enableSteering", 1, console_enableSteering},
     {"hardmode", 1, console_hardmode},
+    {"getPower", 0, console_getPower},
     {NULL, 0, NULL}
 };
 
@@ -522,4 +523,13 @@ static void console_enableSteering(uint32_t argc, char** argv)
 static void console_hardmode(uint32_t argc, char** argv)
 {
     echoCharacters = strtol(argv[0], NULL, 10);
+}
+
+static void console_getPower(uint32_t argc, char** argv)
+{
+    int i;
+    for(i = 0; i < ADC_LINES; i++){
+        int ind = periph_order[i];
+        printf("%s:\t%u %s\r\n", periph_name[ind], adc_conv(ind), periph_unit[ind]);                
+    }
 }

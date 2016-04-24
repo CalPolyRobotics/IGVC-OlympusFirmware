@@ -91,6 +91,7 @@ int main(void)
     initSpeedDAC();
 
     printf("Hello.\r\n");
+
     while(1)
     {
         consoleProcessBytes();
