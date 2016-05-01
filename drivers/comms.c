@@ -9,6 +9,7 @@
 #include "usart.h"
 #include "usb_otg.h"
 #include "fnr.h"
+#include "pwradc.h"
 #include "speedDAC.h"
 #include "kill.h"
 #include "steering.h"
@@ -66,6 +67,7 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Steering Angle
     {0,  NULL, 0,  NULL, toggleLED},                 //Set Lights
     {0,  NULL, 0,  NULL, toggleLED},                 //Get Battery
+    {0,  NULL, 16,  &commsPwradcValues[0], commsPwradcCallback}, //Get Power
     {0,  NULL, 0,  NULL, killBoard}                  //Send Stop
 };
 
@@ -143,7 +145,7 @@ void runCommsFSM(char data)
     {
         case WAITING_FOR_START_1:
         {
-            printf("Waiting START1\r\n");
+            //printf("Waiting START1\r\n");
             packetIdx = 0;
             if (data == START_BYTE_1)
             {
@@ -156,7 +158,7 @@ void runCommsFSM(char data)
 
         case WAITING_FOR_START_2:
         {
-            printf("Waiting START2\r\n");
+            //printf("Waiting START2\r\n");
             if (data == START_BYTE_2)
             {
                 state = WAITING_FOR_HEADER;
@@ -172,7 +174,7 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
             packetIdx++;
-            printf("Waiting HEADER %lu == %u\r\n", packetIdx, sizeof(PacketHeader_t));
+            //printf("Waiting HEADER %lu == %u\r\n", packetIdx, sizeof(PacketHeader_t));
             if (packetIdx == sizeof(PacketHeader_t))
             {
                 if (packetIdx == packet->header.packetLen)
@@ -192,7 +194,7 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
             packetIdx++;
-            printf("Waiting DATA %lu == %u\r\n", packetIdx, packet->header.packetLen);
+            //printf("Waiting DATA %lu == %u\r\n", packetIdx, packet->header.packetLen);
             if (packetIdx == packet->header.packetLen)
             {
                 checkPacket(packet);
