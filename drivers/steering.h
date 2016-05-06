@@ -15,5 +15,6 @@ uint16_t getRawSteeringTarget();
 uint16_t getSteeringDir();
 uint16_t getRawSteeringPotValue();
 void enableSteering();
+uint32_t getCurrentSteeringValue();
 
 #endif

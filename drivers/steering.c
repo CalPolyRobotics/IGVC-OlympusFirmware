@@ -5,8 +5,11 @@
 #include "motorControl.h"
 #include "comms.h"
 
-static uint32_t steeringPotTarget = 3000;
+#define STEERING_COUNT_THRESHOLD 5
+
+static uint32_t steeringPotTarget = 1000;
 static uint32_t enableSteeringVar = 0;
+static uint8_t steeringValueCount = 0;
 
 uint16_t commsCurrentSteeringValue = 0;
 
@@ -41,6 +44,15 @@ static uint32_t mapPotToTarget(uint16_t pot)
     return ((pot - left) * 65535) / (right - left);
 }
 
+uint32_t getCurrentSteeringValue() 
+{
+    return mapPotToTarget(getSteeringValue());
+}
+
+
+
+
+
 Timer_Return steeringControlCallback(void* dummy)
 {
     uint16_t newSteeringValue = getSteeringValue();
@@ -51,15 +63,21 @@ Timer_Return steeringControlCallback(void* dummy)
     {
         if (newSteeringValue < (steeringPotTarget - STEERING_CONTROL_DEADZONE))
         {
+            steeringValueCount = 0;
             setSteeringMotorDir(STEERING_RIGHT);
         } else if (newSteeringValue > (steeringPotTarget + STEERING_CONTROL_DEADZONE))
         {
+            steeringValueCount = 0;
             setSteeringMotorDir(STEERING_LEFT);
         } else {
-            setSteeringMotorDir(STEERING_STOP);
-            enableSteeringVar = 0;
+            if (++steeringValueCount >= STEERING_COUNT_THRESHOLD) {
+                setSteeringMotorDir(STEERING_STOP);
+                enableSteeringVar = 0;
+                steeringValueCount = 0;
+            }
         }
     } else {
+        steeringValueCount = 0;
         setSteeringMotorDir(STEERING_STOP);
     }
 
