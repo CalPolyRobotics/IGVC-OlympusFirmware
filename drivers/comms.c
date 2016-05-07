@@ -6,6 +6,7 @@
 #include "main.h"
 
 #include "comms.h"
+#include "led.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "fnr.h"
@@ -55,18 +56,18 @@ void toggleLED3(Packet_t* packet)
 }
 
 packetResponse_t response[] = {
-    {0,  NULL, 0,  NULL, toggleLED},           //Get 1 Sonar
-    {0,  NULL, 0,  NULL, toggleLED2},           //Get 1 Sonar
-    {0,  NULL, 0,  NULL, toggleLED},                 //Get all Sonars
-    {0,  NULL, 0,  NULL, FNRCommsHandler},            //Set FNR
-    {0,  NULL, 0,  NULL, speedDACHandler},           //Set Throttle  
-    {0,  NULL, 0,  NULL, toggleSpeedDAC},                 //Set Speed
-    {0,  NULL, 0,  NULL, toggleLED},                 //Get Speed
-    {0,  NULL, 0,  NULL, setSteeringTargetFromComms},  //Set Steering
-    //{0,  NULL, 2,  commsCurrentSteeringValue, NULL},   //Get Steering Angle
-    {0,  NULL, 0,  NULL, toggleLED},                 //Get Steering Angle
-    {0,  NULL, 0,  NULL, toggleLED},                 //Set Lights
-    {0,  NULL, 0,  NULL, toggleLED},                 //Get Battery
+    {0,  NULL, 0,  NULL, toggleLED},                  // Status
+    {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
+    {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
+    {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
+    {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
+    {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
+    {0,  NULL, 0,  NULL, toggleLED},                  // Get Speed
+    {0,  NULL, 0,  NULL, setSteeringTargetFromComms}, // Set Steering
+    //{0,  NULL, 2,  commsCurrentSteeringValue, NULL},// Get Steering Angle
+    {0,  NULL, 0,  NULL, toggleLED},                  // Get Steering Angle
+    {0,  NULL, 0,  NULL, commsSetLightsCallback},     // Set Lights
+    {0,  NULL, 0,  NULL, toggleLED},                  // Get Battery
     {0,  NULL, 16,  &commsPwradcValues[0], commsPwradcCallback}, //Get Power
     {0,  NULL, 0,  NULL, killBoard}                  //Send Stop
 };
