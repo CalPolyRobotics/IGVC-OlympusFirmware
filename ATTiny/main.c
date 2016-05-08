@@ -34,8 +34,7 @@ int main()
 {
    PORTB = 0;
 
-   //DDRA |= (1 << PA6) | (1 << PA4);
-   DDRA = 0;
+   DDRA = (1 << PA3);
    PORTA |= (1 << PA6) | (1 << PA4);
    DDRB = (1 << PB0) | (1 << PB1);
 
@@ -69,6 +68,13 @@ int main()
 
    while (1)
    {
+      if (PINA & (1 << PA5))
+      {
+         PORTA |= (1 << PA3);
+      } else {
+         PORTA &= ~(1 << PA3);
+      }
+
       if (!(PINB & (MCU_EN_PIN)))
       {
          currentState = NEUTRAL;
@@ -104,19 +110,19 @@ int main()
          }
       }
 
-      if (PINA & (1 << PA0))
-      {
-         PORTB |= (1 << PB2);
-      } else {
-         PORTB &= ~(1 << PB2);
-      }
+      // if (PINA & (1 << PA0))
+      // {
+      //    PORTB |= (1 << PB2);
+      // } else {
+      //    PORTB &= ~(1 << PB2);
+      // }
 
-      if (PINA & (1 << PA1))
-      {
-         PORTA |= (1 << PA7);
-      } else {
-         PORTA &= ~(1 << PA7);
-      }
+      // if (PINA & (1 << PA1))
+      // {
+      //    PORTA |= (1 << PA7);
+      // } else {
+      //    PORTA &= ~(1 << PA7);
+      // }
    }
 }
 
