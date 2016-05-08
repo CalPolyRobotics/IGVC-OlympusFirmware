@@ -116,6 +116,7 @@ $(HEX): $(ELF)
 
 $(ELF): $(OBJECTS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(LDLIBS)
+	arm-none-eabi-size $@
 
 $(BUILDDIR)/%.o: %.c
 	mkdir -p $(dir $@)
