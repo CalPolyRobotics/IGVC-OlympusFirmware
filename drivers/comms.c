@@ -22,8 +22,6 @@
 #define START_BYTE_1 0xF0
 #define START_BYTE_2 0x5A
 
-extern uint16_t commsCurrentSteeringValue;
-
 typedef enum {
     WAITING_FOR_START_1 = 0,
     WAITING_FOR_START_2,
@@ -66,7 +64,7 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleLED},                  // Get Speed
     {0,  NULL, 0,  NULL, setSteeringTargetFromComms}, // Set Steering
     //{0,  NULL, 2,  commsCurrentSteeringValue, NULL},// Get Steering Angle
-    {0,  NULL, 0,  NULL, toggleLED},                  // Get Steering Angle
+    {0,  NULL, 2,  &commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
     {0,  NULL, 0,  NULL, commsSetLightsCallback},     // Set Lights
     {0,  NULL, 0,  NULL, toggleLED},                  // Get Battery
     {0,  NULL, 16,  &commsPwradcValues[0], commsPwradcCallback}, //Get Power

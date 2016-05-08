@@ -12,9 +12,13 @@ void setSteeringTargetFromComms(Packet_t* packet);
 uint16_t getRawSteeringTarget();
 //uint16_t getRawSteeringPotValue();
 
+uint8_t commsCurrentSteeringValue[2];
+
 uint16_t getSteeringDir();
 uint16_t getRawSteeringPotValue();
 void enableSteering();
 uint32_t getCurrentSteeringValue();
+
+void commsSteeringCallback();
 
 #endif
