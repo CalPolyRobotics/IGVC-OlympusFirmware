@@ -4,6 +4,20 @@
 #include "fnr.h"
 #include "speedDAC.h"
 
+#include <stdio.h>
+
+void initAutomanInt()
+{
+    EXTI->IMR |= EXTI_IMR_MR15;
+    EXTI->RTSR |= EXTI_RTSR_TR15;
+    EXTI->FTSR |= EXTI_FTSR_TR15;
+
+    SYSCFG->EXTICR[3] = SYSCFG_EXTICR4_EXTI15_PC;
+
+    NVIC_SetPriority(EXTI15_10_IRQn, 5);
+    NVIC_EnableIRQ(EXTI15_10_IRQn);
+}
+
 void setFNR(FNR_t newState)
 {
     switch (newState)
@@ -44,4 +58,10 @@ void FNRCommsHandler(Packet_t* packet)
     {
         setFNR(packet->data[0]);
     }
+}
+
+void EXTI15_10_IRQHandler()
+{
+    EXTI->PR |= EXTI_PR_PR15;
+    printf("Pin Changed\r\n");
 }
