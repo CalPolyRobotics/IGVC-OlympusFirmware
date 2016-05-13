@@ -11,8 +11,7 @@ static uint32_t steeringPotTarget = 1000;
 static uint32_t enableSteeringVar = 0;
 static uint8_t steeringValueCount = 0;
 
-uint16_t currentSteeringValue = 0;
-uint8_t commsCurrentSteeringValue[] = {0,0};
+uint16_t commsCurrentSteeringValue = 0;
 
 static Timer_Return steeringControlCallback(void* dummy);
 
@@ -51,11 +50,14 @@ uint32_t getCurrentSteeringValue()
 }
 
 
+
+
+
 Timer_Return steeringControlCallback(void* dummy)
 {
     uint16_t newSteeringValue = getSteeringValue();
 
-    currentSteeringValue = (uint16_t)mapPotToTarget(newSteeringValue);
+    commsCurrentSteeringValue = (uint16_t)mapPotToTarget(newSteeringValue);
 
     if (enableSteeringVar)
     {
@@ -117,10 +119,4 @@ uint16_t getSteeringDir()
 void enableSteering(uint8_t enable)
 {
     enableSteeringVar = enable;
-}
-
-void commsSteeringCallback()
-{
-    commsCurrentSteeringValue[0] = (currentSteeringValue >> 8) & 0xFF;
-    commsCurrentSteeringValue[1] = currentSteeringValue & 0xFF;
 }
