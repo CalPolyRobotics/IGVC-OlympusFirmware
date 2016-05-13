@@ -7,6 +7,7 @@
 
 typedef enum {FNR_NEUTRAL = 0, FNR_FORWARD, FNR_REVERSE} FNR_t;
 
+void initAutomanInt();
 void setFNR(FNR_t newState);
 
 void FNRCommsHandler(Packet_t* packet);

@@ -60,7 +60,7 @@ ISR(USI_OVF_vect)
         case WAIT_ACK:
             PORTA |= (1 << PA6);
             //PORTB |= (1 << PB2);
-            USIDR = PINA & 0x3;
+            USIDR = PINA & 0x7;
             state = WAIT_DATA;
             break;
 
