@@ -12,4 +12,6 @@ void setFNR(FNR_t newState);
 
 void FNRCommsHandler(Packet_t* packet);
 
+uint8_t getFNR();
+
 #endif

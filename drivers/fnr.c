@@ -3,6 +3,7 @@
 #include "gpio.h"
 #include "fnr.h"
 #include "speedDAC.h"
+#include "i2c.h"
 
 #include <stdio.h>
 
@@ -49,6 +50,12 @@ void setFNR(FNR_t newState)
                               GPIO_PIN_SET);
             break;
     }
+}
+
+uint8_t getFNR(){
+    uint8_t data;
+    i2cReceive(0x1B, &data, 1);
+    return data;
 }
 
 void FNRCommsHandler(Packet_t* packet)

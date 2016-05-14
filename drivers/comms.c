@@ -43,44 +43,51 @@ typedef struct {
 } packetResponse_t;
 
 // Generates a CRC8 lookup table
-static void init_crc8()
-     /*
-      * Should be called before any other crc function.  
-      */
-{
-  int i,j;
-  unsigned char crc;
 
+//static void init_crc8()
+/*
+* Should be called before any other crc function.  
+*/
+//{
+  //int i,j;
+  //unsigned char crc;
+
+    /**
   if (!made_table) {
     for (i=0; i<256; i++) {
       crc = i;
       for (j=0; j<8; j++)
         crc = (crc << 1) ^ ((crc & 0x80) ? DI : 0);
       crc8_table[i] = crc & 0xFF;
-      /* printf("table[%d] = %d (0x%X)\n", i, crc, crc); */
+      // printf("table[%d] = %d (0x%X)\n", i, crc, crc);
     }
     made_table=1;
   }
-}
+    **/
+//}
 
 // Calculates an intermediate CRC8
 void crc8byte(unsigned char *crc, unsigned char m)
 {
+    /**
   if (!made_table)
     init_crc8();
 
   *crc = crc8_table[(*crc) ^ m];
   *crc &= 0xFF;
+    **/
 }
 
 // Calculates a complete CRC8
 void crc8(Packet_t* packet){
+    /**
     uint8_t* byte_pointer = (uint8_t*)packet;
     *crc = 0;
 
     for (int i = 0; i < packet->header.packetLen; i++){
         crc8byte(byte_pointer[i],*crc);
     }
+    **/
 }
 
 void toggleLED(Packet_t* packet)
@@ -118,12 +125,15 @@ packetResponse_t response[] = {
 
 static bool checkPacket(Packet_t* packet)
 {
+    /**
     if (crc8(packet) == 0){
         return true;
     }
     else{
         return true; // CHANGE THIS LATER
     }
+    **/
+    return false;
 }
 
 static void runPacket(Packet_t* packet)

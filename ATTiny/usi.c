@@ -1,6 +1,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include <stdint.h>
+
 #define SLAVE_ADDR 0x1B
 
 typedef enum {WAIT_ADDR, WAIT_ACK, WAIT_DATA} WaitState_t;
@@ -24,6 +26,10 @@ void USIinit()
 
     //USICR = 0xF8;
 
+}
+
+uint8_t mapFNR(){
+    return (PINA & 0x7) ^ 0x4;
 }
 
 
@@ -60,7 +66,7 @@ ISR(USI_OVF_vect)
         case WAIT_ACK:
             PORTA |= (1 << PA6);
             //PORTB |= (1 << PB2);
-            USIDR = PINA & 0x7;
+            USIDR = mapFNR();
             state = WAIT_DATA;
             break;
 
@@ -70,3 +76,4 @@ ISR(USI_OVF_vect)
             break;
     }
 }
+

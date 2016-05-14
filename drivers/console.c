@@ -434,10 +434,7 @@ static void console_writeFNR(uint32_t argc, char** argv)
 
 static void console_readFNR(uint32_t argc, char** argv)
 {
-    uint8_t data;
-    i2cReceive(0x1B, &data, 1);
-
-    printf("%X", data);
+    printf("%X", getFNR());
 }
 
 static void console_writeSpeed(uint32_t argc, char** argv)

@@ -3,4 +3,6 @@
 
 void USIinit();
 
+uint8_t mapFNR();
+
 #endif
