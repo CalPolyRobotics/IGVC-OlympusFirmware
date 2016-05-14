@@ -20,14 +20,14 @@ static uint32_t div[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000}
 
 const char* periph_name[] =  
 {
-    "Battery (I)", 
-    "Five (V)",
-    "Three (V)", 
-    "Battery (V)",
-    "Twelve (I)",
-    "Twelve (V)",
-    "Five (I)",
-    "Three (I)"
+    "        Current", 
+    "5V      Voltage",
+    "3.3V    Voltage", 
+    "Battery Voltage",
+    "        Current",
+    "12V     Voltage",
+    "        Current",
+    "        Current"
 };
 
 const char* periph_unit[] = {"mA", "mV", "mV", "mV", "mA", "mV", "mA", "mA"};

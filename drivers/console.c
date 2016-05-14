@@ -538,17 +538,17 @@ static void console_getPower(uint32_t argc, char** argv)
         powerVals[i * 3] = adc_conv(ind);
         ind = periph_order[i * 2 + 1];
         powerVals[i * 3 + 1] = adc_conv(ind);
-        powerVals[i * 3 + 2] = powerVals[i * 3] * powerVals[i * 3 + 1] / 1000000; // Calculate power in W
+        powerVals[i * 3 + 2] = powerVals[i * 3] * powerVals[i * 3 + 1] / 1000; // Calculate power in mW
     }
 
     printf("\r\n");
 
     for(i = 0; i < ADC_LINES / 2; i++){
         int ind = periph_order[i * 2];
-        printf("%s:\t%u.%u %s\r\n", periph_name[ind], powerVals[i * 3] / 1000, powerVals[i * 3] % 1000, "V");                
+        printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3] / 1000, powerVals[i * 3] % 1000, "V");                
         ind = periph_order[i * 2 + 1];
-        printf("%s:\t%u.%u %s\r\n", periph_name[ind], powerVals[i * 3 + 1] / 1000, powerVals[i * 3 + 1] % 1000, "A");                
-        printf("%s:\t%u %s\r\n", "          Power", powerVals[i * 3 + 2], "W");     
+        printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3 + 1] / 1000, powerVals[i * 3 + 1] % 1000, "A");                
+        printf("%s: %2u.%03u %s\r\n", "          Power", powerVals[i * 3 + 2] / 1000, powerVals[i * 3 + 2] % 1000, "W");     
         printf("\r\n");
     }
 }
