@@ -41,11 +41,17 @@
 
 USBD_HandleTypeDef  USBD_Device;
 uint8_t myBuffer[128];
-buffer8_t usbReceiveBuffer;
+//buffer8_t usbRecieveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-    buffer8_write(&usbReceiveBuffer, data, *len);
+    //buffer8_write(&usbRecieveBuffer, data, len);
+
+    //usbWrite("Read bytes\r\n", 12);
+    while ((*len)--)
+    {
+        runCommsFSM(*data++);
+    }
 
     USBD_CDC_ReceivePacket(&USBD_Device);
 
@@ -56,7 +62,7 @@ static int8_t tunnelInit(void)
 {
     memset(myBuffer, 0, 128);
 
-    buffer8_init(&usbReceiveBuffer, myBuffer, 128);
+    //buffer8_init(&usbRecieveBuffer, myBuffer, 128);
 
     USBD_CDC_SetRxBuffer(&USBD_Device, myBuffer);
     return USBD_OK;
