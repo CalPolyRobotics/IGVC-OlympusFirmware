@@ -14,6 +14,7 @@
 #include "speedDAC.h"
 #include "kill.h"
 #include "steering.h"
+#include "crc8.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
@@ -42,54 +43,6 @@ typedef struct {
     commsCallback callback;
 } packetResponse_t;
 
-// Generates a CRC8 lookup table
-
-//static void init_crc8()
-/*
-* Should be called before any other crc function.  
-*/
-//{
-  //int i,j;
-  //unsigned char crc;
-
-    /**
-  if (!made_table) {
-    for (i=0; i<256; i++) {
-      crc = i;
-      for (j=0; j<8; j++)
-        crc = (crc << 1) ^ ((crc & 0x80) ? DI : 0);
-      crc8_table[i] = crc & 0xFF;
-      // printf("table[%d] = %d (0x%X)\n", i, crc, crc);
-    }
-    made_table=1;
-  }
-    **/
-//}
-
-// Calculates an intermediate CRC8
-void crc8byte(unsigned char *crc, unsigned char m)
-{
-    /**
-  if (!made_table)
-    init_crc8();
-
-  *crc = crc8_table[(*crc) ^ m];
-  *crc &= 0xFF;
-    **/
-}
-
-// Calculates a complete CRC8
-void crc8(Packet_t* packet){
-    /**
-    uint8_t* byte_pointer = (uint8_t*)packet;
-    *crc = 0;
-
-    for (int i = 0; i < packet->header.packetLen; i++){
-        crc8byte(byte_pointer[i],*crc);
-    }
-    **/
-}
-
 void toggleLED(Packet_t* packet)
 {
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
@@ -105,8 +58,12 @@ void toggleLED3(Packet_t* packet)
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
 }
 
-packetResponse_t response[] = {
-    {0,  NULL, 0,  NULL, toggleLED},                  // Status
+static uint8_t echoBuf[256];
+
+void echoPacketCallback(Packet_t* packet);
+
+static packetResponse_t response[] = {
+    {256,  echoBuf, 0,  echoBuf, echoPacketCallback},                  // Status
     {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
     {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
@@ -123,17 +80,19 @@ packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, killBoard}                  //Send Stop
 };
 
+void echoPacketCallback(Packet_t* packet)
+{
+    response[0].responseDataLen = packet->header.packetLen - sizeof(PacketHeader_t);
+}
+
 static bool checkPacket(Packet_t* packet)
 {
-    /**
-    if (crc8(packet) == 0){
+    if (crc8(packet, packet->header.packetLen) == 0){
         return true;
     }
     else{
-        return true; // CHANGE THIS LATER
+        return true;
     }
-    **/
-    return false;
 }
 
 static void runPacket(Packet_t* packet)
@@ -173,7 +132,7 @@ static void sendResponse(Packet_t* packet)
 
     outPacket->header.startByte[0] = START_BYTE_1;
     outPacket->header.startByte[1] = START_BYTE_2;
-    outPacket->header.CRC8 = 0;
+    outPacket->header.CRC8 = 0xCC;
     outPacket->header.msgType = packet->header.msgType | 1;
     outPacket->header.seqNumber = packet->header.seqNumber;
     outPacket->header.packetLen = response[packetType].responseDataLen + sizeof(PacketHeader_t);
