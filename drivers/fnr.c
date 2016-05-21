@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 
+uint8_t FNRState = 0;
+
 void initAutomanInt()
 {
     EXTI->IMR |= EXTI_IMR_MR15;
@@ -56,6 +58,10 @@ uint8_t getFNR(){
     uint8_t data;
     i2cReceive(0x1B, &data, 1);
     return data;
+}
+
+void commsGetFNRCallback(){
+    FNRState = getFNR();
 }
 
 void FNRCommsHandler(Packet_t* packet)

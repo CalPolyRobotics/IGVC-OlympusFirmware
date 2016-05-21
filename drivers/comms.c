@@ -67,7 +67,7 @@ static packetResponse_t response[] = {
     {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
     {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
-    {0,  NULL, 0,  NULL, toggleLED},                  // Get FNR
+    {0,  NULL, 1,  &FNRState, commsGetFNRCallback},   // Get FNR
     {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
     {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
     {0,  NULL, 0,  NULL, toggleLED},                  // Get Speed
