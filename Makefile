@@ -62,7 +62,8 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/pwradc.c \
 		   $(DRIVERS)/sevenSeg.c \
 		   $(DRIVERS)/speedDAC.c \
-		   $(DRIVERS)/steering.c
+		   $(DRIVERS)/steering.c \
+		   $(DRIVERS)/encoder.c
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \

@@ -62,6 +62,8 @@ static uint8_t echoBuf[256];
 
 void echoPacketCallback(Packet_t* packet);
 
+extern volatile uint16_t speedCommsValue[2];
+
 static packetResponse_t response[] = {
     {256,  echoBuf, 0,  echoBuf, echoPacketCallback},                  // Status
     {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
@@ -70,7 +72,7 @@ static packetResponse_t response[] = {
     {0,  NULL, 1,  &FNRState, commsGetFNRCallback},   // Get FNR
     {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
     {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
-    {0,  NULL, 0,  NULL, toggleLED},                  // Get Speed
+    {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], toggleLED},                  // Get Speed
     {0,  NULL, 0,  NULL, setSteeringTargetFromComms}, // Set Steering
     //{0,  NULL, 2,  commsCurrentSteeringValue, NULL},// Get Steering Angle
     {0,  NULL, 2,  &commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle

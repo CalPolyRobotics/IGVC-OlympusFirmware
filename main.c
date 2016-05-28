@@ -52,6 +52,7 @@
 #include "console.h"
 #include "motorControl.h"
 #include "adc.h"
+#include "encoder.h"
 
 #include <stddef.h>
 
@@ -88,6 +89,7 @@ int main(void)
     initIGVCCallbackTimer();
     initSteering();
     initSpeedDAC();
+    initEncoderInputCapture();
 
     printf("Hello.\r\n");
 
