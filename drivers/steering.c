@@ -123,6 +123,6 @@ void commsSteeringCallback()
 {
     commsCurrentSteeringValue[0] = (currentSteeringValue >> 8) & 0xFF;
     commsCurrentSteeringValue[1] = currentSteeringValue & 0xFF;
-    printf("%u", commsCurrentSteeringValue[0]);
-    printf("%u", commsCurrentSteeringValue[1]);
+    // printf("%u", commsCurrentSteeringValue[0]);
+    // printf("%u", commsCurrentSteeringValue[1]);
 }
