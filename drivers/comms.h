@@ -10,7 +10,7 @@ typedef struct {
     uint8_t msgType;
     uint8_t seqNumber;
     uint8_t packetLen;
-} PacketHeader_t;
+} __attribute__((packed)) PacketHeader_t;
 
 typedef struct {
     PacketHeader_t header;

@@ -5,14 +5,15 @@
 #include "motorControl.h"
 #include "comms.h"
 
-#define STEERING_COUNT_THRESHOLD 5
+#define STEERING_COUNT_THRESHOLD 1
 
-static uint32_t steeringPotTarget = 1000;
-static uint32_t enableSteeringVar = 0;
-static uint8_t steeringValueCount = 0;
+// Need to be global to be accessed from comms.c
+volatile uint16_t currentSteeringValue = 0;
+volatile uint8_t commsCurrentSteeringValue[] = {0,0};
 
-uint16_t currentSteeringValue = 0;
-uint8_t commsCurrentSteeringValue[] = {0,0};
+static volatile uint32_t steeringPotTarget = 1000;
+static volatile uint32_t enableSteeringVar = 0;
+static volatile uint8_t steeringValueCount = 0;
 
 static Timer_Return steeringControlCallback(void* dummy);
 
@@ -23,16 +24,16 @@ void initSteering()
 
 static uint32_t mapTargetToPot(uint16_t target)
 {
-    uint32_t left = 2510;
-    uint32_t right = 3520;
+    uint32_t left = 980;
+    uint32_t right = 2030;
 
     return ((right - left) * (uint32_t)target) / 65535 + left;
 }
 
 static uint32_t mapPotToTarget(uint16_t pot)
 {
-    uint32_t left = 2510;
-    uint32_t right = 3520;
+    uint32_t left = 980;
+    uint32_t right = 2030;
 
     if (pot < left)
     {
@@ -56,6 +57,8 @@ Timer_Return steeringControlCallback(void* dummy)
     uint16_t newSteeringValue = getSteeringValue();
 
     currentSteeringValue = (uint16_t)mapPotToTarget(newSteeringValue);
+
+    printf("Target: %lu %lu\r\n", steeringPotTarget, enableSteeringVar);
 
     if (enableSteeringVar)
     {
@@ -92,6 +95,17 @@ void setSteeringTargetFromComms(Packet_t* packet)
     uint16_t val = (packet->data[0] << 8) | (packet->data[1]);
     enableSteeringVar = 1;
     setSteeringTarget(val);
+    // printf("Steering: %d %X\r\n", val, val);
+    printf("Packet: ");
+    printf("%u", val);
+    // int i;
+    // uint8_t* pBuf = (uint8_t*)packet;
+    // for (i = 0; i < 8; i++)
+    // {
+    //     printf("%X ", pBuf[i]);
+    // }
+
+    printf("\r\n");
 }
 
 void setRawSteeringTarget(uint32_t newTarget)
@@ -121,6 +135,7 @@ void enableSteering(uint8_t enable)
 
 void commsSteeringCallback()
 {
+    currentSteeringValue = mapPotToTarget(getSteeringValue());
     commsCurrentSteeringValue[0] = (currentSteeringValue >> 8) & 0xFF;
     commsCurrentSteeringValue[1] = currentSteeringValue & 0xFF;
     // printf("%u", commsCurrentSteeringValue[0]);

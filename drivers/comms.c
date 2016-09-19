@@ -23,10 +23,6 @@
 #define START_BYTE_1 0xF0
 #define START_BYTE_2 0x5A
 
-// Used for CRC
-#define GP  0x107   /* x^8 + x^2 + x + 1 */
-#define DI  0x07
-
 typedef enum {
     WAITING_FOR_START_1 = 0,
     WAITING_FOR_START_2,
