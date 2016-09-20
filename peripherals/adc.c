@@ -1,8 +1,9 @@
-#include "adc.h"
-
 #include "gpio.h"
 
-static uint16_t ADCData[2*8];
+#define ADC2_SAMPLES 8
+#define ADC2_CHANNELS_IN_USE 2
+
+static uint16_t ADCData[ADC2_SAMPLES * ADC2_CHANNELS_IN_USE];
 
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
@@ -10,43 +11,28 @@ ADC_HandleTypeDef hadc2;
 /* ADC1 init function */
 void MX_ADC1_Init(void)
 {
-    ADC_ChannelConfTypeDef sConfig;
-
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
-    hadc1.Instance = ADC1;
-    hadc1.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
-    hadc1.Init.Resolution = ADC_RESOLUTION12b;
-    hadc1.Init.ScanConvMode = DISABLE;
-    hadc1.Init.ContinuousConvMode = ENABLE;
-    hadc1.Init.DiscontinuousConvMode = DISABLE;
-    hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-    hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    hadc1.Init.NbrOfConversion = 1;
-    hadc1.Init.DMAContinuousRequests = DISABLE;
-    hadc1.Init.EOCSelection = EOC_SINGLE_CONV;
-    HAL_ADC_Init(&hadc1);
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
-    sConfig.Channel = ADC_CHANNEL_14;
-    sConfig.Rank = 1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-    HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-
 }
+
 /* ADC2 init function */
 void MX_ADC2_Init(void)
 {
-    ADC2->CR1 = ADC_CR1_SCAN;
-    ADC2->CR2 = ADC_CR2_DDS | ADC_CR2_DMA | ADC_CR2_CONT | ADC_CR2_ADON;
-    ADC2->SMPR2 = (ADC_SMPR2_SMP0_2) | (ADC_SMPR2_SMP1_2);
+    ADC2->CR1 = ADC_CR1_SCAN; //Enable SCAN Mode 
 
-    ADC2->SQR1 = (ADC_SQR1_L_0);
-    ADC2->SQR3 = (10) | (11 << 5);
+    ADC2->CR2 = ADC_CR2_DDS |  //Enable DMA Mode
+                ADC_CR2_DMA |  //Enable DMA Mode
+                ADC_CR2_CONT | //Continuous Mode
+                ADC_CR2_ADON;  //Turn the ADC on, but don't start it
 
-    ADC->CCR = ADC_CCR_DMA_0 | ADC_CCR_DDS;
+    ADC2->SMPR2 = (ADC_SMPR2_SMP0_2) | //Sample for 28 cycles
+                  (ADC_SMPR2_SMP1_2);  //Sample for 28 cycles
 
+    ADC2->SQR1 = (ADC_SQR1_L_1); //Two conversions in sequence
+    ADC2->SQR3 = (10) |     //Channel 10 in the first conversion
+                 (11 << 5); //Channel 11 in the second conversion
+
+    ADC->CCR = ADC_CCR_DMA_0; //Disable the DMA for multi-mode
+
+    // Enable GPIO C 0,1 as Analog inputs
     GPIO_InitTypeDef GPIO_InitStruct;
 
     GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
@@ -56,102 +42,22 @@ void MX_ADC2_Init(void)
 
     //Stream 3, Channel 1
 
-    DMA2_Stream3->CR = (DMA_SxCR_CHSEL_0) |\
-                 (DMA_SxCR_PL) | \
-                 (DMA_SxCR_MSIZE_0) |\
-                 (DMA_SxCR_PSIZE_0) |\
-                 (DMA_SxCR_MINC) |\
-                 (DMA_SxCR_CIRC);
+    //Initialize the DMA to continuously place data into the ADCData array
+    DMA2_Stream3->CR = (DMA_SxCR_CHSEL_0) | //Use Channel 0 ()
+                 (DMA_SxCR_PL) |            //Very High priority
+                 (DMA_SxCR_MSIZE_1) |       //Half-Word Size
+                 (DMA_SxCR_PSIZE_1) |       //Half-Word Size
+                 (DMA_SxCR_MINC) |          //Memory Increment
+                 (DMA_SxCR_CIRC);           //Circular Mode
 
-    DMA2_Stream3->NDTR = 2*8;
-    DMA2_Stream3->PAR = (uint32_t)&(ADC2->DR);
-    DMA2_Stream3->M0AR = (uint32_t)ADCData;
+    DMA2_Stream3->NDTR = sizeof(ADCData)/sizeof(ADCData[0]); //Number of data to transfer
+    DMA2_Stream3->PAR = (uint32_t)&(ADC2->DR); //ADC2 Data Regist
+    DMA2_Stream3->M0AR = (uint32_t)ADCData;    //ADCData Array is destination
 
-    DMA2_Stream3->CR |= (DMA_SxCR_EN);
+    DMA2_Stream3->CR |= (DMA_SxCR_EN);        //Enable DMA2 Stream 3
 
-    ADC2->CR2 |= ADC_CR2_SWSTART;
+    ADC2->CR2 |= ADC_CR2_SWSTART; //Start ADC2
 }
-
-void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
-{
-    GPIO_InitTypeDef GPIO_InitStruct;
-    if(hadc->Instance==ADC1)
-    {
-        /* Peripheral clock enable */
-        __ADC1_CLK_ENABLE();
-
-        /**ADC1 GPIO Configuration    
-        PC1     ------> ADC1_IN11
-        PC2     ------> ADC1_IN12
-        PC3     ------> ADC1_IN13
-        PA0-WKUP     ------> ADC1_IN0
-        PA1     ------> ADC1_IN1
-        PC4     ------> ADC1_IN14
-        PC5     ------> ADC1_IN15 
-        */
-        GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4 
-                              |GPIO_PIN_5;
-        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-        GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-        /* Peripheral interrupt init*/
-        NVIC_SetPriority(ADC_IRQn, 4);
-        NVIC_EnableIRQ(ADC_IRQn);
-    } else if(hadc->Instance==ADC2) {
-        /* Peripheral clock enable */
-        __ADC2_CLK_ENABLE();
-
-        /**ADC2 GPIO Configuration    
-        PC0     ------> ADC2_IN10 
-        */
-        GPIO_InitStruct.Pin = GPIO_PIN_0;
-        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-        /* Peripheral interrupt init*/
-        HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
-        HAL_NVIC_EnableIRQ(ADC_IRQn);
-    }
-}
-
-void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
-{
-    if(hadc->Instance==ADC1)
-    {
-        /* Peripheral clock disable */
-        __ADC1_CLK_DISABLE();
-
-        /**ADC1 GPIO Configuration    
-        PC1     ------> ADC1_IN11
-        PC2     ------> ADC1_IN12
-        PC3     ------> ADC1_IN13
-        PA0-WKUP     ------> ADC1_IN0
-        PA1     ------> ADC1_IN1
-        PC4     ------> ADC1_IN14
-        PC5     ------> ADC1_IN15 
-        */
-        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|
-                               GPIO_PIN_5);
-
-        HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0|GPIO_PIN_1);
-
-    } else if(hadc->Instance==ADC2) {
-        /* Peripheral clock disable */
-        __ADC2_CLK_DISABLE();
-
-        /**ADC2 GPIO Configuration    
-        PC0     ------> ADC2_IN10 
-        */
-        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0);
-    }
-} 
 
 uint32_t getSteeringValue()
 {
@@ -180,4 +86,3 @@ uint32_t getPedalValue()
 }
 
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

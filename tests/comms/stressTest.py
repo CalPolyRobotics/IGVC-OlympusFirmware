@@ -6,7 +6,7 @@ import sys
 import binascii
 
 def sendPacket(ser):
-    packet = bytearray([0xF0,0x5A,0,0,3,8,0x60,0x70])
+    packet = bytearray([0xF0,0x5A,0,18,3,8,0x60,0x70])
     retPacket = bytearray([0xF0,0x5A,1,0,0,8,0x60,0x70])
     ser.write(packet)
     recvPacket = ser.read(len(packet))

@@ -61,16 +61,15 @@ void echoPacketCallback(Packet_t* packet);
 extern volatile uint16_t speedCommsValue[2];
 
 static packetResponse_t response[] = {
-    {256,  echoBuf, 0,  echoBuf, echoPacketCallback},                  // Status
+    {256,  echoBuf, 0,  echoBuf, echoPacketCallback},  // Status
     {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
     {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
     {0,  NULL, 1,  &FNRState, commsGetFNRCallback},   // Get FNR
     {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
     {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
-    {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], toggleLED},                  // Get Speed
+    {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], toggleLED}, // Get Speed
     {0,  NULL, 0,  NULL, setSteeringTargetFromComms}, // Set Steering
-    //{0,  NULL, 2,  commsCurrentSteeringValue, NULL},// Get Steering Angle
     {0,  NULL, 2,  &commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
     {0,  NULL, 0,  NULL, commsSetLightsCallback},     // Set Lights
     {0,  NULL, 0,  NULL, toggleLED},                  // Get Battery
@@ -140,7 +139,7 @@ static void sendResponse(Packet_t* packet)
         outPacket->data[idx] = response[packetType].responseData[idx];
     }
 
-    //outPacket->header.CRC8 = crc8(outPacket, outPacket->header.packetLen);
+    outPacket->header.CRC8 = crc8(outPacket, outPacket->header.packetLen);
 
     usbWrite(packetBuffer, outPacket->header.packetLen);
 }
@@ -156,7 +155,6 @@ void runCommsFSM(char data)
     {
         case WAITING_FOR_START_1:
         {
-            //printf("Waiting START1\r\n");
             packetIdx = 0;
             if (data == START_BYTE_1)
             {
@@ -169,7 +167,6 @@ void runCommsFSM(char data)
 
         case WAITING_FOR_START_2:
         {
-            //printf("Waiting START2\r\n");
             if (data == START_BYTE_2)
             {
                 state = WAITING_FOR_HEADER;
@@ -185,7 +182,6 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
             packetIdx++;
-            //printf("Waiting HEADER %lu == %u\r\n", packetIdx, sizeof(PacketHeader_t));
             if (packetIdx == sizeof(PacketHeader_t))
             {
                 if (packetIdx == packet->header.packetLen)
@@ -205,7 +201,6 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
             packetIdx++;
-            //printf("Waiting DATA %lu == %u\r\n", packetIdx, packet->header.packetLen);
             if (packetIdx == packet->header.packetLen)
             {
                 checkPacket(packet);

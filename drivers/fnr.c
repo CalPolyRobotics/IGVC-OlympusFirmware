@@ -76,5 +76,4 @@ void FNRCommsHandler(Packet_t* packet)
 void EXTI15_10_IRQHandler()
 {
     EXTI->PR |= EXTI_PR_PR15;
-    printf("Pin Changed\r\n");
 }
