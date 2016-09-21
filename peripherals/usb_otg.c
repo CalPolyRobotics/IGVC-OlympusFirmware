@@ -10,11 +10,11 @@
 
 USBD_HandleTypeDef  USBD_Device;
 static uint8_t usbRecvData[USB_RECEIVE_BUFFER_SIZE];
-buffer8_t usbRecieveBuffer;
+buffer8_t usbReceiveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-    buffer8_write(&usbRecieveBuffer, data, *len);
+    buffer8_write(&usbReceiveBuffer, data, *len);
 
     //usbWrite("Read bytes\r\n", 12);
     //while ((*len)--)
@@ -29,7 +29,7 @@ static int8_t usbReceive(uint8_t* data, uint32_t* len)
 
 static int8_t tunnelInit(void)
 {
-    buffer8_init(&usbRecieveBuffer, usbRecvData, sizeof(usbRecvData));
+    buffer8_init(&usbReceiveBuffer, usbRecvData, sizeof(usbRecvData));
 
     USBD_CDC_SetRxBuffer(&USBD_Device, usbRecvData);
     return USBD_OK;
