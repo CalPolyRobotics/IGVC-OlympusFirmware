@@ -88,7 +88,7 @@
 #define GPIO_USART_PORT GPIOB
 #define GPIO_USART_AF   GPIO_AF7_USART1;
 
-#define IRIS_SEG_I2C_ADDR  (0x27)
+#define IRIS_SEG_I2C_ADDR  (0x21)
 
 #define COMMS_USART        USART1
 #define COMMS_BAUDRATE     115200
