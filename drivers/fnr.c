@@ -4,21 +4,27 @@
 #include "fnr.h"
 #include "speedDAC.h"
 #include "i2c.h"
+#include "timerCallback.h"
+#include "sevenSeg.h"
 
 #include <stdio.h>
 
 uint8_t FNRState = 0;
 
+static Timer_Return updateSevenSegCallback(void* dummy);
+
 void initAutomanInt()
 {
-    EXTI->IMR |= EXTI_IMR_MR15;
-    EXTI->RTSR |= EXTI_RTSR_TR15;
-    EXTI->FTSR |= EXTI_FTSR_TR15;
+    //EXTI->IMR |= EXTI_IMR_MR15;
+    //EXTI->RTSR |= EXTI_RTSR_TR15;
+    //EXTI->FTSR |= EXTI_FTSR_TR15;
 
-    SYSCFG->EXTICR[3] = SYSCFG_EXTICR4_EXTI15_PC;
+    //SYSCFG->EXTICR[3] = SYSCFG_EXTICR4_EXTI15_PC;
 
-    NVIC_SetPriority(EXTI15_10_IRQn, 5);
-    NVIC_EnableIRQ(EXTI15_10_IRQn);
+    //NVIC_SetPriority(EXTI15_10_IRQn, 5);
+    //NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+    addCallbackTimer(SEVEN_SEG_UPDATE_PERIOD, updateSevenSegCallback, NULL);
 }
 
 void setFNR(FNR_t newState)
@@ -58,6 +64,11 @@ uint8_t getFNR(){
     uint8_t data;
     i2cReceive(0x1B, &data, 1);
     return data;
+}
+
+Timer_Return updateSevenSegCallback(void* dummy){
+    setSevenSeg(getFNR());
+    return CONTINUE_TIMER;
 }
 
 void commsGetFNRCallback(){

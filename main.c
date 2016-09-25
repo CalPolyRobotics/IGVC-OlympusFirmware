@@ -21,6 +21,7 @@
 #include "motorControl.h"
 #include "adc.h"
 #include "encoder.h"
+#include "fnr.h"
 
 #include <stddef.h>
 
@@ -58,6 +59,7 @@ int main(void)
     initSteering();
     initSpeedDAC();
     initEncoderInputCapture();
+    initAutomanInt();
 
     printf("Hello.\r\n");
 
