@@ -4,6 +4,8 @@
 #include "i2c.h"
 #include "gpio.h"
 
+#include <stdio.h>
+
 I2C_HandleTypeDef hi2c2;
 
 /* I2C2 init function */

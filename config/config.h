@@ -1,9 +1,15 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_G__
 
+#include "main.h"
+
 #define FIRMWARE_MAJOR_VERSION   1
 #define FIRMWARE_MINOR_VERSION   1
 #define FIRMWARE_REVISOIN  0
+
+#define AHB_CLK_FREQ 120000000U
+#define APB1_CLK_FREQ 60000000U
+#define APB2_CLK_FREQ 30000000U
 
 //Callback Timer
 #define CALLBACK_TIMER  TIM9
@@ -92,10 +98,18 @@
 
 #define COMMS_USART        USART1
 #define COMMS_BAUDRATE     115200
-#define COMMS_IRQ          USART1_IRQn
-#define COMMS_ISR          USART1_IRQHandler
+#define COMMS_TX_BUFFER_SIZE (512)
 #define COMMS_RX_BUFFER_SIZE (1024)
-#define COMMS_TX_BUFFER_SIZE (8 * 1024)
+#define COMMS_TX_NUM_BUFFERS (4)
+
+#define COMMS_TX_DMA       DMA2
+#define COMMS_RX_DMA       DMA2
+#define COMMS_TX_DMA_STREAM DMA2_Stream7
+#define COMMS_RX_DMA_STREAM DMA2_Stream5
+#define COMMS_TX_DMA_CHANNEL DMA_CHANNEL_4
+#define COMMS_RX_DMA_CHANNEL DMA_CHANNEL_4
+#define COMMS_TX_DMA_IRQ   DMA2_Stream7_IRQn
+#define COMMS_TX_DMA_ISR   DMA2_Stream7_IRQHandler
 
 //Hermes GPIO
 #define HERMES_SPEED_DAC_I2C_ADDR (0x62)

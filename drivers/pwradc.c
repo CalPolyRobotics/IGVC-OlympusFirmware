@@ -15,8 +15,8 @@
 
 
 /* Value index is based off enum set in header */
-static uint32_t mul[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
-static uint32_t div[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000};
+static uint32_t muls[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
+static uint32_t divs[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000};
 
 const char* periph_name[] =  
 {
@@ -71,5 +71,5 @@ uint16_t adc_read(enum adc_periph periph) {
 }
 
 uint16_t adc_conv(enum adc_periph periph){
-    return (adc_read(periph) * mul[periph]) / div[periph];
+    return (adc_read(periph) * muls[periph]) / divs[periph];
 }

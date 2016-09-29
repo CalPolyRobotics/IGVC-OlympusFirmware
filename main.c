@@ -49,7 +49,7 @@ int main(void)
     MX_ADC2_Init();
     MX_I2C2_Init();
 
-    MX_USART1_UART_Init();
+    commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
 
     adc_init();
@@ -65,6 +65,8 @@ int main(void)
 
     while(1)
     {
+        serviceTxDma();
+
         consoleProcessBytes();
 
          //while (buffer8_bytes(&usbReceiveBuffer))

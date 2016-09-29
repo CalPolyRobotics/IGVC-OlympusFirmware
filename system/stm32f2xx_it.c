@@ -88,24 +88,6 @@ void ADC_IRQHandler(void)
     HAL_ADC_IRQHandler(&hadc2);
 }
 
-/**
-* @brief This function handles USART1 global interrupt.
-// */
-// void USART1_IRQHandler(void)
-// {
-//     //HAL_UART_IRQHandler(&huart1);
-//     buffer_USART1_IRQHandler();
-// }
-
-/**
-* @brief This function handles DMA2 Stream2 global interrupt.
-*/
-void DMA2_Stream2_IRQHandler(void)
-{
-    HAL_DMA_IRQHandler(&hdma_usart1_rx);
-}
-
-/* USER CODE BEGIN 1 */
 void OTG_FS_IRQHandler(void)
 {
     HAL_PCD_IRQHandler(&hpcd);

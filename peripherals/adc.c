@@ -3,6 +3,7 @@
 #define ADC2_SAMPLES 8
 #define ADC2_CHANNELS_IN_USE 2
 
+//static uint16_t ADCData[ADC2_SAMPLES * ADC2_CHANNELS_IN_USE];
 static uint16_t ADCData[ADC2_SAMPLES * ADC2_CHANNELS_IN_USE];
 
 ADC_HandleTypeDef hadc1;
@@ -16,6 +17,7 @@ void MX_ADC1_Init(void)
 /* ADC2 init function */
 void MX_ADC2_Init(void)
 {
+
     ADC2->CR1 = ADC_CR1_SCAN; //Enable SCAN Mode 
 
     ADC2->CR2 = ADC_CR2_DDS |  //Enable DMA Mode
@@ -45,12 +47,13 @@ void MX_ADC2_Init(void)
     //Initialize the DMA to continuously place data into the ADCData array
     DMA2_Stream3->CR = (DMA_SxCR_CHSEL_0) | //Use Channel 0 ()
                  (DMA_SxCR_PL) |            //Very High priority
-                 (DMA_SxCR_MSIZE_1) |       //Half-Word Size
-                 (DMA_SxCR_PSIZE_1) |       //Half-Word Size
+                 (DMA_SxCR_MSIZE_0) |       //Half-Word Size
+                 (DMA_SxCR_PSIZE_0) |       //Half-Word Size
                  (DMA_SxCR_MINC) |          //Memory Increment
                  (DMA_SxCR_CIRC);           //Circular Mode
 
-    DMA2_Stream3->NDTR = sizeof(ADCData)/sizeof(ADCData[0]); //Number of data to transfer
+    //DMA2_Stream3->NDTR = ADC2_SAMPLES * ADC2_CHANNELS_IN_USE; //Number of data to transfer
+    DMA2_Stream3->NDTR = 8; //Number of data to transfer
     DMA2_Stream3->PAR = (uint32_t)&(ADC2->DR); //ADC2 Data Regist
     DMA2_Stream3->M0AR = (uint32_t)ADCData;    //ADCData Array is destination
 

@@ -88,6 +88,7 @@ INCLUDES += -I$(DEVICE)/include \
 ELF = $(BUILDDIR)/program.elf
 HEX = $(BUILDDIR)/program.hex
 BIN = $(BUILDDIR)/program.bin
+MAP = $(BUILDDIR)/program.map
 
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-gcc
@@ -117,7 +118,7 @@ $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
 $(ELF): $(OBJECTS)
-	$(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(LDLIBS)
+	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 
 $(BUILDDIR)/%.o: %.c
