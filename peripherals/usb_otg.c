@@ -14,13 +14,13 @@ buffer8_t usbReceiveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-    buffer8_write(&usbReceiveBuffer, data, *len);
+    //buffer8_write(&usbReceiveBuffer, data, *len);
 
     //usbWrite("Read bytes\r\n", 12);
-    //while ((*len)--)
-    //{
-        //runCommsFSM(*data++);
-    //}
+    while ((*len)--)
+    {
+        runCommsFSM(*data++);
+    }
 
     USBD_CDC_ReceivePacket(&USBD_Device);
 
@@ -55,9 +55,9 @@ uint8_t usbWrite(uint8_t* data, uint32_t len)
 
     USBD_CDC_SetTxBuffer(&USBD_Device, data, len);
 
-    do {
+    //do {
         writeStatus = USBD_CDC_TransmitPacket(&USBD_Device);
-    } while (writeStatus == USBD_BUSY);
+    //} while (writeStatus == USBD_BUSY);
 
     return writeStatus == USBD_OK;
 }

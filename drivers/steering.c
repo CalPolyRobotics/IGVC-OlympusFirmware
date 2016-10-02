@@ -24,16 +24,16 @@ void initSteering()
 
 static uint32_t mapTargetToPot(uint16_t target)
 {
-    uint32_t left = 980;
-    uint32_t right = 2030;
+    uint32_t left = 1200;
+    uint32_t right = 1650;
 
     return ((right - left) * (uint32_t)target) / 65535 + left;
 }
 
 static uint32_t mapPotToTarget(uint16_t pot)
 {
-    uint32_t left = 980;
-    uint32_t right = 2030;
+    uint32_t left = 1200;
+    uint32_t right = 1650;
 
     if (pot < left)
     {
@@ -57,8 +57,6 @@ Timer_Return steeringControlCallback(void* dummy)
     uint16_t newSteeringValue = getSteeringValue();
 
     currentSteeringValue = (uint16_t)mapPotToTarget(newSteeringValue);
-
-    printf("Target: %lu %lu\r\n", steeringPotTarget, enableSteeringVar);
 
     if (enableSteeringVar)
     {
@@ -96,9 +94,9 @@ void setSteeringTargetFromComms(Packet_t* packet)
     enableSteeringVar = 1;
     setSteeringTarget(val);
     // printf("Steering: %d %X\r\n", val, val);
-    printf("Packet: ");
-    printf("%u", val);
-    // int i;
+    //printf("Packet: ");
+    //printf("%u", val);
+    //// int i;
     // uint8_t* pBuf = (uint8_t*)packet;
     // for (i = 0; i < 8; i++)
     // {

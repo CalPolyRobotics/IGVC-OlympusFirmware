@@ -67,10 +67,10 @@ int main(void)
     {
         consoleProcessBytes();
 
-         while (buffer8_bytes(&usbReceiveBuffer))
-         {
-             runCommsFSM(buffer8_get(&usbReceiveBuffer));
-         }
+         //while (buffer8_bytes(&usbReceiveBuffer))
+         //{
+             //runCommsFSM(buffer8_get(&usbReceiveBuffer));
+         //}
     }
 }
 
