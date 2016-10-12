@@ -62,5 +62,6 @@ void setSevenSeg(char a)
         magicNumber = lookupTable[a & 0xF];
     }    
 
-    i2cTransmit((IRIS_SEG_I2C_ADDR << 1), &magicNumber, 1);
+    i2cAddTxTransaction(IRIS_SEG_I2C_ADDR, &magicNumber, 1, NULL, NULL);
 }
+
