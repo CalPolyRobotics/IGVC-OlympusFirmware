@@ -22,10 +22,24 @@
 #include "adc.h"
 #include "encoder.h"
 #include "fnr.h"
+#include "config.h"
 
 #include <stddef.h>
 
 void SystemClock_Config(void);
+
+void togglePin(GPIO_TypeDef* gpio, uint32_t pin)
+{
+    gpio->ODR ^= pin;
+}
+
+Timer_Return led6Toggle(void* dummy)
+{
+    //HAL_GPIO_TogglePin(GPIO_DEBUG_6);
+    togglePin(GPIO_DEBUG_6);
+
+    return CONTINUE_TIMER;
+}
 
 int main(void)
 {
@@ -61,11 +75,14 @@ int main(void)
     initEncoderInputCapture();
     initAutomanInt();
 
+    addCallbackTimer(1000, led6Toggle, NULL);
+
     printf("Hello.\r\n");
 
     while(1)
     {
         serviceTxDma();
+        serviceCallbackTimer();
 
         consoleProcessBytes();
 
