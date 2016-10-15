@@ -72,7 +72,7 @@ static ConsoleCommand commands[] = {
     {"writeFNR", 1, console_writeFNR},
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
-    {"readSpeed", 0, console_readSpeed},
+    {"readSpeed", 1, console_readSpeed},
     {"toggleSpeed", 0, console_toggleSpeed},
     {"readSteeringDir", 0, console_readSteeringDir},
     //{"readBatt", 1, console_readBatt},
@@ -571,6 +571,7 @@ static void console_getPower(uint32_t argc, char** argv)
         printf("\r\n");
     }
 }
+
 static void console_help(uint32_t argc, char** argv) 
 {
     uint32_t i = 0;
