@@ -57,6 +57,7 @@ static void console_getSteerValue(uint32_t, char**);
 static void console_enableSteering(uint32_t, char**);
 static void console_hardmode(uint32_t, char**);
 static void console_getPower(uint32_t, char**);
+static void console_clear(uint32_t, char**);
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
@@ -70,7 +71,7 @@ static ConsoleCommand commands[] = {
     {"writeFNR", 1, console_writeFNR},
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
-    {"readSpeed", 0, console_readSpeed},
+    {"readSpeed", 1, console_readSpeed},
     {"toggleSpeed", 0, console_toggleSpeed},
     {"readSteeringDir", 0, console_readSteeringDir},
     {"readBatt", 1, console_readBatt},
@@ -83,6 +84,7 @@ static ConsoleCommand commands[] = {
     {"enableSteering", 1, console_enableSteering},
     {"hardmode", 1, console_hardmode},
     {"getPower", 0, console_getPower},
+    {"clear", 0, console_clear},
     {NULL, 0, NULL}
 };
 
@@ -98,9 +100,10 @@ static void rewriteBuffer(char* characterBuffer, uint8_t color)
         // Move cursor left
         if (echoCharacters == CONSOLE_ECHO_MAP)
         {
-            printf("\033[%dD", strlen(characterBuffer) * 3);
+            printf("\033[2G\033[0K");
         } else {
-            printf("\033[%dD", strlen(characterBuffer));
+            //printf("\033[%dD", strlen(characterBuffer));
+            printf("\033[2G\033[0K");
         }
 
         if (color < 10)
@@ -130,11 +133,6 @@ static void rewriteBuffer(char* characterBuffer, uint8_t color)
             }
         }
     }
-}
-
-static void clearStyle()
-{
-    printf("\033[0m");
 }
 
 static int32_t matchCommand(char* buffer)
@@ -201,10 +199,13 @@ static void processCommand(char* cmd)
         if (argc < commands[i].minArguments)
         {
             printf("ERROR: Need %lu Args", commands[i].minArguments);
-        } else {
+        } else { 
             commands[i].callback(argc, argv);
         }
-        printf(">\r\n");
+
+        if(strcmp(commands[i].cmdStr,"clear") != 0){
+            printf(">\r\n");
+        }
 
     }
 
@@ -232,7 +233,9 @@ void consoleProcessBytes()
             {
                 cmdBufferIdx--;
                 cmdBuffer[cmdBufferIdx] = 0;
-                printf("\033[1D\033[1X");
+
+                // Left One and delete to end of line
+                printf("\033[1D\033[0K");
 
                 if (cmdBufferIdx > 0)
                 {
@@ -273,17 +276,26 @@ void consoleProcessBytes()
                 if (data == '[')
                 {
                     state = CONSOLE_READING;
-                    memset(cmdBuffer, 0, CONSOLE_MAX_CMD_LEN);
                     cmdBufferIdx = 0;
                 }
                 break;
             case CONSOLE_READING:
                 if (data == ']')
                 {
-                    clearStyle();
-                    //Redraw ] without style
-                    printf("\033[1D]");
+                    // Remove Ending ]
+                    printf("\033[1D\033[0K");
+
+                    // Clear Color
+                    printf("\033[0m");
+                    
+                    // Redraw ]
+                    printf("]");
+
                     processCommand(cmdBuffer);
+
+                    // Reset cmdBuffer
+                    memset(cmdBuffer, 0, CONSOLE_MAX_CMD_LEN);
+
                     state = CONSOLE_START;
                 } else {
                     if (cmdBufferIdx < CONSOLE_MAX_CMD_LEN)
@@ -548,4 +560,10 @@ static void console_getPower(uint32_t argc, char** argv)
         printf("%s: %2u.%03u %s\r\n", "          Power", powerVals[i * 3 + 2] / 1000, powerVals[i * 3 + 2] % 1000, "W");     
         printf("\r\n");
     }
+}
+
+static void console_clear(uint32_t argc, char** argv){
+    // Move to col 1 row 1
+    printf("\033[H");
+    printf("\033[J");
 }
