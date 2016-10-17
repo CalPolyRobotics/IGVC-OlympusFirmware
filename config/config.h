@@ -25,6 +25,9 @@
 //USB Input Buffer
 #define USB_RECEIVE_BUFFER_SIZE 128
 
+#define USB_SEND_BUFFER_SIZE 64
+#define USB_SEND_BUFFER_NUM  8
+
 //Olympus GPIO
 #define NUM_DEBUG_PINS  12
 
