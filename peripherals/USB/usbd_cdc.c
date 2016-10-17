@@ -938,7 +938,6 @@ uint8_t USBD_CDC_GetTxState(USBD_HandleTypeDef *pdev)
   }   
 }
   
-
 /**
   * @}
   */ 

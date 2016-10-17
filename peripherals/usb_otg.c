@@ -47,6 +47,7 @@ static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len)
 
 static USBD_CDC_ItfTypeDef cdcInterface = {tunnelInit, dummyDeinit, dummyControl, usbReceive};
 
+<<<<<<< 73367ecee41b24ca907f463412ab7207b15d6501
 static uint8_t usbTransmitBuffers[USB_SEND_BUFFER_NUM][USB_SEND_BUFFER_SIZE];
 static uint32_t usbTransmitBufferLengths[USB_SEND_BUFFER_NUM];
 static volatile uint32_t nextUsbBuffer = 0;
@@ -145,8 +146,6 @@ void serviceUSBWrite()
                 nextUsbBuffer = 0;
             }
         }
-
-        //printf("Writing %lu bytes to USB stack\r\n", usbTransmitBufferLengths[activeUsbBuffer]);
 
         // Transmit the current active buffer across USB
         // Actual transmission will take place in a later USB IRQ
