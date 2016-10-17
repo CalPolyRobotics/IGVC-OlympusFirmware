@@ -46,20 +46,20 @@ static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len)
 
 static USBD_CDC_ItfTypeDef cdcInterface = {tunnelInit, dummyDeinit, dummyControl, usbReceive};
 
-static uint8_t shouldServiceUSBWrite = 0;
 static uint8_t usbTransmitBuffers[USB_SEND_BUFFER_NUM][USB_SEND_BUFFER_SIZE];
 static uint32_t usbTransmitBufferLengths[USB_SEND_BUFFER_NUM];
 static uint32_t nextUsbBuffer;
 static uint32_t activeUsbBuffer;
 static uint32_t usbIsActive;
 static uint32_t usbBufferOverrun;
+static uint32_t usbTransferHasCompleted;
 
 void usbWrite(uint8_t* data, uint32_t size)
 {
     uint32_t bufferSpace;
     uint32_t bytesToWrite;
 
-    if ((usbBufferOverrrun == 0) &&
+    if ((usbBufferOverrun == 0) &&
         (usbIsActive == 0 || nextUsbBuffer != activeUsbBuffer))
     {
         while (size > 0)
@@ -88,7 +88,7 @@ void usbWrite(uint8_t* data, uint32_t size)
 
                 if (nextUsbBuffer == activeUsbBuffer)
                 {
-                    printf("WARNING: Overran USB Buffers by %u bytes. Further USB data is corrupted!!!!!!!!!\n", size);
+                    printf("WARNING: Overran USB Buffers by %lu bytes. Further USB data is corrupted!!!!!!!!!\n", size);
                     printf("Increase the size of the input buffers using USB_SEND_BUFFER_NUM and USB_SEND_BUFFER_SIZE\n");
 
                     usbBufferOverrun = 1;
@@ -123,7 +123,7 @@ void serviceUSBWrite()
     // the active buffer has data and
     // we can start another transfer
     if (usbIsActive == 0 &&
-        usbTranmitBufferLengths[activeUsbBuffer] > 0)
+        usbTransmitBufferLengths[activeUsbBuffer] > 0)
     {
         // Mark USB as active to not overwrite buffer
         usbIsActive = 1;
