@@ -29,7 +29,7 @@
 #define USB_SEND_BUFFER_NUM  4
 
 #define USB_SEND_BUFFER_SIZE 64
-#define USB_SEND_BUFFER_NUM  8
+#define USB_SEND_BUFFER_NUM  4
 
 //Olympus GPIO
 #define NUM_DEBUG_PINS  12

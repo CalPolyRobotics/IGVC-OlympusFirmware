@@ -55,7 +55,6 @@ static volatile uint32_t usbIsActive = 0;
 static volatile uint32_t usbBufferOverrun = 0;
 static volatile uint32_t usbTransferHasCompleted = 0;
 
-
 void usbWrite(uint8_t* data, uint32_t size)
 {
     uint32_t bufferSpace;
@@ -94,6 +93,7 @@ void usbWrite(uint8_t* data, uint32_t size)
                 {
                     printf("WARNING: Overran USB Buffers by %lu bytes. Further USB data is corrupted!!!!!!!!!\r\n", size);
                     printf("Increase the size of the input buffers using USB_SEND_BUFFER_NUM and USB_SEND_BUFFER_SIZE\r\n");
+
                     usbBufferOverrun = 1;
                     size = 0;
                 }
@@ -145,6 +145,8 @@ void serviceUSBWrite()
                 nextUsbBuffer = 0;
             }
         }
+
+        //printf("Writing %lu bytes to USB stack\r\n", usbTransmitBufferLengths[activeUsbBuffer]);
 
         // Transmit the current active buffer across USB
         // Actual transmission will take place in a later USB IRQ
