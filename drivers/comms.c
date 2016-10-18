@@ -143,7 +143,7 @@ static void sendResponse(Packet_t* packet)
         outPacket->data[idx] = response[packetType].responseData[idx];
     }
 
-    outPacket->header.CRC8 = crc8(outPacket, outPacket->header.packetLen);
+    //outPacket->header.CRC8 = crc8(outPacket, outPacket->header.packetLen);
 
     usbWrite(packetBuffer, outPacket->header.packetLen);
 }

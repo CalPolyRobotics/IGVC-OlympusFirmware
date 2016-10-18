@@ -69,7 +69,8 @@ SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
 		   $(UTILS)/timerCallback.c \
 		   $(UTILS)/characterMapping.c \
-		   $(UTILS)/crc8.c
+		   $(UTILS)/crc8.c \
+		   $(UTILS)/doubleBuffer.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 

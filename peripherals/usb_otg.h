@@ -39,11 +39,11 @@
 #endif
 
 #include "stm32f2xx_hal.h"
-#include "buffer8.h"
+#include "doubleBuffer.h"
 
 void MX_USB_OTG_FS_USB_Init(void);
 
-extern buffer8_t usbReceiveBuffer;
+extern DoubleBuffer_t usbReceiveBuffer;
 void usbWrite(uint8_t* data, uint32_t size);
 void serviceUSBWrite(void);
 

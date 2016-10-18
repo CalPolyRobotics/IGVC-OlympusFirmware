@@ -23,6 +23,7 @@
 #include "encoder.h"
 #include "fnr.h"
 #include "config.h"
+#include "doubleBuffer.h"
 
 #include <stddef.h>
 
@@ -87,10 +88,12 @@ int main(void)
 
         consoleProcessBytes();
 
-         while (buffer8_bytes(&usbReceiveBuffer))
-         {
-             runCommsFSM(buffer8_get(&usbReceiveBuffer));
-         }
+        uint8_t dataIn;
+
+        while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
+        {
+            runCommsFSM((char)dataIn);
+        }
     }
 }
 
