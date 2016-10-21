@@ -29,6 +29,7 @@ ser = serial.Serial(sys.argv[1], 115200, timeout=1)
 for i in range(1,100000):
     if (not sendPacket(ser)):
         print "Invalid Packet: " + str(i)
+        break
 
     time.sleep(.001)
 

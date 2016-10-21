@@ -15,6 +15,11 @@ DoubleBuffer_t usbReceiveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
+    static uint32_t pCount = 0;
+
+    printf("pCount: %lu\r\n", pCount);
+    pCount++;
+
     doubleBuffer_write(&usbReceiveBuffer, data, *len);
 
     // while ((*len)--)

@@ -68,23 +68,29 @@ uint8_t doubleBuffer_write(DoubleBuffer_t* buffer, uint8_t* data, uint32_t len)
 uint32_t doubleBuffer_getReadLength(DoubleBuffer_t* buffer)
 {
     uint8_t inactive = doubleBuffer_getInactive(buffer);
+    uint32_t len = buffer->bufferLengths[inactive] - buffer->readIdx;
 
-    return buffer->bufferLengths[inactive] - buffer->readIdx;
+    if (len == 0)
+    {
+        doubleBuffer_switchActive(buffer);
+
+        inactive = doubleBuffer_getInactive(buffer);
+
+        len = buffer->bufferLengths[inactive] - buffer->readIdx;
+    }
+
+    return len;
 }
 
 uint32_t doubleBuffer_read(DoubleBuffer_t* buffer, uint8_t* data, uint32_t len)
 {
     uint32_t bytesAvailable;
     uint32_t numBytesToRead = 0;
-    uint8_t inactive = doubleBuffer_getInactive(buffer);
+    uint8_t inactive;
 
     bytesAvailable = doubleBuffer_getReadLength(buffer);
 
-    if (bytesAvailable == 0)
-    {
-        doubleBuffer_switchActive(buffer);
-        bytesAvailable = doubleBuffer_getReadLength(buffer);
-    }
+    inactive = doubleBuffer_getInactive(buffer);
 
     if (bytesAvailable > 0)
     {

@@ -563,6 +563,9 @@ static uint8_t  USBD_CDC_Init (USBD_HandleTypeDef *pdev,
 static uint8_t  USBD_CDC_DeInit (USBD_HandleTypeDef *pdev, 
                                  uint8_t cfgidx)
 {
+  //while (1);
+  asm("bkpt");
+
   uint8_t ret = 0;
   
   /* Open EP IN */

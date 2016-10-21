@@ -102,6 +102,13 @@ static void runPacket(Packet_t* packet)
     uint8_t packetType = packet->header.msgType >> 1;
     uint8_t dataLen = packet->header.packetLen - sizeof(PacketHeader_t);
 
+    // Debug Code. If you're reading this remove these three lines
+    if (packetType > (sizeof(response)/sizeof(response[0])))
+    {
+        packetType = 0;
+    }
+
+
     if (response[packetType].inputDataMaxLen > 0)
     {
         if (response[packetType].inputDataMaxLen > dataLen)

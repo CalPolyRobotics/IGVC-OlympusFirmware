@@ -61,11 +61,12 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
 
 void i2cTransmit(uint8_t address, uint8_t* data, uint32_t len)
 {
-    HAL_I2C_Master_Transmit(&hi2c2, address, data, len, 10000);
+    //HAL_I2C_Master_Transmit(&hi2c2, address, data, len, 10000);
 }
 
 void i2cReceive(uint8_t address, uint8_t *data, uint32_t len) {
-    HAL_I2C_Master_Receive(&hi2c2, address, data, len, 10000);
+
+    //HAL_I2C_Master_Receive(&hi2c2, address, data, len, 10000);
 }
 
 void i2cScan()
