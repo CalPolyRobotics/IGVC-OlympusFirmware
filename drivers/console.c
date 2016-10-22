@@ -34,9 +34,9 @@ typedef enum {CONSOLE_START = 0, CONSOLE_READING} ConsoleState;
 typedef enum {CONSOLE_ECHO_ON = 0, CONSOLE_ECHO_OFF, CONSOLE_ECHO_MAP, CONSOLE_ECHO_DEBUG} EchoState;
 
 static void console_i2cWrite(uint32_t, char**);
-static void console_i2cRead(uint32_t, char**);
+//static void console_i2cRead(uint32_t, char**);
 static void console_i2cScan(uint32_t, char**);
-static void console_setGPIO(uint32_t, char**);
+//static void console_setGPIO(uint32_t, char**);
 static void console_setLED(uint32_t, char**);
 static void console_setSegment(uint32_t, char**);
 static void console_measPower(uint32_t, char**);
@@ -44,8 +44,8 @@ static void console_kill(uint32_t, char**);
 static void console_writeFNR(uint32_t, char**);
 static void console_readFNR(uint32_t, char**);
 static void console_writeSpeed(uint32_t, char**);
-static void console_readSpeed(uint32_t, char**);
-static void console_readBatt(uint32_t, char**);
+//static void console_readSpeed(uint32_t, char**);
+//static void console_readBatt(uint32_t, char**);
 static void console_emulateUSB(uint32_t, char**);
 static void console_setSteerAngle(uint32_t, char**);
 static void console_USBWrite(uint32_t, char**);
@@ -57,12 +57,14 @@ static void console_getSteerValue(uint32_t, char**);
 static void console_enableSteering(uint32_t, char**);
 static void console_hardmode(uint32_t, char**);
 static void console_getPower(uint32_t, char**);
+static void console_help(uint32_t, char**);
+
 
 static ConsoleCommand commands[] = {
     {"i2cWrite", 2, console_i2cWrite},
-    {"i2cRead", 2, console_i2cRead},
+    //{"i2cRead", 2, console_i2cRead},
     {"i2cScan", 0, console_i2cScan},
-    {"setGPIO", 3, console_setGPIO},
+    //{"setGPIO", 3, console_setGPIO},
     {"setLED", 2, console_setLED},
     {"setSegment", 1, console_setSegment},
     {"measPower", 1, console_measPower},
@@ -70,10 +72,10 @@ static ConsoleCommand commands[] = {
     {"writeFNR", 1, console_writeFNR},
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
-    {"readSpeed", 0, console_readSpeed},
+    //{"readSpeed", 0, console_readSpeed},
     {"toggleSpeed", 0, console_toggleSpeed},
     {"readSteeringDir", 0, console_readSteeringDir},
-    {"readBatt", 1, console_readBatt},
+    //{"readBatt", 1, console_readBatt},
     {"emulateUSB", 1, console_emulateUSB},
     {"setSteerAngle", 2, console_setSteerAngle},
     {"setRawSteerAngle", 1, console_setRawSteerAngle},
@@ -83,6 +85,7 @@ static ConsoleCommand commands[] = {
     {"enableSteering", 1, console_enableSteering},
     {"hardmode", 1, console_hardmode},
     {"getPower", 0, console_getPower},
+    {"help", 0, console_help},
     {NULL, 0, NULL}
 };
 
@@ -325,20 +328,24 @@ static void console_i2cWrite(uint32_t argc, char** argv)
     i2cTransmit(addr, dataBytes, argc-1);
 }
 
+/*
 static void console_i2cRead(uint32_t argc, char** argv) 
 {
 
 }
+*/
 
 static void console_i2cScan(uint32_t argc, char** argv)
 {
     i2cScan();
 }
 
+/*
 static void console_setGPIO(uint32_t argc, char** argv)
 {
 
 }
+*/
 
 static void console_setLED(uint32_t argc, char** argv)
 {
@@ -442,20 +449,24 @@ static void console_writeSpeed(uint32_t argc, char** argv)
     writeSpeedDAC(atoi(argv[0]));
 }
 
+/*
 static void console_readSpeed(uint32_t argc, char** argv)
 {
 
 }
+*/
 
 static void console_toggleSpeed(uint32_t argc, char** argv)
 {
     toggleSpeedDAC(NULL);
 }
 
+/*
 static void console_readBatt(uint32_t argc, char** argv)
 {
 
 }
+*/
 
 static void console_emulateUSB(uint32_t argc, char** argv)
 {
@@ -547,5 +558,15 @@ static void console_getPower(uint32_t argc, char** argv)
         printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3 + 1] / 1000, powerVals[i * 3 + 1] % 1000, "A");                
         printf("%s: %2u.%03u %s\r\n", "          Power", powerVals[i * 3 + 2] / 1000, powerVals[i * 3 + 2] % 1000, "W");     
         printf("\r\n");
+    }
+}
+static void console_help(uint32_t argc, char** argv) 
+{
+    uint32_t i = 0;
+    printf("***Command Summary***");
+    while (commands[i].cmdStr != NULL) {
+        printf("%s", commands[i].cmdStr);
+        printf("\t requires %lu arguments\n", commands[i].minArguments);
+        i++;
     }
 }
