@@ -96,7 +96,7 @@ LD = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
 
-WARNINGS = -Wall -Werror
+WARNINGS = -Wall -Werror -Wno-unused-function
 	
 CFLAGS  = -O0 -g \
    -mcpu=cortex-m3 -mthumb \

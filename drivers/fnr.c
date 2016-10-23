@@ -24,7 +24,7 @@ void initAutomanInt()
     //NVIC_SetPriority(EXTI15_10_IRQn, 5);
     //NVIC_EnableIRQ(EXTI15_10_IRQn);
 
-    addCallbackTimer(SEVEN_SEG_UPDATE_PERIOD, updateSevenSegCallback, NULL);
+    //addCallbackTimer(SEVEN_SEG_UPDATE_PERIOD, updateSevenSegCallback, NULL);
 }
 
 void setFNR(FNR_t newState)
