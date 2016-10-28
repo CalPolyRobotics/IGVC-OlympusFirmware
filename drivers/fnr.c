@@ -61,8 +61,8 @@ void setFNR(FNR_t newState)
 }
 
 uint8_t getFNR(){
-    uint8_t data;
-    i2cReceive(0x1B, &data, 1);
+    uint8_t data = 0;
+    //i2cReceive(0x1B, &data, 1);
     return data;
 }
 

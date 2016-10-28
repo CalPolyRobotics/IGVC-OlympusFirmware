@@ -36,8 +36,16 @@ void togglePin(GPIO_TypeDef* gpio, uint32_t pin)
 
 Timer_Return led6Toggle(void* dummy)
 {
+    static uint32_t num = 0;
     //HAL_GPIO_TogglePin(GPIO_DEBUG_6);
     togglePin(GPIO_DEBUG_6);
+
+    setSevenSeg(num);
+    num++;
+    if (num > 15)
+    {
+        num = 0;
+    }
 
     return CONTINUE_TIMER;
 }
@@ -57,24 +65,27 @@ int main(void)
 
     /* Configure the system clock */
     SystemClock_Config();
+    initIGVCCallbackTimer();
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_ADC2_Init();
-    MX_I2C2_Init();
+    i2cInit();
 
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
 
-    adc_init();
+    //adc_init();
 
     initSteeringMotor();
-    initIGVCCallbackTimer();
     initSteering();
     initSpeedDAC();
     initEncoderInputCapture();
     initAutomanInt();
+
+    //i2cAddRxTransaction((0x1B >> 1), 1, NULL, NULL);
+    i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR, 5, NULL, NULL);
 
     addCallbackTimer(1000, led6Toggle, NULL);
 
@@ -85,6 +96,7 @@ int main(void)
         serviceTxDma();
         serviceCallbackTimer();
         serviceUSBWrite();
+        serviceI2C();
 
         consoleProcessBytes();
 

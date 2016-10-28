@@ -16,7 +16,7 @@ static Timer_Return speedDACCallback(void* dummy);
 
 static void setSpeedDAC(uint8_t value)
 {
-    i2cTransmit(HERMES_SPEED_DAC_I2C_ADDR, &value, 1);
+    //i2cTransmit(HERMES_SPEED_DAC_I2C_ADDR, &value, 1);
 }
 
 void initSpeedDAC()
