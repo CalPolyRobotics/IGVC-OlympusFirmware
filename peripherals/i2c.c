@@ -36,6 +36,7 @@ static volatile uint32_t nextTransaction;
 static volatile uint8_t i2cRunning;
 static volatile uint8_t shouldServiceI2C;
 static volatile uint8_t i2cStatus;
+static volatile uint8_t i2cBytesLeft;
 
 void i2cInit()
 {
@@ -70,8 +71,9 @@ void i2cInit()
 
 static void startI2CTransfer()
 {
-    printf("Starting Transaction\r\n");
     i2cRunning = 1;
+
+    i2cBytesLeft = transactionList[nextTransaction].numBytes;
 
     if (transactionList[nextTransaction].type == I2C_TYPE_RX)
     {
@@ -158,10 +160,10 @@ void serviceI2C()
             if (transactionList[nextTransaction].type == I2C_TYPE_TX)
             {
                 // Clear the remaining bytes in the fifo
-                while (transactionList[nextTransaction].numBytes > 0)
+                while (i2cBytesLeft > 0)
                 {
                     buffer8_get(&i2cTxDataFifo);
-                    transactionList[nextTransaction].numBytes--;
+                    i2cBytesLeft--;
                 }
 
                 if (transactionList[nextTransaction].txCallback)
@@ -182,7 +184,7 @@ void serviceI2C()
             }
         } else {
             // Transaction successful
-
+           
             if (transactionList[nextTransaction].type == I2C_TYPE_TX)
             {
                 if (transactionList[nextTransaction].txCallback)
@@ -192,6 +194,13 @@ void serviceI2C()
                             i2cStatus);
                 }
             } else {
+
+                if (transactionList[nextTransaction].numBytes == 1)
+                {
+                    i2cRxDataBuffer[i2cRxDataBufferIdx] = I2C2->DR;
+                    i2cRxDataBufferIdx++;
+                }
+
                 if (transactionList[nextTransaction].rxCallback)
                 {
                     transactionList[nextTransaction].rxCallback(
@@ -222,31 +231,27 @@ void serviceI2C()
 
 static void readI2CByte()
 {
-    uint32_t bytesLeft = transactionList[nextTransaction].numBytes;
-
-    if (bytesLeft == 3)
+    if (i2cBytesLeft == 3)
     {
         I2C2->CR1 &= ~I2C_CR1_ACK;
-    } else if (bytesLeft == 2) {
+    } else if (i2cBytesLeft == 2) {
         I2C2->CR1 |= I2C_CR1_STOP;
         shouldServiceI2C = 1;
 
         i2cRxDataBuffer[i2cRxDataBufferIdx] = I2C2->DR;
         i2cRxDataBufferIdx++;
-        transactionList[nextTransaction].numBytes--;
+        i2cBytesLeft--;
     }
 
     i2cRxDataBuffer[i2cRxDataBufferIdx] = I2C2->DR;
     i2cRxDataBufferIdx++;
-    transactionList[nextTransaction].numBytes--;
+    i2cBytesLeft--;
 
 }
 
 void I2C2_EV_IRQHandler()
 {
     uint32_t i2cStatusReg = I2C2->SR1;
-
-    printf("Ev %lX\r\n", i2cStatusReg);
 
     // Start Bit Sent
     if (i2cStatusReg & I2C_SR1_SB)
@@ -269,31 +274,27 @@ void I2C2_EV_IRQHandler()
 
         if (transactionList[nextTransaction].type == I2C_TYPE_TX)
         {
-            if (transactionList[nextTransaction].numBytes > 0)
+            if (i2cBytesLeft > 0)
             {
                 I2C2->DR = buffer8_get(&i2cTxDataFifo);
-                transactionList[nextTransaction].numBytes--;
+                i2cBytesLeft--;
             } else {
                 I2C2->CR1 |= I2C_CR1_STOP;
                 shouldServiceI2C = 1;
             }
         } else {
 
-            if (transactionList[nextTransaction].numBytes == 1)
+            if (i2cBytesLeft == 1)
             {
-                transactionList[nextTransaction].numBytes--;
+                i2cBytesLeft--;
                 I2C2->CR1 &= ~I2C_CR1_ACK;
                 I2C2->CR1 |= I2C_CR1_STOP;
                 shouldServiceI2C = 1;
-            } else if (transactionList[nextTransaction].numBytes == 2)
+            } else if (i2cBytesLeft == 2)
             {
                 I2C2->CR1 &= ~I2C_CR1_ACK;
                 I2C2->CR1 |= I2C_CR1_POS;
             }
-            //if (transactionList[nextTransaction].numBytes > 2)
-            //{
-                //I2C2->CR1 |= I2C_CR1_ACK;
-            //}
         }
     }
 
@@ -303,10 +304,10 @@ void I2C2_EV_IRQHandler()
 
         if (transactionList[nextTransaction].type == I2C_TYPE_TX)
         {
-            if (transactionList[nextTransaction].numBytes > 0)
+            if (i2cBytesLeft > 0)
             {
                 I2C2->DR = buffer8_get(&i2cTxDataFifo);
-                transactionList[nextTransaction].numBytes--;
+                i2cBytesLeft--;
             } else {
                 I2C2->CR1 |= I2C_CR1_STOP;
                 shouldServiceI2C = 1;
@@ -320,7 +321,6 @@ void I2C2_EV_IRQHandler()
 void I2C2_ER_IRQHandler()
 {
     uint32_t i2cStatusReg = I2C2->SR1;
-    printf("ER %lX\r\n", i2cStatusReg);
 
     // NACK
     if (i2cStatusReg & I2C_SR1_AF)

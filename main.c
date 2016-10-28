@@ -50,6 +50,24 @@ Timer_Return led6Toggle(void* dummy)
     return CONTINUE_TIMER;
 }
 
+void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
+{
+    if (status == I2C_ACK)
+    {
+        printf("Zeus Data: ");
+        while (len--)
+        {
+            printf("%X ", *data++);
+        }
+        printf("\r\n");
+    } else if (status == I2C_NACK) {
+        printf("Zeus NACK\r\n");
+    } else {
+        printf("Zeus ERR\r\n");
+    }
+}
+
+
 int main(void)
 {
     RCC->AHB1ENR |= 0xFFFFFFFF;
@@ -85,7 +103,7 @@ int main(void)
     initAutomanInt();
 
     //i2cAddRxTransaction((0x1B >> 1), 1, NULL, NULL);
-    i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR, 5, NULL, NULL);
+    i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR, 1, zeusDataCallback, NULL);
 
     addCallbackTimer(1000, led6Toggle, NULL);
 
