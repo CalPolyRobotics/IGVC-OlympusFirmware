@@ -54,7 +54,7 @@ void adc_init() {
                         NULL,
                         NULL);
 
-    addCallbackTimer(10, adc_poll_data, NULL);
+    addCallbackTimer(30, adc_poll_data, NULL);
 }
 
 void commsPwradcCallback(Packet_t* packet){
@@ -71,7 +71,7 @@ void adc_readDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus st
 
         if (currADCPeriph == batt_v)
         {
-            printf("%u %u\r\n", data[0], data[1]);
+            //printf("%X %X\r\n", data[0], data[1]);
         }
 
         // Go to the next ADC Periph
@@ -90,10 +90,10 @@ void adc_readSetupCallback(void* dummy, I2CStatus status)
     if (status == I2C_ACK)
     {
         
-        i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR,
-                            sizeof(uint16_t),
-                            adc_readDataCallback,
-                            NULL);
+        //i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR,
+                            //sizeof(uint16_t),
+                            //adc_readDataCallback,
+                            //NULL);
 
     } else {
         printf("ADC Tx NACK\r\n");

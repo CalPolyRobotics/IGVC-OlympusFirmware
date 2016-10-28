@@ -326,6 +326,7 @@ void I2C2_ER_IRQHandler()
     if (i2cStatusReg & I2C_SR1_AF)
     {
         shouldServiceI2C = 1;
+        I2C2->SR1 &= ~(I2C_SR1_AF);
         i2cStatus = I2C_NACK;
     }
 
@@ -333,6 +334,7 @@ void I2C2_ER_IRQHandler()
     if (i2cStatusReg & I2C_SR1_ARLO)
     {
         shouldServiceI2C = 1;
+        I2C2->SR1 &= ~(I2C_SR1_ARLO);
         i2cStatus = I2C_ERR;
     }
 
@@ -340,6 +342,7 @@ void I2C2_ER_IRQHandler()
     if (i2cStatusReg & I2C_SR1_BERR)
     {
         shouldServiceI2C = 1;
+        I2C2->SR1 &= ~(I2C_SR1_BERR);
         i2cStatus = I2C_ERR;
     }
 

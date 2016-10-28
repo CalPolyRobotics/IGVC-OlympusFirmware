@@ -94,7 +94,7 @@ int main(void)
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
 
-    //adc_init();
+    adc_init();
 
     initSteeringMotor();
     initSteering();
@@ -103,7 +103,7 @@ int main(void)
     initAutomanInt();
 
     //i2cAddRxTransaction((0x1B >> 1), 1, NULL, NULL);
-    i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR, 1, zeusDataCallback, NULL);
+    i2cAddRxTransaction(1, 1, zeusDataCallback, NULL);
 
     addCallbackTimer(1000, led6Toggle, NULL);
 
