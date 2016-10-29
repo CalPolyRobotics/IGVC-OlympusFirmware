@@ -28,7 +28,7 @@ void MX_ADC2_Init(void)
     ADC2->SMPR2 = (ADC_SMPR2_SMP0_2) | //Sample for 28 cycles
                   (ADC_SMPR2_SMP1_2);  //Sample for 28 cycles
 
-    ADC2->SQR1 = (ADC_SQR1_L_1); //Two conversions in sequence
+    ADC2->SQR1 = (ADC_SQR1_L_0); //Two conversions in sequence
     ADC2->SQR3 = (10) |     //Channel 10 in the first conversion
                  (11 << 5); //Channel 11 in the second conversion
 
@@ -52,8 +52,8 @@ void MX_ADC2_Init(void)
                  (DMA_SxCR_MINC) |          //Memory Increment
                  (DMA_SxCR_CIRC);           //Circular Mode
 
-    //DMA2_Stream3->NDTR = ADC2_SAMPLES * ADC2_CHANNELS_IN_USE; //Number of data to transfer
-    DMA2_Stream3->NDTR = 8; //Number of data to transfer
+    DMA2_Stream3->NDTR = ADC2_SAMPLES * ADC2_CHANNELS_IN_USE; //Number of data to transfer
+    //DMA2_Stream3->NDTR = 8; //Number of data to transfer
     DMA2_Stream3->PAR = (uint32_t)&(ADC2->DR); //ADC2 Data Regist
     DMA2_Stream3->M0AR = (uint32_t)ADCData;    //ADCData Array is destination
 

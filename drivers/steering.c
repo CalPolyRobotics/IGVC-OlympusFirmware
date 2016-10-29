@@ -24,16 +24,16 @@ void initSteering()
 
 static uint32_t mapTargetToPot(uint16_t target)
 {
-    uint32_t left = 1200;
-    uint32_t right = 1650;
+    uint32_t left = 1100;
+    uint32_t right = 1900;
 
     return ((right - left) * (uint32_t)target) / 65535 + left;
 }
 
 static uint32_t mapPotToTarget(uint16_t pot)
 {
-    uint32_t left = 1200;
-    uint32_t right = 1650;
+    uint32_t left = 1100;
+    uint32_t right = 1900;
 
     if (pot < left)
     {
