@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 
-uint8_t FNRState = 0;
+volatile uint8_t FNRState = 0;
 
 static Timer_Return updateSevenSegCallback(void* dummy);
 

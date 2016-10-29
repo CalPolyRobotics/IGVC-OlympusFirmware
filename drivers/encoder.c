@@ -2,16 +2,17 @@
 
 #include "encoder.h"
 
-#define PULSE_PER_ROTATION 6
-#define WHEEL_CIRCUMFERENCE_MUL 91 //measured in meters 
-#define WHEEL_CIRCUMFERENCE_DIV 64 //measured in meters 
-#define MINIMUM_MINIMUM_SPM 10
-#define MAX_COUNT 65535
+#include "stdio.h"
 
-static const uint32_t CLOCK_FREQUENCY = 60; //SET IN MHZ
-//static uint32_t TIMER_FREQUENCY = ; //SET IN MHZ
-static uint32_t MINIMUM_SECOND_PER_METER = MINIMUM_MINIMUM_SPM; 
-static uint32_t PRESCALER = 0;
+#define DIAMETER 1.4 // Meters
+#define MAX_COUNT 65535
+#define TIM10_PRESCALER 511 // Timer is max 120 MHz
+#define TIM12_PRESCALER 511 // Timer is max 60 MHz
+//#define METER_TICKS_PER_SECOND 54405000 // Measured Value Times 1000 to maintain precision
+#define METER_TICKS_PER_SECOND 27202500
+
+// Meter Ticks / Second can be calculated as
+// DIAMETER / (ENCODERS_PER_ROTATION * (PRESCALE/(2 *CLK_FREQ)))
 
 static uint16_t leftSpeedValues[8] = {0};
 static uint16_t rightSpeedValues[8] = {0};
@@ -19,28 +20,8 @@ static uint8_t leftSpeedIdx = 0;
 static uint8_t rightSpeedIdx = 0;
 volatile uint16_t speedCommsValue[2] = {0}; //0 - Left, 1 - Right;
 
-
-void setPrescaleValue() {
-    if (MINIMUM_SECOND_PER_METER) {
-       PRESCALER = CLOCK_FREQUENCY * (1000000) * 
-                   WHEEL_CIRCUMFERENCE_MUL * MINIMUM_SECOND_PER_METER
-                    /(MAX_COUNT * 6 * WHEEL_CIRCUMFERENCE_DIV);    
-    }
-}
-
-void setMinimumMetersPerSecond(uint32_t target) {
-    //MINIMUM_METERS_PER_SECOND = target;
-    //setPrescaleValue();
-}
-
-uint32_t getMaximumMMPerSecond() {
-    return (MAX_COUNT * 1000/ MINIMUM_MINIMUM_SPM);
-}
-
 void initEncoderInputCapture() {
     //INITIALIZE HALL EFFECT 1 
-    setPrescaleValue();
-
     GPIO_InitTypeDef gpio;
     gpio.Pin = GPIO_PIN_8;
     gpio.Mode = GPIO_MODE_AF_OD;
@@ -63,8 +44,7 @@ void initEncoderInputCapture() {
                   TIM_DIER_UIE;
     
 
-    // TIM10->PSC = PRESCALER; 
-    TIM10->PSC = 500;
+    TIM10->PSC = TIM10_PRESCALER;
     TIM10->CR1 = TIM_CR1_URS | TIM_CR1_CEN; //enable the timer
 
 
@@ -92,7 +72,7 @@ void initEncoderInputCapture() {
     
     TIM12->DIER = TIM_DIER_CC1IE; //enable interrupts on timer 
 
-    TIM12->PSC = 500; 
+    TIM12->PSC = TIM12_PRESCALER; 
 
     TIM12->CR1 = TIM_CR1_CEN; //enable the timer
 
@@ -110,7 +90,7 @@ static uint16_t calcFilteredSpeedValue(uint16_t* speedArray)
         accum += speedArray[i];
     }
 
-    return accum >> 3;
+    return METER_TICKS_PER_SECOND/(accum >> 3);
 }
 
 
@@ -118,9 +98,7 @@ void TIM1_UP_TIM10_IRQHandler() {
     // uint16_t speed = (uint8_t)(getMaximumMMPerSecond() / TIM10->CCR1);
     if (TIM10->SR & TIM_SR_CC1IF)
     {
-           uint16_t speed = TIM10->CCR1;
-        leftSpeedValues[leftSpeedIdx] = speed;
-        leftSpeedIdx++;
+        leftSpeedValues[leftSpeedIdx++] = TIM10->CCR1;
         if (leftSpeedIdx >= (sizeof(leftSpeedValues) / 2))
         {
             leftSpeedIdx = 0;
@@ -134,6 +112,7 @@ void TIM1_UP_TIM10_IRQHandler() {
 
     if (TIM10->SR & TIM_SR_UIF) {
         // printf("OVF\r\n");
+        speedCommsValue[0] = 0;
     }
 
     TIM10->SR = 0;
@@ -146,23 +125,22 @@ void TIM8_BRK_TIM12_IRQHandler() {
     // uint16_t speed = (uint8_t)(getMaximumMMPerSecond() / TIM12->CCR1);
     if (TIM12->SR & TIM_SR_CC1IF)
     {
-        uint16_t speed = TIM12->CCR1;
-        rightSpeedValues[rightSpeedIdx] = speed;
-        rightSpeedIdx++;
-        if (rightSpeedIdx >= (sizeof(rightSpeedValues) / 2))
+        rightSpeedValues[rightSpeedIdx++] = TIM12->CCR1;
+        if (rightSpeedIdx >= (sizeof(rightSpeedValues) / sizeof(rightSpeedValues[0])))
         {
             rightSpeedIdx = 0;
         }
-        // uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
-        // speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        speedCommsValue[1] = 0xAABB;
+
+        uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
+        speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
         TIM12->EGR |= TIM_EGR_UG;
     }
 
     if (TIM12->SR & TIM_SR_UIF)
     {
-
+        speedCommsValue[1] = 0;
     }
 
+    TIM12->SR = 0;
 }
 

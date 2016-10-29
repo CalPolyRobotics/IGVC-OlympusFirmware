@@ -20,8 +20,6 @@ extern const char* periph_name[];
 extern const char* periph_unit[];
 extern const uint8_t periph_order[]; 
 
-uint8_t commsPwradcValues[16];
-
 void adc_init();
 void commsPwradcCallback();
 uint16_t adc_read(enum adc_periph periph);

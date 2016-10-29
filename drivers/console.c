@@ -72,8 +72,7 @@ static ConsoleCommand commands[] = {
     {"writeFNR", 1, console_writeFNR},
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
-    //{"readSpeed", 0, console_readSpeed},
-    {"readSpeed", 1, console_readSpeed},
+    {"readSpeed", 0, console_readSpeed},
     {"toggleSpeed", 0, console_toggleSpeed},
     {"readSteeringDir", 0, console_readSteeringDir},
     //{"readBatt", 1, console_readBatt},
@@ -230,8 +229,10 @@ void consoleProcessBytes()
     while (usartRead(&data, 1))
     {
 
+        
         if (data == 0x7F)
-        {
+        { 
+            // Data is a Backspace
             if (cmdBufferIdx > 0)
             {
                 cmdBufferIdx--;

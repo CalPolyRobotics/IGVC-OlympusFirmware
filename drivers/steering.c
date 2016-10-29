@@ -9,7 +9,7 @@
 
 // Need to be global to be accessed from comms.c
 volatile uint16_t currentSteeringValue = 0;
-volatile uint8_t commsCurrentSteeringValue[] = {0,0};
+volatile uint8_t commsCurrentSteeringValue[2] = {0};
 
 static volatile uint32_t steeringPotTarget = 1000;
 static volatile uint32_t enableSteeringVar = 0;

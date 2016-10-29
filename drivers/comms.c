@@ -23,6 +23,11 @@
 #define START_BYTE_1 0xF0
 #define START_BYTE_2 0x5A
 
+extern volatile uint16_t speedCommsValue[2];
+extern volatile uint8_t  commsPwradcValues[16];
+extern volatile uint8_t  commsCurrentSteeringValue[2];
+extern volatile uint8_t  FNRState;
+
 typedef enum {
     WAITING_FOR_START_1 = 0,
     WAITING_FOR_START_2,
@@ -58,22 +63,21 @@ static uint8_t echoBuf[256];
 
 void echoPacketCallback(Packet_t* packet);
 
-extern volatile uint16_t speedCommsValue[2];
 
 static packetResponse_t response[] = {
     {256,  echoBuf, 0,  echoBuf, echoPacketCallback},  // Status
     {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
     {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
-    {0,  NULL, 1,  &FNRState, commsGetFNRCallback},   // Get FNR
+    {0,  NULL, 1,  (uint8_t*)&FNRState, commsGetFNRCallback},   // Get FNR
     {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
     {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
     {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], toggleLED}, // Get Speed
     {0,  NULL, 0,  NULL, setSteeringTargetFromComms}, // Set Steering
-    {0,  NULL, 2,  &commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
+    {0,  NULL, 2,  (uint8_t*)&commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
     {0,  NULL, 0,  NULL, commsSetLightsCallback},     // Set Lights
     {0,  NULL, 0,  NULL, toggleLED},                  // Get Battery
-    {0,  NULL, 16,  &commsPwradcValues[0], commsPwradcCallback}, //Get Power
+    {0,  NULL, 16, (uint8_t*)&commsPwradcValues[0], commsPwradcCallback}, //Get Power
     {0,  NULL, 0,  NULL, killBoard}                  //Send Stop
 };
 
@@ -122,7 +126,7 @@ static void runPacket(Packet_t* packet)
 
 static void sendResponse(Packet_t* packet)
 {
-    uint8_t packetBuffer[MAX_PACKET_SIZE];
+    static uint8_t packetBuffer[MAX_PACKET_SIZE];
     Packet_t* outPacket = (Packet_t*)packetBuffer;
     uint8_t packetType = packet->header.msgType >> 1;
     uint32_t idx;

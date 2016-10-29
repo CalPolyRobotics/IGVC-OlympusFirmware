@@ -35,7 +35,7 @@ const char* periph_unit[] = {"mA", "mV", "mV", "mV", "mA", "mV", "mA", "mA"};
 /* Order to traverse periphs for viewing pleasure */
 const uint8_t periph_order[] = {3, 0, 5, 4, 1, 6, 2, 7};
 
-uint8_t commsPwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+volatile uint8_t commsPwradcValues[16] = {0};
 
 static const uint8_t adc_cfg = 
     (1 << ADC_REG) | (0x7 << ADC_SEL) | (1 << ADC_RST); 
