@@ -406,22 +406,20 @@ static const struct adc_cmd adc_dict[] = {
 
 static void console_measPower(uint32_t argc, char** argv)
 {
-    //int found = 0;
-    //const struct adc_cmd *val;
-    ////uint16_t res = adc_read(batt_i);
-    ////printf("%d\n", res);
+    int found = 0;
+    const struct adc_cmd *val;
 
-    //for (val = adc_dict; val->cmd && !found; val++) {
-        ////printf("Val at %p", val);
-        //if (!strncmp(val->cmd, argv[0], strlen(val->cmd))) {
-            //found = 1;
-        //}
-    //}
+    for (val = adc_dict; val->cmd && !found; val++) {
+        //printf("Val at %p", val);
+        if (!strncmp(val->cmd, argv[0], strlen(val->cmd))) {
+            found = 1;
+        }
+    }
 
-    //if (found) {
-        //val--;
-        //printf("%s: %d", val->cmd, adc_read(val->per));
-    //}
+    if (found) {
+        val--;
+        printf("%s: %d", val->cmd, adc_conv(val->per));
+    }
 }
 
 static void console_kill(uint32_t argc, char** argv)
@@ -445,6 +443,8 @@ static void console_writeFNR(uint32_t argc, char** argv)
                 break;
             case FNR_REVERSE:
                 printf("Reverse");
+                break;
+            case FNR_STATE_UNKNOWN:
                 break;
         }
     } else {

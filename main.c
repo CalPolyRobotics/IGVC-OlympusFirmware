@@ -40,7 +40,7 @@ Timer_Return led6Toggle(void* dummy)
     //HAL_GPIO_TogglePin(GPIO_DEBUG_6);
     togglePin(GPIO_DEBUG_6);
 
-    setSevenSeg(num);
+    //setSevenSeg(num);
     num++;
     if (num > 15)
     {
@@ -101,9 +101,6 @@ int main(void)
     initSpeedDAC();
     initEncoderInputCapture();
     initAutomanInt();
-
-    //i2cAddRxTransaction((0x1B >> 1), 1, NULL, NULL);
-    i2cAddRxTransaction(1, 1, zeusDataCallback, NULL);
 
     addCallbackTimer(1000, led6Toggle, NULL);
 

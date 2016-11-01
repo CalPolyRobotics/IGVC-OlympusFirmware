@@ -31,7 +31,6 @@ for i in range(1,100000):
         print "Invalid Packet: " + str(i)
         break
 
-    time.sleep(.001)
 
 
 

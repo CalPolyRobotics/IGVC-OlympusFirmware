@@ -47,7 +47,6 @@ Timer_Return adc_poll_data();
 
 void adc_init() {
     /* Set ADC to internal reference with output */
-    //i2cTransmit(ZEUS_ADC_I2C_ADDR, (uint8_t *)&adc_cfg, sizeof(uint8_t));
     i2cAddTxTransaction(ZEUS_ADC_I2C_ADDR,
                         (uint8_t *)&adc_cfg,
                         sizeof(uint8_t),
@@ -69,11 +68,6 @@ void adc_readDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus st
         commsPwradcValues[currADCPeriph * 2] = data[1] & 0xF;
         commsPwradcValues[(currADCPeriph * 2) + 1] = data[0];
 
-        if (currADCPeriph == batt_v)
-        {
-            //printf("%X %X\r\n", data[0], data[1]);
-        }
-
         // Go to the next ADC Periph
         currADCPeriph++;
         if (currADCPeriph == ADC_PERIPH_LAST_ENUM)
@@ -90,10 +84,10 @@ void adc_readSetupCallback(void* dummy, I2CStatus status)
     if (status == I2C_ACK)
     {
         
-        //i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR,
-                            //sizeof(uint16_t),
-                            //adc_readDataCallback,
-                            //NULL);
+        i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR,
+                            sizeof(uint16_t),
+                            adc_readDataCallback,
+                            NULL);
 
     } else {
         printf("ADC Tx NACK\r\n");
@@ -114,8 +108,9 @@ Timer_Return adc_poll_data() {
 }
 
 uint16_t adc_conv(enum adc_periph periph){
-    (void) muls;
-    (void) divs;
-    return 0;
-    //return (adc_read(periph) * muls[periph]) / divs[periph];
+
+    uint16_t adcVal = commsPwradcValues[periph * 2] << 8 |
+                      commsPwradcValues[periph * 2 + 1];
+
+    return (adcVal * muls[periph]) / divs[periph];
 }
