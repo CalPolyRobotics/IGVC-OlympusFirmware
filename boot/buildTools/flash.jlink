@@ -1,0 +1,8 @@
+If SWD
+Device STM32F205RG
+speed 2000
+r
+h
+loadbin build/program.bin, 0x08000000
+r
+q

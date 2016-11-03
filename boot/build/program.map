@@ -1,0 +1,2419 @@
+Archive member included because of file (symbol)
+
+buildTools/libc.a(lib_a-impure.o)
+                              build/peripherals/usart.o (_impure_ptr)
+buildTools/libc.a(lib_a-malloc.o)
+                              build/peripherals/USB/usbd_cdc.o (malloc)
+buildTools/libc.a(lib_a-memcpy.o)
+                              build/peripherals/usart.o (memcpy)
+buildTools/libc.a(lib_a-nano-freer.o)
+                              buildTools/libc.a(lib_a-malloc.o) (_free_r)
+buildTools/libc.a(lib_a-nano-mallocr.o)
+                              buildTools/libc.a(lib_a-malloc.o) (_malloc_r)
+buildTools/libc.a(lib_a-printf.o)
+                              build/peripherals/i2c.o (printf)
+buildTools/libc.a(lib_a-putchar.o)
+                              build/peripherals/USB/usbd_core.o (putchar)
+buildTools/libc.a(lib_a-puts.o)
+                              build/main.o (puts)
+buildTools/libc.a(lib_a-sbrkr.o)
+                              buildTools/libc.a(lib_a-nano-mallocr.o) (_sbrk_r)
+buildTools/libc.a(lib_a-setbuf.o)
+                              build/peripherals/usart.o (setbuf)
+buildTools/libc.a(lib_a-setvbuf.o)
+                              buildTools/libc.a(lib_a-setbuf.o) (setvbuf)
+buildTools/libc.a(lib_a-strlen.o)
+                              buildTools/libc.a(lib_a-puts.o) (strlen)
+buildTools/libc.a(lib_a-fflush.o)
+                              buildTools/libc.a(lib_a-setvbuf.o) (_fflush_r)
+buildTools/libc.a(lib_a-findfp.o)
+                              buildTools/libc.a(lib_a-setvbuf.o) (_cleanup_r)
+buildTools/libc.a(lib_a-fvwrite.o)
+                              buildTools/libc.a(lib_a-puts.o) (__sfvwrite_r)
+buildTools/libc.a(lib_a-fwalk.o)
+                              buildTools/libc.a(lib_a-findfp.o) (_fwalk)
+buildTools/libc.a(lib_a-memchr.o)
+                              buildTools/libc.a(lib_a-fvwrite.o) (memchr)
+buildTools/libc.a(lib_a-memmove.o)
+                              buildTools/libc.a(lib_a-fvwrite.o) (memmove)
+buildTools/libc.a(lib_a-memset.o)
+                              buildTools/libc.a(lib_a-findfp.o) (memset)
+buildTools/libc.a(lib_a-nano-reallocr.o)
+                              buildTools/libc.a(lib_a-fvwrite.o) (_realloc_r)
+buildTools/libc.a(lib_a-nano-vfprintf.o)
+                              buildTools/libc.a(lib_a-printf.o) (_vfprintf_r)
+buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+                              buildTools/libc.a(lib_a-nano-vfprintf.o) (_printf_i)
+buildTools/libc.a(lib_a-putc.o)
+                              buildTools/libc.a(lib_a-putchar.o) (_putc_r)
+buildTools/libc.a(lib_a-reent.o)
+                              buildTools/libc.a(lib_a-sbrkr.o) (errno)
+buildTools/libc.a(lib_a-stdio.o)
+                              buildTools/libc.a(lib_a-findfp.o) (__sread)
+buildTools/libc.a(lib_a-wbuf.o)
+                              buildTools/libc.a(lib_a-nano-vfprintf.o) (__swbuf_r)
+buildTools/libc.a(lib_a-writer.o)
+                              buildTools/libc.a(lib_a-stdio.o) (_write_r)
+buildTools/libc.a(lib_a-wsetup.o)
+                              buildTools/libc.a(lib_a-fvwrite.o) (__swsetup_r)
+buildTools/libc.a(lib_a-closer.o)
+                              buildTools/libc.a(lib_a-stdio.o) (_close_r)
+buildTools/libc.a(lib_a-fputwc.o)
+                              buildTools/libc.a(lib_a-nano-vfprintf.o) (_fputwc_r)
+buildTools/libc.a(lib_a-locale.o)
+                              buildTools/libc.a(lib_a-fputwc.o) (__locale_mb_cur_max)
+buildTools/libc.a(lib_a-lseekr.o)
+                              buildTools/libc.a(lib_a-stdio.o) (_lseek_r)
+buildTools/libc.a(lib_a-makebuf.o)
+                              buildTools/libc.a(lib_a-wsetup.o) (__smakebuf_r)
+buildTools/libc.a(lib_a-nano-msizer.o)
+                              buildTools/libc.a(lib_a-nano-reallocr.o) (_malloc_usable_size_r)
+buildTools/libc.a(lib_a-readr.o)
+                              buildTools/libc.a(lib_a-stdio.o) (_read_r)
+buildTools/libc.a(lib_a-strcmp.o)
+                              buildTools/libc.a(lib_a-locale.o) (strcmp)
+buildTools/libc.a(lib_a-wcrtomb.o)
+                              buildTools/libc.a(lib_a-fputwc.o) (_wcrtomb_r)
+buildTools/libc.a(lib_a-wctomb_r.o)
+                              buildTools/libc.a(lib_a-wcrtomb.o) (__wctomb)
+buildTools/libc.a(lib_a-fstatr.o)
+                              buildTools/libc.a(lib_a-makebuf.o) (_fstat_r)
+buildTools/libc.a(lib_a-isattyr.o)
+                              buildTools/libc.a(lib_a-makebuf.o) (_isatty_r)
+buildTools/libnosys.a(close.o)
+                              buildTools/libc.a(lib_a-closer.o) (_close)
+buildTools/libnosys.a(fstat.o)
+                              buildTools/libc.a(lib_a-fstatr.o) (_fstat)
+buildTools/libnosys.a(isatty.o)
+                              buildTools/libc.a(lib_a-isattyr.o) (_isatty)
+buildTools/libnosys.a(lseek.o)
+                              buildTools/libc.a(lib_a-lseekr.o) (_lseek)
+buildTools/libnosys.a(read.o)
+                              buildTools/libc.a(lib_a-readr.o) (_read)
+buildTools/libnosys.a(sbrk.o)
+                              buildTools/libc.a(lib_a-sbrkr.o) (_sbrk)
+
+Allocating common symbols
+Common symbol       size              file
+
+htim8               0x3c              build/peripherals/tim.o
+htim4               0x3c              build/peripherals/tim.o
+errno               0x4               buildTools/libc.a(lib_a-reent.o)
+hadc2               0x44              build/peripherals/adc.o
+htim10              0x3c              build/peripherals/tim.o
+hi2c2               0x38              build/peripherals/i2c.o
+hpcd                0x3b0             build/peripherals/USB/usbd_conf.o
+htim5               0x3c              build/peripherals/tim.o
+htim3               0x3c              build/peripherals/tim.o
+hspi3               0x54              build/peripherals/spi.o
+hadc1               0x44              build/peripherals/adc.o
+htim13              0x3c              build/peripherals/tim.o
+hdac                0x14              build/peripherals/dac.o
+htim1               0x3c              build/peripherals/tim.o
+htim9               0x3c              build/peripherals/tim.o
+timerList           0xa0              build/utils/timerCallback.o
+htim2               0x3c              build/peripherals/tim.o
+htim14              0x3c              build/peripherals/tim.o
+htim12              0x3c              build/peripherals/tim.o
+USBD_StrDesc        0x100             build/peripherals/USB/usbd_desc.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00100000         xr
+RAM              0x20000000         0x00020000         xrw
+MEMORY_B1        0x60000000         0x00000000         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD build/main.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+LOAD build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+LOAD build/system/startup_stm32f2xx.o
+LOAD build/system/stm32f2xx_hal_msp.o
+LOAD build/system/stm32f2xx_it.o
+LOAD build/system/system_stm32f2xx.o
+LOAD build/peripherals/adc.o
+LOAD build/peripherals/dac.o
+LOAD build/peripherals/dma.o
+LOAD build/peripherals/gpio.o
+LOAD build/peripherals/i2c.o
+LOAD build/peripherals/spi.o
+LOAD build/peripherals/tim.o
+LOAD build/peripherals/usart.o
+LOAD build/peripherals/USB/usbd_cdc.o
+LOAD build/peripherals/USB/usbd_conf.o
+LOAD build/peripherals/USB/usbd_core.o
+LOAD build/peripherals/USB/usbd_ctlreq.o
+LOAD build/peripherals/USB/usbd_desc.o
+LOAD build/peripherals/USB/usbd_ioreq.o
+LOAD build/drivers/boot.o
+LOAD build/drivers/led.o
+LOAD build/utils/buffer8.o
+LOAD build/utils/newlib_hooks.o
+LOAD build/utils/timerCallback.o
+LOAD build/utils/characterMapping.o
+LOAD build/utils/crc8.o
+LOAD buildTools/libc.a
+LOAD buildTools/libm.a
+LOAD buildTools/libnosys.a
+                0x2000a000                _estack = 0x2000a000
+                0x00000200                _Min_Heap_Size = 0x200
+                0x00000400                _Min_Stack_Size = 0x400
+
+.isr_vector     0x08000000      0x184
+                0x08000000                . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x08000000      0x184 build/system/startup_stm32f2xx.o
+                0x08000000                g_pfnVectors
+                0x08000184                . = ALIGN (0x4)
+
+.eh_frame       0x08000184       0x28
+ .eh_frame      0x08000184       0x28 buildTools/libc.a(lib_a-strcmp.o)
+
+.text           0x080001ac    0x1f6ac
+                0x080001ac                . = ALIGN (0x4)
+ *(.text)
+ .text          0x080001ac       0xf0 build/main.o
+                0x080001ac                main
+                0x0800021c                SystemClock_Config
+ .text          0x0800029c      0x53c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+                0x0800029c                HAL_GPIO_Init
+                0x080005d4                HAL_GPIO_DeInit
+                0x08000710                HAL_GPIO_ReadPin
+                0x08000740                HAL_GPIO_WritePin
+                0x08000770                HAL_GPIO_TogglePin
+                0x08000794                HAL_GPIO_EXTI_IRQHandler
+                0x080007c4                HAL_GPIO_EXTI_Callback
+ .text          0x080007d8     0x33c8 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+                0x080007d8                HAL_I2C_Init
+                0x08000984                HAL_I2C_DeInit
+                0x08000a00                HAL_I2C_Master_Transmit
+                0x08000b68                HAL_I2C_Master_Receive
+                0x08000e5c                HAL_I2C_Slave_Transmit
+                0x08000ff4                HAL_I2C_Slave_Receive
+                0x0800116c                HAL_I2C_Master_Transmit_IT
+                0x08001250                HAL_I2C_Master_Receive_IT
+                0x080013b4                HAL_I2C_Slave_Transmit_IT
+                0x08001464                HAL_I2C_Slave_Receive_IT
+                0x08001514                HAL_I2C_Master_Transmit_DMA
+                0x08001628                HAL_I2C_Master_Receive_DMA
+                0x08001764                HAL_I2C_Slave_Transmit_DMA
+                0x080018a8                HAL_I2C_Slave_Receive_DMA
+                0x080019ac                HAL_I2C_Mem_Write
+                0x08001b14                HAL_I2C_Mem_Read
+                0x08001e04                HAL_I2C_Mem_Write_IT
+                0x08001ee8                HAL_I2C_Mem_Read_IT
+                0x08002058                HAL_I2C_Mem_Write_DMA
+                0x0800216c                HAL_I2C_Mem_Read_DMA
+                0x080022b4                HAL_I2C_IsDeviceReady
+                0x080024b8                HAL_I2C_EV_IRQHandler
+                0x08002798                HAL_I2C_ER_IRQHandler
+                0x08002980                HAL_I2C_MasterTxCpltCallback
+                0x08002994                HAL_I2C_MasterRxCpltCallback
+                0x080029a8                HAL_I2C_SlaveTxCpltCallback
+                0x080029bc                HAL_I2C_SlaveRxCpltCallback
+                0x080029d0                HAL_I2C_MemTxCpltCallback
+                0x080029e4                HAL_I2C_MemRxCpltCallback
+                0x080029f8                HAL_I2C_ErrorCallback
+                0x08002a0c                HAL_I2C_GetState
+                0x08002a28                HAL_I2C_GetError
+ .text          0x08003ba0      0xd88 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+                0x08003c38                HAL_RCC_DeInit
+                0x08003cb0                HAL_RCC_OscConfig
+                0x08004148                HAL_RCC_ClockConfig
+                0x080043f8                HAL_RCC_MCOConfig
+                0x080044a4                HAL_RCC_EnableCSS
+                0x080044bc                HAL_RCC_DisableCSS
+                0x080044d4                HAL_RCC_GetSysClockFreq
+                0x0800460c                HAL_RCC_GetHCLKFreq
+                0x08004664                HAL_RCC_GetPCLK1Freq
+                0x080046b0                HAL_RCC_GetPCLK2Freq
+                0x080046fc                HAL_RCC_GetOscConfig
+                0x08004898                HAL_RCC_GetClockConfig
+                0x080048f8                HAL_RCC_NMI_IRQHandler
+                0x0800491c                HAL_RCC_CCSCallback
+ .text          0x08004928     0x1d40 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+                0x08004928                HAL_SPI_Init
+                0x080049ec                HAL_SPI_DeInit
+                0x08004a60                HAL_SPI_Transmit
+                0x08004cc4                HAL_SPI_Receive
+                0x08004fe8                HAL_SPI_TransmitReceive
+                0x08005474                HAL_SPI_Transmit_IT
+                0x08005598                HAL_SPI_Receive_IT
+                0x080056cc                HAL_SPI_TransmitReceive_IT
+                0x080057e8                HAL_SPI_Transmit_DMA
+                0x08005924                HAL_SPI_Receive_DMA
+                0x08005a8c                HAL_SPI_TransmitReceive_DMA
+                0x08005c2c                HAL_SPI_IRQHandler
+                0x08005ddc                HAL_SPI_TxCpltCallback
+                0x08005df0                HAL_SPI_RxCpltCallback
+                0x08005e04                HAL_SPI_TxRxCpltCallback
+                0x08005e18                HAL_SPI_ErrorCallback
+                0x08005e2c                HAL_SPI_GetState
+                0x08005e48                HAL_SPI_GetError
+ .text          0x08006668        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .text          0x08006668     0x176c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+                0x08006668                HAL_UART_Init
+                0x080066f4                HAL_HalfDuplex_Init
+                0x08006790                HAL_LIN_Init
+                0x08006850                HAL_MultiProcessor_Init
+                0x08006924                HAL_UART_DeInit
+                0x08006968                HAL_UART_MspInit
+                0x0800697c                HAL_UART_MspDeInit
+                0x08006990                HAL_UART_Transmit
+                0x08006ae4                HAL_UART_Receive
+                0x08006c58                HAL_UART_Transmit_IT
+                0x08006d28                HAL_UART_Receive_IT
+                0x08006df8                HAL_UART_Transmit_DMA
+                0x08006eec                HAL_UART_Receive_DMA
+                0x08006fd8                HAL_UART_DMAPause
+                0x08007074                HAL_UART_DMAResume
+                0x08007130                HAL_UART_DMAStop
+                0x080071bc                HAL_UART_IRQHandler
+                0x080073bc                HAL_UART_TxCpltCallback
+                0x080073d0                HAL_UART_TxHalfCpltCallback
+                0x080073e4                HAL_UART_RxCpltCallback
+                0x080073f8                HAL_UART_RxHalfCpltCallback
+                0x0800740c                HAL_UART_ErrorCallback
+                0x08007420                HAL_LIN_SendBreak
+                0x08007474                HAL_MultiProcessor_EnterMuteMode
+                0x080074c8                HAL_MultiProcessor_ExitMuteMode
+                0x0800751c                HAL_HalfDuplex_EnableTransmitter
+                0x08007584                HAL_HalfDuplex_EnableReceiver
+                0x080075ec                HAL_UART_GetState
+                0x08007608                HAL_UART_GetError
+ .text          0x08007dd4     0x3ce4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+                0x08007dd4                HAL_TIM_Base_Init
+                0x08007e24                HAL_TIM_Base_DeInit
+                0x08007eac                HAL_TIM_Base_Start
+                0x08007ee4                HAL_TIM_Base_Stop
+                0x08007f3c                HAL_TIM_Base_Start_IT
+                0x08007f74                HAL_TIM_Base_Stop_IT
+                0x08007fcc                HAL_TIM_Base_Start_DMA
+                0x0800806c                HAL_TIM_Base_Stop_DMA
+                0x080080cc                HAL_TIM_OC_Init
+                0x0800811c                HAL_TIM_OC_DeInit
+                0x0800817c                HAL_TIM_OC_MspInit
+                0x08008190                HAL_TIM_OC_MspDeInit
+                0x080081a4                HAL_TIM_OC_Start
+                0x0800820c                HAL_TIM_OC_Stop
+                0x080082b4                HAL_TIM_OC_Start_IT
+                0x080083a8                HAL_TIM_OC_Stop_IT
+                0x080084dc                HAL_TIM_OC_Start_DMA
+                0x080086b8                HAL_TIM_OC_Stop_DMA
+                0x080087f4                HAL_TIM_PWM_Init
+                0x08008844                HAL_TIM_PWM_DeInit
+                0x080088a4                HAL_TIM_PWM_MspInit
+                0x080088b8                HAL_TIM_PWM_MspDeInit
+                0x080088cc                HAL_TIM_PWM_Start
+                0x08008934                HAL_TIM_PWM_Stop
+                0x080089e4                HAL_TIM_PWM_Start_IT
+                0x08008ad8                HAL_TIM_PWM_Stop_IT
+                0x08008c0c                HAL_TIM_PWM_Start_DMA
+                0x08008de8                HAL_TIM_PWM_Stop_DMA
+                0x08008f24                HAL_TIM_IC_Init
+                0x08008f74                HAL_TIM_IC_DeInit
+                0x08008fd4                HAL_TIM_IC_MspInit
+                0x08008fe8                HAL_TIM_IC_MspDeInit
+                0x08008ffc                HAL_TIM_IC_Start
+                0x08009030                HAL_TIM_IC_Stop
+                0x08009084                HAL_TIM_IC_Start_IT
+                0x08009144                HAL_TIM_IC_Stop_IT
+                0x08009224                HAL_TIM_IC_Start_DMA
+                0x080093c4                HAL_TIM_IC_Stop_DMA
+                0x080094ac                HAL_TIM_OnePulse_Init
+                0x0800951c                HAL_TIM_OnePulse_DeInit
+                0x0800957c                HAL_TIM_OnePulse_MspInit
+                0x08009590                HAL_TIM_OnePulse_MspDeInit
+                0x080095a4                HAL_TIM_OnePulse_Start
+                0x0800960c                HAL_TIM_OnePulse_Stop
+                0x080096c4                HAL_TIM_OnePulse_Start_IT
+                0x0800974c                HAL_TIM_OnePulse_Stop_IT
+                0x08009824                HAL_TIM_Encoder_Init
+                0x08009948                HAL_TIM_Encoder_DeInit
+                0x080099a8                HAL_TIM_Encoder_MspInit
+                0x080099bc                HAL_TIM_Encoder_MspDeInit
+                0x080099d0                HAL_TIM_Encoder_Start
+                0x08009a40                HAL_TIM_Encoder_Stop
+                0x08009ad0                HAL_TIM_Encoder_Start_IT
+                0x08009b80                HAL_TIM_Encoder_Stop_IT
+                0x08009c54                HAL_TIM_Encoder_Start_DMA
+                0x08009e0c                HAL_TIM_Encoder_Stop_DMA
+                0x08009ee0                HAL_TIM_IRQHandler
+                0x0800a120                HAL_TIM_OC_ConfigChannel
+                0x0800a1e0                HAL_TIM_IC_ConfigChannel
+                0x0800a318                HAL_TIM_PWM_ConfigChannel
+                0x0800a4a4                HAL_TIM_OnePulse_ConfigChannel
+                0x0800a624                HAL_TIM_DMABurst_WriteStart
+                0x0800a830                HAL_TIM_DMABurst_WriteStop
+                0x0800a85c                HAL_TIM_DMABurst_ReadStart
+                0x0800aa5c                HAL_TIM_DMABurst_ReadStop
+                0x0800aa88                HAL_TIM_GenerateEvent
+                0x0800aad8                HAL_TIM_ConfigOCrefClear
+                0x0800ac2c                HAL_TIM_ConfigClockSource
+                0x0800adf0                HAL_TIM_ConfigTI1Input
+                0x0800ae2c                HAL_TIM_SlaveConfigSynchronization
+                0x0800af7c                HAL_TIM_ReadCapturedValue
+                0x0800b020                HAL_TIM_PeriodElapsedCallback
+                0x0800b034                HAL_TIM_OC_DelayElapsedCallback
+                0x0800b048                HAL_TIM_IC_CaptureCallback
+                0x0800b05c                HAL_TIM_PWM_PulseFinishedCallback
+                0x0800b070                HAL_TIM_TriggerCallback
+                0x0800b084                HAL_TIM_ErrorCallback
+                0x0800b098                HAL_TIM_Base_GetState
+                0x0800b0b4                HAL_TIM_OC_GetState
+                0x0800b0d0                HAL_TIM_PWM_GetState
+                0x0800b0ec                HAL_TIM_IC_GetState
+                0x0800b108                HAL_TIM_OnePulse_GetState
+                0x0800b124                HAL_TIM_Encoder_GetState
+                0x0800b140                HAL_TIM_DMAError
+                0x0800b164                HAL_TIM_DMADelayPulseCplt
+                0x0800b188                HAL_TIM_DMACaptureCplt
+                0x0800b1f4                TIM_Base_SetConfig
+                0x0800b428                TIM_OC2_SetConfig
+                0x0800b6c4                TIM_TI1_SetConfig
+                0x0800ba74                TIM_CCxChannelCmd
+ .text          0x0800bab8     0x149c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+                0x0800bab8                HAL_TIMEx_HallSensor_Init
+                0x0800bbd4                HAL_TIMEx_HallSensor_DeInit
+                0x0800bc34                HAL_TIMEx_HallSensor_MspInit
+                0x0800bc48                HAL_TIMEx_HallSensor_MspDeInit
+                0x0800bc5c                HAL_TIMEx_HallSensor_Start
+                0x0800bc8c                HAL_TIMEx_HallSensor_Stop
+                0x0800bcdc                HAL_TIMEx_HallSensor_Start_IT
+                0x0800bd1c                HAL_TIMEx_HallSensor_Stop_IT
+                0x0800bd7c                HAL_TIMEx_HallSensor_Start_DMA
+                0x0800be28                HAL_TIMEx_HallSensor_Stop_DMA
+                0x0800be88                HAL_TIMEx_OCN_Start
+                0x0800becc                HAL_TIMEx_OCN_Stop
+                0x0800bf50                HAL_TIMEx_OCN_Start_IT
+                0x0800c020                HAL_TIMEx_OCN_Stop_IT
+                0x0800c130                HAL_TIMEx_OCN_Start_DMA
+                0x0800c2e8                HAL_TIMEx_OCN_Stop_DMA
+                0x0800c400                HAL_TIMEx_PWMN_Start
+                0x0800c444                HAL_TIMEx_PWMN_Stop
+                0x0800c4c8                HAL_TIMEx_PWMN_Start_IT
+                0x0800c5a8                HAL_TIMEx_PWMN_Stop_IT
+                0x0800c6c8                HAL_TIMEx_PWMN_Start_DMA
+                0x0800c880                HAL_TIMEx_PWMN_Stop_DMA
+                0x0800c998                HAL_TIMEx_OnePulseN_Start
+                0x0800c9cc                HAL_TIMEx_OnePulseN_Stop
+                0x0800ca50                HAL_TIMEx_OnePulseN_Start_IT
+                0x0800caa4                HAL_TIMEx_OnePulseN_Stop_IT
+                0x0800cb48                HAL_TIMEx_ConfigCommutationEvent
+                0x0800cbe8                HAL_TIMEx_ConfigCommutationEvent_IT
+                0x0800cc98                HAL_TIMEx_ConfigCommutationEvent_DMA
+                0x0800cd60                HAL_TIMEx_MasterConfigSynchronization
+                0x0800cdec                HAL_TIMEx_ConfigBreakDeadTime
+                0x0800ce60                HAL_TIMEx_RemapConfig
+                0x0800cea8                HAL_TIMEx_CommutationCallback
+                0x0800cebc                HAL_TIMEx_BreakCallback
+                0x0800ced0                HAL_TIMEx_HallSensor_GetState
+                0x0800ceec                HAL_TIMEx_DMACommutationCplt
+ .text          0x0800cf54     0x7b74 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+                0x0800cf54                HAL_DMA_Init
+                0x0800d02c                HAL_DMA_DeInit
+                0x0800e4cc                HAL_DMA_Start
+                0x0800e530                HAL_DMA_Start_IT
+                0x0800e5e4                HAL_DMA_Abort
+                0x0800e664                HAL_DMA_PollForTransfer
+                0x08011670                HAL_DMA_IRQHandler
+                0x08014a48                HAL_DMA_GetState
+                0x08014a64                HAL_DMA_GetError
+ .text          0x08014ac8      0x544 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+                0x08014e5c                HAL_NVIC_SetPriorityGrouping
+                0x08014e70                HAL_NVIC_SetPriority
+                0x08014ea8                HAL_NVIC_EnableIRQ
+                0x08014ec4                HAL_NVIC_DisableIRQ
+                0x08014ee0                HAL_NVIC_SystemReset
+                0x08014eec                HAL_SYSTICK_Config
+                0x08014f04                HAL_NVIC_GetPriorityGrouping
+                0x08014f14                HAL_NVIC_GetPriority
+                0x08014f44                HAL_NVIC_SetPendingIRQ
+                0x08014f60                HAL_NVIC_GetPendingIRQ
+                0x08014f80                HAL_NVIC_ClearPendingIRQ
+                0x08014f9c                HAL_NVIC_GetActive
+                0x08014fbc                HAL_SYSTICK_CLKSourceConfig
+                0x08014ff4                HAL_SYSTICK_IRQHandler
+                0x08015000                HAL_SYSTICK_Callback
+ .text          0x0801500c      0xd50 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+                0x0801500c                HAL_ADC_Init
+                0x08015060                HAL_ADC_DeInit
+                0x08015098                HAL_ADC_MspInit
+                0x080150ac                HAL_ADC_MspDeInit
+                0x080150c0                HAL_ADC_Start
+                0x08015198                HAL_ADC_Stop
+                0x080151c8                HAL_ADC_PollForConversion
+                0x08015240                HAL_ADC_PollForEvent
+                0x080152d4                HAL_ADC_Start_IT
+                0x080153d0                HAL_ADC_Stop_IT
+                0x08015420                HAL_ADC_IRQHandler
+                0x08015694                HAL_ADC_Start_DMA
+                0x08015778                HAL_ADC_Stop_DMA
+                0x080157cc                HAL_ADC_GetValue
+                0x080157e8                HAL_ADC_ConvCpltCallback
+                0x080157fc                HAL_ADC_ConvHalfCpltCallback
+                0x08015810                HAL_ADC_LevelOutOfWindowCallback
+                0x08015824                HAL_ADC_ErrorCallback
+                0x08015838                HAL_ADC_ConfigChannel
+                0x08015a28                HAL_ADC_AnalogWDGConfig
+                0x08015ae4                HAL_ADC_GetState
+                0x08015b00                HAL_ADC_GetError
+ .text          0x08015d5c      0x998 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+                0x08015d5c                HAL_ADCEx_InjectedStart
+                0x08015e9c                HAL_ADCEx_InjectedStart_IT
+                0x08016000                HAL_ADCEx_InjectedStop
+                0x08016030                HAL_ADCEx_InjectedPollForConversion
+                0x080160a8                HAL_ADCEx_InjectedStop_IT
+                0x080160f8                HAL_ADCEx_InjectedGetValue
+                0x0801616c                HAL_ADCEx_MultiModeStart_DMA
+                0x08016264                HAL_ADCEx_MultiModeStop_DMA
+                0x080162d8                HAL_ADCEx_MultiModeGetValue
+                0x080162f4                HAL_ADCEx_InjectedConvCpltCallback
+                0x08016308                HAL_ADCEx_InjectedConfigChannel
+                0x080165e8                HAL_ADCEx_MultiModeConfigChannel
+ .text          0x080166f4      0x5f0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+                0x080166f4                HAL_DAC_Init
+                0x08016734                HAL_DAC_DeInit
+                0x08016798                HAL_DAC_Start
+                0x08016868                HAL_DAC_Stop
+                0x080168a0                HAL_DAC_Start_DMA
+                0x08016a08                HAL_DAC_Stop_DMA
+                0x08016a58                HAL_DAC_GetValue
+                0x08016a84                HAL_DAC_IRQHandler
+                0x08016b14                HAL_DAC_ConvCpltCallbackCh1
+                0x08016b28                HAL_DAC_ConvHalfCpltCallbackCh1
+                0x08016b3c                HAL_DAC_ErrorCallbackCh1
+                0x08016b50                HAL_DAC_DMAUnderrunCallbackCh1
+                0x08016b64                HAL_DAC_ConfigChannel
+                0x08016bfc                HAL_DAC_SetValue
+                0x08016c48                HAL_DAC_GetState
+                0x08016c64                HAL_DAC_GetError
+ .text          0x08016ce4      0x1f4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+                0x08016ce4                HAL_DACEx_DualGetValue
+                0x08016d18                HAL_DACEx_TriangleWaveGenerate
+                0x08016d70                HAL_DACEx_NoiseWaveGenerate
+                0x08016dc8                HAL_DACEx_DualSetValue
+                0x08016e20                HAL_DACEx_ConvCpltCallbackCh2
+                0x08016e34                HAL_DACEx_ConvHalfCpltCallbackCh2
+                0x08016e48                HAL_DACEx_ErrorCallbackCh2
+                0x08016e5c                HAL_DACEx_DMAUnderrunCallbackCh2
+                0x08016e70                DAC_DMAConvCpltCh2
+                0x08016e90                DAC_DMAHalfConvCpltCh2
+                0x08016eac                DAC_DMAErrorCh2
+ .text          0x08016ed8     0x1348 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+                0x08016ed8                HAL_PCD_Init
+                0x080170e0                HAL_PCD_DeInit
+                0x08017140                HAL_PCD_Start
+                0x08017184                HAL_PCD_Stop
+                0x080171d4                HAL_PCD_IRQHandler
+                0x08017a54                HAL_PCD_DevConnect
+                0x08017a90                HAL_PCD_DevDisconnect
+                0x08017acc                HAL_PCD_SetAddress
+                0x08017b10                HAL_PCD_EP_Open
+                0x08017be0                HAL_PCD_EP_Close
+                0x08017c74                HAL_PCD_EP_Receive
+                0x08017d2c                HAL_PCD_EP_GetRxCount
+                0x08017d60                HAL_PCD_EP_Transmit
+                0x08017e14                HAL_PCD_EP_SetStall
+                0x08017ecc                HAL_PCD_EP_ClrStall
+                0x08017f60                HAL_PCD_EP_Flush
+                0x08017fbc                HAL_PCD_SetTxFiFo
+                0x08018058                HAL_PCD_SetRxFiFo
+                0x0801807c                HAL_PCD_ActiveRemoteWakeup
+                0x080180c0                HAL_PCD_DeActiveRemoteWakeup
+                0x080180f4                HAL_PCD_GetState
+ .text          0x08018220       0xbc build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+                0x08018220                HAL_PCDEx_SetTxFiFo
+                0x080182b8                HAL_PCDEx_SetRxFiFo
+ .text          0x080182dc     0x21a4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+                0x080182dc                USB_CoreInit
+                0x08018380                USB_EnableGlobalInt
+                0x080183a4                USB_DisableGlobalInt
+                0x080183c8                USB_SetCurrentMode
+                0x08018418                USB_DevInit
+                0x08018670                USB_FlushTxFifo
+                0x080186bc                USB_FlushRxFifo
+                0x08018700                USB_SetDevSpeed
+                0x08018730                USB_GetDevSpeed
+                0x0801879c                USB_ActivateEndpoint
+                0x080188b0                USB_ActivateDedicatedEndpoint
+                0x08018a38                USB_DeactivateEndpoint
+                0x08018b30                USB_DeactivateDedicatedEndpoint
+                0x08018be4                USB_EPStartXfer
+                0x08019068                USB_EP0StartXfer
+                0x08019324                USB_WritePacket
+                0x08019394                USB_ReadPacket
+                0x080193e8                USB_EPSetStall
+                0x080194cc                USB_EPClearStall
+                0x080195a8                USB_StopDevice
+                0x08019630                USB_SetDevAddress
+                0x0801967c                USB_DevConnect
+                0x080196ac                USB_DevDisconnect
+                0x080196dc                USB_ReadInterrupts
+                0x08019708                USB_ReadDevAllOutEpInterrupt
+                0x08019738                USB_ReadDevAllInEpInterrupt
+                0x08019768                USB_ReadDevOutEPInterrupt
+                0x080197a0                USB_ReadDevInEPInterrupt
+                0x080197f4                USB_ClearInterrupts
+                0x08019814                USB_GetMode
+                0x08019830                USB_ActivateSetup
+                0x0801989c                USB_EP0_OutStart
+                0x08019990                USB_HostInit
+                0x08019ae8                USB_InitFSLSPClkSel
+                0x08019b5c                USB_ResetPort
+                0x08019ba8                USB_DriveVbus
+                0x08019c14                USB_GetHostSpeed
+                0x08019c3c                USB_GetCurrentFrame
+                0x08019c5c                USB_HC_Init
+                0x08019e54                USB_HC_StartXfer
+                0x0801a0dc                USB_HC_ReadInterrupt
+                0x0801a0fc                USB_HC_Halt
+                0x0801a2fc                USB_DoPing
+                0x0801a380                USB_StopHost
+ .text          0x0801a480      0x230 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+                0x0801a480                HAL_Init
+                0x0801a4c4                HAL_DeInit
+                0x0801a528                HAL_MspDeInit
+                0x0801a534                HAL_IncTick
+                0x0801a550                HAL_GetTick
+                0x0801a568                HAL_Delay
+                0x0801a590                HAL_GetHalVersion
+                0x0801a5a4                HAL_GetREVID
+                0x0801a5bc                HAL_GetDEVID
+                0x0801a5d8                HAL_EnableDBGSleepMode
+                0x0801a5f4                HAL_DisableDBGSleepMode
+                0x0801a610                HAL_EnableDBGStopMode
+                0x0801a62c                HAL_DisableDBGStopMode
+                0x0801a648                HAL_EnableDBGStandbyMode
+                0x0801a664                HAL_DisableDBGStandbyMode
+                0x0801a680                HAL_EnableCompensationCell
+                0x0801a698                HAL_DisableCompensationCell
+ .text          0x0801a6b0       0x14 build/system/startup_stm32f2xx.o
+ .text          0x0801a6c4       0x18 build/system/stm32f2xx_hal_msp.o
+                0x0801a6c4                HAL_MspInit
+ .text          0x0801a6dc       0x54 build/system/stm32f2xx_it.o
+                0x0801a6dc                NMI_Handler
+                0x0801a6e8                SysTick_Handler
+                0x0801a6f8                HardFault_Handler
+                0x0801a708                ADC_IRQHandler
+                0x0801a718                OTG_FS_IRQHandler
+                0x0801a728                WWDG_IRQHandler
+ .text          0x0801a730      0x154 build/system/system_stm32f2xx.o
+                0x0801a730                SystemInit
+                0x0801a78c                SystemCoreClockUpdate
+ .text          0x0801a884      0x130 build/peripherals/adc.o
+                0x0801a884                MX_ADC1_Init
+                0x0801a890                MX_ADC2_Init
+                0x0801a92c                getSteeringValue
+                0x0801a970                getPedalValue
+ .text          0x0801a9b4       0xc0 build/peripherals/dac.o
+                0x0801a9b4                MX_DAC_Init
+                0x0801a9f4                HAL_DAC_MspInit
+                0x0801aa3c                HAL_DAC_MspDeInit
+ .text          0x0801aa74       0x28 build/peripherals/dma.o
+                0x0801aa74                MX_DMA_Init
+ .text          0x0801aa9c      0x17c build/peripherals/gpio.o
+                0x0801aa9c                MX_GPIO_Init
+ .text          0x0801ac18      0x198 build/peripherals/i2c.o
+                0x0801ac18                MX_I2C2_Init
+                0x0801ac68                HAL_I2C_MspInit
+                0x0801acbc                HAL_I2C_MspDeInit
+                0x0801acf8                i2cTransmit
+                0x0801ad2c                i2cReceive
+                0x0801ad60                i2cScan
+ .text          0x0801adb0      0x120 build/peripherals/spi.o
+                0x0801adb0                MX_SPI3_Init
+                0x0801ae10                HAL_SPI_MspInit
+                0x0801ae88                HAL_SPI_MspDeInit
+ .text          0x0801aed0      0x918 build/peripherals/tim.o
+                0x0801aed0                MX_TIM1_Init
+                0x0801af58                MX_TIM2_Init
+                0x0801afd8                MX_TIM3_Init
+                0x0801b058                MX_TIM4_Init
+                0x0801b0d8                MX_TIM5_Init
+                0x0801b158                MX_TIM8_Init
+                0x0801b1e0                MX_TIM9_Init
+                0x0801b228                MX_TIM10_Init
+                0x0801b284                MX_TIM12_Init
+                0x0801b2f0                MX_TIM13_Init
+                0x0801b34c                MX_TIM14_Init
+                0x0801b3a8                HAL_TIM_Base_MspInit
+                0x0801b640                HAL_TIM_Base_MspDeInit
+ .text          0x0801b7e8      0x484 build/peripherals/usart.o
+                0x0801b818                commsUsartInit
+                0x0801b8f4                serviceTxDma
+                0x0801b9ec                usartPut
+                0x0801ba08                usartWrite
+                0x0801bb30                usartGet
+                0x0801bb80                usartRead
+                0x0801bc48                DMA2_Stream7_IRQHandler
+ .text          0x0801bc6c      0x490 build/peripherals/USB/usbd_cdc.o
+                0x0801bfa4                USBD_CDC_GetDeviceQualifierDescriptor
+                0x0801bfc4                USBD_CDC_RegisterInterface
+                0x0801bff4                USBD_CDC_SetTxBuffer
+                0x0801c028                USBD_CDC_SetRxBuffer
+                0x0801c050                USBD_CDC_TransmitPacket
+                0x0801c0a4                USBD_CDC_ReceivePacket
+ .text          0x0801c0fc      0x72c build/peripherals/USB/usbd_conf.o
+                0x0801c150                HAL_PCD_MspInit
+                0x0801c320                HAL_PCD_MspDeInit
+                0x0801c38c                HAL_PCD_SetupStageCallback
+                0x0801c3b0                HAL_PCD_DataOutStageCallback
+                0x0801c3e8                HAL_PCD_DataInStageCallback
+                0x0801c41c                HAL_PCD_SOFCallback
+                0x0801c438                HAL_PCD_ResetCallback
+                0x0801c488                HAL_PCD_SuspendCallback
+                0x0801c4a4                HAL_PCD_ResumeCallback
+                0x0801c4c0                HAL_PCD_ISOOUTIncompleteCallback
+                0x0801c4e4                HAL_PCD_ISOINIncompleteCallback
+                0x0801c508                HAL_PCD_ConnectCallback
+                0x0801c524                HAL_PCD_DisconnectCallback
+                0x0801c540                USBD_LL_Init
+                0x0801c5d0                USBD_LL_DeInit
+                0x0801c5f0                USBD_LL_Start
+                0x0801c610                USBD_LL_Stop
+                0x0801c630                USBD_LL_OpenEP
+                0x0801c664                USBD_LL_CloseEP
+                0x0801c68c                USBD_LL_FlushEP
+                0x0801c6b4                USBD_LL_StallEP
+                0x0801c6dc                USBD_LL_ClearStallEP
+                0x0801c704                USBD_LL_IsStallEP
+                0x0801c75c                USBD_LL_SetUSBAddress
+                0x0801c784                USBD_LL_Transmit
+                0x0801c7b8                USBD_LL_PrepareReceive
+                0x0801c7ec                USBD_LL_GetRxDataSize
+                0x0801c814                USBD_LL_Delay
+ .text          0x0801c828      0x5ac build/peripherals/USB/usbd_core.o
+                0x0801c828                USBD_Init
+                0x0801c898                USBD_DeInit
+                0x0801c8d4                USBD_RegisterClass
+                0x0801c920                USBD_Start
+                0x0801c938                USBD_Stop
+                0x0801c964                USBD_RunTestMode
+                0x0801c97c                USBD_SetClassConfig
+                0x0801c9bc                USBD_ClrClassConfig
+                0x0801c9e4                USBD_LL_SetupStage
+                0x0801ca78                USBD_LL_DataOutStage
+                0x0801cb30                USBD_LL_DataInStage
+                0x0801cc50                USBD_LL_Reset
+                0x0801ccb0                USBD_LL_SetSpeed
+                0x0801ccd0                USBD_LL_Suspend
+                0x0801ccfc                USBD_LL_Resume
+                0x0801cd20                USBD_LL_SOF
+                0x0801cd54                USBD_LL_IsoINIncomplete
+                0x0801cd70                USBD_LL_IsoOUTIncomplete
+                0x0801cd8c                USBD_LL_DevConnected
+                0x0801cda4                USBD_LL_DevDisconnected
+ .text          0x0801cdd4      0x8c8 build/peripherals/USB/usbd_ctlreq.o
+                0x0801cdd4                USBD_StdDevReq
+                0x0801ce74                USBD_StdItfReq
+                0x0801cedc                USBD_StdEPReq
+                0x0801d550                USBD_ParseSetupRequest
+                0x0801d5c8                USBD_CtlError
+                0x0801d5e8                USBD_GetString
+ .text          0x0801d69c      0x21c build/peripherals/USB/usbd_desc.o
+                0x0801d69c                USBD_VCP_DeviceDescriptor
+                0x0801d6c0                USBD_VCP_LangIDStrDescriptor
+                0x0801d6e4                USBD_VCP_ProductStrDescriptor
+                0x0801d724                USBD_VCP_ManufacturerStrDescriptor
+                0x0801d74c                USBD_VCP_SerialStrDescriptor
+                0x0801d770                USBD_VCP_ConfigStrDescriptor
+                0x0801d7ac                USBD_VCP_InterfaceStrDescriptor
+ .text          0x0801d8b8      0x130 build/peripherals/USB/usbd_ioreq.o
+                0x0801d8b8                USBD_CtlSendData
+                0x0801d8f0                USBD_CtlContinueSendData
+                0x0801d914                USBD_CtlPrepareRx
+                0x0801d950                USBD_CtlContinueRx
+                0x0801d974                USBD_CtlSendStatus
+                0x0801d99c                USBD_CtlReceiveStatus
+                0x0801d9c4                USBD_GetRxCount
+ .text          0x0801d9e8       0x94 build/drivers/boot.o
+                0x0801d9e8                bootloaderFSM
+ .text          0x0801da7c       0x50 build/drivers/led.o
+                0x0801da7c                setLED
+ .text          0x0801dacc      0x208 build/utils/buffer8.o
+                0x0801dacc                buffer8_init
+                0x0801dafc                buffer8_put
+                0x0801db60                buffer8_write
+                0x0801dba8                buffer8_get
+                0x0801dbf8                buffer8_peek
+                0x0801dc20                buffer8_space
+                0x0801dc40                buffer8_bytes
+                0x0801dc84                buffer8_empty
+                0x0801dcac                buffer8_full
+ .text          0x0801dcd4       0x24 build/utils/newlib_hooks.o
+                0x0801dcd4                _write
+ .text          0x0801dcf8      0x230 build/utils/timerCallback.o
+                0x0801dd7c                initIGVCCallbackTimer
+                0x0801dde8                addCallbackTimer
+                0x0801de80                TIM1_BRK_TIM9_IRQHandler
+ .text          0x0801df28       0x8c build/utils/characterMapping.o
+                0x0801df28                mapCharacter
+ .text          0x0801dfb4       0x44 build/utils/crc8.o
+                0x0801dfb4                crc8
+ .text          0x0801dff8        0x0 buildTools/libc.a(lib_a-impure.o)
+ .text          0x0801dff8       0x20 buildTools/libc.a(lib_a-malloc.o)
+                0x0801dff8                malloc
+                0x0801e008                free
+ .text          0x0801e018       0x16 buildTools/libc.a(lib_a-memcpy.o)
+                0x0801e018                memcpy
+ *fill*         0x0801e02e        0x2 
+ .text          0x0801e030       0x88 buildTools/libc.a(lib_a-nano-freer.o)
+                0x0801e030                _free_r
+ .text          0x0801e0b8       0xa8 buildTools/libc.a(lib_a-nano-mallocr.o)
+                0x0801e0b8                _malloc_r
+ .text          0x0801e160       0x40 buildTools/libc.a(lib_a-printf.o)
+                0x0801e160                _printf_r
+                0x0801e160                _iprintf_r
+                0x0801e17c                printf
+                0x0801e17c                iprintf
+ .text          0x0801e1a0       0x18 buildTools/libc.a(lib_a-putchar.o)
+                0x0801e1a0                _putchar_r
+                0x0801e1a6                putchar
+ .text          0x0801e1b8       0x68 buildTools/libc.a(lib_a-puts.o)
+                0x0801e1b8                _puts_r
+                0x0801e210                puts
+ .text          0x0801e220       0x20 buildTools/libc.a(lib_a-sbrkr.o)
+                0x0801e220                _sbrk_r
+ .text          0x0801e240       0x10 buildTools/libc.a(lib_a-setbuf.o)
+                0x0801e240                setbuf
+ .text          0x0801e250       0xe8 buildTools/libc.a(lib_a-setvbuf.o)
+                0x0801e250                setvbuf
+ .text          0x0801e338       0x10 buildTools/libc.a(lib_a-strlen.o)
+                0x0801e338                strlen
+ .text          0x0801e348      0x15c buildTools/libc.a(lib_a-fflush.o)
+                0x0801e348                __sflush_r
+                0x0801e45e                _fflush_r
+                0x0801e482                fflush
+ .text          0x0801e4a4      0x180 buildTools/libc.a(lib_a-findfp.o)
+                0x0801e4ac                _cleanup_r
+                0x0801e500                __sfmoreglue
+                0x0801e52c                _cleanup
+                0x0801e538                __sinit
+                0x0801e57c                __sfp
+                0x0801e5f4                __sfp_lock_acquire
+                0x0801e5f6                __sfp_lock_release
+                0x0801e5f8                __sinit_lock_acquire
+                0x0801e5fa                __sinit_lock_release
+                0x0801e5fc                __fp_lock_all
+                0x0801e610                __fp_unlock_all
+ .text          0x0801e624      0x2a0 buildTools/libc.a(lib_a-fvwrite.o)
+                0x0801e624                __sfvwrite_r
+ .text          0x0801e8c4       0x74 buildTools/libc.a(lib_a-fwalk.o)
+                0x0801e8c4                _fwalk
+                0x0801e8fc                _fwalk_reent
+ .text          0x0801e938       0x1c buildTools/libc.a(lib_a-memchr.o)
+                0x0801e938                memchr
+ .text          0x0801e954       0x36 buildTools/libc.a(lib_a-memmove.o)
+                0x0801e954                memmove
+ .text          0x0801e98a       0x10 buildTools/libc.a(lib_a-memset.o)
+                0x0801e98a                memset
+ .text          0x0801e99a       0x4c buildTools/libc.a(lib_a-nano-reallocr.o)
+                0x0801e99a                _realloc_r
+ *fill*         0x0801e9e6        0x2 
+ .text          0x0801e9e8      0x29c buildTools/libc.a(lib_a-nano-vfprintf.o)
+                0x0801ea14                __sfputs_r
+                0x0801ea5e                __sprint_r
+                0x0801eabe                _vfiprintf_r
+                0x0801eabe                _vfprintf_r
+                0x0801ec68                vfiprintf
+                0x0801ec68                vfprintf
+ .text          0x0801ec84      0x32c buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+                0x0801ec84                _printf_common
+                0x0801ed6e                _printf_i
+ .text          0x0801efb0       0x60 buildTools/libc.a(lib_a-putc.o)
+                0x0801efb0                _putc_r
+                0x0801effe                putc
+ .text          0x0801f010       0x9c buildTools/libc.a(lib_a-reent.o)
+                0x0801f010                cleanup_glue
+                0x0801f02a                _reclaim_reent
+ .text          0x0801f0ac       0x8a buildTools/libc.a(lib_a-stdio.o)
+                0x0801f0ac                __sread
+                0x0801f0ce                __seofread
+                0x0801f0d2                __swrite
+                0x0801f10a                __sseek
+                0x0801f12e                __sclose
+ *fill*         0x0801f136        0x2 
+ .text          0x0801f138       0xa4 buildTools/libc.a(lib_a-wbuf.o)
+                0x0801f138                __swbuf_r
+                0x0801f1ca                __swbuf
+ .text          0x0801f1dc       0x24 buildTools/libc.a(lib_a-writer.o)
+                0x0801f1dc                _write_r
+ .text          0x0801f200       0xac buildTools/libc.a(lib_a-wsetup.o)
+                0x0801f200                __swsetup_r
+ .text          0x0801f2ac       0x20 buildTools/libc.a(lib_a-closer.o)
+                0x0801f2ac                _close_r
+ .text          0x0801f2cc       0xe0 buildTools/libc.a(lib_a-fputwc.o)
+                0x0801f2cc                __fputwc
+                0x0801f366                _fputwc_r
+                0x0801f382                fputwc
+ .text          0x0801f3ac       0x84 buildTools/libc.a(lib_a-locale.o)
+                0x0801f3ac                _setlocale_r
+                0x0801f3ec                __locale_charset
+                0x0801f3f4                __locale_mb_cur_max
+                0x0801f400                __locale_msgcharset
+                0x0801f408                __locale_cjk_lang
+                0x0801f40c                _localeconv_r
+                0x0801f414                setlocale
+                0x0801f428                localeconv
+ .text          0x0801f430       0x24 buildTools/libc.a(lib_a-lseekr.o)
+                0x0801f430                _lseek_r
+ .text          0x0801f454       0xc8 buildTools/libc.a(lib_a-makebuf.o)
+                0x0801f454                __smakebuf_r
+ .text          0x0801f51c       0x14 buildTools/libc.a(lib_a-nano-msizer.o)
+                0x0801f51c                _malloc_usable_size_r
+ .text          0x0801f530       0x24 buildTools/libc.a(lib_a-readr.o)
+                0x0801f530                _read_r
+ .text          0x0801f554       0x14 buildTools/libc.a(lib_a-strcmp.o)
+                0x0801f554                strcmp
+ .text          0x0801f568       0x68 buildTools/libc.a(lib_a-wcrtomb.o)
+                0x0801f568                _wcrtomb_r
+                0x0801f5b4                wcrtomb
+ .text          0x0801f5d0       0x48 buildTools/libc.a(lib_a-wctomb_r.o)
+                0x0801f5d0                __ascii_wctomb
+                0x0801f5ea                _wctomb_r
+ .text          0x0801f618       0x24 buildTools/libc.a(lib_a-fstatr.o)
+                0x0801f618                _fstat_r
+ .text          0x0801f63c       0x20 buildTools/libc.a(lib_a-isattyr.o)
+                0x0801f63c                _isatty_r
+ .text          0x0801f65c       0x10 buildTools/libnosys.a(close.o)
+                0x0801f65c                _close
+ .text          0x0801f66c       0x10 buildTools/libnosys.a(fstat.o)
+                0x0801f66c                _fstat
+ .text          0x0801f67c       0x10 buildTools/libnosys.a(isatty.o)
+                0x0801f67c                _isatty
+ .text          0x0801f68c       0x10 buildTools/libnosys.a(lseek.o)
+                0x0801f68c                _lseek
+ .text          0x0801f69c       0x10 buildTools/libnosys.a(read.o)
+                0x0801f69c                _read
+ .text          0x0801f6ac       0x1c buildTools/libnosys.a(sbrk.o)
+                0x0801f6ac                _sbrk
+ *(.text*)
+ .text.Reset_Handler
+                0x0801f6c8       0x44 build/system/startup_stm32f2xx.o
+                0x0801f6c8                Reset_Handler
+ .text.Default_Handler
+                0x0801f70c        0x2 build/system/startup_stm32f2xx.o
+                0x0801f70c                RTC_Alarm_IRQHandler
+                0x0801f70c                HASH_RNG_IRQHandler
+                0x0801f70c                EXTI2_IRQHandler
+                0x0801f70c                TIM8_CC_IRQHandler
+                0x0801f70c                DebugMon_Handler
+                0x0801f70c                TIM1_CC_IRQHandler
+                0x0801f70c                DMA2_Stream5_IRQHandler
+                0x0801f70c                DMA1_Stream5_IRQHandler
+                0x0801f70c                PVD_IRQHandler
+                0x0801f70c                SDIO_IRQHandler
+                0x0801f70c                TAMP_STAMP_IRQHandler
+                0x0801f70c                PendSV_Handler
+                0x0801f70c                CAN2_RX1_IRQHandler
+                0x0801f70c                EXTI3_IRQHandler
+                0x0801f70c                TIM8_TRG_COM_TIM14_IRQHandler
+                0x0801f70c                TIM1_UP_TIM10_IRQHandler
+                0x0801f70c                TIM8_UP_TIM13_IRQHandler
+                0x0801f70c                I2C3_ER_IRQHandler
+                0x0801f70c                EXTI0_IRQHandler
+                0x0801f70c                I2C2_EV_IRQHandler
+                0x0801f70c                DMA1_Stream2_IRQHandler
+                0x0801f70c                CAN1_RX0_IRQHandler
+                0x0801f70c                OTG_HS_WKUP_IRQHandler
+                0x0801f70c                UsageFault_Handler
+                0x0801f70c                CAN2_SCE_IRQHandler
+                0x0801f70c                DMA2_Stream2_IRQHandler
+                0x0801f70c                SPI1_IRQHandler
+                0x0801f70c                TIM6_DAC_IRQHandler
+                0x0801f70c                DCMI_IRQHandler
+                0x0801f70c                CAN2_RX0_IRQHandler
+                0x0801f70c                DMA2_Stream3_IRQHandler
+                0x0801f70c                USART6_IRQHandler
+                0x0801f70c                USART3_IRQHandler
+                0x0801f70c                CRYP_IRQHandler
+                0x0801f70c                CAN1_RX1_IRQHandler
+                0x0801f70c                UART5_IRQHandler
+                0x0801f70c                DMA2_Stream0_IRQHandler
+                0x0801f70c                TIM4_IRQHandler
+                0x0801f70c                I2C1_EV_IRQHandler
+                0x0801f70c                DMA1_Stream6_IRQHandler
+                0x0801f70c                DMA1_Stream1_IRQHandler
+                0x0801f70c                UART4_IRQHandler
+                0x0801f70c                TIM3_IRQHandler
+                0x0801f70c                RCC_IRQHandler
+                0x0801f70c                TIM8_BRK_TIM12_IRQHandler
+                0x0801f70c                Default_Handler
+                0x0801f70c                EXTI15_10_IRQHandler
+                0x0801f70c                DMA1_Stream7_IRQHandler
+                0x0801f70c                TIM7_IRQHandler
+                0x0801f70c                CAN2_TX_IRQHandler
+                0x0801f70c                TIM5_IRQHandler
+                0x0801f70c                I2C3_EV_IRQHandler
+                0x0801f70c                EXTI9_5_IRQHandler
+                0x0801f70c                RTC_WKUP_IRQHandler
+                0x0801f70c                ETH_WKUP_IRQHandler
+                0x0801f70c                SPI2_IRQHandler
+                0x0801f70c                OTG_HS_EP1_IN_IRQHandler
+                0x0801f70c                MemManage_Handler
+                0x0801f70c                DMA1_Stream0_IRQHandler
+                0x0801f70c                CAN1_TX_IRQHandler
+                0x0801f70c                SVC_Handler
+                0x0801f70c                EXTI4_IRQHandler
+                0x0801f70c                FSMC_IRQHandler
+                0x0801f70c                ETH_IRQHandler
+                0x0801f70c                OTG_HS_EP1_OUT_IRQHandler
+                0x0801f70c                TIM2_IRQHandler
+                0x0801f70c                OTG_FS_WKUP_IRQHandler
+                0x0801f70c                TIM1_TRG_COM_TIM11_IRQHandler
+                0x0801f70c                OTG_HS_IRQHandler
+                0x0801f70c                EXTI1_IRQHandler
+                0x0801f70c                USART2_IRQHandler
+                0x0801f70c                I2C2_ER_IRQHandler
+                0x0801f70c                DMA2_Stream1_IRQHandler
+                0x0801f70c                CAN1_SCE_IRQHandler
+                0x0801f70c                FLASH_IRQHandler
+                0x0801f70c                DMA2_Stream4_IRQHandler
+                0x0801f70c                BusFault_Handler
+                0x0801f70c                USART1_IRQHandler
+                0x0801f70c                SPI3_IRQHandler
+                0x0801f70c                DMA1_Stream4_IRQHandler
+                0x0801f70c                I2C1_ER_IRQHandler
+                0x0801f70c                DMA2_Stream6_IRQHandler
+                0x0801f70c                DMA1_Stream3_IRQHandler
+ *(.rodata)
+ *fill*         0x0801f70e        0x2 
+ .rodata        0x0801f710        0x8 build/main.o
+ .rodata        0x0801f718       0x10 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+                0x0801f718                APBAHBPrescTable
+ .rodata        0x0801f728        0x6 build/peripherals/i2c.o
+ *fill*         0x0801f72e        0x2 
+ .rodata        0x0801f730       0x35 build/peripherals/USB/usbd_core.o
+ *fill*         0x0801f765        0x3 
+ .rodata        0x0801f768       0x76 build/peripherals/USB/usbd_desc.o
+ *fill*         0x0801f7de        0x2 
+ .rodata        0x0801f7e0       0x1a build/drivers/boot.o
+ *fill*         0x0801f7fa        0x2 
+ .rodata        0x0801f7fc       0x18 build/utils/buffer8.o
+ .rodata        0x0801f814        0x4 buildTools/libc.a(lib_a-impure.o)
+                0x0801f814                _global_impure_ptr
+ *(.rodata*)
+ .rodata.str1.1
+                0x0801f818        0x2 buildTools/libc.a(lib_a-impure.o)
+ .rodata.str1.1
+                0x0801f81a        0x2 buildTools/libc.a(lib_a-puts.o)
+ .rodata.str1.1
+                0x0801f81c       0x11 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .rodata.str1.1
+                0x0801f82d       0x22 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .rodata.str1.1
+                0x0801f84f        0x8 buildTools/libc.a(lib_a-locale.o)
+                                  0xb (size before relaxing)
+ *(.glue_7)
+ .glue_7        0x00000000        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x00000000        0x0 linker stubs
+ *(.init)
+ *(.fini)
+                0x0801f858                . = ALIGN (0x4)
+ *fill*         0x0801f857        0x1 
+                0x0801f858                _etext = .
+
+.vfp11_veneer   0x0801f858        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0801f858        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.iplt           0x0801f858        0x0
+ .iplt          0x00000000        0x0 build/main.o
+
+.rel.dyn        0x0801f858        0x0
+ .rel.iplt      0x00000000        0x0 build/main.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM            0x0801f858        0x0
+                0x0801f858                __exidx_start = .
+ *(.ARM.exidx*)
+                0x0801f858                __exidx_end = .
+
+.preinit_array  0x0801f858        0x0
+                0x0801f858                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array*)
+                0x0801f858                PROVIDE (__preinit_array_end, .)
+
+.init_array     0x0801f858        0x0
+                0x0801f858                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array*)
+                0x0801f858                PROVIDE (__init_array_end, .)
+
+.fini_array     0x0801f858        0x0
+                0x0801f858                PROVIDE (__fini_array_start, .)
+ *(.fini_array*)
+ *(SORT(.fini_array.*))
+                0x0801f858                PROVIDE (__fini_array_end, .)
+                0x0801f858                _sidata = .
+
+.data           0x20000000      0x790 load address 0x0801f858
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _sdata = .
+ *(.data)
+ .data          0x20000000        0x0 build/main.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .data          0x20000000        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .data          0x20000000        0x0 build/system/startup_stm32f2xx.o
+ .data          0x20000000        0x0 build/system/stm32f2xx_hal_msp.o
+ .data          0x20000000        0x0 build/system/stm32f2xx_it.o
+ .data          0x20000000       0x14 build/system/system_stm32f2xx.o
+                0x20000000                SystemCoreClock
+                0x20000004                AHBPrescTable
+ .data          0x20000014        0x0 build/peripherals/adc.o
+ .data          0x20000014        0x0 build/peripherals/dac.o
+ .data          0x20000014        0x0 build/peripherals/dma.o
+ .data          0x20000014        0x0 build/peripherals/gpio.o
+ .data          0x20000014        0x0 build/peripherals/i2c.o
+ .data          0x20000014        0x0 build/peripherals/spi.o
+ .data          0x20000014        0x0 build/peripherals/tim.o
+ .data          0x20000014        0x0 build/peripherals/usart.o
+ .data          0x20000014      0x10f build/peripherals/USB/usbd_cdc.o
+                0x20000020                USBD_CDC
+                0x20000058                USBD_CDC_CfgHSDesc
+                0x2000009c                USBD_CDC_CfgFSDesc
+                0x200000e0                USBD_CDC_OtherSpeedCfgDesc
+ .data          0x20000123        0x0 build/peripherals/USB/usbd_conf.o
+ .data          0x20000123        0x0 build/peripherals/USB/usbd_core.o
+ .data          0x20000123        0x0 build/peripherals/USB/usbd_ctlreq.o
+ *fill*         0x20000123        0x1 
+ .data          0x20000124       0x4e build/peripherals/USB/usbd_desc.o
+                0x20000124                VCP_Desc
+                0x20000140                USBD_DeviceDesc
+                0x20000154                USBD_LangIDDesc
+                0x20000158                USBD_StringSerial
+ .data          0x20000172        0x0 build/peripherals/USB/usbd_ioreq.o
+ .data          0x20000172        0x0 build/drivers/boot.o
+ *fill*         0x20000172        0x2 
+ .data          0x20000174       0x68 build/drivers/led.o
+                0x20000174                LEDtable
+ .data          0x200001dc        0x0 build/utils/buffer8.o
+ .data          0x200001dc        0x0 build/utils/newlib_hooks.o
+ .data          0x200001dc        0x0 build/utils/timerCallback.o
+ .data          0x200001dc        0x0 build/utils/characterMapping.o
+ .data          0x200001dc      0x100 build/utils/crc8.o
+ *fill*         0x200002dc        0x4 
+ .data          0x200002e0      0x430 buildTools/libc.a(lib_a-impure.o)
+                0x200002e0                _impure_ptr
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-malloc.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-memcpy.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-nano-freer.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-nano-mallocr.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-printf.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-putchar.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-puts.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-sbrkr.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-setbuf.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-setvbuf.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-strlen.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-fflush.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-findfp.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-fvwrite.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-fwalk.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-memchr.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-memmove.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-memset.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-nano-reallocr.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-putc.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-reent.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-stdio.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-wbuf.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-writer.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-wsetup.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-closer.o)
+ .data          0x20000710        0x0 buildTools/libc.a(lib_a-fputwc.o)
+ .data          0x20000710       0x7c buildTools/libc.a(lib_a-locale.o)
+                0x20000730                __mb_cur_max
+ .data          0x2000078c        0x0 buildTools/libc.a(lib_a-lseekr.o)
+ .data          0x2000078c        0x0 buildTools/libc.a(lib_a-makebuf.o)
+ .data          0x2000078c        0x0 buildTools/libc.a(lib_a-nano-msizer.o)
+ .data          0x2000078c        0x0 buildTools/libc.a(lib_a-readr.o)
+ .data          0x2000078c        0x0 buildTools/libc.a(lib_a-strcmp.o)
+ .data          0x2000078c        0x0 buildTools/libc.a(lib_a-wcrtomb.o)
+ .data          0x2000078c        0x4 buildTools/libc.a(lib_a-wctomb_r.o)
+                0x2000078c                __wctomb
+ .data          0x20000790        0x0 buildTools/libc.a(lib_a-fstatr.o)
+ .data          0x20000790        0x0 buildTools/libc.a(lib_a-isattyr.o)
+ .data          0x20000790        0x0 buildTools/libnosys.a(close.o)
+ .data          0x20000790        0x0 buildTools/libnosys.a(fstat.o)
+ .data          0x20000790        0x0 buildTools/libnosys.a(isatty.o)
+ .data          0x20000790        0x0 buildTools/libnosys.a(lseek.o)
+ .data          0x20000790        0x0 buildTools/libnosys.a(read.o)
+ .data          0x20000790        0x0 buildTools/libnosys.a(sbrk.o)
+ *(.data*)
+                0x20000790                . = ALIGN (0x4)
+                0x20000790                _edata = .
+
+.igot.plt       0x20000790        0x0 load address 0x0801ffe8
+ .igot.plt      0x00000000        0x0 build/main.o
+                0x20000790                . = ALIGN (0x4)
+
+.bss            0x20000790     0x1564 load address 0x0801ffe8
+                0x20000790                _sbss = .
+                0x20000790                __bss_start__ = _sbss
+ *(.bss)
+ .bss           0x20000790        0x0 build/main.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .bss           0x20000790        0x0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .bss           0x20000790        0x4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .bss           0x20000794        0x4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .bss           0x20000798        0x0 build/system/startup_stm32f2xx.o
+ .bss           0x20000798        0x0 build/system/stm32f2xx_hal_msp.o
+ .bss           0x20000798        0x0 build/system/stm32f2xx_it.o
+ .bss           0x20000798        0x0 build/system/system_stm32f2xx.o
+ .bss           0x20000798       0x20 build/peripherals/adc.o
+ .bss           0x200007b8        0x0 build/peripherals/dac.o
+ .bss           0x200007b8        0x0 build/peripherals/dma.o
+ .bss           0x200007b8        0x0 build/peripherals/gpio.o
+ .bss           0x200007b8        0x0 build/peripherals/i2c.o
+ .bss           0x200007b8        0x0 build/peripherals/spi.o
+ .bss           0x200007b8        0x0 build/peripherals/tim.o
+ .bss           0x200007b8      0xc0d build/peripherals/usart.o
+ .bss           0x200013c5        0x1 build/peripherals/USB/usbd_cdc.o
+ .bss           0x200013c6        0x0 build/peripherals/USB/usbd_conf.o
+ .bss           0x200013c6        0x0 build/peripherals/USB/usbd_core.o
+ .bss           0x200013c6        0x1 build/peripherals/USB/usbd_ctlreq.o
+ .bss           0x200013c7        0x0 build/peripherals/USB/usbd_desc.o
+ .bss           0x200013c7        0x0 build/peripherals/USB/usbd_ioreq.o
+ .bss           0x200013c7        0x0 build/drivers/boot.o
+ .bss           0x200013c7        0x0 build/drivers/led.o
+ *fill*         0x200013c7        0x1 
+ .bss           0x200013c8        0x4 build/utils/buffer8.o
+                0x200013c8                bufferFullCount
+ .bss           0x200013cc        0x0 build/utils/newlib_hooks.o
+ .bss           0x200013cc        0x0 build/utils/timerCallback.o
+ .bss           0x200013cc        0x0 build/utils/characterMapping.o
+ .bss           0x200013cc        0x0 build/utils/crc8.o
+ .bss           0x200013cc        0x0 buildTools/libc.a(lib_a-impure.o)
+ .bss           0x200013cc        0x0 buildTools/libc.a(lib_a-malloc.o)
+ .bss           0x200013cc        0x0 buildTools/libc.a(lib_a-memcpy.o)
+ .bss           0x200013cc        0x0 buildTools/libc.a(lib_a-nano-freer.o)
+ .bss           0x200013cc        0x8 buildTools/libc.a(lib_a-nano-mallocr.o)
+                0x200013cc                __malloc_free_list
+                0x200013d0                __malloc_sbrk_start
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-printf.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-putchar.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-puts.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-sbrkr.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-setbuf.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-setvbuf.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-strlen.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-fflush.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-findfp.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-fvwrite.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-fwalk.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-memchr.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-memmove.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-memset.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-nano-reallocr.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-putc.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-reent.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-stdio.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-wbuf.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-writer.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-wsetup.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-closer.o)
+ .bss           0x200013d4        0x0 buildTools/libc.a(lib_a-fputwc.o)
+ .bss           0x200013d4        0xc buildTools/libc.a(lib_a-locale.o)
+                0x200013d4                _PathLocale
+                0x200013d8                __mlocale_changed
+                0x200013dc                __nlocale_changed
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-lseekr.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-makebuf.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-nano-msizer.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-readr.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-strcmp.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-wcrtomb.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-wctomb_r.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-fstatr.o)
+ .bss           0x200013e0        0x0 buildTools/libc.a(lib_a-isattyr.o)
+ .bss           0x200013e0        0x0 buildTools/libnosys.a(close.o)
+ .bss           0x200013e0        0x0 buildTools/libnosys.a(fstat.o)
+ .bss           0x200013e0        0x0 buildTools/libnosys.a(isatty.o)
+ .bss           0x200013e0        0x0 buildTools/libnosys.a(lseek.o)
+ .bss           0x200013e0        0x0 buildTools/libnosys.a(read.o)
+ .bss           0x200013e0        0x4 buildTools/libnosys.a(sbrk.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x200013e4       0x88 build/peripherals/adc.o
+                0x200013e4                hadc2
+                0x20001428                hadc1
+ COMMON         0x2000146c       0x14 build/peripherals/dac.o
+                0x2000146c                hdac
+ COMMON         0x20001480       0x38 build/peripherals/i2c.o
+                0x20001480                hi2c2
+ COMMON         0x200014b8       0x54 build/peripherals/spi.o
+                0x200014b8                hspi3
+ COMMON         0x2000150c      0x294 build/peripherals/tim.o
+                0x2000150c                htim8
+                0x20001548                htim4
+                0x20001584                htim10
+                0x200015c0                htim5
+                0x200015fc                htim3
+                0x20001638                htim13
+                0x20001674                htim1
+                0x200016b0                htim9
+                0x200016ec                htim2
+                0x20001728                htim14
+                0x20001764                htim12
+ COMMON         0x200017a0      0x3b0 build/peripherals/USB/usbd_conf.o
+                0x200017a0                hpcd
+ COMMON         0x20001b50      0x100 build/peripherals/USB/usbd_desc.o
+                0x20001b50                USBD_StrDesc
+ COMMON         0x20001c50       0xa0 build/utils/timerCallback.o
+                0x20001c50                timerList
+ COMMON         0x20001cf0        0x4 buildTools/libc.a(lib_a-reent.o)
+                0x20001cf0                errno
+                0x20001cf4                . = ALIGN (0x4)
+                0x20001cf4                _ebss = .
+                0x20001cf4                __bss_end__ = _ebss
+                0x20001cf4                PROVIDE (end, _ebss)
+                0x20001cf4                PROVIDE (_end, _ebss)
+
+._user_heap_stack
+                0x20001cf4      0x600 load address 0x0802154c
+                0x20001cf4                . = ALIGN (0x4)
+                0x20001ef4                . = (. + _Min_Heap_Size)
+ *fill*         0x20001cf4      0x200 
+                0x200022f4                . = (. + _Min_Stack_Size)
+ *fill*         0x20001ef4      0x400 
+                0x200022f4                . = ALIGN (0x4)
+
+.memory_b1_text
+ *(.mb1text)
+ *(.mb1text*)
+ *(.mb1rodata)
+ *(.mb1rodata*)
+
+/DISCARD/
+ libc.a(*)
+ libm.a(*)
+ libgcc.a(*)
+
+.ARM.attributes
+                0x00000000       0x31
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x33 build/main.o
+ .ARM.attributes
+                0x00000033       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .ARM.attributes
+                0x00000066       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .ARM.attributes
+                0x00000099       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .ARM.attributes
+                0x000000cc       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .ARM.attributes
+                0x000000ff       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .ARM.attributes
+                0x00000132       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .ARM.attributes
+                0x00000165       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .ARM.attributes
+                0x00000198       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .ARM.attributes
+                0x000001cb       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .ARM.attributes
+                0x000001fe       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .ARM.attributes
+                0x00000231       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .ARM.attributes
+                0x00000264       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .ARM.attributes
+                0x00000297       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .ARM.attributes
+                0x000002ca       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .ARM.attributes
+                0x000002fd       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .ARM.attributes
+                0x00000330       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .ARM.attributes
+                0x00000363       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .ARM.attributes
+                0x00000396       0x33 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .ARM.attributes
+                0x000003c9       0x21 build/system/startup_stm32f2xx.o
+ .ARM.attributes
+                0x000003ea       0x33 build/system/stm32f2xx_hal_msp.o
+ .ARM.attributes
+                0x0000041d       0x33 build/system/stm32f2xx_it.o
+ .ARM.attributes
+                0x00000450       0x33 build/system/system_stm32f2xx.o
+ .ARM.attributes
+                0x00000483       0x33 build/peripherals/adc.o
+ .ARM.attributes
+                0x000004b6       0x33 build/peripherals/dac.o
+ .ARM.attributes
+                0x000004e9       0x33 build/peripherals/dma.o
+ .ARM.attributes
+                0x0000051c       0x33 build/peripherals/gpio.o
+ .ARM.attributes
+                0x0000054f       0x33 build/peripherals/i2c.o
+ .ARM.attributes
+                0x00000582       0x33 build/peripherals/spi.o
+ .ARM.attributes
+                0x000005b5       0x33 build/peripherals/tim.o
+ .ARM.attributes
+                0x000005e8       0x33 build/peripherals/usart.o
+ .ARM.attributes
+                0x0000061b       0x33 build/peripherals/USB/usbd_cdc.o
+ .ARM.attributes
+                0x0000064e       0x33 build/peripherals/USB/usbd_conf.o
+ .ARM.attributes
+                0x00000681       0x33 build/peripherals/USB/usbd_core.o
+ .ARM.attributes
+                0x000006b4       0x33 build/peripherals/USB/usbd_ctlreq.o
+ .ARM.attributes
+                0x000006e7       0x33 build/peripherals/USB/usbd_desc.o
+ .ARM.attributes
+                0x0000071a       0x33 build/peripherals/USB/usbd_ioreq.o
+ .ARM.attributes
+                0x0000074d       0x33 build/drivers/boot.o
+ .ARM.attributes
+                0x00000780       0x33 build/drivers/led.o
+ .ARM.attributes
+                0x000007b3       0x33 build/utils/buffer8.o
+ .ARM.attributes
+                0x000007e6       0x33 build/utils/newlib_hooks.o
+ .ARM.attributes
+                0x00000819       0x33 build/utils/timerCallback.o
+ .ARM.attributes
+                0x0000084c       0x33 build/utils/characterMapping.o
+ .ARM.attributes
+                0x0000087f       0x33 build/utils/crc8.o
+ .ARM.attributes
+                0x000008b2       0x2d buildTools/libc.a(lib_a-impure.o)
+ .ARM.attributes
+                0x000008df       0x2d buildTools/libc.a(lib_a-malloc.o)
+ .ARM.attributes
+                0x0000090c       0x2d buildTools/libc.a(lib_a-memcpy.o)
+ .ARM.attributes
+                0x00000939       0x2d buildTools/libc.a(lib_a-nano-freer.o)
+ .ARM.attributes
+                0x00000966       0x2d buildTools/libc.a(lib_a-nano-mallocr.o)
+ .ARM.attributes
+                0x00000993       0x2d buildTools/libc.a(lib_a-printf.o)
+ .ARM.attributes
+                0x000009c0       0x2d buildTools/libc.a(lib_a-putchar.o)
+ .ARM.attributes
+                0x000009ed       0x2d buildTools/libc.a(lib_a-puts.o)
+ .ARM.attributes
+                0x00000a1a       0x2d buildTools/libc.a(lib_a-sbrkr.o)
+ .ARM.attributes
+                0x00000a47       0x2d buildTools/libc.a(lib_a-setbuf.o)
+ .ARM.attributes
+                0x00000a74       0x2d buildTools/libc.a(lib_a-setvbuf.o)
+ .ARM.attributes
+                0x00000aa1       0x2d buildTools/libc.a(lib_a-strlen.o)
+ .ARM.attributes
+                0x00000ace       0x2d buildTools/libc.a(lib_a-fflush.o)
+ .ARM.attributes
+                0x00000afb       0x2d buildTools/libc.a(lib_a-findfp.o)
+ .ARM.attributes
+                0x00000b28       0x2d buildTools/libc.a(lib_a-fvwrite.o)
+ .ARM.attributes
+                0x00000b55       0x2d buildTools/libc.a(lib_a-fwalk.o)
+ .ARM.attributes
+                0x00000b82       0x2d buildTools/libc.a(lib_a-memchr.o)
+ .ARM.attributes
+                0x00000baf       0x2d buildTools/libc.a(lib_a-memmove.o)
+ .ARM.attributes
+                0x00000bdc       0x2d buildTools/libc.a(lib_a-memset.o)
+ .ARM.attributes
+                0x00000c09       0x2d buildTools/libc.a(lib_a-nano-reallocr.o)
+ .ARM.attributes
+                0x00000c36       0x2d buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .ARM.attributes
+                0x00000c63       0x2d buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .ARM.attributes
+                0x00000c90       0x2d buildTools/libc.a(lib_a-putc.o)
+ .ARM.attributes
+                0x00000cbd       0x2d buildTools/libc.a(lib_a-reent.o)
+ .ARM.attributes
+                0x00000cea       0x2d buildTools/libc.a(lib_a-stdio.o)
+ .ARM.attributes
+                0x00000d17       0x2d buildTools/libc.a(lib_a-wbuf.o)
+ .ARM.attributes
+                0x00000d44       0x2d buildTools/libc.a(lib_a-writer.o)
+ .ARM.attributes
+                0x00000d71       0x2d buildTools/libc.a(lib_a-wsetup.o)
+ .ARM.attributes
+                0x00000d9e       0x2d buildTools/libc.a(lib_a-closer.o)
+ .ARM.attributes
+                0x00000dcb       0x2d buildTools/libc.a(lib_a-fputwc.o)
+ .ARM.attributes
+                0x00000df8       0x2d buildTools/libc.a(lib_a-locale.o)
+ .ARM.attributes
+                0x00000e25       0x2d buildTools/libc.a(lib_a-lseekr.o)
+ .ARM.attributes
+                0x00000e52       0x2d buildTools/libc.a(lib_a-makebuf.o)
+ .ARM.attributes
+                0x00000e7f       0x2d buildTools/libc.a(lib_a-nano-msizer.o)
+ .ARM.attributes
+                0x00000eac       0x2d buildTools/libc.a(lib_a-readr.o)
+ .ARM.attributes
+                0x00000ed9       0x1b buildTools/libc.a(lib_a-strcmp.o)
+ .ARM.attributes
+                0x00000ef4       0x2d buildTools/libc.a(lib_a-wcrtomb.o)
+ .ARM.attributes
+                0x00000f21       0x2d buildTools/libc.a(lib_a-wctomb_r.o)
+ .ARM.attributes
+                0x00000f4e       0x2d buildTools/libc.a(lib_a-fstatr.o)
+ .ARM.attributes
+                0x00000f7b       0x2d buildTools/libc.a(lib_a-isattyr.o)
+ .ARM.attributes
+                0x00000fa8       0x2d buildTools/libnosys.a(close.o)
+ .ARM.attributes
+                0x00000fd5       0x2d buildTools/libnosys.a(fstat.o)
+ .ARM.attributes
+                0x00001002       0x2d buildTools/libnosys.a(isatty.o)
+ .ARM.attributes
+                0x0000102f       0x2d buildTools/libnosys.a(lseek.o)
+ .ARM.attributes
+                0x0000105c       0x2d buildTools/libnosys.a(read.o)
+ .ARM.attributes
+                0x00001089       0x2d buildTools/libnosys.a(sbrk.o)
+OUTPUT(build/program.elf elf32-littlearm)
+
+.debug_info     0x00000000    0x2eeb5
+ .debug_info    0x00000000      0x3d9 build/main.o
+ .debug_info    0x000003d9      0x660 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .debug_info    0x00000a39     0x1554 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .debug_info    0x00001f8d     0x1334 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .debug_info    0x000032c1      0xd3e build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .debug_info    0x00003fff       0x92 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .debug_info    0x00004091      0xe35 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .debug_info    0x00004ec6     0x20e8 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .debug_info    0x00006fae      0xf06 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .debug_info    0x00007eb4      0x634 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .debug_info    0x000084e8      0xb4e build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .debug_info    0x00009036      0xc22 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .debug_info    0x00009c58      0xa90 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .debug_info    0x0000a6e8      0x94c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .debug_info    0x0000b034      0x6e5 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .debug_info    0x0000b719      0xf10 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .debug_info    0x0000c629      0x535 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .debug_info    0x0000cb5e     0x13a7 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .debug_info    0x0000df05      0x4ee build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .debug_info    0x0000e3f3       0x6e build/system/startup_stm32f2xx.o
+ .debug_info    0x0000e461      0x2d7 build/system/stm32f2xx_hal_msp.o
+ .debug_info    0x0000e738      0x983 build/system/stm32f2xx_it.o
+ .debug_info    0x0000f0bb      0x49e build/system/system_stm32f2xx.o
+ .debug_info    0x0000f559      0x798 build/peripherals/adc.o
+ .debug_info    0x0000fcf1      0x7c0 build/peripherals/dac.o
+ .debug_info    0x000104b1      0x487 build/peripherals/dma.o
+ .debug_info    0x00010938      0x3be build/peripherals/gpio.o
+ .debug_info    0x00010cf6      0x936 build/peripherals/i2c.o
+ .debug_info    0x0001162c      0x8ca build/peripherals/spi.o
+ .debug_info    0x00011ef6      0xc2b build/peripherals/tim.o
+ .debug_info    0x00012b21     0x1120 build/peripherals/usart.o
+ .debug_info    0x00013c41      0xa47 build/peripherals/USB/usbd_cdc.o
+ .debug_info    0x00014688     0x15a8 build/peripherals/USB/usbd_conf.o
+ .debug_info    0x00015c30      0x8fb build/peripherals/USB/usbd_core.o
+ .debug_info    0x0001652b      0x85c build/peripherals/USB/usbd_ctlreq.o
+ .debug_info    0x00016d87      0x439 build/peripherals/USB/usbd_desc.o
+ .debug_info    0x000171c0      0x65c build/peripherals/USB/usbd_ioreq.o
+ .debug_info    0x0001781c      0x131 build/drivers/boot.o
+ .debug_info    0x0001794d      0x23f build/drivers/led.o
+ .debug_info    0x00017b8c      0x2f4 build/utils/buffer8.o
+ .debug_info    0x00017e80       0xbc build/utils/newlib_hooks.o
+ .debug_info    0x00017f3c      0x8ae build/utils/timerCallback.o
+ .debug_info    0x000187ea       0xde build/utils/characterMapping.o
+ .debug_info    0x000188c8      0x10f build/utils/crc8.o
+ .debug_info    0x000189d7      0x894 buildTools/libc.a(lib_a-impure.o)
+ .debug_info    0x0001926b      0x915 buildTools/libc.a(lib_a-malloc.o)
+ .debug_info    0x00019b80      0x104 buildTools/libc.a(lib_a-memcpy.o)
+ .debug_info    0x00019c84      0x96e buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_info    0x0001a5f2      0xa4f buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_info    0x0001b041      0x9ab buildTools/libc.a(lib_a-printf.o)
+ .debug_info    0x0001b9ec      0x935 buildTools/libc.a(lib_a-putchar.o)
+ .debug_info    0x0001c321      0xa12 buildTools/libc.a(lib_a-puts.o)
+ .debug_info    0x0001cd33      0x8f4 buildTools/libc.a(lib_a-sbrkr.o)
+ .debug_info    0x0001d627      0x8f0 buildTools/libc.a(lib_a-setbuf.o)
+ .debug_info    0x0001df17      0x9db buildTools/libc.a(lib_a-setvbuf.o)
+ .debug_info    0x0001e8f2       0xcd buildTools/libc.a(lib_a-strlen.o)
+ .debug_info    0x0001e9bf      0xac8 buildTools/libc.a(lib_a-fflush.o)
+ .debug_info    0x0001f487      0xd2a buildTools/libc.a(lib_a-findfp.o)
+ .debug_info    0x000201b1      0xc72 buildTools/libc.a(lib_a-fvwrite.o)
+ .debug_info    0x00020e23      0x99a buildTools/libc.a(lib_a-fwalk.o)
+ .debug_info    0x000217bd       0xf8 buildTools/libc.a(lib_a-memchr.o)
+ .debug_info    0x000218b5      0x102 buildTools/libc.a(lib_a-memmove.o)
+ .debug_info    0x000219b7       0xd3 buildTools/libc.a(lib_a-memset.o)
+ .debug_info    0x00021a8a      0xa09 buildTools/libc.a(lib_a-nano-reallocr.o)
+ .debug_info    0x00022493      0xf4a buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_info    0x000233dd      0xc7b buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_info    0x00024058      0x989 buildTools/libc.a(lib_a-putc.o)
+ .debug_info    0x000249e1      0x9fb buildTools/libc.a(lib_a-reent.o)
+ .debug_info    0x000253dc      0xb8a buildTools/libc.a(lib_a-stdio.o)
+ .debug_info    0x00025f66      0x9d7 buildTools/libc.a(lib_a-wbuf.o)
+ .debug_info    0x0002693d      0x929 buildTools/libc.a(lib_a-writer.o)
+ .debug_info    0x00027266      0x93b buildTools/libc.a(lib_a-wsetup.o)
+ .debug_info    0x00027ba1      0x8e0 buildTools/libc.a(lib_a-closer.o)
+ .debug_info    0x00028481      0xab9 buildTools/libc.a(lib_a-fputwc.o)
+ .debug_info    0x00028f3a      0xc26 buildTools/libc.a(lib_a-locale.o)
+ .debug_info    0x00029b60      0x90c buildTools/libc.a(lib_a-lseekr.o)
+ .debug_info    0x0002a46c      0xae0 buildTools/libc.a(lib_a-makebuf.o)
+ .debug_info    0x0002af4c      0x90d buildTools/libc.a(lib_a-nano-msizer.o)
+ .debug_info    0x0002b859      0x922 buildTools/libc.a(lib_a-readr.o)
+ .debug_info    0x0002c17b       0xc3 buildTools/libc.a(lib_a-strcmp.o)
+ .debug_info    0x0002c23e      0x9c8 buildTools/libc.a(lib_a-wcrtomb.o)
+ .debug_info    0x0002cc06      0x9b5 buildTools/libc.a(lib_a-wctomb_r.o)
+ .debug_info    0x0002d5bb      0xa5e buildTools/libc.a(lib_a-fstatr.o)
+ .debug_info    0x0002e019      0x8e0 buildTools/libc.a(lib_a-isattyr.o)
+ .debug_info    0x0002e8f9       0xae buildTools/libnosys.a(close.o)
+ .debug_info    0x0002e9a7      0x22d buildTools/libnosys.a(fstat.o)
+ .debug_info    0x0002ebd4       0xae buildTools/libnosys.a(isatty.o)
+ .debug_info    0x0002ec82       0xca buildTools/libnosys.a(lseek.o)
+ .debug_info    0x0002ed4c       0xd0 buildTools/libnosys.a(read.o)
+ .debug_info    0x0002ee1c       0x99 buildTools/libnosys.a(sbrk.o)
+
+.debug_abbrev   0x00000000     0x9318
+ .debug_abbrev  0x00000000      0x107 build/main.o
+ .debug_abbrev  0x00000107      0x1a1 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .debug_abbrev  0x000002a8      0x1d6 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .debug_abbrev  0x0000047e      0x2ef build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .debug_abbrev  0x0000076d      0x210 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .debug_abbrev  0x0000097d       0x4b build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .debug_abbrev  0x000009c8      0x1e7 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .debug_abbrev  0x00000baf      0x204 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .debug_abbrev  0x00000db3      0x20c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .debug_abbrev  0x00000fbf      0x1c2 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .debug_abbrev  0x00001181      0x27d build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .debug_abbrev  0x000013fe      0x212 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .debug_abbrev  0x00001610      0x20d build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .debug_abbrev  0x0000181d      0x1c4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .debug_abbrev  0x000019e1      0x183 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .debug_abbrev  0x00001b64      0x238 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .debug_abbrev  0x00001d9c      0x15e build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .debug_abbrev  0x00001efa      0x213 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .debug_abbrev  0x0000210d      0x15a build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .debug_abbrev  0x00002267       0x12 build/system/startup_stm32f2xx.o
+ .debug_abbrev  0x00002279       0x7d build/system/stm32f2xx_hal_msp.o
+ .debug_abbrev  0x000022f6      0x182 build/system/stm32f2xx_it.o
+ .debug_abbrev  0x00002478      0x101 build/system/system_stm32f2xx.o
+ .debug_abbrev  0x00002579      0x184 build/peripherals/adc.o
+ .debug_abbrev  0x000026fd      0x152 build/peripherals/dac.o
+ .debug_abbrev  0x0000284f       0xc7 build/peripherals/dma.o
+ .debug_abbrev  0x00002916      0x103 build/peripherals/gpio.o
+ .debug_abbrev  0x00002a19      0x179 build/peripherals/i2c.o
+ .debug_abbrev  0x00002b92      0x16a build/peripherals/spi.o
+ .debug_abbrev  0x00002cfc      0x188 build/peripherals/tim.o
+ .debug_abbrev  0x00002e84      0x303 build/peripherals/usart.o
+ .debug_abbrev  0x00003187      0x1e0 build/peripherals/USB/usbd_cdc.o
+ .debug_abbrev  0x00003367      0x25c build/peripherals/USB/usbd_conf.o
+ .debug_abbrev  0x000035c3      0x1bb build/peripherals/USB/usbd_core.o
+ .debug_abbrev  0x0000377e      0x1eb build/peripherals/USB/usbd_ctlreq.o
+ .debug_abbrev  0x00003969      0x172 build/peripherals/USB/usbd_desc.o
+ .debug_abbrev  0x00003adb      0x12b build/peripherals/USB/usbd_ioreq.o
+ .debug_abbrev  0x00003c06       0xac build/drivers/boot.o
+ .debug_abbrev  0x00003cb2      0x11d build/drivers/led.o
+ .debug_abbrev  0x00003dcf      0x12d build/utils/buffer8.o
+ .debug_abbrev  0x00003efc       0x6d build/utils/newlib_hooks.o
+ .debug_abbrev  0x00003f69      0x1ec build/utils/timerCallback.o
+ .debug_abbrev  0x00004155       0x78 build/utils/characterMapping.o
+ .debug_abbrev  0x000041cd       0xb1 build/utils/crc8.o
+ .debug_abbrev  0x0000427e      0x180 buildTools/libc.a(lib_a-impure.o)
+ .debug_abbrev  0x000043fe      0x1fa buildTools/libc.a(lib_a-malloc.o)
+ .debug_abbrev  0x000045f8       0xa4 buildTools/libc.a(lib_a-memcpy.o)
+ .debug_abbrev  0x0000469c      0x211 buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_abbrev  0x000048ad      0x2ab buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_abbrev  0x00004b58      0x227 buildTools/libc.a(lib_a-printf.o)
+ .debug_abbrev  0x00004d7f      0x1fa buildTools/libc.a(lib_a-putchar.o)
+ .debug_abbrev  0x00004f79      0x233 buildTools/libc.a(lib_a-puts.o)
+ .debug_abbrev  0x000051ac      0x1fd buildTools/libc.a(lib_a-sbrkr.o)
+ .debug_abbrev  0x000053a9      0x1ba buildTools/libc.a(lib_a-setbuf.o)
+ .debug_abbrev  0x00005563      0x244 buildTools/libc.a(lib_a-setvbuf.o)
+ .debug_abbrev  0x000057a7       0x8c buildTools/libc.a(lib_a-strlen.o)
+ .debug_abbrev  0x00005833      0x2a9 buildTools/libc.a(lib_a-fflush.o)
+ .debug_abbrev  0x00005adc      0x32b buildTools/libc.a(lib_a-findfp.o)
+ .debug_abbrev  0x00005e07      0x24c buildTools/libc.a(lib_a-fvwrite.o)
+ .debug_abbrev  0x00006053      0x1d1 buildTools/libc.a(lib_a-fwalk.o)
+ .debug_abbrev  0x00006224       0xab buildTools/libc.a(lib_a-memchr.o)
+ .debug_abbrev  0x000062cf       0x9c buildTools/libc.a(lib_a-memmove.o)
+ .debug_abbrev  0x0000636b       0x8e buildTools/libc.a(lib_a-memset.o)
+ .debug_abbrev  0x000063f9      0x226 buildTools/libc.a(lib_a-nano-reallocr.o)
+ .debug_abbrev  0x0000661f      0x36c buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_abbrev  0x0000698b      0x256 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_abbrev  0x00006be1      0x230 buildTools/libc.a(lib_a-putc.o)
+ .debug_abbrev  0x00006e11      0x25c buildTools/libc.a(lib_a-reent.o)
+ .debug_abbrev  0x0000706d      0x246 buildTools/libc.a(lib_a-stdio.o)
+ .debug_abbrev  0x000072b3      0x252 buildTools/libc.a(lib_a-wbuf.o)
+ .debug_abbrev  0x00007505      0x1f4 buildTools/libc.a(lib_a-writer.o)
+ .debug_abbrev  0x000076f9      0x20b buildTools/libc.a(lib_a-wsetup.o)
+ .debug_abbrev  0x00007904      0x1ef buildTools/libc.a(lib_a-closer.o)
+ .debug_abbrev  0x00007af3      0x270 buildTools/libc.a(lib_a-fputwc.o)
+ .debug_abbrev  0x00007d63      0x2b5 buildTools/libc.a(lib_a-locale.o)
+ .debug_abbrev  0x00008018      0x1fe buildTools/libc.a(lib_a-lseekr.o)
+ .debug_abbrev  0x00008216      0x206 buildTools/libc.a(lib_a-makebuf.o)
+ .debug_abbrev  0x0000841c      0x1bc buildTools/libc.a(lib_a-nano-msizer.o)
+ .debug_abbrev  0x000085d8      0x1ef buildTools/libc.a(lib_a-readr.o)
+ .debug_abbrev  0x000087c7       0x14 buildTools/libc.a(lib_a-strcmp.o)
+ .debug_abbrev  0x000087db      0x223 buildTools/libc.a(lib_a-wcrtomb.o)
+ .debug_abbrev  0x000089fe      0x212 buildTools/libc.a(lib_a-wctomb_r.o)
+ .debug_abbrev  0x00008c10      0x1fe buildTools/libc.a(lib_a-fstatr.o)
+ .debug_abbrev  0x00008e0e      0x1ef buildTools/libc.a(lib_a-isattyr.o)
+ .debug_abbrev  0x00008ffd       0x66 buildTools/libnosys.a(close.o)
+ .debug_abbrev  0x00009063       0xbb buildTools/libnosys.a(fstat.o)
+ .debug_abbrev  0x0000911e       0x66 buildTools/libnosys.a(isatty.o)
+ .debug_abbrev  0x00009184       0x84 buildTools/libnosys.a(lseek.o)
+ .debug_abbrev  0x00009208       0x8d buildTools/libnosys.a(read.o)
+ .debug_abbrev  0x00009295       0x83 buildTools/libnosys.a(sbrk.o)
+
+.debug_aranges  0x00000000      0xb38
+ .debug_aranges
+                0x00000000       0x20 build/main.o
+ .debug_aranges
+                0x00000020       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .debug_aranges
+                0x00000040       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .debug_aranges
+                0x00000060       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .debug_aranges
+                0x00000080       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .debug_aranges
+                0x000000a0       0x18 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .debug_aranges
+                0x000000b8       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .debug_aranges
+                0x000000d8       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .debug_aranges
+                0x000000f8       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .debug_aranges
+                0x00000118       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .debug_aranges
+                0x00000138       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .debug_aranges
+                0x00000158       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .debug_aranges
+                0x00000178       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .debug_aranges
+                0x00000198       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .debug_aranges
+                0x000001b8       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .debug_aranges
+                0x000001d8       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .debug_aranges
+                0x000001f8       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .debug_aranges
+                0x00000218       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .debug_aranges
+                0x00000238       0x20 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .debug_aranges
+                0x00000258       0x28 build/system/startup_stm32f2xx.o
+ .debug_aranges
+                0x00000280       0x20 build/system/stm32f2xx_hal_msp.o
+ .debug_aranges
+                0x000002a0       0x20 build/system/stm32f2xx_it.o
+ .debug_aranges
+                0x000002c0       0x20 build/system/system_stm32f2xx.o
+ .debug_aranges
+                0x000002e0       0x20 build/peripherals/adc.o
+ .debug_aranges
+                0x00000300       0x20 build/peripherals/dac.o
+ .debug_aranges
+                0x00000320       0x20 build/peripherals/dma.o
+ .debug_aranges
+                0x00000340       0x20 build/peripherals/gpio.o
+ .debug_aranges
+                0x00000360       0x20 build/peripherals/i2c.o
+ .debug_aranges
+                0x00000380       0x20 build/peripherals/spi.o
+ .debug_aranges
+                0x000003a0       0x20 build/peripherals/tim.o
+ .debug_aranges
+                0x000003c0       0x20 build/peripherals/usart.o
+ .debug_aranges
+                0x000003e0       0x20 build/peripherals/USB/usbd_cdc.o
+ .debug_aranges
+                0x00000400       0x20 build/peripherals/USB/usbd_conf.o
+ .debug_aranges
+                0x00000420       0x20 build/peripherals/USB/usbd_core.o
+ .debug_aranges
+                0x00000440       0x20 build/peripherals/USB/usbd_ctlreq.o
+ .debug_aranges
+                0x00000460       0x20 build/peripherals/USB/usbd_desc.o
+ .debug_aranges
+                0x00000480       0x20 build/peripherals/USB/usbd_ioreq.o
+ .debug_aranges
+                0x000004a0       0x20 build/drivers/boot.o
+ .debug_aranges
+                0x000004c0       0x20 build/drivers/led.o
+ .debug_aranges
+                0x000004e0       0x20 build/utils/buffer8.o
+ .debug_aranges
+                0x00000500       0x20 build/utils/newlib_hooks.o
+ .debug_aranges
+                0x00000520       0x20 build/utils/timerCallback.o
+ .debug_aranges
+                0x00000540       0x20 build/utils/characterMapping.o
+ .debug_aranges
+                0x00000560       0x20 build/utils/crc8.o
+ .debug_aranges
+                0x00000580       0x18 buildTools/libc.a(lib_a-impure.o)
+ .debug_aranges
+                0x00000598       0x20 buildTools/libc.a(lib_a-malloc.o)
+ .debug_aranges
+                0x000005b8       0x20 buildTools/libc.a(lib_a-memcpy.o)
+ .debug_aranges
+                0x000005d8       0x20 buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_aranges
+                0x000005f8       0x20 buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_aranges
+                0x00000618       0x20 buildTools/libc.a(lib_a-printf.o)
+ .debug_aranges
+                0x00000638       0x20 buildTools/libc.a(lib_a-putchar.o)
+ .debug_aranges
+                0x00000658       0x20 buildTools/libc.a(lib_a-puts.o)
+ .debug_aranges
+                0x00000678       0x20 buildTools/libc.a(lib_a-sbrkr.o)
+ .debug_aranges
+                0x00000698       0x20 buildTools/libc.a(lib_a-setbuf.o)
+ .debug_aranges
+                0x000006b8       0x20 buildTools/libc.a(lib_a-setvbuf.o)
+ .debug_aranges
+                0x000006d8       0x20 buildTools/libc.a(lib_a-strlen.o)
+ .debug_aranges
+                0x000006f8       0x20 buildTools/libc.a(lib_a-fflush.o)
+ .debug_aranges
+                0x00000718       0x20 buildTools/libc.a(lib_a-findfp.o)
+ .debug_aranges
+                0x00000738       0x20 buildTools/libc.a(lib_a-fvwrite.o)
+ .debug_aranges
+                0x00000758       0x20 buildTools/libc.a(lib_a-fwalk.o)
+ .debug_aranges
+                0x00000778       0x20 buildTools/libc.a(lib_a-memchr.o)
+ .debug_aranges
+                0x00000798       0x20 buildTools/libc.a(lib_a-memmove.o)
+ .debug_aranges
+                0x000007b8       0x20 buildTools/libc.a(lib_a-memset.o)
+ .debug_aranges
+                0x000007d8       0x20 buildTools/libc.a(lib_a-nano-reallocr.o)
+ .debug_aranges
+                0x000007f8       0x20 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_aranges
+                0x00000818       0x20 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_aranges
+                0x00000838       0x20 buildTools/libc.a(lib_a-putc.o)
+ .debug_aranges
+                0x00000858       0x20 buildTools/libc.a(lib_a-reent.o)
+ .debug_aranges
+                0x00000878       0x20 buildTools/libc.a(lib_a-stdio.o)
+ .debug_aranges
+                0x00000898       0x20 buildTools/libc.a(lib_a-wbuf.o)
+ .debug_aranges
+                0x000008b8       0x20 buildTools/libc.a(lib_a-writer.o)
+ .debug_aranges
+                0x000008d8       0x20 buildTools/libc.a(lib_a-wsetup.o)
+ .debug_aranges
+                0x000008f8       0x20 buildTools/libc.a(lib_a-closer.o)
+ .debug_aranges
+                0x00000918       0x20 buildTools/libc.a(lib_a-fputwc.o)
+ .debug_aranges
+                0x00000938       0x20 buildTools/libc.a(lib_a-locale.o)
+ .debug_aranges
+                0x00000958       0x20 buildTools/libc.a(lib_a-lseekr.o)
+ .debug_aranges
+                0x00000978       0x20 buildTools/libc.a(lib_a-makebuf.o)
+ .debug_aranges
+                0x00000998       0x20 buildTools/libc.a(lib_a-nano-msizer.o)
+ .debug_aranges
+                0x000009b8       0x20 buildTools/libc.a(lib_a-readr.o)
+ .debug_aranges
+                0x000009d8       0x20 buildTools/libc.a(lib_a-strcmp.o)
+ .debug_aranges
+                0x000009f8       0x20 buildTools/libc.a(lib_a-wcrtomb.o)
+ .debug_aranges
+                0x00000a18       0x20 buildTools/libc.a(lib_a-wctomb_r.o)
+ .debug_aranges
+                0x00000a38       0x20 buildTools/libc.a(lib_a-fstatr.o)
+ .debug_aranges
+                0x00000a58       0x20 buildTools/libc.a(lib_a-isattyr.o)
+ .debug_aranges
+                0x00000a78       0x20 buildTools/libnosys.a(close.o)
+ .debug_aranges
+                0x00000a98       0x20 buildTools/libnosys.a(fstat.o)
+ .debug_aranges
+                0x00000ab8       0x20 buildTools/libnosys.a(isatty.o)
+ .debug_aranges
+                0x00000ad8       0x20 buildTools/libnosys.a(lseek.o)
+ .debug_aranges
+                0x00000af8       0x20 buildTools/libnosys.a(read.o)
+ .debug_aranges
+                0x00000b18       0x20 buildTools/libnosys.a(sbrk.o)
+
+.debug_line     0x00000000     0xfe83
+ .debug_line    0x00000000      0x19a build/main.o
+ .debug_line    0x0000019a      0x2c3 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .debug_line    0x0000045d      0xc5d build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .debug_line    0x000010ba      0x4b5 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .debug_line    0x0000156f      0x6e6 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .debug_line    0x00001c55       0xde build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .debug_line    0x00001d33      0x682 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .debug_line    0x000023b5      0xd5c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .debug_line    0x00003111      0x5ba build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .debug_line    0x000036cb     0x41dc build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .debug_line    0x000078a7      0x2a2 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .debug_line    0x00007b49      0x450 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .debug_line    0x00007f99      0x411 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .debug_line    0x000083aa      0x328 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .debug_line    0x000086d2      0x25b build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .debug_line    0x0000892d      0x527 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .debug_line    0x00008e54      0x1f9 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .debug_line    0x0000904d      0x5a4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .debug_line    0x000095f1      0x207 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .debug_line    0x000097f8       0x76 build/system/startup_stm32f2xx.o
+ .debug_line    0x0000986e      0x14b build/system/stm32f2xx_hal_msp.o
+ .debug_line    0x000099b9      0x1f7 build/system/stm32f2xx_it.o
+ .debug_line    0x00009bb0      0x169 build/system/system_stm32f2xx.o
+ .debug_line    0x00009d19      0x203 build/peripherals/adc.o
+ .debug_line    0x00009f1c      0x1d7 build/peripherals/dac.o
+ .debug_line    0x0000a0f3      0x143 build/peripherals/dma.o
+ .debug_line    0x0000a236      0x1b5 build/peripherals/gpio.o
+ .debug_line    0x0000a3eb      0x1f4 build/peripherals/i2c.o
+ .debug_line    0x0000a5df      0x1e7 build/peripherals/spi.o
+ .debug_line    0x0000a7c6      0x30b build/peripherals/tim.o
+ .debug_line    0x0000aad1      0x273 build/peripherals/usart.o
+ .debug_line    0x0000ad44      0x1e3 build/peripherals/USB/usbd_cdc.o
+ .debug_line    0x0000af27      0x2c5 build/peripherals/USB/usbd_conf.o
+ .debug_line    0x0000b1ec      0x208 build/peripherals/USB/usbd_core.o
+ .debug_line    0x0000b3f4      0x2a0 build/peripherals/USB/usbd_ctlreq.o
+ .debug_line    0x0000b694      0x175 build/peripherals/USB/usbd_desc.o
+ .debug_line    0x0000b809      0x148 build/peripherals/USB/usbd_ioreq.o
+ .debug_line    0x0000b951      0x116 build/drivers/boot.o
+ .debug_line    0x0000ba67      0x158 build/drivers/led.o
+ .debug_line    0x0000bbbf      0x140 build/utils/buffer8.o
+ .debug_line    0x0000bcff       0x45 build/utils/newlib_hooks.o
+ .debug_line    0x0000bd44      0x1e3 build/utils/timerCallback.o
+ .debug_line    0x0000bf27       0xe9 build/utils/characterMapping.o
+ .debug_line    0x0000c010       0xde build/utils/crc8.o
+ .debug_line    0x0000c0ee       0xfa buildTools/libc.a(lib_a-impure.o)
+ .debug_line    0x0000c1e8      0x150 buildTools/libc.a(lib_a-malloc.o)
+ .debug_line    0x0000c338       0xf6 buildTools/libc.a(lib_a-memcpy.o)
+ .debug_line    0x0000c42e      0x14e buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_line    0x0000c57c      0x18a buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_line    0x0000c706      0x170 buildTools/libc.a(lib_a-printf.o)
+ .debug_line    0x0000c876      0x14e buildTools/libc.a(lib_a-putchar.o)
+ .debug_line    0x0000c9c4      0x180 buildTools/libc.a(lib_a-puts.o)
+ .debug_line    0x0000cb44      0x153 buildTools/libc.a(lib_a-sbrkr.o)
+ .debug_line    0x0000cc97      0x148 buildTools/libc.a(lib_a-setbuf.o)
+ .debug_line    0x0000cddf      0x1ba buildTools/libc.a(lib_a-setvbuf.o)
+ .debug_line    0x0000cf99       0xfe buildTools/libc.a(lib_a-strlen.o)
+ .debug_line    0x0000d097      0x218 buildTools/libc.a(lib_a-fflush.o)
+ .debug_line    0x0000d2af      0x1f3 buildTools/libc.a(lib_a-findfp.o)
+ .debug_line    0x0000d4a2      0x264 buildTools/libc.a(lib_a-fvwrite.o)
+ .debug_line    0x0000d706      0x19a buildTools/libc.a(lib_a-fwalk.o)
+ .debug_line    0x0000d8a0       0xf9 buildTools/libc.a(lib_a-memchr.o)
+ .debug_line    0x0000d999      0x104 buildTools/libc.a(lib_a-memmove.o)
+ .debug_line    0x0000da9d       0xf7 buildTools/libc.a(lib_a-memset.o)
+ .debug_line    0x0000db94      0x16f buildTools/libc.a(lib_a-nano-reallocr.o)
+ .debug_line    0x0000dd03      0x2a5 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_line    0x0000dfa8      0x2e7 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_line    0x0000e28f      0x190 buildTools/libc.a(lib_a-putc.o)
+ .debug_line    0x0000e41f      0x180 buildTools/libc.a(lib_a-reent.o)
+ .debug_line    0x0000e59f      0x191 buildTools/libc.a(lib_a-stdio.o)
+ .debug_line    0x0000e730      0x1a2 buildTools/libc.a(lib_a-wbuf.o)
+ .debug_line    0x0000e8d2      0x153 buildTools/libc.a(lib_a-writer.o)
+ .debug_line    0x0000ea25      0x197 buildTools/libc.a(lib_a-wsetup.o)
+ .debug_line    0x0000ebbc      0x154 buildTools/libc.a(lib_a-closer.o)
+ .debug_line    0x0000ed10      0x1bc buildTools/libc.a(lib_a-fputwc.o)
+ .debug_line    0x0000eecc      0x187 buildTools/libc.a(lib_a-locale.o)
+ .debug_line    0x0000f053      0x153 buildTools/libc.a(lib_a-lseekr.o)
+ .debug_line    0x0000f1a6      0x1be buildTools/libc.a(lib_a-makebuf.o)
+ .debug_line    0x0000f364      0x116 buildTools/libc.a(lib_a-nano-msizer.o)
+ .debug_line    0x0000f47a      0x152 buildTools/libc.a(lib_a-readr.o)
+ .debug_line    0x0000f5cc       0x7c buildTools/libc.a(lib_a-strcmp.o)
+ .debug_line    0x0000f648      0x168 buildTools/libc.a(lib_a-wcrtomb.o)
+ .debug_line    0x0000f7b0      0x176 buildTools/libc.a(lib_a-wctomb_r.o)
+ .debug_line    0x0000f926      0x169 buildTools/libc.a(lib_a-fstatr.o)
+ .debug_line    0x0000fa8f      0x155 buildTools/libc.a(lib_a-isattyr.o)
+ .debug_line    0x0000fbe4       0x61 buildTools/libnosys.a(close.o)
+ .debug_line    0x0000fc45       0xb8 buildTools/libnosys.a(fstat.o)
+ .debug_line    0x0000fcfd       0x62 buildTools/libnosys.a(isatty.o)
+ .debug_line    0x0000fd5f       0x61 buildTools/libnosys.a(lseek.o)
+ .debug_line    0x0000fdc0       0x60 buildTools/libnosys.a(read.o)
+ .debug_line    0x0000fe20       0x63 buildTools/libnosys.a(sbrk.o)
+
+.debug_str      0x00000000     0x7f27
+ .debug_str     0x00000000      0x351 build/main.o
+                                0x3a8 (size before relaxing)
+ .debug_str     0x00000351      0x1c9 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+                                0x463 (size before relaxing)
+ .debug_str     0x0000051a      0xa90 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+                                0xc90 (size before relaxing)
+ .debug_str     0x00000faa      0x7a5 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+                                0xc18 (size before relaxing)
+ .debug_str     0x0000174f      0x4ca build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+                                0x9a8 (size before relaxing)
+ .debug_str     0x00001c19       0x3c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+                                0x190 (size before relaxing)
+ .debug_str     0x00001c55      0x51a build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+                                0xa38 (size before relaxing)
+ .debug_str     0x0000216f      0xe82 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+                               0x132c (size before relaxing)
+ .debug_str     0x00002ff1      0x541 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+                                0xc10 (size before relaxing)
+ .debug_str     0x00003532      0x15b build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+                                0x5b4 (size before relaxing)
+ .debug_str     0x0000368d      0x243 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+                                0xa84 (size before relaxing)
+ .debug_str     0x000038d0      0x50d build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+                                0xa12 (size before relaxing)
+ .debug_str     0x00003ddd      0x30c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+                                0xa54 (size before relaxing)
+ .debug_str     0x000040e9      0x321 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+                                0x78a (size before relaxing)
+ .debug_str     0x0000440a      0x166 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+                                0x6c1 (size before relaxing)
+ .debug_str     0x00004570      0x74b build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+                                0x981 (size before relaxing)
+ .debug_str     0x00004cbb       0x65 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+                                0x4eb (size before relaxing)
+ .debug_str     0x00004d20      0x5c7 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+                                0xb3a (size before relaxing)
+ .debug_str     0x000052e7      0x1af build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+                                0x493 (size before relaxing)
+ .debug_str     0x00005496       0x1b build/system/stm32f2xx_hal_msp.o
+                                0x658 (size before relaxing)
+ .debug_str     0x000054b1       0x6c build/system/stm32f2xx_it.o
+                                0x99c (size before relaxing)
+ .debug_str     0x0000551d       0x45 build/system/system_stm32f2xx.o
+                                0x33e (size before relaxing)
+ .debug_str     0x00005562       0x72 build/peripherals/adc.o
+                                0x799 (size before relaxing)
+ .debug_str     0x000055d4       0x1e build/peripherals/dac.o
+                                0x6fe (size before relaxing)
+ .debug_str     0x000055f2       0x1e build/peripherals/dma.o
+                                0x74b (size before relaxing)
+ .debug_str     0x00005610       0x20 build/peripherals/gpio.o
+                                0x33f (size before relaxing)
+ .debug_str     0x00005630       0x44 build/peripherals/i2c.o
+                                0x875 (size before relaxing)
+ .debug_str     0x00005674       0x25 build/peripherals/spi.o
+                                0x832 (size before relaxing)
+ .debug_str     0x00005699       0xff build/peripherals/tim.o
+                                0x95c (size before relaxing)
+ .debug_str     0x00005798      0x4c6 build/peripherals/usart.o
+                                0xce1 (size before relaxing)
+ .debug_str     0x00005c5e      0x564 build/peripherals/USB/usbd_cdc.o
+                                0x7cb (size before relaxing)
+ .debug_str     0x000061c2      0x133 build/peripherals/USB/usbd_conf.o
+                               0x1151 (size before relaxing)
+ .debug_str     0x000062f5      0x18a build/peripherals/USB/usbd_core.o
+                                0x6e9 (size before relaxing)
+ .debug_str     0x0000647f      0x102 build/peripherals/USB/usbd_ctlreq.o
+                                0x66f (size before relaxing)
+ .debug_str     0x00006581      0x17b build/peripherals/USB/usbd_desc.o
+                                0x42e (size before relaxing)
+ .debug_str     0x000066fc       0xa5 build/peripherals/USB/usbd_ioreq.o
+                                0x5f7 (size before relaxing)
+ .debug_str     0x000067a1       0x2f build/drivers/boot.o
+                                0x1b3 (size before relaxing)
+ .debug_str     0x000067d0       0x48 build/drivers/led.o
+                                0x21a (size before relaxing)
+ .debug_str     0x00006818       0xbb build/utils/buffer8.o
+                                0x259 (size before relaxing)
+ .debug_str     0x000068d3       0x1c build/utils/newlib_hooks.o
+                                0x154 (size before relaxing)
+ .debug_str     0x000068ef       0xef build/utils/timerCallback.o
+                                0x87f (size before relaxing)
+ .debug_str     0x000069de       0x40 build/utils/characterMapping.o
+                                0x192 (size before relaxing)
+ .debug_str     0x00006a1e       0x21 build/utils/crc8.o
+                                0x17c (size before relaxing)
+ .debug_str     0x00006a3f      0x131 buildTools/libc.a(lib_a-impure.o)
+                                0x585 (size before relaxing)
+ .debug_str     0x00006b70       0x9c buildTools/libc.a(lib_a-malloc.o)
+                                0x599 (size before relaxing)
+ .debug_str     0x00006c0c       0xa0 buildTools/libc.a(lib_a-memcpy.o)
+                                0x1c8 (size before relaxing)
+ .debug_str     0x00006cac       0x97 buildTools/libc.a(lib_a-nano-freer.o)
+                                0x5dd (size before relaxing)
+ .debug_str     0x00006d43       0x50 buildTools/libc.a(lib_a-nano-mallocr.o)
+                                0x612 (size before relaxing)
+ .debug_str     0x00006d93       0xb7 buildTools/libc.a(lib_a-printf.o)
+                                0x5ae (size before relaxing)
+ .debug_str     0x00006e4a       0x50 buildTools/libc.a(lib_a-putchar.o)
+                                0x58d (size before relaxing)
+ .debug_str     0x00006e9a       0x8f buildTools/libc.a(lib_a-puts.o)
+                                0x5d4 (size before relaxing)
+ .debug_str     0x00006f29       0x3e buildTools/libc.a(lib_a-sbrkr.o)
+                                0x57c (size before relaxing)
+ .debug_str     0x00006f67       0x43 buildTools/libc.a(lib_a-setbuf.o)
+                                0x575 (size before relaxing)
+ .debug_str     0x00006faa       0x57 buildTools/libc.a(lib_a-setvbuf.o)
+                                0x5bc (size before relaxing)
+ .debug_str     0x00007001       0x9a buildTools/libc.a(lib_a-strlen.o)
+                                0x1c9 (size before relaxing)
+ .debug_str     0x0000709b       0x64 buildTools/libc.a(lib_a-fflush.o)
+                                0x5e5 (size before relaxing)
+ .debug_str     0x000070ff      0x11e buildTools/libc.a(lib_a-findfp.o)
+                                0x6ac (size before relaxing)
+ .debug_str     0x0000721d       0x79 buildTools/libc.a(lib_a-fvwrite.o)
+                                0x617 (size before relaxing)
+ .debug_str     0x00007296       0x42 buildTools/libc.a(lib_a-fwalk.o)
+                                0x58a (size before relaxing)
+ .debug_str     0x000072d8       0x3e buildTools/libc.a(lib_a-memchr.o)
+                                0x1c4 (size before relaxing)
+ .debug_str     0x00007316       0x3f buildTools/libc.a(lib_a-memmove.o)
+                                0x1cf (size before relaxing)
+ .debug_str     0x00007355       0x35 buildTools/libc.a(lib_a-memset.o)
+                                0x1b4 (size before relaxing)
+ .debug_str     0x0000738a       0x23 buildTools/libc.a(lib_a-nano-reallocr.o)
+                                0x5e5 (size before relaxing)
+ .debug_str     0x000073ad      0x187 buildTools/libc.a(lib_a-nano-vfprintf.o)
+                                0x70a (size before relaxing)
+ .debug_str     0x00007534       0x8f buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+                                0x680 (size before relaxing)
+ .debug_str     0x000075c3       0x37 buildTools/libc.a(lib_a-putc.o)
+                                0x59f (size before relaxing)
+ .debug_str     0x000075fa       0x5f buildTools/libc.a(lib_a-reent.o)
+                                0x5a4 (size before relaxing)
+ .debug_str     0x00007659       0x93 buildTools/libc.a(lib_a-stdio.o)
+                                0x5e0 (size before relaxing)
+ .debug_str     0x000076ec       0x3a buildTools/libc.a(lib_a-wbuf.o)
+                                0x5a9 (size before relaxing)
+ .debug_str     0x00007726       0x34 buildTools/libc.a(lib_a-writer.o)
+                                0x579 (size before relaxing)
+ .debug_str     0x0000775a       0x41 buildTools/libc.a(lib_a-wsetup.o)
+                                0x5a4 (size before relaxing)
+ .debug_str     0x0000779b       0x34 buildTools/libc.a(lib_a-closer.o)
+                                0x569 (size before relaxing)
+ .debug_str     0x000077cf       0x5c buildTools/libc.a(lib_a-fputwc.o)
+                                0x5e5 (size before relaxing)
+ .debug_str     0x0000782b      0x253 buildTools/libc.a(lib_a-locale.o)
+                                0x7e2 (size before relaxing)
+ .debug_str     0x00007a7e       0x3b buildTools/libc.a(lib_a-lseekr.o)
+                                0x577 (size before relaxing)
+ .debug_str     0x00007ab9      0x114 buildTools/libc.a(lib_a-makebuf.o)
+                                0x687 (size before relaxing)
+ .debug_str     0x00007bcd        0xf buildTools/libc.a(lib_a-nano-msizer.o)
+                                0x5c3 (size before relaxing)
+ .debug_str     0x00007bdc       0x33 buildTools/libc.a(lib_a-readr.o)
+                                0x577 (size before relaxing)
+ .debug_str     0x00007c0f       0x4e buildTools/libc.a(lib_a-wcrtomb.o)
+                                0x5b6 (size before relaxing)
+ .debug_str     0x00007c5d       0x57 buildTools/libc.a(lib_a-wctomb_r.o)
+                                0x5c5 (size before relaxing)
+ .debug_str     0x00007cb4       0x41 buildTools/libc.a(lib_a-fstatr.o)
+                                0x65c (size before relaxing)
+ .debug_str     0x00007cf5       0x3d buildTools/libc.a(lib_a-isattyr.o)
+                                0x573 (size before relaxing)
+ .debug_str     0x00007d32       0xf8 buildTools/libnosys.a(close.o)
+                                0x197 (size before relaxing)
+ .debug_str     0x00007e2a       0x30 buildTools/libnosys.a(fstat.o)
+                                0x284 (size before relaxing)
+ .debug_str     0x00007e5a       0x31 buildTools/libnosys.a(isatty.o)
+                                0x197 (size before relaxing)
+ .debug_str     0x00007e8b       0x30 buildTools/libnosys.a(lseek.o)
+                                0x195 (size before relaxing)
+ .debug_str     0x00007ebb       0x2f buildTools/libnosys.a(read.o)
+                                0x193 (size before relaxing)
+ .debug_str     0x00007eea       0x3d buildTools/libnosys.a(sbrk.o)
+                                0x117 (size before relaxing)
+
+.comment        0x00000000       0xe0
+ .comment       0x00000000       0x70 build/main.o
+                                 0x71 (size before relaxing)
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_usart.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .comment       0x00000000       0x71 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .comment       0x00000000       0x71 build/system/stm32f2xx_hal_msp.o
+ .comment       0x00000000       0x71 build/system/stm32f2xx_it.o
+ .comment       0x00000000       0x71 build/system/system_stm32f2xx.o
+ .comment       0x00000000       0x71 build/peripherals/adc.o
+ .comment       0x00000000       0x71 build/peripherals/dac.o
+ .comment       0x00000000       0x71 build/peripherals/dma.o
+ .comment       0x00000000       0x71 build/peripherals/gpio.o
+ .comment       0x00000000       0x71 build/peripherals/i2c.o
+ .comment       0x00000000       0x71 build/peripherals/spi.o
+ .comment       0x00000000       0x71 build/peripherals/tim.o
+ .comment       0x00000000       0x71 build/peripherals/usart.o
+ .comment       0x00000000       0x71 build/peripherals/USB/usbd_cdc.o
+ .comment       0x00000000       0x71 build/peripherals/USB/usbd_conf.o
+ .comment       0x00000000       0x71 build/peripherals/USB/usbd_core.o
+ .comment       0x00000000       0x71 build/peripherals/USB/usbd_ctlreq.o
+ .comment       0x00000000       0x71 build/peripherals/USB/usbd_desc.o
+ .comment       0x00000000       0x71 build/peripherals/USB/usbd_ioreq.o
+ .comment       0x00000000       0x71 build/drivers/boot.o
+ .comment       0x00000000       0x71 build/drivers/led.o
+ .comment       0x00000000       0x71 build/utils/buffer8.o
+ .comment       0x00000000       0x71 build/utils/newlib_hooks.o
+ .comment       0x00000000       0x71 build/utils/timerCallback.o
+ .comment       0x00000000       0x71 build/utils/characterMapping.o
+ .comment       0x00000000       0x71 build/utils/crc8.o
+ .comment       0x00000070       0x70 buildTools/libc.a(lib_a-impure.o)
+                                 0x71 (size before relaxing)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-malloc.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-memcpy.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-nano-freer.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-nano-mallocr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-printf.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-putchar.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-puts.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-sbrkr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-setbuf.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-setvbuf.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-strlen.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-fflush.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-findfp.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-fvwrite.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-fwalk.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-memchr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-memmove.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-memset.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-nano-reallocr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-putc.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-reent.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-stdio.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-wbuf.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-writer.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-wsetup.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-closer.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-fputwc.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-locale.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-lseekr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-makebuf.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-nano-msizer.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-readr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-wcrtomb.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-wctomb_r.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-fstatr.o)
+ .comment       0x00000000       0x71 buildTools/libc.a(lib_a-isattyr.o)
+ .comment       0x00000000       0x71 buildTools/libnosys.a(close.o)
+ .comment       0x00000000       0x71 buildTools/libnosys.a(fstat.o)
+ .comment       0x00000000       0x71 buildTools/libnosys.a(isatty.o)
+ .comment       0x00000000       0x71 buildTools/libnosys.a(lseek.o)
+ .comment       0x00000000       0x71 buildTools/libnosys.a(read.o)
+ .comment       0x00000000       0x71 buildTools/libnosys.a(sbrk.o)
+
+.debug_frame    0x00000000     0x7044
+ .debug_frame   0x00000000       0x50 build/main.o
+ .debug_frame   0x00000050      0x128 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_gpio.o
+ .debug_frame   0x00000178      0x8b4 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_i2c.o
+ .debug_frame   0x00000a2c      0x250 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_rcc.o
+ .debug_frame   0x00000c7c      0x488 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_spi.o
+ .debug_frame   0x00001104      0x5c0 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_uart.o
+ .debug_frame   0x000016c4      0xf90 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim.o
+ .debug_frame   0x00002654      0x580 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_tim_ex.o
+ .debug_frame   0x00002bd4      0x194 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dma.o
+ .debug_frame   0x00002d68      0x428 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_cortex.o
+ .debug_frame   0x00003190      0x400 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc.o
+ .debug_frame   0x00003590      0x254 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_adc_ex.o
+ .debug_frame   0x000037e4      0x33c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac.o
+ .debug_frame   0x00003b20      0x1bc build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_dac_ex.o
+ .debug_frame   0x00003cdc      0x558 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd.o
+ .debug_frame   0x00004234       0x60 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal_pcd_ex.o
+ .debug_frame   0x00004294      0x718 build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_ll_usb.o
+ .debug_frame   0x000049ac      0x24c build/libraries/STM32F2xx_HAL_Driver/source/stm32f2xx_hal.o
+ .debug_frame   0x00004bf8       0x2c build/system/stm32f2xx_hal_msp.o
+ .debug_frame   0x00004c24       0xb4 build/system/stm32f2xx_it.o
+ .debug_frame   0x00004cd8       0x58 build/system/system_stm32f2xx.o
+ .debug_frame   0x00004d30       0xa4 build/peripherals/adc.o
+ .debug_frame   0x00004dd4       0x7c build/peripherals/dac.o
+ .debug_frame   0x00004e50       0x2c build/peripherals/dma.o
+ .debug_frame   0x00004e7c       0x34 build/peripherals/gpio.o
+ .debug_frame   0x00004eb0       0xe8 build/peripherals/i2c.o
+ .debug_frame   0x00004f98       0x74 build/peripherals/spi.o
+ .debug_frame   0x0000500c      0x1e8 build/peripherals/tim.o
+ .debug_frame   0x000051f4      0x1b0 build/peripherals/usart.o
+ .debug_frame   0x000053a4      0x24c build/peripherals/USB/usbd_cdc.o
+ .debug_frame   0x000055f0      0x430 build/peripherals/USB/usbd_conf.o
+ .debug_frame   0x00005a20      0x2fc build/peripherals/USB/usbd_core.o
+ .debug_frame   0x00005d1c      0x210 build/peripherals/USB/usbd_ctlreq.o
+ .debug_frame   0x00005f2c      0x160 build/peripherals/USB/usbd_desc.o
+ .debug_frame   0x0000608c      0x10c build/peripherals/USB/usbd_ioreq.o
+ .debug_frame   0x00006198       0x54 build/drivers/boot.o
+ .debug_frame   0x000061ec       0x34 build/drivers/led.o
+ .debug_frame   0x00006220      0x164 build/utils/buffer8.o
+ .debug_frame   0x00006384       0x34 build/utils/newlib_hooks.o
+ .debug_frame   0x000063b8       0xd4 build/utils/timerCallback.o
+ .debug_frame   0x0000648c       0x38 build/utils/characterMapping.o
+ .debug_frame   0x000064c4       0x38 build/utils/crc8.o
+ .debug_frame   0x000064fc       0x30 buildTools/libc.a(lib_a-malloc.o)
+ .debug_frame   0x0000652c       0x28 buildTools/libc.a(lib_a-memcpy.o)
+ .debug_frame   0x00006554       0x2c buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_frame   0x00006580       0x2c buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x000065ac       0x6c buildTools/libc.a(lib_a-printf.o)
+ .debug_frame   0x00006618       0x30 buildTools/libc.a(lib_a-putchar.o)
+ .debug_frame   0x00006648       0x40 buildTools/libc.a(lib_a-puts.o)
+ .debug_frame   0x00006688       0x2c buildTools/libc.a(lib_a-sbrkr.o)
+ .debug_frame   0x000066b4       0x20 buildTools/libc.a(lib_a-setbuf.o)
+ .debug_frame   0x000066d4       0x30 buildTools/libc.a(lib_a-setvbuf.o)
+ .debug_frame   0x00006704       0x20 buildTools/libc.a(lib_a-strlen.o)
+ .debug_frame   0x00006724       0x68 buildTools/libc.a(lib_a-fflush.o)
+ .debug_frame   0x0000678c      0x11c buildTools/libc.a(lib_a-findfp.o)
+ .debug_frame   0x000068a8       0x3c buildTools/libc.a(lib_a-fvwrite.o)
+ .debug_frame   0x000068e4       0x54 buildTools/libc.a(lib_a-fwalk.o)
+ .debug_frame   0x00006938       0x28 buildTools/libc.a(lib_a-memchr.o)
+ .debug_frame   0x00006960       0x28 buildTools/libc.a(lib_a-memmove.o)
+ .debug_frame   0x00006988       0x20 buildTools/libc.a(lib_a-memset.o)
+ .debug_frame   0x000069a8       0x3c buildTools/libc.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x000069e4       0xbc buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_frame   0x00006aa0       0x58 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x00006af8       0x48 buildTools/libc.a(lib_a-putc.o)
+ .debug_frame   0x00006b40       0x5c buildTools/libc.a(lib_a-reent.o)
+ .debug_frame   0x00006b9c       0x88 buildTools/libc.a(lib_a-stdio.o)
+ .debug_frame   0x00006c24       0x3c buildTools/libc.a(lib_a-wbuf.o)
+ .debug_frame   0x00006c60       0x2c buildTools/libc.a(lib_a-writer.o)
+ .debug_frame   0x00006c8c       0x2c buildTools/libc.a(lib_a-wsetup.o)
+ .debug_frame   0x00006cb8       0x2c buildTools/libc.a(lib_a-closer.o)
+ .debug_frame   0x00006ce4       0x68 buildTools/libc.a(lib_a-fputwc.o)
+ .debug_frame   0x00006d4c       0x98 buildTools/libc.a(lib_a-locale.o)
+ .debug_frame   0x00006de4       0x2c buildTools/libc.a(lib_a-lseekr.o)
+ .debug_frame   0x00006e10       0x34 buildTools/libc.a(lib_a-makebuf.o)
+ .debug_frame   0x00006e44       0x20 buildTools/libc.a(lib_a-nano-msizer.o)
+ .debug_frame   0x00006e64       0x2c buildTools/libc.a(lib_a-readr.o)
+ .debug_frame   0x00006e90       0x58 buildTools/libc.a(lib_a-wcrtomb.o)
+ .debug_frame   0x00006ee8       0x44 buildTools/libc.a(lib_a-wctomb_r.o)
+ .debug_frame   0x00006f2c       0x2c buildTools/libc.a(lib_a-fstatr.o)
+ .debug_frame   0x00006f58       0x2c buildTools/libc.a(lib_a-isattyr.o)
+ .debug_frame   0x00006f84       0x20 buildTools/libnosys.a(close.o)
+ .debug_frame   0x00006fa4       0x20 buildTools/libnosys.a(fstat.o)
+ .debug_frame   0x00006fc4       0x20 buildTools/libnosys.a(isatty.o)
+ .debug_frame   0x00006fe4       0x20 buildTools/libnosys.a(lseek.o)
+ .debug_frame   0x00007004       0x20 buildTools/libnosys.a(read.o)
+ .debug_frame   0x00007024       0x20 buildTools/libnosys.a(sbrk.o)
+
+.debug_ranges   0x00000000       0xd0
+ .debug_ranges  0x00000000       0x20 build/system/startup_stm32f2xx.o
+ .debug_ranges  0x00000020       0x18 buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_ranges  0x00000038       0x18 buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_ranges  0x00000050       0x18 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_ranges  0x00000068       0x48 buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_ranges  0x000000b0       0x20 buildTools/libc.a(lib_a-wsetup.o)
+
+.debug_loc      0x00000000     0x313a
+ .debug_loc     0x00000000       0x58 buildTools/libc.a(lib_a-malloc.o)
+ .debug_loc     0x00000058       0x87 buildTools/libc.a(lib_a-memcpy.o)
+ .debug_loc     0x000000df      0x172 buildTools/libc.a(lib_a-nano-freer.o)
+ .debug_loc     0x00000251      0x304 buildTools/libc.a(lib_a-nano-mallocr.o)
+ .debug_loc     0x00000555       0x34 buildTools/libc.a(lib_a-printf.o)
+ .debug_loc     0x00000589       0x81 buildTools/libc.a(lib_a-putchar.o)
+ .debug_loc     0x0000060a       0xb6 buildTools/libc.a(lib_a-puts.o)
+ .debug_loc     0x000006c0       0x4d buildTools/libc.a(lib_a-sbrkr.o)
+ .debug_loc     0x0000070d       0x42 buildTools/libc.a(lib_a-setbuf.o)
+ .debug_loc     0x0000074f      0x183 buildTools/libc.a(lib_a-setvbuf.o)
+ .debug_loc     0x000008d2       0x21 buildTools/libc.a(lib_a-strlen.o)
+ .debug_loc     0x000008f3      0x21f buildTools/libc.a(lib_a-fflush.o)
+ .debug_loc     0x00000b12      0x200 buildTools/libc.a(lib_a-findfp.o)
+ .debug_loc     0x00000d12      0x51c buildTools/libc.a(lib_a-fvwrite.o)
+ .debug_loc     0x0000122e      0x11f buildTools/libc.a(lib_a-fwalk.o)
+ .debug_loc     0x0000134d       0xaa buildTools/libc.a(lib_a-memchr.o)
+ .debug_loc     0x000013f7       0xde buildTools/libc.a(lib_a-memmove.o)
+ .debug_loc     0x000014d5       0x49 buildTools/libc.a(lib_a-memset.o)
+ .debug_loc     0x0000151e      0x11b buildTools/libc.a(lib_a-nano-reallocr.o)
+ .debug_loc     0x00001639      0x555 buildTools/libc.a(lib_a-nano-vfprintf.o)
+ .debug_loc     0x00001b8e      0x46d buildTools/libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_loc     0x00001ffb      0x113 buildTools/libc.a(lib_a-putc.o)
+ .debug_loc     0x0000210e      0x12b buildTools/libc.a(lib_a-reent.o)
+ .debug_loc     0x00002239      0x236 buildTools/libc.a(lib_a-stdio.o)
+ .debug_loc     0x0000246f       0xef buildTools/libc.a(lib_a-wbuf.o)
+ .debug_loc     0x0000255e       0xa5 buildTools/libc.a(lib_a-writer.o)
+ .debug_loc     0x00002603       0x6b buildTools/libc.a(lib_a-wsetup.o)
+ .debug_loc     0x0000266e       0x4d buildTools/libc.a(lib_a-closer.o)
+ .debug_loc     0x000026bb      0x1a8 buildTools/libc.a(lib_a-fputwc.o)
+ .debug_loc     0x00002863      0x150 buildTools/libc.a(lib_a-locale.o)
+ .debug_loc     0x000029b3       0xa5 buildTools/libc.a(lib_a-lseekr.o)
+ .debug_loc     0x00002a58       0xf9 buildTools/libc.a(lib_a-makebuf.o)
+ .debug_loc     0x00002b51       0xb5 buildTools/libc.a(lib_a-nano-msizer.o)
+ .debug_loc     0x00002c06       0xa5 buildTools/libc.a(lib_a-readr.o)
+ .debug_loc     0x00002cab      0x1a0 buildTools/libc.a(lib_a-wcrtomb.o)
+ .debug_loc     0x00002e4b      0x116 buildTools/libc.a(lib_a-wctomb_r.o)
+ .debug_loc     0x00002f61       0x79 buildTools/libc.a(lib_a-fstatr.o)
+ .debug_loc     0x00002fda       0x4d buildTools/libc.a(lib_a-isattyr.o)
+ .debug_loc     0x00003027       0x21 buildTools/libnosys.a(close.o)
+ .debug_loc     0x00003048       0x21 buildTools/libnosys.a(fstat.o)
+ .debug_loc     0x00003069       0x21 buildTools/libnosys.a(isatty.o)
+ .debug_loc     0x0000308a       0x42 buildTools/libnosys.a(lseek.o)
+ .debug_loc     0x000030cc       0x42 buildTools/libnosys.a(read.o)
+ .debug_loc     0x0000310e       0x2c buildTools/libnosys.a(sbrk.o)
+
+.stab           0x00000000       0x84
+ .stab          0x00000000       0x24 buildTools/libnosys.a(close.o)
+ .stab          0x00000024       0x18 buildTools/libnosys.a(fstat.o)
+                                 0x24 (size before relaxing)
+ .stab          0x0000003c       0x18 buildTools/libnosys.a(isatty.o)
+                                 0x24 (size before relaxing)
+ .stab          0x00000054       0x18 buildTools/libnosys.a(lseek.o)
+                                 0x24 (size before relaxing)
+ .stab          0x0000006c       0x18 buildTools/libnosys.a(read.o)
+                                 0x24 (size before relaxing)
+
+.stabstr        0x00000000      0x117
+ .stabstr       0x00000000      0x117 buildTools/libnosys.a(close.o)
