@@ -327,18 +327,18 @@ void consoleProcessBytes()
 
 static void console_i2cWrite(uint32_t argc, char** argv)
 {
-    //uint8_t addr;
-    //uint8_t dataBytes[CONSOLE_MAX_NUM_ARGS];
-    //uint32_t i;
+    uint8_t addr;
+    uint8_t dataBytes[CONSOLE_MAX_NUM_ARGS];
+    uint32_t i;
 
-    //addr = atoi(argv[0]);
+    addr = atoi(argv[0]);
 
-    //for (i = 1; i < argc; i++)
-    //{
-        //dataBytes[i-1] = atoi(argv[i]);
-    //}
+    for (i = 1; i < argc; i++)
+    {
+        dataBytes[i-1] = atoi(argv[i]);
+    }
 
-    //i2cTransmit(addr, dataBytes, argc-1);
+    i2cTransmit(addr, dataBytes, argc-1);
 }
 
 /*
@@ -350,7 +350,7 @@ static void console_i2cRead(uint32_t argc, char** argv)
 
 static void console_i2cScan(uint32_t argc, char** argv)
 {
-    //i2cScan();
+    i2cScan();
 }
 
 /*
@@ -408,6 +408,8 @@ static void console_measPower(uint32_t argc, char** argv)
 {
     int found = 0;
     const struct adc_cmd *val;
+    //uint16_t res = adc_read(batt_i);
+    //printf("%d\n", res);
 
     for (val = adc_dict; val->cmd && !found; val++) {
         //printf("Val at %p", val);
@@ -418,7 +420,7 @@ static void console_measPower(uint32_t argc, char** argv)
 
     if (found) {
         val--;
-        printf("%s: %d", val->cmd, adc_conv(val->per));
+        printf("%s: %d", val->cmd, adc_read(val->per));
     }
 }
 
@@ -443,8 +445,6 @@ static void console_writeFNR(uint32_t argc, char** argv)
                 break;
             case FNR_REVERSE:
                 printf("Reverse");
-                break;
-            case FNR_STATE_UNKNOWN:
                 break;
         }
     } else {
@@ -549,27 +549,27 @@ static void console_hardmode(uint32_t argc, char** argv)
 
 static void console_getPower(uint32_t argc, char** argv)
 {
-    //int i;
-    //uint16_t powerVals[] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    int i;
+    uint16_t powerVals[] = {0,0,0,0,0,0,0,0,0,0,0,0};
 
-    //for(i = 0; i < ADC_LINES / 2; i++){
-        //int ind = periph_order[i * 2];
-        //powerVals[i * 3] = adc_conv(ind);
-        //ind = periph_order[i * 2 + 1];
-        //powerVals[i * 3 + 1] = adc_conv(ind);
-        //powerVals[i * 3 + 2] = powerVals[i * 3] * powerVals[i * 3 + 1] / 1000; // Calculate power in mW
-    //}
+    for(i = 0; i < ADC_LINES / 2; i++){
+        int ind = periph_order[i * 2];
+        powerVals[i * 3] = adc_conv(ind);
+        ind = periph_order[i * 2 + 1];
+        powerVals[i * 3 + 1] = adc_conv(ind);
+        powerVals[i * 3 + 2] = powerVals[i * 3] * powerVals[i * 3 + 1] / 1000; // Calculate power in mW
+    }
 
-    //printf("\r\n");
+    printf("\r\n");
 
-    //for(i = 0; i < ADC_LINES / 2; i++){
-        //int ind = periph_order[i * 2];
-        //printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3] / 1000, powerVals[i * 3] % 1000, "V");                
-        //ind = periph_order[i * 2 + 1];
-        //printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3 + 1] / 1000, powerVals[i * 3 + 1] % 1000, "A");                
-        //printf("%s: %2u.%03u %s\r\n", "          Power", powerVals[i * 3 + 2] / 1000, powerVals[i * 3 + 2] % 1000, "W");     
-        //printf("\r\n");
-    //}
+    for(i = 0; i < ADC_LINES / 2; i++){
+        int ind = periph_order[i * 2];
+        printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3] / 1000, powerVals[i * 3] % 1000, "V");                
+        ind = periph_order[i * 2 + 1];
+        printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3 + 1] / 1000, powerVals[i * 3 + 1] % 1000, "A");                
+        printf("%s: %2u.%03u %s\r\n", "          Power", powerVals[i * 3 + 2] / 1000, powerVals[i * 3 + 2] % 1000, "W");     
+        printf("\r\n");
+    }
 }
 static void console_help(uint32_t argc, char** argv) 
 {

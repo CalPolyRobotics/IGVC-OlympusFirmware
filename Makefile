@@ -69,8 +69,7 @@ SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
 		   $(UTILS)/timerCallback.c \
 		   $(UTILS)/characterMapping.c \
-		   $(UTILS)/crc8.c \
-		   $(UTILS)/doubleBuffer.c
+		   $(UTILS)/crc8.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
@@ -96,7 +95,7 @@ LD = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
 
-WARNINGS = -Wall -Werror -Wno-unused-function
+WARNINGS = -Wall -Werror
 	
 CFLAGS  = -O0 -g \
    -mcpu=cortex-m3 -mthumb \

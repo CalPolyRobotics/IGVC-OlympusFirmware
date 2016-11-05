@@ -53,6 +53,7 @@ void MX_ADC2_Init(void)
                  (DMA_SxCR_CIRC);           //Circular Mode
 
     DMA2_Stream3->NDTR = ADC2_SAMPLES * ADC2_CHANNELS_IN_USE; //Number of data to transfer
+    //DMA2_Stream3->NDTR = 8; //Number of data to transfer
     DMA2_Stream3->PAR = (uint32_t)&(ADC2->DR); //ADC2 Data Regist
     DMA2_Stream3->M0AR = (uint32_t)ADCData;    //ADCData Array is destination
 

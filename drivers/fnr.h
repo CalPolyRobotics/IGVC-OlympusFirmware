@@ -5,11 +5,7 @@
 
 #include "comms.h"
 
-typedef enum {FNR_NEUTRAL = 0,
-              FNR_FORWARD,
-              FNR_REVERSE,
-              FNR_STATE_UNKNOWN = 255
-} FNR_t;
+typedef enum {FNR_NEUTRAL = 0, FNR_FORWARD, FNR_REVERSE} FNR_t;
 
 void initAutomanInt();
 void setFNR(FNR_t newState);

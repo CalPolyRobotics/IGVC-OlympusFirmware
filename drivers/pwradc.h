@@ -13,8 +13,7 @@ enum adc_periph {
     twlv_i,     /* Ain4 */
     twlv_v,     /* Ain5 */
     fv_i,       /* Ain6 */
-    thr_i,      /* Ain7 */
-    ADC_PERIPH_LAST_ENUM
+    thr_i       /* Ain7 */
 };
 
 extern const char* periph_name[];

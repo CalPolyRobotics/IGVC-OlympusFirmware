@@ -5,11 +5,9 @@
 
 #define SLAVE_ADDR 0x1B
 
-typedef enum {WAIT_STARTBIT, WAIT_ADDR, WAIT_ACK, WAIT_DATA, STATE_BAD} WaitState_t;
+typedef enum {WAIT_ADDR, WAIT_ACK, WAIT_DATA} WaitState_t;
 
 static WaitState_t state;
-
-
 
 void USIinit()
 {
@@ -30,20 +28,6 @@ void USIinit()
 
 }
 
-void startTimeoutTimer()
-{
-    TCCR1A = 0;
-    TCNT1H = 0;
-    TCNT1L = 0;
-    TIMSK1 = (1 << TOIE1);
-    TCCR1B = (1 << CS10);
-}
-
-void stopTimeoutTimer()
-{
-    TCCR1B = 0;
-}
-
 uint8_t mapFNR(){
     return (PINA & 0x7) ^ 0x4;
 }
@@ -51,7 +35,6 @@ uint8_t mapFNR(){
 
 ISR(USI_STR_vect)
 {
-    //state = WAIT_STARTBIT;
     state = WAIT_ADDR;
 
     //PORTB &= ~(1 << PB2);
@@ -59,9 +42,6 @@ ISR(USI_STR_vect)
 
     USISR |= (1 << USISIF);
     USISR &= 0xF0;
-    //USISR |= 0x0F;
-
-    startTimeoutTimer();
 }
 
 ISR(USI_OVF_vect)
@@ -70,19 +50,13 @@ ISR(USI_OVF_vect)
 
     switch (state)
     {
-        case WAIT_STARTBIT:
-            USISR &= 0xF0;
-            state = WAIT_ADDR;
-            break;
-
         case WAIT_ADDR:
 
             if (USIBR == SLAVE_ADDR)
-            //if (USIBR >= 0x10)
             {
                 DDRA |= (1 << PA6);
-                PORTA &= ~(1 << PA6);
-            //} else {
+
+            } else {
                 //PORTB &= ~(1 << PB2);
             }
             state = WAIT_ACK;
@@ -98,20 +72,8 @@ ISR(USI_OVF_vect)
 
         case WAIT_DATA:
             DDRA &= ~(1 << PA6);
-            stopTimeoutTimer();
             //PORTA |= (1 << PA7);
             break;
-        case STATE_BAD:
-            DDRA &= ~(1 << PA6);
-            break;
     }
-}
-
-ISR(TIM1_OVF_vect)
-{
-    state = STATE_BAD;
-    DDRA &= ~(1 << PA6);
-
-    stopTimeoutTimer();
 }
 

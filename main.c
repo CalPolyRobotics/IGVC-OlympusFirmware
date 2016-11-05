@@ -22,51 +22,10 @@
 #include "adc.h"
 #include "encoder.h"
 #include "fnr.h"
-#include "config.h"
-#include "doubleBuffer.h"
 
 #include <stddef.h>
 
 void SystemClock_Config(void);
-
-void togglePin(GPIO_TypeDef* gpio, uint32_t pin)
-{
-    gpio->ODR ^= pin;
-}
-
-Timer_Return led6Toggle(void* dummy)
-{
-    static uint32_t num = 0;
-    //HAL_GPIO_TogglePin(GPIO_DEBUG_6);
-    togglePin(GPIO_DEBUG_6);
-
-    //setSevenSeg(num);
-    num++;
-    if (num > 15)
-    {
-        num = 0;
-    }
-
-    return CONTINUE_TIMER;
-}
-
-void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
-{
-    if (status == I2C_ACK)
-    {
-        printf("Zeus Data: ");
-        while (len--)
-        {
-            printf("%X ", *data++);
-        }
-        printf("\r\n");
-    } else if (status == I2C_NACK) {
-        printf("Zeus NACK\r\n");
-    } else {
-        printf("Zeus ERR\r\n");
-    }
-}
-
 
 int main(void)
 {
@@ -83,13 +42,12 @@ int main(void)
 
     /* Configure the system clock */
     SystemClock_Config();
-    initIGVCCallbackTimer();
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_ADC2_Init();
-    i2cInit();
+    MX_I2C2_Init();
 
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
@@ -97,30 +55,24 @@ int main(void)
     adc_init();
 
     initSteeringMotor();
+    initIGVCCallbackTimer();
     initSteering();
     initSpeedDAC();
     initEncoderInputCapture();
     initAutomanInt();
-
-    addCallbackTimer(1000, led6Toggle, NULL);
 
     printf("Hello.\r\n");
 
     while(1)
     {
         serviceTxDma();
-        serviceCallbackTimer();
-        serviceUSBWrite();
-        serviceI2C();
 
         consoleProcessBytes();
 
-        uint8_t dataIn;
-
-        while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
-        {
-            runCommsFSM((char)dataIn);
-        }
+         //while (buffer8_bytes(&usbReceiveBuffer))
+         //{
+             //runCommsFSM(buffer8_get(&usbReceiveBuffer));
+         //}
     }
 }
 

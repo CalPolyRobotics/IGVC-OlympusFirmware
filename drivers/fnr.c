@@ -12,7 +12,6 @@
 volatile uint8_t FNRState = 0;
 
 static Timer_Return updateSevenSegCallback(void* dummy);
-static Timer_Return pollFnrStateCallback(void* dummy);
 
 void initAutomanInt()
 {
@@ -25,7 +24,7 @@ void initAutomanInt()
     //NVIC_SetPriority(EXTI15_10_IRQn, 5);
     //NVIC_EnableIRQ(EXTI15_10_IRQn);
 
-    addCallbackTimer(POLL_FNR_UPDATE_PERIOD, pollFnrStateCallback, NULL);
+    addCallbackTimer(SEVEN_SEG_UPDATE_PERIOD, updateSevenSegCallback, NULL);
 }
 
 void setFNR(FNR_t newState)
@@ -58,39 +57,17 @@ void setFNR(FNR_t newState)
                               GPIO_FNR_ENABLE_PIN,
                               GPIO_PIN_SET);
             break;
-        case FNR_STATE_UNKNOWN:
-        default:
-            setSpeedDACOutputEnable(0);
-            HAL_GPIO_WritePin(GPIO_FNR_ENABLE_PORT,
-                              GPIO_FNR_ENABLE_PIN,
-                              GPIO_PIN_RESET);
     }
 }
 
 uint8_t getFNR(){
-    return FNRState;
+    uint8_t data;
+    i2cReceive(0x1B, &data, 1);
+    return data;
 }
 
-void pollFnrI2CCallback(void* dummy, uint8_t* newState, uint32_t len, I2CStatus status)
-{
-    if (status == I2C_ACK)
-    {
-        if (*newState <= (FNR_REVERSE + 1))
-        {
-            FNRState = *newState;
-            setSevenSeg(FNRState);
-        } else {
-            setSevenSeg('r');
-        }
-    } else {
-        FNRState = FNR_STATE_UNKNOWN;
-        setSevenSeg('n');
-    }
-}
-
-Timer_Return pollFnrStateCallback(void* dummy)
-{
-    i2cAddRxTransaction(JANUS_ATTINY_I2C_ADDR, 1, pollFnrI2CCallback, NULL);
+Timer_Return updateSevenSegCallback(void* dummy){
+    setSevenSeg(getFNR());
     return CONTINUE_TIMER;
 }
 
