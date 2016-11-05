@@ -16,6 +16,7 @@ void setFNR(FNR_t newState);
 
 void FNRCommsHandler(Packet_t* packet);
 void commsGetFNRCallback();
+void serviceAutoman();
 
 uint8_t getFNR();
 

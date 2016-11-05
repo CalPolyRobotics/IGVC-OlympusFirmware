@@ -112,6 +112,7 @@ int main(void)
         serviceCallbackTimer();
         serviceUSBWrite();
         serviceI2C();
+        serviceAutoman();
 
         consoleProcessBytes();
 

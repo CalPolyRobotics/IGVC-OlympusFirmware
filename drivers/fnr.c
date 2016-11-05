@@ -6,6 +6,8 @@
 #include "i2c.h"
 #include "timerCallback.h"
 #include "sevenSeg.h"
+#include "steering.h"
+
 
 #include <stdio.h>
 
@@ -28,6 +30,25 @@ void initAutomanInt()
     addCallbackTimer(POLL_FNR_UPDATE_PERIOD, pollFnrStateCallback, NULL);
 }
 
+void serviceAutoman()
+{
+    if (HAL_GPIO_ReadPin(GPIO_COMPUTER_DRIVE_PORT, GPIO_COMPUTER_DRIVE_PIN))
+    {
+        //printf("Enabled DAC\r\n");
+        enableSpeedDAC();
+        // Enabled Steering
+        enableSteering(1);
+    }
+    else
+    {
+        //printf("Disabled DAC\r\n");
+        disableSpeedDAC();
+        // Enabled Steering
+        enableSteering(0);
+    }
+}
+
+// Function to set FNR
 void setFNR(FNR_t newState)
 {
     switch (newState)

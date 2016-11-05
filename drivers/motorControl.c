@@ -49,4 +49,3 @@ void setSteeringMotorDir(MotorDirection dir)
         HAL_GPIO_WritePin(GPIO_STEER_RIGHT, GPIO_PIN_RESET);
     }
 }
-

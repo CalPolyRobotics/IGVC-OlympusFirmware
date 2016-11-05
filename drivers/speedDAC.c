@@ -62,7 +62,21 @@ static Timer_Return speedDACCallback(void* dummy)
 
 void toggleSpeedDAC(Packet_t* packet)
 {
-   HAL_GPIO_TogglePin(GPIO_AUTO_THROTTLE_ENABLE);
+    HAL_GPIO_TogglePin(GPIO_AUTO_THROTTLE_ENABLE);
+}
+
+void enableSpeedDAC()
+{
+    HAL_GPIO_WritePin(GPIO_AUTO_THROTTLE_ENABLE_PORT,
+                      GPIO_AUTO_THROTTLE_ENABLE_PIN,
+                      GPIO_PIN_SET);
+}
+
+void disableSpeedDAC()
+{
+    HAL_GPIO_WritePin(GPIO_AUTO_THROTTLE_ENABLE_PORT,
+                      GPIO_AUTO_THROTTLE_ENABLE_PIN,
+                      GPIO_PIN_RESET);
 }
 
 void setSpeedDACOutputEnable(uint8_t enable)

@@ -51,7 +51,6 @@ uint32_t getCurrentSteeringValue()
     return mapPotToTarget(getSteeringValue());
 }
 
-
 Timer_Return steeringControlCallback(void* dummy)
 {
     uint16_t newSteeringValue = getSteeringValue();
