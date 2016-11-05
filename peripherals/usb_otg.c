@@ -11,21 +11,12 @@
 
 USBD_HandleTypeDef  USBD_Device;
 static uint8_t usbRecvData[USB_RECEIVE_BUFFER_SIZE];
+static uint8_t reinitUSB = 0;
 DoubleBuffer_t usbReceiveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-    static uint32_t pCount = 0;
-
-    printf("pCount: %lu\r\n", pCount);
-    pCount++;
-
     doubleBuffer_write(&usbReceiveBuffer, data, *len);
-
-    // while ((*len)--)
-    // {
-        // runCommsFSM(*data++);
-    // }
 
     USBD_CDC_ReceivePacket(&USBD_Device);
 
@@ -42,6 +33,8 @@ static int8_t tunnelInit(void)
 
 static int8_t dummyDeinit(void)
 {
+    reinitUSB = 1;
+
     return USBD_OK;
 }
 
@@ -160,6 +153,13 @@ void serviceUSBWrite()
                              usbTransmitBufferLengths[activeUsbBuffer]);
 
         USBD_CDC_TransmitPacket(&USBD_Device);
+    }
+
+    if (reinitUSB)
+    {
+        reinitUSB = 0;
+
+        USBD_CDC_RegisterInterface(&USBD_Device, &cdcInterface);
     }
 }
 

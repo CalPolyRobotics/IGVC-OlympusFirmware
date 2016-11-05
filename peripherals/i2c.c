@@ -284,6 +284,7 @@ void serviceI2C()
         {
             // Clear the STOP bit
             I2C2->CR1 &= ~(I2C_CR1_STOP);
+            I2C2->CR1 &= ~(I2C_CR1_POS);
 
             shouldServiceI2C = 0;
             lastTransaction = nextTransaction;
