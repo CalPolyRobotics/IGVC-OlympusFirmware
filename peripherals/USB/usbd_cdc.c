@@ -654,6 +654,11 @@ static uint8_t  USBD_CDC_Setup (USBD_HandleTypeDef *pdev,
   return USBD_OK;
 }
 
+__weak void USBD_CDC_DataIn_Hook()
+{
+
+}
+
 /**
   * @brief  USBD_CDC_DataIn
   *         Data sent on non-control IN endpoint
@@ -667,8 +672,9 @@ static uint8_t  USBD_CDC_DataIn (USBD_HandleTypeDef *pdev, uint8_t epnum)
   
   if(pdev->pClassData != NULL)
   {
-    
     hcdc->TxState = 0;
+
+    USBD_CDC_DataIn_Hook();
 
     return USBD_OK;
   }
@@ -910,6 +916,28 @@ uint8_t  USBD_CDC_ReceivePacket(USBD_HandleTypeDef *pdev)
     return USBD_FAIL;
   }
 }
+
+uint8_t USBD_CDC_GetTxState(USBD_HandleTypeDef *pdev)
+{
+   USBD_CDC_HandleTypeDef   *hcdc = (USBD_CDC_HandleTypeDef*) pdev->pClassData;
+  
+  if(pdev->pClassData != NULL)
+  {
+    if(hcdc->TxState == 0)
+    {
+      return USBD_OK;
+    }
+    else
+    {
+      return USBD_BUSY;
+    }
+  }
+  else
+  {
+    return USBD_FAIL;
+  }   
+}
+  
 /**
   * @}
   */ 

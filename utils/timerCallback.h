@@ -10,6 +10,7 @@ typedef Timer_Return (*timerCallback)(void*);
 
 void initIGVCCallbackTimer(void);
 int32_t addCallbackTimer(uint32_t count, timerCallback callback, void* parameters);
+void serviceCallbackTimer(void);
 
 
 #endif
