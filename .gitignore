@@ -11,6 +11,7 @@
 *tags
 
 build/*
+boot/build/*
 
 .DS_Store
 *.dSYM
