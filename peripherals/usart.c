@@ -12,9 +12,9 @@
 
 static uint8_t txBuffers[COMMS_TX_NUM_BUFFERS][COMMS_TX_BUFFER_SIZE];
 static uint8_t rxBuffer[COMMS_RX_BUFFER_SIZE];
-static volatile uint8_t txBufferLengths[COMMS_TX_NUM_BUFFERS];
-static volatile uint8_t nextTxBuffer;
-static volatile uint8_t dmaTxBuffer;
+static volatile uint32_t txBufferLengths[COMMS_TX_NUM_BUFFERS];
+static volatile uint32_t nextTxBuffer;
+static volatile uint32_t dmaTxBuffer;
 static volatile uint8_t txDmaActive;
 
 static uint32_t rxBufferPos;
