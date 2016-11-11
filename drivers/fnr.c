@@ -96,12 +96,12 @@ void pollFnrI2CCallback(void* dummy, uint8_t* newState, uint32_t len, I2CStatus 
 {
     if (status == I2C_ACK)
     {
-        if (*newState <= (FNR_REVERSE + 1))
+        //if (*newState <= (FNR_REVERSE + 1))
         {
             FNRState = *newState;
             setSevenSeg(FNRState);
-        } else {
-            setSevenSeg('r');
+        //} else {
+            //setSevenSeg('r');
         }
     } else {
         FNRState = FNR_STATE_UNKNOWN;
