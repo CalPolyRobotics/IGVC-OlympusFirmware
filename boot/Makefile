@@ -13,22 +13,8 @@ SYSTEM = system
 SOURCES += main.c
 
 SOURCES += $(LIBRARIES)/source/stm32f2xx_hal_gpio.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_i2c.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal_rcc.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_spi.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_usart.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_uart.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_tim.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_tim_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_dma.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal_cortex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_adc.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_adc_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_dac.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_dac_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_pcd.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_pcd_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_ll_usb.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal.c
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
@@ -36,29 +22,13 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCES += $(PERIPHERALS)/adc.c \
-		   $(PERIPHERALS)/dac.c \
-		   $(PERIPHERALS)/dma.c \
-		   $(PERIPHERALS)/gpio.c \
-		   $(PERIPHERALS)/i2c.c \
-		   $(PERIPHERALS)/spi.c \
-		   $(PERIPHERALS)/tim.c \
+SOURCES += $(PERIPHERALS)/gpio.c \
 		   $(PERIPHERALS)/usart.c
-
-SOURCES += $(USB)/usbd_cdc.c \
-		   $(USB)/usbd_conf.c \
-		   $(USB)/usbd_core.c \
-		   $(USB)/usbd_ctlreq.c \
-		   $(USB)/usbd_desc.c \
-		   $(USB)/usbd_ioreq.c
 
 SOURCES += $(DRIVERS)/boot.c \
 			$(DRIVERS)/led.c
 
-SOURCES += $(UTILS)/buffer8.c \
-		   $(UTILS)/newlib_hooks.c \
-		   $(UTILS)/timerCallback.c \
-		   $(UTILS)/characterMapping.c \
+SOURCES +=  $(UTILS)/newlib_hooks.c \
 		   $(UTILS)/crc8.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
