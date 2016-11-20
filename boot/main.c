@@ -1,13 +1,7 @@
 #include "stm32f2xx_hal.h"
-#include "adc.h"
-#include "dac.h"
 #include "dma.h"
-#include "i2c.h"
-#include "spi.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "timerCallback.h"
 #include "main.h"
 #include "boot.h"
 #include "led.h"
@@ -34,17 +28,24 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_DMA_Init();
-    MX_ADC2_Init();
-    MX_I2C2_Init();
 
     commsUsartInit();
 
-    printf("Hello.\r\n");
+    char* hello = "Hello.\r\n";
+
+    usartWrite(hello, 8);
+    //printf("ABC.\r\n");
 
     bootloaderFSM();
 
-    while(1){};
+
+    int x = 0;
+    while(1){
+        x++;
+        if(x == 256){
+            x = 0;
+        }
+    };
 }
 
 /** System Clock Configuration **/

@@ -22,20 +22,21 @@ if(len(data) % 4 != 0):
 
 toWrite = [data[i:i + 4] for i in range(0, len(data), 4)]
 
-print toWrite[0]
-
 ser.flush()
 
-ser.write(toWrite[0])
-time.sleep(.01)
+for i in range(0, len(toWrite)):
+   ser.write(toWrite[i])
+   time.sleep(0.01)
 
-resp = bytearray(ser.readline())
-while(len(resp) != 0):
-   print(resp[0:-1])
-   resp = ser.readline()
 
 ser.write(progComplete)
 time.sleep(.01)
+resp = bytearray(ser.readline())
+while(len(resp) != 0):
+   print(resp[0:-1])
+   resp = ser.readline()
+
+"""
 
 resp = bytearray(ser.readline())
 while(len(resp) != 0):
@@ -43,7 +44,11 @@ while(len(resp) != 0):
    resp = ser.readline()
 
 
-"""
+resp = bytearray(ser.readline())
+while(len(resp) != 0):
+   print(resp[0:-1])
+   resp = ser.readline()
+
 #try:
 #except IOError:
 #   print "Usage: toBoot filename portName"
