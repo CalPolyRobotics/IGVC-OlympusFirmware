@@ -71,7 +71,7 @@ def addCRC ( packet ):
 def calcCRC8 ( data ):
    remainder = 0
    for datum in data:
-      curDiv = (datum ^ remainder) ^ (0xFF)
+      curDiv = (datum ^ remainder) & (0xFF)
       remainder = (CRC8_TABLE[curDiv] ^ (remainder << 8)) & (0xFF)
    
    return remainder
@@ -80,7 +80,7 @@ def calcCRC32 ( data ):
    remainder = 0
 
    for datum in data:
-      curDiv = (datum ^ (remainder >> 8)) & (0xFF)
+      curDiv = (datum ^ (remainder >> 24)) & (0xFF)
       remainder = (CRC32_TABLE[curDiv] ^ (remainder << 8)) & (0xFFFFFFFF)
 
    return remainder
@@ -105,4 +105,5 @@ def genLookupCRC (polynomial, width):
    return crcTable 
 
 
-print(hex(calcCRC32( [0x50, 0x60] )))
+print(hex(calcCRC32( [0x50, 0x60, 0x10, 0x34, 0xFF, 0x11] )))
+print(hex(calcCRC8( [0x50, 0x60, 0xFF] ) ))
