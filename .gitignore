@@ -9,10 +9,10 @@
 *.swp
 
 *tags
+*.pyc
 
 build/*
 boot/build/*
-boot/tags
 
 .DS_Store
 *.dSYM
