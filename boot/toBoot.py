@@ -2,15 +2,13 @@
 import serial
 import sys
 import time
+import CRC
 
 POLYNOMIAL = 0xE7
 TOPBIT     = 0x80
-CRC        = [ 0 for i in range(256) ]
 
 START_BYTE = 0xFA
 SIZE_BASIS = 1024
-
-PROG_COMP  = bytearray([0x8B,0xEF,0xF2,0x1F])
 
 INFO_SIZE  = 2
 DATA_LOC   = 2
@@ -81,40 +79,17 @@ def readPacket ( ser ):
    dataSize = resp[DATA_LOC]
    return bytearray(ser.read(dataSize))
 
-
 def addCRC ( packet ):
-   global CRC
-
-   for byte in packet:
-      data = byte ^ remainder
-      remainder = CRC[byte] ^ remainder
-
-   packet.add(remainder)
+   remainder = CRC.calcCRC8( packet )
+   packet.add(remainder & 0xFF)
 
    return packet
-
-def genLookupCRC ():
-   global CRC
-
-   remainder = 0
-   for byte in range(0, 256):
-      remainder = byte 
-
-      for bit in range(0, 8):
-         if(remainder & TOPBIT):
-            remainder = (remainder << 1) ^ POLYNOMIAL
-         else:
-            remainder = remainder << 1
-
-      CRC[byte] = remainder
 
 # START MAIN
 if(len(sys.argv) != 3):
    print "Usage: toBoot filename portName"
    sys.exit()
 
-genLookupCRC()
-print ( CRC )
 
 # Setup Serial Connection and Save Data from File
 ser = serial.Serial(sys.argv[2], 115200, timeout=0)
@@ -141,19 +116,3 @@ sendInfoMessage( ser, 'STOP')
 
 # ser.flush()
 #ser.write(packet)
-
-"""
-# Make last byte 32 bits if not
-if(len(data) % 4 != 0):
-   for i in range(0, (4 - len(data) % 4)):
-      data.append(0)
-
-toWrite = [data[i:i + 4] for i in range(0, len(data), 4)]
-
-ser.flush()
-
-for i in range(0, len(toWrite)):
-   ser.write(toWrite[i])
-   time.sleep(0.01)
-ser.write(PROG_COMP)
-"""
