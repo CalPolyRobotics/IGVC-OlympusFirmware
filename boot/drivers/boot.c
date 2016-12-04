@@ -1,7 +1,9 @@
 #include <stdint.h>
 
+#include "flash.h"
 #include "usart.h"
 
+/**
 void bootloaderFSM(){
 
     //if(RCC -> CSR & SFTRSTF){
@@ -48,3 +50,4 @@ void bootloaderFSM(){
     //}
 }
 
+**/

@@ -26,7 +26,9 @@ SOURCES += $(PERIPHERALS)/gpio.c \
 		   $(PERIPHERALS)/usart.c
 
 SOURCES += $(DRIVERS)/boot.c \
-			$(DRIVERS)/led.c
+			  $(DRIVERS)/flash.c \
+			  $(DRIVERS)/comms.c \
+			  $(DRIVERS)/led.c
 
 SOURCES +=  $(UTILS)/newlib_hooks.c \
 		   $(UTILS)/crc8.c

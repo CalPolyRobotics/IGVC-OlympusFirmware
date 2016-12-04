@@ -1,22 +1,37 @@
-static void writeInit(){
+#include "stm32f205xx.h"
+#include "flash.h"
+#include "usart.h"
+
+void writeInit(uint8_t startSector){
 
     // Unlock Flash for Writing 
     FLASH -> KEYR = KEY_1;
     FLASH -> KEYR = KEY_2;
-   
-    eraseSector(9);
-    eraseSector(10);
-    eraseSector(11);
+    
+    int sector = startSector;
+    for( sector = startSector; sector < NUM_SECTORS; sector ++){
+        eraseSector(sector);
 
-    // Set parallelism to 32 bit
-    FLASH -> CR |= FLASH_CR_PSIZE_1;
+    }
+
+    // Parallelism to 32 bit
+    //FLASH -> CR |= FLASH_CR_PSIZE_1;
 
     // Set Flash to write mode
     FLASH -> CR |= FLASH_CR_PG;
-
 }
 
-void writeFlash(uint32_t* loc, uint32_t data){
+void writePacket(Packet_t * packet){
+    static uint8_t* loc = 0x080A0000;
+
+
+    int dataIdx;
+    for(dataIdx = 0; dataIdx < (packet -> packetLength - HEADER_SIZE); dataIdx++){
+        writeFlash(loc++, packet -> data[dataIdx]);
+    }
+}
+
+void writeFlash(uint8_t* loc, uint8_t data){
 
     *loc = data;
     while(FLASH -> SR & FLASH_SR_BSY);
@@ -26,9 +41,6 @@ void writeFlash(uint32_t* loc, uint32_t data){
 void completeWrite(){
 
     FLASH -> CR &= ~FLASH_CR_PG;
-
-    char *msg = "Goodbye\n";
-    usartWrite(msg, 8); 
 
 }
 
