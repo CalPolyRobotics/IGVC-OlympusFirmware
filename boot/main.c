@@ -31,21 +31,10 @@ int main(void)
 
     commsUsartInit();
 
-    char* hello = "Hello.\r\n";
-
-    usartWrite(hello, 8);
+    usartWrite("Hello.\r\n", 9);
     //printf("ABC.\r\n");
 
     bootloaderFSM();
-
-
-    int x = 0;
-    while(1){
-        x++;
-        if(x == 256){
-            x = 0;
-        }
-    };
 }
 
 /** System Clock Configuration **/

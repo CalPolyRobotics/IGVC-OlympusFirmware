@@ -4,16 +4,30 @@ import sys
 import time
 import CRC
 
+"""
+
+Message Structure
+Each  space is one byte unless specified otherwise
+
+--------------------------------------------
+|         |        |         |             |
+|  START  |  MSG   |  DATA   |  DATA       |
+|  BYTE   |  TYPE  |  LENGTH |  ANY -SIZE  |
+|         |        |         |             |
+--------------------------------------------
+
+"""
+
 POLYNOMIAL = 0xE7
 TOPBIT     = 0x80
 
+
 START_BYTE = 0xFA
-SIZE_BASIS = 1024
 
-INFO_SIZE  = 2
-DATA_LOC   = 2
-
-INFO_DATA_SIZE = 1
+START_BYTE_LOC  = 0
+MSG_TYPE_LOC    = 1
+DATA_LENGTH_LOC = 2
+DATA_LOC        = 3
 
 DATA_SIZE  = 16
 MSG_TYPE   = {   'DATA'     : 0x00,
@@ -27,16 +41,11 @@ MSG_TYPE   = {   'DATA'     : 0x00,
 
 # Creates and sends packets from the given data bytearray
 def sendData ( ser, data ):
-   for indx in range( 0, len(data), DATA_SIZE ):
-      size = DATA_SIZE
+      packet = genPacket ( 'DATA', HEADER_SIZE + len(data) )
 
-      if( len(data) - indx < DATA_SIZE ) :
-         size = len(data) - indx
-
-      packet = genPacket ( 'DATA', INFO_SIZE + size )
-
-      for dataIndx in range( indx, indx + size):
-         packet[DATA_LOC + (dataIndx - indx)] = data[dataIndx]
+      indx = DATA_LOC + 1
+      for dataIndx in range( indx, indx + len(data)size ):
+         packet[ dataIndx ] = data[ dataIndx - (DATA_LOC + 1) ]
 
       sendPacket ( packet )
 
@@ -63,10 +72,11 @@ Packet Helper Methods
    -- genPacket
    -- sendPacket
 """
-def genPacket ( msgType, msgLength, dataSize ):
-   packet = bytearray( [ 0 for i in range(msgLength) ] )
+def genPacket ( msgType,  dataSize ):
+   packet = bytearray( [ 0 for i in range( dataSize + HEADER_LENGTH) ] )
    packet[0] = START_BYTE
-   packet[1] = (MSG_TYPE[msgType] & 0x07) << 7 | ((msgLength - INFO_SIZE) & 0x15)
+   packet[1] = MSG_TYPE[msgType]
+   packet[2] = dataSize 
 
    return packet
 
@@ -93,8 +103,7 @@ if(len(sys.argv) != 3):
 
 # Setup Serial Connection and Save Data from File
 ser = serial.Serial(sys.argv[2], 115200, timeout=0)
-data = readFile(argv[1])
-
+data = readFile(sys.argv[1])
 
 sendInfoMessage( ser, 'START')
 sendInfoMessage( ser, 'SIZE', int(len(data) / SIZE_BASIS) )

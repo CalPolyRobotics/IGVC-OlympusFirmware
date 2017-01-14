@@ -3,7 +3,7 @@
 #include "flash.h"
 #include "usart.h"
 
-/**
+
 void bootloaderFSM(){
 
     //if(RCC -> CSR & SFTRSTF){
@@ -18,6 +18,10 @@ void bootloaderFSM(){
 
         while(1){
             serviceTxDma();
+
+            while(usartRead(&data, 1)){
+                if( 
+            }
 
             while((usartRead(&data, 1))){
                 wrData |= 0xFFFFFFFF & data;
@@ -44,10 +48,9 @@ void bootloaderFSM(){
                 wrData <<= 8;
             }
         }
+
     //}else{
         // Run Checksum
         // Jump to application
     //}
 }
-
-**/
