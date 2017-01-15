@@ -103,7 +103,3 @@ def genLookupCRC (polynomial, width):
       crcTable[dividend] = hex(remainder & 0xFF) # TODO make xFF generic to any width
 
    return crcTable 
-
-
-print(hex(calcCRC32( [0x50, 0x60, 0x10, 0x34, 0xFF, 0x11] )))
-print(hex(calcCRC8( [0x50, 0x60, 0xFF] ) ))

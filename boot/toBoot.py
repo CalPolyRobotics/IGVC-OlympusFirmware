@@ -16,6 +16,9 @@ Each  space is one byte unless specified otherwise
 |         |        |         |             |
 --------------------------------------------
 
+Note: For start mesage, there is one byte of data that represents the
+      start sector
+
 """
 
 POLYNOMIAL = 0xE7
@@ -44,7 +47,7 @@ def sendData ( ser, data ):
       packet = genPacket ( 'DATA', HEADER_SIZE + len(data) )
 
       indx = DATA_LOC + 1
-      for dataIndx in range( indx, indx + len(data)size ):
+      for dataIndx in range( indx, indx + len(data) ):
          packet[ dataIndx ] = data[ dataIndx - (DATA_LOC + 1) ]
 
       sendPacket ( packet )
@@ -56,9 +59,12 @@ def sendInfoMessage ( ser, msgType, data ):
    sendPacket ( packet )
 
 def sendInfoMessage ( ser, msgType ):
-   packet = genPacket ( msgType, INFO_SIZE )
+   packet = genPacket ( msgType, HEADER_SIZE )
 
    sendPacket ( packet )
+
+def sendStartMessage ( ser, startSector ):
+   packet = genPacket ( msgType, HEADER_SIZE + 1 );
 
 def readFile ( fileName ):
    page = open(sys.argv[1], 'r')
@@ -66,6 +72,7 @@ def readFile ( fileName ):
    data = bytearray(page.read())
    page.close()
    return data
+
 
 """
 Packet Helper Methods
@@ -85,8 +92,8 @@ def sendPacket ( ser, packet ):
    ser.write( packet )
 
 def readPacket ( ser ):
-   resp = bytearray(ser.read(INFO_SIZE))
-   dataSize = resp[DATA_LOC]
+   resp = bytearray(ser.read(HEADER_SIZE))
+   dataSize = resp[DATA_LENGTH_LOC]
    return bytearray(ser.read(dataSize))
 
 def addCRC ( packet ):
@@ -105,23 +112,11 @@ if(len(sys.argv) != 3):
 ser = serial.Serial(sys.argv[2], 115200, timeout=0)
 data = readFile(sys.argv[1])
 
-sendInfoMessage( ser, 'START')
-sendInfoMessage( ser, 'SIZE', int(len(data) / SIZE_BASIS) )
-sendInfoMessage( ser, 'SECTOR', START_SECTOR )
+sendStartMessage( ser, 10)
+#sendInfoMessage( ser, 'SIZE', int(len(data) / SIZE_BASIS) )
+#sendInfoMessage( ser, 'SECTOR', START_SECTOR )
 sendData(ser, data)
 
 #sendInfoMessage( ser, 'CHECKSUM', checksum )
 sendInfoMessage( ser, 'STOP')
 # END MAIN
-
-
-
-#try:
-#except IOError:
-#   print "Usage: toBoot filename portName"
-
-#data = bytearray(serial.read(data_len))
-# Clear the buffer
-
-# ser.flush()
-#ser.write(packet)

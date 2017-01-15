@@ -10,6 +10,8 @@
 #define END_MSG      0x06
 #define ERROR_MSG    0x07
 
+#define MAX_PACKET_LEN
+
 typedef struct {
     uint8_t startByte;
     uint8_t msgType;
@@ -19,22 +21,22 @@ typedef struct {
 
 typedef struct {
     PacketHeader_t header;
-    uint8_t data[27];
+    uint8_t data[2048];
     uint8_t crc;
 } Packet_t;
 
 typedef enum{
-    START_1 = 0, HEADER, DATA, CRC
+    START = 0, HEADER, DATA, CRC
 }commsState_t
 
 void runCommsFSM(uint8_t data){
-    static commsState_t state = START_1;
-    static uint8_t packetBuf[MAX_PACKET_LEN];
+    static commsState_t state = START;
+    static uint8_t packetBuf[sizeof(Packet_t)];
     static Packet_t* packet = (Packet_t*)packetBuffer;
     static uint8_t packetIdx;
 
     switch(state){
-        case START_1:
+        case START:
             packetIdx = 0;
             if (data == START_BYTE){
                 state = HEADER;
@@ -81,7 +83,7 @@ void runCommsFSM(uint8_t data){
     }
 }
 
-void runPacket(packet * Packet_t){
+void runPacket(packet* Packet_t){
     switch(packet -> header.msg_type){
         case DATA_MSG:
             writeData(packet);
