@@ -116,7 +116,6 @@ void TIM1_UP_TIM10_IRQHandler() {
         speedCommsValue[0] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
     }
 
-    // uint16_t speed = (uint8_t)(getMaximumMMPerSecond() / TIM10->CCR1);
     if (TIM10->SR & TIM_SR_CC1IF)
     {
         if(overflow){
@@ -131,7 +130,7 @@ void TIM1_UP_TIM10_IRQHandler() {
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(leftSpeedValues);
         speedCommsValue[0] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        printf("L %u \r\n", filteredSpeed);
+        //printf("L %u \r\n", filteredSpeed);
 
         TIM10->EGR |= TIM_EGR_UG;
     }
@@ -139,9 +138,6 @@ void TIM1_UP_TIM10_IRQHandler() {
     TIM10->SR = 0;
 
 }
-
-//TODO: Make sure the speed measurement AVOIDS floating point, adjust calculations to also avoid floating point
-//     ADDITIONALLY: 
 
 void TIM8_BRK_TIM12_IRQHandler() {
     static  uint8_t overflow = 0;
@@ -160,7 +156,6 @@ void TIM8_BRK_TIM12_IRQHandler() {
         speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
     }
 
-    // uint16_t speed = (uint8_t)(getMaximumMMPerSecond() / TIM12->CCR1);
     if (TIM12->SR & TIM_SR_CC1IF)
     {
         if(overflow){
@@ -175,7 +170,7 @@ void TIM8_BRK_TIM12_IRQHandler() {
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
         speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        printf("R %u \r\n", filteredSpeed);
+        //printf("R %u \r\n", filteredSpeed);
 
         TIM12->EGR |= TIM_EGR_UG;
     }
