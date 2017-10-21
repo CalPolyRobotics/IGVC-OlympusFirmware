@@ -115,10 +115,6 @@ Timer_Return pollFnrStateCallback(void* dummy)
     return CONTINUE_TIMER;
 }
 
-void commsGetFNRCallback(){
-    FNRState = getFNR();
-}
-
 void FNRCommsHandler(Packet_t* packet)
 {
     if (packet->data[0] >= FNR_NEUTRAL && 

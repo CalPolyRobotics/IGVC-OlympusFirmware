@@ -6,10 +6,10 @@
 
 #define DIAMETER 1.4 // Meters
 #define MAX_COUNT 65535
-#define TIM10_PRESCALER 511 // Timer is max 120 MHz
-#define TIM12_PRESCALER 511 // Timer is max 60 MHz
+#define TIM2_PRESCALER 0 // 511 // Timer is max 120 MHz
+#define TIM5_PRESCALER 0 // 511  // Timer is max 60 MHz
 //#define METER_TICKS_PER_SECOND 54405000 // Measured Value Times 1000 to maintain precision
-#define METER_TICKS_PER_SECOND 27202500
+#define METER_TICKS_PER_SECOND 13927680000 //27202500
 //#define METER_TICKS_PER_SECOND 27203 // MTPS / 1000 to calculate micro meters / s
 
 #define SPEED_ARRAY_SIZE 8
@@ -17,8 +17,8 @@
 // Meter Ticks / Second can be calculated as
 // DIAMETER / (ENCODERS_PER_ROTATION * (PRESCALE/(2 *CLK_FREQ)))
 
-static uint16_t leftSpeedValues[SPEED_ARRAY_SIZE] = {0};
-static uint16_t rightSpeedValues[SPEED_ARRAY_SIZE] = {0};
+static uint32_t leftSpeedValues[SPEED_ARRAY_SIZE] = {0};
+static uint32_t rightSpeedValues[SPEED_ARRAY_SIZE] = {0};
 
 static uint8_t leftSpeedIdx = 0;
 static uint8_t rightSpeedIdx = 0;
@@ -32,61 +32,66 @@ void initEncoderInputCapture() {
     gpio.Mode = GPIO_MODE_AF_OD;
     gpio.Pull = GPIO_PULLUP;
     gpio.Speed = GPIO_SPEED_LOW;
-    gpio.Alternate = GPIO_AF3_TIM10;
+    gpio.Alternate = GPIO_AF1_TIM2;
 
     HAL_GPIO_Init(GPIOB, &gpio);  
-    
-    //Setup TIM10_CH1
-    TIM10->CCMR1 = TIM_CCMR1_CC1S_0 | //set capture input to TI1
-                    (TIM_CCMR1_IC1F_0 | TIM_CCMR1_IC1F_1 |
-                     TIM_CCMR1_IC1F_2); //set filter
+
+    //Setup TIM2_CH1
+    TIM2->CCMR1 = TIM_CCMR1_CC1S_0 | //set capture input to TI1
+                  (TIM_CCMR1_IC1F_0 | TIM_CCMR1_IC1F_1 |
+                  TIM_CCMR1_IC1F_2); //set filter
     
 
-    TIM10->CCER = (TIM_CCER_CC1NP | TIM_CCER_CC1P) | //determine edge sensitivity
-                    TIM_CCER_CC1E;  //enable capture on TI1
+    TIM2->CCER =  TIM_CCER_CC1NP | TIM_CCER_CC1P | //falling edge sensitivity
+                   TIM_CCER_CC1E;  //enable capture on TI1
     
-    TIM10->DIER = TIM_DIER_CC1IE | //enable interrupts on timer 
+    TIM2->DIER = TIM_DIER_CC1IE | //enable interrupts on timer 
                   TIM_DIER_UIE;
     
 
-    TIM10->PSC = TIM10_PRESCALER;
-    TIM10->CR1 = TIM_CR1_CEN; //enable the timer
+    TIM2->PSC = TIM2_PRESCALER;
+
+    TIM2->ARR = 16777215;
+
+    TIM2->CR1 = TIM_CR1_CEN; //enable the timer
 
 
     //ENABLE INTERRUPTS
-    NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 32);
-    NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+    NVIC_SetPriority(TIM2_IRQn, 32);
+    NVIC_EnableIRQ(TIM2_IRQn);
 
     //INITIALIZE HALL EFFECT 2 
     gpio.Pin = GPIO_PIN_14;
     gpio.Mode = GPIO_MODE_AF_OD;
     gpio.Pull = GPIO_PULLUP;
     gpio.Speed = GPIO_SPEED_LOW;
-    gpio.Alternate = GPIO_AF9_TIM12;
+    gpio.Alternate = GPIO_AF2_TIM5;
 
     HAL_GPIO_Init(GPIOB, &gpio);  
     
-    //Setup TIM12_CH1
-    TIM12->CCMR1 = TIM_CCMR1_CC1S_0 | //set capture input to TI1
+    //Setup TIM5_CH1
+    TIM5->CCMR1 = TIM_CCMR1_CC1S_0 | //set capture input to TI1
                     (TIM_CCMR1_IC1F_0 | TIM_CCMR1_IC1F_1 |
                      TIM_CCMR1_IC1F_2); //set filter
     
 
-    TIM12->CCER = (TIM_CCER_CC1NP) | //determine edge sensitivity
-                    TIM_CCER_CC1E;  //enable capture on TI1
+    TIM5->CCER = TIM_CCER_CC1NP | //falling edge sensitivity
+                  TIM_CCER_CC1E;  //enable capture on TI1
     
-    TIM12->DIER = TIM_DIER_CC1IE | TIM_DIER_UIE; //enable interrupts on timer 
+    TIM5->DIER = TIM_DIER_CC1IE | TIM_DIER_UIE; //enable interrupts on timer 
 
-    TIM12->PSC = TIM12_PRESCALER; 
+    TIM5->PSC = TIM5_PRESCALER; 
 
-    TIM12->CR1 = TIM_CR1_CEN; //enable the timer
+    TIM5->ARR = 16777215;
+
+    TIM5->CR1 = TIM_CR1_CEN; //enable the timer
 
     //ENABLE INTERRUPTS
-    NVIC_SetPriority(TIM8_BRK_TIM12_IRQn, 31);
-    NVIC_EnableIRQ(TIM8_BRK_TIM12_IRQn);
+    NVIC_SetPriority(TIM5_IRQn, 31);
+    NVIC_EnableIRQ(TIM5_IRQn);
 }
 
-static uint16_t calcFilteredSpeedValue(uint16_t* speedArray)
+static uint16_t calcFilteredSpeedValue(uint32_t* speedArray)
 {
     uint8_t i;
     uint32_t accum = 0;
@@ -99,29 +104,29 @@ static uint16_t calcFilteredSpeedValue(uint16_t* speedArray)
 }
 
 
-void TIM1_UP_TIM10_IRQHandler() {
+void TIM2_IRQHandler(){
     static  uint8_t overflow = 0;
 
-    if (TIM10-> SR & TIM_SR_UIF) {
+    if (TIM2-> SR & TIM_SR_UIF) {
         overflow = 1;
 
-        leftSpeedValues[leftSpeedIdx++] =  0xFFFF;
+        leftSpeedValues[leftSpeedIdx++] =  0xFFFFFF;
         if (leftSpeedIdx >= SPEED_ARRAY_SIZE )
         {
             leftSpeedIdx = 0;
         }
-        TIM10->EGR |= TIM_EGR_UG;
+        TIM2->EGR |= TIM_EGR_UG;
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(leftSpeedValues);
         speedCommsValue[0] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
     }
 
-    if (TIM10->SR & TIM_SR_CC1IF)
+    if (TIM2->SR & TIM_SR_CC1IF)
     {
         if(overflow){
             overflow = 0;
         }else{
-            leftSpeedValues[leftSpeedIdx++] = TIM10->CCR1;
+            leftSpeedValues[leftSpeedIdx++] = TIM2->CCR1;
             if (leftSpeedIdx >= SPEED_ARRAY_SIZE )
             {
                 leftSpeedIdx = 0;
@@ -130,38 +135,37 @@ void TIM1_UP_TIM10_IRQHandler() {
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(leftSpeedValues);
         speedCommsValue[0] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        //printf("L %u \r\n", filteredSpeed);
+        printf("L %u \r\n", filteredSpeed);
 
-        TIM10->EGR |= TIM_EGR_UG;
+        TIM2->EGR |= TIM_EGR_UG;
     }
 
-    TIM10->SR = 0;
-
+    TIM2->SR = 0;
 }
 
-void TIM8_BRK_TIM12_IRQHandler() {
+void TIM5_IRQHandler(){
     static  uint8_t overflow = 0;
 
-    if (TIM12-> SR & TIM_SR_UIF) {
+    if (TIM5-> SR & TIM_SR_UIF) {
         overflow = 1;
 
-        rightSpeedValues[rightSpeedIdx++] =  0xFFFF;
+        rightSpeedValues[rightSpeedIdx++] =  0xFFFFFF;
         if (rightSpeedIdx >= SPEED_ARRAY_SIZE )
         {
             rightSpeedIdx = 0;
         }
-        TIM12->EGR |= TIM_EGR_UG;
+        TIM5->EGR |= TIM_EGR_UG;
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
         speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
     }
 
-    if (TIM12->SR & TIM_SR_CC1IF)
+    if (TIM5->SR & TIM_SR_CC1IF)
     {
         if(overflow){
             overflow = 0;
         }else{
-            rightSpeedValues[rightSpeedIdx++] = TIM12->CCR1;
+            rightSpeedValues[rightSpeedIdx++] = TIM5->CCR1;
             if (rightSpeedIdx >= SPEED_ARRAY_SIZE )
             {
                 rightSpeedIdx = 0;
@@ -170,11 +174,11 @@ void TIM8_BRK_TIM12_IRQHandler() {
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
         speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        //printf("R %u \r\n", filteredSpeed);
+        printf("R %u \r\n", filteredSpeed);
 
-        TIM12->EGR |= TIM_EGR_UG;
+        TIM5->EGR |= TIM_EGR_UG;
     }
 
-    TIM12->SR = 0;
-}
+    TIM5->SR = 0;
 
+}
