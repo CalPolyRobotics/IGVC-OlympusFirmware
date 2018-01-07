@@ -32,7 +32,8 @@ typedef enum {
     WAITING_FOR_START_1 = 0,
     WAITING_FOR_START_2,
     WAITING_FOR_HEADER,
-    WAITING_FOR_DATA
+    WAITING_FOR_DATA,
+    WAITING_FOR_CRC
 } CommsState_t;
 
 
@@ -65,11 +66,11 @@ void echoPacketCallback(Packet_t* packet);
 
 
 static packetResponse_t response[] = {
-    {256,  echoBuf, 0,  echoBuf, echoPacketCallback},  // Status
-    {0,  NULL, 0,  NULL, toggleLED2},                 // Get 1 Sonar
+    {250,  echoBuf, 0,  echoBuf, echoPacketCallback}, // Status
+    {0,  NULL, 0,  NULL, toggleLED},                  // Get 1 Sonar
     {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
     {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
-    {0,  NULL, 1,  (uint8_t*)&FNRState, NULL},   // Get FNR
+    {0,  NULL, 1,  (uint8_t*)&FNRState, NULL},        // Get FNR
     {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
     {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
     {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], toggleLED}, // Get Speed
@@ -101,13 +102,6 @@ static void runPacket(Packet_t* packet)
     uint32_t bytesToCopy, idx;
     uint8_t packetType = packet->header.msgType >> 1;
     uint8_t dataLen = packet->header.packetLen - sizeof(PacketHeader_t);
-/*
-    // Debug Code. If you're reading this remove these three lines
-    if (packetType > (sizeof(response)/sizeof(response[0])))
-    {
-        packetType = 0;
-    }
-*/
 
     if (response[packetType].inputDataMaxLen > 0)
     {
@@ -140,7 +134,6 @@ static void sendResponse(Packet_t* packet)
 
     outPacket->header.startByte[0] = START_BYTE_1;
     outPacket->header.startByte[1] = START_BYTE_2;
-    outPacket->header.CRC8 = 0xCC;
     outPacket->header.msgType = packet->header.msgType | 1;
     outPacket->header.seqNumber = packet->header.seqNumber;
     outPacket->header.packetLen = response[packetType].responseDataLen + sizeof(PacketHeader_t);
@@ -150,7 +143,9 @@ static void sendResponse(Packet_t* packet)
         outPacket->data[idx] = response[packetType].responseData[idx];
     }
 
-    //outPacket->header.CRC8 = crc8(outPacket, outPacket->header.packetLen);
+    // TODO - implement CRC
+    outPacket->data[idx] = 0xCC;
+    //outPacket->data[idx] = crc8(outPacket, outPacket->header.packetLen);
 
     usbWrite(packetBuffer, outPacket->header.packetLen);
 }
@@ -191,16 +186,14 @@ void runCommsFSM(char data)
 
         case WAITING_FOR_HEADER:
         {
-            packetBuffer[packetIdx] = data;
-            packetIdx++;
+            packetBuffer[packetIdx++] = data;
+
             if (packetIdx == sizeof(PacketHeader_t))
             {
-                if (packetIdx == packet->header.packetLen)
+                // There must be 1 byte of space available for CRC
+                if (packetIdx == packet->header.packetLen - 1)
                 {
-                    checkPacket(packet);
-                    runPacket(packet);
-                    sendResponse(packet);
-                    state = WAITING_FOR_START_1;
+                    state = WAITING_FOR_CRC;
                 } else {
                     state = WAITING_FOR_DATA;
                 }
@@ -210,17 +203,26 @@ void runCommsFSM(char data)
 
         case WAITING_FOR_DATA:
         {
-            packetBuffer[packetIdx] = data;
-            packetIdx++;
-            if (packetIdx == packet->header.packetLen)
+            packetBuffer[packetIdx++] = data;
+
+            // There must be 1 byte of space available for CRC
+            if (packetIdx == packet->header.packetLen - 1)
             {
-                checkPacket(packet);
-                runPacket(packet);
-                sendResponse(packet);
-                state = WAITING_FOR_START_1;
-            } else if (packetIdx >= MAX_PACKET_SIZE) {
+                state = WAITING_FOR_CRC;
+            } else if (packetIdx >= MAX_PACKET_SIZE - 1) {
                 state = WAITING_FOR_START_1;
             }
+        }
+        break;
+
+        case WAITING_FOR_CRC:
+        {
+            packetBuffer[packetIdx] = data;
+
+            checkPacket(packet);
+            runPacket(packet);
+            sendResponse(packet);
+            state = WAITING_FOR_START_1;
         }
         break;
 
