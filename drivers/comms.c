@@ -84,7 +84,8 @@ static packetResponse_t response[] = {
 
 void echoPacketCallback(Packet_t* packet)
 {
-    response[0].responseDataLen = packet->header.packetLen - sizeof(PacketHeader_t);
+    // CRC is of length 1
+    response[0].responseDataLen = packet->header.packetLen - sizeof(PacketHeader_t) - 1;
 }
 
 static bool checkPacket(Packet_t* packet)
@@ -136,7 +137,9 @@ static void sendResponse(Packet_t* packet)
     outPacket->header.startByte[1] = START_BYTE_2;
     outPacket->header.msgType = packet->header.msgType | 1;
     outPacket->header.seqNumber = packet->header.seqNumber;
-    outPacket->header.packetLen = response[packetType].responseDataLen + sizeof(PacketHeader_t);
+
+    // CRC is of length 1
+    outPacket->header.packetLen = response[packetType].responseDataLen + sizeof(PacketHeader_t) + 1;
 
     for (idx = 0; idx < response[packetType].responseDataLen; idx++)
     {
@@ -188,7 +191,7 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx++] = data;
 
-            if (packetIdx == sizeof(PacketHeader_t))
+            if (packetIdx == sizeof(PacketHeader_t) - 1)
             {
                 // There must be 1 byte of space available for CRC
                 if (packetIdx == packet->header.packetLen - 1)
