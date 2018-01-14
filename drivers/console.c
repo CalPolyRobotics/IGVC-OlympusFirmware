@@ -365,7 +365,7 @@ static void console_setLED(uint32_t argc, char** argv)
     uint8_t ledNum = atoi(argv[0]);
     uint8_t state = atoi(argv[1]);
 
-    setLED(ledNum, state);
+    writeLED(ledNum, state);
 
     if (state)
     {
@@ -406,19 +406,13 @@ static const struct adc_cmd adc_dict[] = {
 
 static void console_measPower(uint32_t argc, char** argv)
 {
-    int found = 0;
     const struct adc_cmd *val;
 
-    for (val = adc_dict; val->cmd && !found; val++) {
-        //printf("Val at %p", val);
+    for (val = adc_dict; val->cmd; val++) {
         if (!strncmp(val->cmd, argv[0], strlen(val->cmd))) {
-            found = 1;
+            printf("%s: %d", val->cmd, adc_conv(val->per));
+            break;
         }
-    }
-
-    if (found) {
-        val--;
-        printf("%s: %d", val->cmd, adc_conv(val->per));
     }
 }
 
@@ -485,13 +479,12 @@ static void console_emulateUSB(uint32_t argc, char** argv)
     uint32_t numPacketArgs = argc - 1;
 
     char buf[sizeof(PacketHeader_t)];
-    PacketHeader_t* header = (PacketHeader_t*)buf;;
+    PacketHeader_t* header = (PacketHeader_t*)buf;
     header->startByte[0] = 0xF0;
     header->startByte[1] = 0x5A;
-    header->CRC8 = 0;
     header->msgType = atoi(argv[0]);
     header->seqNumber = 0;
-    header->packetLen = sizeof(PacketHeader_t) + numPacketArgs;
+    header->packetLen = sizeof(PacketHeader_t) + 1 + numPacketArgs;
 
     for (i = 0; i < sizeof(PacketHeader_t); i++)
     {

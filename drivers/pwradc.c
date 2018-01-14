@@ -19,23 +19,9 @@
 static uint32_t muls[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
 static uint32_t divs[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000};
 
-const char* periph_name[] =  
-{
-    "        Current", 
-    "5V      Voltage",
-    "3.3V    Voltage", 
-    "Battery Voltage",
-    "        Current",
-    "12V     Voltage",
-    "        Current",
-    "        Current"
-};
+static enum adc_periph commsOrder[] = {batt_v, batt_i, twlv_v, twlv_i, fv_v, fv_i, thr_v, thr_i};
 
-const char* periph_unit[] = {"mA", "mV", "mV", "mV", "mA", "mV", "mA", "mA"};
-
-/* Order to traverse periphs for viewing pleasure */
-const uint8_t periph_order[] = {3, 0, 5, 4, 1, 6, 2, 7};
-
+uint8_t pwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint8_t commsPwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 static volatile uint32_t currADCPeriph;
 
@@ -45,7 +31,8 @@ static const uint8_t adc_cfg =
 
 Timer_Return adc_poll_data();
 
-void adc_init() {
+void adc_init()
+{
     /* Set ADC to internal reference with output */
     i2cAddTxTransaction(ZEUS_ADC_I2C_ADDR,
                         (uint8_t *)&adc_cfg,
@@ -56,7 +43,18 @@ void adc_init() {
     addCallbackTimer(30, adc_poll_data, NULL);
 }
 
-void commsPwradcCallback(Packet_t* packet){
+void commsPwradcCallback(Packet_t* packet)
+{
+    int i;
+    uint16_t convVal;
+    for(i = 0; i < ADC_PERIPH_LAST_ENUM; i++)
+    {
+        convVal = adc_conv(commsOrder[i]);
+
+        //Convert uint16 to uint8s
+        commsPwradcValues[i*2] = convVal >> 8;
+        commsPwradcValues[(i*2)+1] = convVal & 0xFF;
+    }
    
 }
 
@@ -65,15 +63,11 @@ void adc_readDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus st
     if (status == I2C_ACK)
     {
         // Convert uint16 to two uint8s
-        commsPwradcValues[currADCPeriph * 2] = data[1] & 0xF;
-        commsPwradcValues[(currADCPeriph * 2) + 1] = data[0];
+        pwradcValues[currADCPeriph * 2] = data[0] & 0xF;
+        pwradcValues[(currADCPeriph * 2) + 1] = data[1];
 
         // Go to the next ADC Periph
-        currADCPeriph++;
-        if (currADCPeriph == ADC_PERIPH_LAST_ENUM)
-        {
-            currADCPeriph = 0;
-        }
+        currADCPeriph = (currADCPeriph + 1) % ADC_PERIPH_LAST_ENUM;
     } else {
         printf("ADC Rx NACK\r\n");
     }
@@ -109,8 +103,8 @@ Timer_Return adc_poll_data() {
 
 uint16_t adc_conv(enum adc_periph periph){
 
-    uint16_t adcVal = commsPwradcValues[periph * 2] << 8 |
-                      commsPwradcValues[periph * 2 + 1];
+    uint16_t adcVal = pwradcValues[periph * 2] << 8 |
+                      pwradcValues[periph * 2 + 1];
 
     return (adcVal * muls[periph]) / divs[periph];
 }

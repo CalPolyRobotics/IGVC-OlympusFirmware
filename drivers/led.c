@@ -31,7 +31,7 @@ LED_t LEDtable[] = {{},
                     {GPIO_DEBUG_12}
                    };
 
-void setLED(uint8_t ledNum, LEDState state)
+void writeLED(uint8_t ledNum, LEDState state)
 {
     if (((state == LED_ON) || (state == LED_OFF)) && (ledNum > 0) && (ledNum <= NUM_DEBUG_PINS))
     {
@@ -41,15 +41,16 @@ void setLED(uint8_t ledNum, LEDState state)
 
 void commsSetLightsCallback(Packet_t* packet){
     // Currently the upper four bits of byte 1 are unhandled
+    // TODO
     uint8_t byte0 = packet->data[1];
     uint8_t byte1 = packet->data[0];
 
     int i;
     for(i = 0; i < 8; i++){
-        setLED(i + 1, (byte0 >> i) & 1);
+        writeLED(i + 1, (byte0 >> i) & 1);
     }
 
     for(i = 0; i < 4; i++){
-        setLED(i + 9, (byte1 >> i) & 1);
+        writeLED(i + 9, (byte1 >> i) & 1);
     }
 }

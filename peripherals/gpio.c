@@ -108,10 +108,11 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Pin = GPIO_PIN_2;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-    // THIS ONE DOESNT SEEM TO WORK
+    // THIS ONE DOESNT SEEM TO WORK TODO
     // Port H LED GPIOs
     GPIO_InitStruct.Pin = GPIO_PIN_1;
     HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
 
     //---------------------------------------------------------------------------------
 

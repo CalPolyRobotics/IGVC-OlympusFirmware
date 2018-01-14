@@ -66,20 +66,20 @@ void echoPacketCallback(Packet_t* packet);
 
 
 static packetResponse_t response[] = {
-    {250,  echoBuf, 0,  echoBuf, echoPacketCallback}, // Status
-    {0,  NULL, 0,  NULL, toggleLED},                  // Get 1 Sonar
-    {0,  NULL, 0,  NULL, toggleLED},                  // Get all Sonars
-    {0,  NULL, 0,  NULL, FNRCommsHandler},            // Set FNR
-    {0,  NULL, 1,  (uint8_t*)&FNRState, NULL},        // Get FNR
-    {0,  NULL, 0,  NULL, speedDACHandler},            // Set Throttle  
-    {0,  NULL, 0,  NULL, toggleSpeedDAC},             // Set Speed
-    {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], toggleLED}, // Get Speed
-    {0,  NULL, 0,  NULL, setSteeringTargetFromComms}, // Set Steering
+    {250,  echoBuf, 0,  echoBuf, echoPacketCallback},          // Echo
+    {0,  NULL, 0,  NULL, NULL},                                // Get 1 Sonar // TODO
+    {0,  NULL, 0,  NULL, NULL},                                // Get all Sonars // TODO
+    {1,  NULL, 0,  NULL, FNRCommsHandler},                     // Set FNR
+    {0,  NULL, 1,  (uint8_t*)&FNRState, NULL},                 // Get FNR
+    {2,  NULL, 0,  NULL, speedDACHandler},                     // Set Throttle
+    {2,  NULL, 0,  NULL, toggleSpeedDAC},                      // Set Speed
+    {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], NULL},       // Get Speed
+    {2,  NULL, 0,  NULL, setSteeringTargetFromComms},          // Set Steering
     {0,  NULL, 2,  (uint8_t*)&commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
-    {0,  NULL, 0,  NULL, commsSetLightsCallback},     // Set Lights
-    {0,  NULL, 0,  NULL, toggleLED},                  // Get Battery
+    {2,  NULL, 0,  NULL, commsSetLightsCallback},              // Set Lights
+    {0,  NULL, 0,  NULL, NULL},                                // Get Battery // TODO - Deprecated
     {0,  NULL, 16, (uint8_t*)&commsPwradcValues[0], commsPwradcCallback}, //Get Power
-    {0,  NULL, 0,  NULL, killBoard}                  //Send Stop
+    {0,  NULL, 0,  NULL, killBoard}                            //Send Stop
 };
 
 void echoPacketCallback(Packet_t* packet)
@@ -90,12 +90,7 @@ void echoPacketCallback(Packet_t* packet)
 
 static bool checkPacket(Packet_t* packet)
 {
-    if (crc8(packet, packet->header.packetLen) == 0){
-        return true;
-    }
-    else{
-        return true;
-    }
+    return crc8(packet, packet->header.packetLen) == 0;
 }
 
 static void runPacket(Packet_t* packet)
@@ -146,9 +141,7 @@ static void sendResponse(Packet_t* packet)
         outPacket->data[idx] = response[packetType].responseData[idx];
     }
 
-    // TODO - implement CRC
-    outPacket->data[idx] = 0xCC;
-    //outPacket->data[idx] = crc8(outPacket, outPacket->header.packetLen);
+    outPacket->data[idx] = crc8(outPacket, outPacket->header.packetLen - 1);
 
     usbWrite(packetBuffer, outPacket->header.packetLen);
 }
@@ -222,7 +215,12 @@ void runCommsFSM(char data)
         {
             packetBuffer[packetIdx] = data;
 
-            checkPacket(packet);
+            if(!checkPacket(packet))
+            {
+                state = WAITING_FOR_START_1;
+                break;
+            }
+
             runPacket(packet);
             sendResponse(packet);
             state = WAITING_FOR_START_1;

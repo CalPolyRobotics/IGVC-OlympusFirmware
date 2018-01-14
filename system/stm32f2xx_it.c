@@ -68,7 +68,7 @@ void SysTick_Handler(void)
 
 void HardFault_Handler(void)
 {
-    setLED(10, 1);
+    writeLED(10, 1);
     while(1);
 }
 
