@@ -93,7 +93,8 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
 
     // Port A LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7;
+    // TODO GPIO_PIN_5 is being used for encoder capture GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_7;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     // Port B LED GPIOs
