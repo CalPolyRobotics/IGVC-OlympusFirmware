@@ -15,6 +15,7 @@
 #include "kill.h"
 #include "steering.h"
 #include "crc8.h"
+#include "adc.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
@@ -27,6 +28,7 @@ extern volatile uint16_t speedCommsValue[2];
 extern volatile uint8_t  commsPwradcValues[16];
 extern volatile uint8_t  commsCurrentSteeringValue[2];
 extern volatile uint8_t  FNRState;
+extern volatile uint16_t commsPedalAdc;
 
 typedef enum {
     WAITING_FOR_START_1 = 0,
@@ -77,7 +79,7 @@ static packetResponse_t response[] = {
     {2,  NULL, 0,  NULL, setSteeringTargetFromComms},          // Set Steering
     {0,  NULL, 2,  (uint8_t*)&commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
     {2,  NULL, 0,  NULL, commsSetLightsCallback},              // Set Lights
-    {0,  NULL, 0,  NULL, NULL},                                // Get Battery // TODO - Deprecated
+    {0,  NULL, 2,  (uint8_t*)&commsPedalAdc, commsPedalAdcCallback}, // Get Pedal
     {0,  NULL, 16, (uint8_t*)&commsPwradcValues[0], commsPwradcCallback}, //Get Power
     {0,  NULL, 0,  NULL, killBoard}                            //Send Stop
 };

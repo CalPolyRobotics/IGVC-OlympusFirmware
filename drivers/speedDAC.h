@@ -16,4 +16,6 @@ void disableSpeedDAC();
 void resetSpeedDAC();
 uint16_t getSpeedDAC();
 
+void commsPedalAdcCallback();
+
 #endif
