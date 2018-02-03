@@ -28,7 +28,7 @@ extern volatile uint16_t speedCommsValue[2];
 extern volatile uint8_t  commsPwradcValues[16];
 extern volatile uint8_t  commsCurrentSteeringValue[2];
 extern volatile uint8_t  FNRState;
-extern volatile uint16_t commsPedalAdc;
+extern volatile uint8_t  commsPedalAdc[2];
 
 typedef enum {
     WAITING_FOR_START_1 = 0,
@@ -79,7 +79,7 @@ static packetResponse_t response[] = {
     {2,  NULL, 0,  NULL, setSteeringTargetFromComms},          // Set Steering
     {0,  NULL, 2,  (uint8_t*)&commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
     {2,  NULL, 0,  NULL, commsSetLightsCallback},              // Set Lights
-    {0,  NULL, 2,  (uint8_t*)&commsPedalAdc, commsPedalAdcCallback}, // Get Pedal
+    {0,  NULL, 2,  (uint8_t*)&commsPedalAdc[0], commsPedalAdcCallback}, // Get Pedal
     {0,  NULL, 16, (uint8_t*)&commsPwradcValues[0], commsPwradcCallback}, //Get Power
     {0,  NULL, 0,  NULL, killBoard}                            //Send Stop
 };

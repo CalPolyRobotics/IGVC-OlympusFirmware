@@ -115,7 +115,6 @@ void TIM2_IRQHandler(){
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(leftSpeedValues);
         speedCommsValue[0] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        printf("L %u \r\n", filteredSpeed);
     }
 
     if (TIM2->SR & TIM_SR_CC1IF)
@@ -131,7 +130,6 @@ void TIM2_IRQHandler(){
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(leftSpeedValues);
         speedCommsValue[0] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        printf("L %u \r\n", filteredSpeed);
     }
 
     TIM2->SR = 0;
@@ -150,7 +148,6 @@ void TIM5_IRQHandler(){
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
         speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        printf("R %u \r\n", filteredSpeed);
     }
 
     if (TIM5->SR & TIM_SR_CC1IF)
@@ -166,7 +163,6 @@ void TIM5_IRQHandler(){
 
         uint16_t filteredSpeed = calcFilteredSpeedValue(rightSpeedValues);
         speedCommsValue[1] = (filteredSpeed >> 8) | ((filteredSpeed & 0xFF) << 8);
-        printf("R %u \r\n", filteredSpeed);
     }
 
     TIM5->SR = 0;

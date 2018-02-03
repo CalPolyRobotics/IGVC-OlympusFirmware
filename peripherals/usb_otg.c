@@ -61,7 +61,7 @@ void usbWrite(uint8_t* data, uint32_t size)
     if ((usbBufferOverrun == 0) &&
         (usbIsActive == 0 || nextUsbBuffer != activeUsbBuffer))
     {
-        printf("Writing %lu bytes\r\n", size);
+        //printf("Writing %lu bytes\r\n", size);
 
         while (size > 0)
         {

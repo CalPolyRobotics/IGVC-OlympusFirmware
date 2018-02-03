@@ -8,7 +8,7 @@
 #include "timerCallback.h"
 #include "adc.h"
 
-volatile uint16_t commsPedalAdc;
+volatile uint8_t commsPedalAdc[2] = {0};
 
 static uint16_t targetSpeed = 0;
 static uint16_t currentSpeed = 0;
@@ -118,5 +118,7 @@ void speedDACHandler(Packet_t* packet)
 }
 
 void commsPedalAdcCallback(){
-    commsPedalAdc = getPedalValue();
+    uint16_t pedalVal = getPedalValue();
+    commsPedalAdc[0] = (pedalVal >> 8) & 0xFF;
+    commsPedalAdc[1] = pedalVal & 0xFF;
 }
