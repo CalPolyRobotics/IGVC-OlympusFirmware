@@ -53,6 +53,38 @@ void SystemClock_Config(void);
 
 /* Private functions ---------------------------------------------------------*/
 
+
+void i2c_init(){
+    I2C_HandleTypeDef hi2c;
+
+    /**
+    (##) Enable the I2Cx interface clock
+    (##) I2C pins configuration
+        (+++) Enable the clock for the I2C GPIOs
+        (+++) Configure I2C pins as alternate function open-drain
+    (##) NVIC configuration if you need to use interrupt process
+        (+++) Configure the I2Cx interrupt priority
+        (+++) Enable the NVIC I2C IRQ Channel
+    (##) DMA Configuration if you need to use DMA process
+        (+++) Declare a DMA_HandleTypeDef handle structure for the transmit or receive channel
+        (+++) Enable the DMAx interface clock using
+        (+++) Configure the DMA handle parameters
+        (+++) Configure the DMA Tx or Rx channel
+        (+++) Associate the initialized DMA handle to the hi2c DMA Tx or Rx handle
+        (+++) Configure the priority and enable the NVIC for the transfer complete interrupt on
+              the DMA Tx or Rx channel
+    (#) Configure the Communication Clock Timing, Own Address1, Master Addressing mode, Dual Addressing mode,
+        Own Address2, Own Address2 Mask, General call and Nostretch mode in the hi2c Init structure.
+
+    (#) Initialize the I2C registers by calling the HAL_I2C_Init(), configures also the low level Hardware
+        (GPIO, CLOCK, NVIC...etc) by calling the customized HAL_I2C_MspInit(&hi2c) API.
+
+    (#) To check if target device is ready for communication, use the function HAL_I2C_IsDeviceReady()
+
+    **/
+
+}
+
 /**
   * @brief  Main program
   * @param  None
@@ -61,7 +93,7 @@ void SystemClock_Config(void);
 int main(void)
 {
 
-  /* STM32F0xx HAL library initialization:
+    /* STM32F0xx HAL library initialization:
        - Configure the Flash prefetch
        - Systick timer is configured by default as source of time base, but user 
              can eventually implement his proper time base source (a general purpose 
@@ -70,91 +102,106 @@ int main(void)
              handled in milliseconds basis.
        - Low Level Initialization
      */
-  HAL_Init();
+    HAL_Init();
 
-  /* Configure the system clock to 48 MHz */
-  SystemClock_Config();
+    /* Configure the system clock to 48 MHz */
+    SystemClock_Config();
 
+    __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /* Add your application code here */
+    //LED3_GPIO_CLK_ENABLE();
 
+    GPIO_InitTypeDef GPIO_InitTypeDef;
 
-  /* Infinite loop */
-  while (1)
-  {
-  }
+    GPIO_InitTypeDef.Pin = GPIO_PIN_3;
+    GPIO_InitTypeDef.Pull = GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
+
+    HAL_GPIO_Init( GPIOB, &GPIO_InitTypeDef );
+
+    //GPIOB -> BSRR |= GPIO_PIN_3;
+
+    /* Infinite loop */
+    while (1)
+    {
+        HAL_Delay(500);
+        GPIOB -> ODR ^= GPIO_PIN_3;
+    }
+
+    i2c_init();
 }
 
 /**
-  * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
-  *            System Clock source            = PLL (HSI)
-  *            SYSCLK(Hz)                     = 48000000
-  *            HCLK(Hz)                       = 48000000
-  *            AHB Prescaler                  = 1
-  *            APB1 Prescaler                 = 1
-  *            HSI Frequency(Hz)              = 8000000
-  *            PREDIV                         = 1
-  *            PLLMUL                         = 6
-  *            Flash Latency(WS)              = 1
-  * @param  None
-  * @retval None
-  */
+* @brief  System Clock Configuration
+*         The system Clock is configured as follow : 
+*            System Clock source            = PLL (HSI)
+*            SYSCLK(Hz)                     = 48000000
+*            HCLK(Hz)                       = 48000000
+*            AHB Prescaler                  = 1
+*            APB1 Prescaler                 = 1
+*            HSI Frequency(Hz)              = 8000000
+*            PREDIV                         = 1
+*            PLLMUL                         = 6
+*            Flash Latency(WS)              = 1
+* @param  None
+* @retval None
+*/
 void SystemClock_Config(void)
 {
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  
-  /* No HSE Oscillator on Nucleo, Activate PLL with HSI as source */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct)!= HAL_OK)
-  {
-    /* Initialization Error */
-    while(1); 
-  }
+    RCC_ClkInitTypeDef RCC_ClkInitStruct;
+    RCC_OscInitTypeDef RCC_OscInitStruct;
 
-  /* Select PLL as system clock source and configure the HCLK, PCLK1 clocks dividers */
-  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1)!= HAL_OK)
-  {
-    /* Initialization Error */
-    while(1); 
-  }
+    /* No HSE Oscillator on Nucleo, Activate PLL with HSI as source */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+    RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
+    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct)!= HAL_OK)
+    {
+        /* Initialization Error */
+        while(1); 
+    }
+
+    /* Select PLL as system clock source and configure the HCLK, PCLK1 clocks dividers */
+    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1)!= HAL_OK)
+    {
+        /* Initialization Error */
+        while(1); 
+    }
 }
 #ifdef  USE_FULL_ASSERT
 
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+* @brief  Reports the name of the source file and the source line number
+*         where the assert_param error has occurred.
+* @param  file: pointer to the source file name
+* @param  line: assert_param error line source number
+* @retval None
+*/
 void assert_failed(char* file, uint32_t line)
 { 
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+/* User can add his own implementation to report the file name and line number,
+ ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
-  /* Infinite loop */
-  while (1)
-  {
-  }
+/* Infinite loop */
+    while (1)
+    {
+    }
 }
 #endif
 
 /**
-  * @}
-  */
+* @}
+*/
 
 /**
-  * @}
-  */
+* @}
+*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

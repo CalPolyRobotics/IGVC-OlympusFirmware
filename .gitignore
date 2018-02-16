@@ -5,6 +5,7 @@
 *.bin
 *.out
 *.hex
+*.map
 
 tags
 

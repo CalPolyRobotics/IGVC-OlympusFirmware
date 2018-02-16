@@ -74,7 +74,7 @@ $(BUILDDIR)/%.o: %.s
 	$(CC) -c $(CFLAGS) $< -o $@
 
 flash: $(BIN)
-	JLinkExe -Device STM32F042K6 -CommanderScript $(FLASH_SCRIPT)
+	st-flash write $(BIN) 0x8000000
 
 clean:
 	rm -rf build
