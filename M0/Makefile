@@ -6,13 +6,19 @@ HAL = libraries/STM32F0xx_HAL_Driver
 UTILS = utils
 CONFIG = config
 SYSTEM = system
+INC = inc
 
 SOURCES += main.c
+
+SOURCES += src/spi.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
 			$(HAL)/src/stm32f0xx_hal_flash.c \
 			$(HAL)/src/stm32f0xx_hal_flash_ex.c \
+			$(HAL)/src/stm32f0xx_hal_spi.c \
+			$(HAL)/src/stm32f0xx_hal_spi_ex.c \
+			$(HAL)/src/stm32f0xx_hal_dma.c \
 			$(HAL)/src/stm32f0xx_hal_gpio.c \
 			$(HAL)/src/stm32f0xx_hal_cortex.c \
 			$(HAL)/src/stm32f0xx_hal.c
@@ -27,6 +33,7 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
 			-I$(SYSTEM) \
+			-I$(INC) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf

@@ -35,6 +35,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 
 /** @addtogroup STM32F0xx_HAL_Examples
   * @{
@@ -53,37 +54,6 @@ void SystemClock_Config(void);
 
 /* Private functions ---------------------------------------------------------*/
 
-
-void i2c_init(){
-    I2C_HandleTypeDef hi2c;
-
-    /**
-    (##) Enable the I2Cx interface clock
-    (##) I2C pins configuration
-        (+++) Enable the clock for the I2C GPIOs
-        (+++) Configure I2C pins as alternate function open-drain
-    (##) NVIC configuration if you need to use interrupt process
-        (+++) Configure the I2Cx interrupt priority
-        (+++) Enable the NVIC I2C IRQ Channel
-    (##) DMA Configuration if you need to use DMA process
-        (+++) Declare a DMA_HandleTypeDef handle structure for the transmit or receive channel
-        (+++) Enable the DMAx interface clock using
-        (+++) Configure the DMA handle parameters
-        (+++) Configure the DMA Tx or Rx channel
-        (+++) Associate the initialized DMA handle to the hi2c DMA Tx or Rx handle
-        (+++) Configure the priority and enable the NVIC for the transfer complete interrupt on
-              the DMA Tx or Rx channel
-    (#) Configure the Communication Clock Timing, Own Address1, Master Addressing mode, Dual Addressing mode,
-        Own Address2, Own Address2 Mask, General call and Nostretch mode in the hi2c Init structure.
-
-    (#) Initialize the I2C registers by calling the HAL_I2C_Init(), configures also the low level Hardware
-        (GPIO, CLOCK, NVIC...etc) by calling the customized HAL_I2C_MspInit(&hi2c) API.
-
-    (#) To check if target device is ready for communication, use the function HAL_I2C_IsDeviceReady()
-
-    **/
-
-}
 
 /**
   * @brief  Main program
@@ -121,15 +91,15 @@ int main(void)
     HAL_GPIO_Init( GPIOB, &GPIO_InitTypeDef );
 
     //GPIOB -> BSRR |= GPIO_PIN_3;
+    GPIOB -> ODR |= GPIO_PIN_3;
 
+    init_spi();
     /* Infinite loop */
     while (1)
     {
         HAL_Delay(500);
         GPIOB -> ODR ^= GPIO_PIN_3;
     }
-
-    i2c_init();
 }
 
 /**
