@@ -1,16 +1,17 @@
-BUILDDIR = build
+BUILDDIR = build/bin
 
 #DEVICE = libraries/CMSIS/device/ST/STM32F0xx
-CMSIS = libraries/CMSIS
-HAL = libraries/STM32F0xx_HAL_Driver
-UTILS = utils
-CONFIG = config
-SYSTEM = system
-INC = inc
+CMSIS = ../libraries/CMSIS
+HAL = ../libraries/STM32F0xx_HAL_Driver
+UTILS = ../utils
+CONFIG = ../config
+SYSTEM = ../system
+INC = ../inc
+PERIPHERALS = ../peripherals
 
 SOURCES += main.c
 
-SOURCES += src/spi.c
+SOURCES += $(PERIPHERALS)/spi.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -34,6 +35,7 @@ INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
 			-I$(SYSTEM) \
 			-I$(INC) \
+			-I$(PERIPHERALS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -55,12 +57,12 @@ CFLAGS  = -O0 -g \
    -D STM32F042x6 \
    $(WARNINGS)
 
-LDSCRIPT = buildTools/STM32F042K6Tx_FLASH.ld
+LDSCRIPT = ../buildTools/STM32F042K6Tx_FLASH.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = buildTools/flash.jlink
+FLASH_SCRIPT = ../buildTools/flash.jlink
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@

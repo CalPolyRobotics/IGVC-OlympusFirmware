@@ -88,12 +88,13 @@ int main(void)
     GPIO_InitTypeDef.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
 
-    HAL_GPIO_Init( GPIOB, &GPIO_InitTypeDef );
+    HAL_GPIO_Init(GPIOB, &GPIO_InitTypeDef);
 
     //GPIOB -> BSRR |= GPIO_PIN_3;
-    GPIOB -> ODR |= GPIO_PIN_3;
+    GPIOB -> ODR &= ~GPIO_PIN_3;
 
-    init_spi();
+    init_spi_master();
+
     /* Infinite loop */
     while (1)
     {
