@@ -6,6 +6,7 @@
 *.out
 *.hex
 *.map
+*.swp
 
 tags
 

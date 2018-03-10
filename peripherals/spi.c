@@ -37,8 +37,9 @@
 #include "gpio.h"
 
 SPI_HandleTypeDef hspi3;
+SPI_HandleTypeDef hspi1;
 
-/* SPI3 init function */
+/* SPI1 init function */
 void MX_SPI3_Init(void)
 {
     hspi3.Instance = SPI3;
@@ -54,6 +55,24 @@ void MX_SPI3_Init(void)
     hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
     hspi3.Init.CRCPolynomial = 10;
     HAL_SPI_Init(&hspi3);
+}
+
+/* SPI3 init function */
+void MX_SPI1_Init(void)
+{
+    hspi1.Instance = SPI1;
+    hspi1.Init.Mode = SPI_MODE_MASTER;
+    hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+    hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi1.Init.NSS = SPI_NSS_SOFT;
+    hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    hspi1.Init.TIMode = SPI_TIMODE_DISABLED;
+    hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
+    hspi3.Init.CRCPolynomial = 10;
+    HAL_SPI_Init(&hspi1);
 }
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
@@ -82,6 +101,28 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    }else if(hspi->Instance==SPI1){
+        /* Peripheral clock enable */
+        __SPI1_CLK_ENABLE();
+
+        /**SPI1 GPIO Configuration    
+        PA4     ------> CS-Apollo
+        PA5     ------> SPI1_CK
+        PA6     ------> SPI1_MISO
+        PA7     ------> SPI1_MOSI
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_4;
+        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
     }
 }
 
@@ -100,6 +141,19 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
         HAL_GPIO_DeInit(GPIOA, GPIO_PIN_15);
 
         HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_12);
+    }else if(hspi->Instance==SPI1){
+        /* Peripheral clock disable */
+        __SPI1_CLK_DISABLE();
+
+        /**SPI1 GPIO Configuration    
+        PA4     ------> CS-Apollo
+        PA5     ------> SPI1_CK
+        PA6     ------> SPI1_MISO
+        PA7     ------> SPI1_MOSI
+        */
+        HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4);
+
+        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7);
     }
 } 
 

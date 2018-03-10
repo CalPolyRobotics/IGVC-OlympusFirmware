@@ -40,8 +40,10 @@
 #include "stm32f2xx_hal.h"
 
 extern SPI_HandleTypeDef hspi3;
+extern SPI_HandleTypeDef hspi1;
 
 void MX_SPI3_Init(void);
+void MX_SPI1_Init(void);
 
 #ifdef __cplusplus
 }

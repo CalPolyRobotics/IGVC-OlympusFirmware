@@ -1,10 +1,71 @@
 #include "main.h"
+#include "spi.h"
+
+SPI_HandleTypeDef hspi1;
+
+void MX_SPI1_Init(){
+    hspi1.Instance = SPI1;
+    hspi1.Init.Mode = SPI_MODE_SLAVE;
+    hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+    hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi1.Init.NSS = SPI_NSS_HARD_INPUT;
+    hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+    hspi1.Init.NSSPMode =  SPI_NSS_PULSE_DISABLE;
+}
+
+void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi){
+    GPIO_InitTypeDef gpioInit;
+    if(hspi -> Instance == SPI1){
+        /** Enable GPIO and SPI Clocks **/
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        __HAL_RCC_SPI1_CLK_ENABLE();
+
+
+
+        /** SPI1 GPIO Configuration
+         *  PA4 ----------> CS
+         *  PA5 ----------> SPI1_SCK 
+         *  PA6 ----------> SPI1_MISO 
+         *  PA7 ----------> SPI1_MOSI
+         */
+        gpioInit.Pin = GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
+        gpioInit.Pull = GPIO_NOPULL;
+        gpioInit.Mode = GPIO_MODE_AF_PP;
+        gpioInit.Speed = GPIO_SPEED_FREQ_MEDIUM;
+        gpioInit.Alternate = GPIO_AF0_SPI1;
+
+        HAL_GPIO_Init(GPIOA, &gpioInit);
+
+        HAL_SPI_Init(&hspi1);
+    }
+}
+
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi){
+    if(hspi -> Instance == SPI1){
+
+        /** SPI1 Clock Disable **/
+        __HAL_RCC_SPI1_CLK_DISABLE();
+
+
+        /** SPI1 GPIO Configuration
+         *  PA4 ----------> CS
+         *  PA5 ----------> SPI1_SCK 
+         *  PA6 ----------> SPI1_MISO 
+         *  PA7 ----------> SPI1_MOSI
+         */
+        HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
+    }
+}
+
+
 
 void init_spi_master(){
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_SPI1_CLK_ENABLE();
-
-    // (+++) Configure these SPI pins as alternate function push-pull
 
     GPIO_InitTypeDef gpioInit;
 
@@ -25,81 +86,19 @@ void init_spi_master(){
     HAL_GPIO_Init(GPIOA, &gpioInit);
     GPIOA -> ODR |= GPIO_PIN_4;
 
-    SPI_InitTypeDef ispi;
-    ispi.Mode = SPI_MODE_MASTER;
-    ispi.Direction = SPI_DIRECTION_2LINES;
-    ispi.DataSize = SPI_DATASIZE_8BIT;
-    ispi.CLKPolarity = SPI_POLARITY_LOW;
-    ispi.CLKPhase = SPI_PHASE_1EDGE;
-    ispi.NSS = SPI_NSS_SOFT;
-    ispi.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-    ispi.FirstBit = SPI_FIRSTBIT_MSB;
-    ispi.TIMode = SPI_TIMODE_DISABLE;
-    ispi.NSSPMode =  SPI_NSS_PULSE_DISABLE;
+    hspi1.Instance = SPI1;
+    hspi1.Init.Mode = SPI_MODE_MASTER;
+    hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+    hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+    hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+    hspi1.Init.NSS = SPI_NSS_SOFT;
+    hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+    hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+    hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+    hspi1.Init.NSSPMode =  SPI_NSS_PULSE_DISABLE;
 
-    SPI_HandleTypeDef hspi;
-    hspi.Instance = SPI1;
-    hspi.Init = ispi;
-
-    //HAL_StatusTypeDef stat = HAL_SPI_Init(&hspi);
-    HAL_SPI_Init(&hspi);
-
-
-    uint8_t reg = 0xAA;
-    uint8_t val[2];
-    while(1){
-        GPIOA -> ODR &= ~GPIO_PIN_4;
-        HAL_SPI_Transmit(&hspi, &reg, 1, 1000);
-        HAL_Delay(1);
-        HAL_SPI_Receive(&hspi, (uint8_t*)val, 2, 1000);
-        GPIOA -> ODR |= GPIO_PIN_4;
-    }
-}
-
-void init_spi_slave(){
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_SPI1_CLK_ENABLE();
-
-    // (+++) Configure these SPI pins as alternate function push-pull
-
-    GPIO_InitTypeDef gpioInit;
-
-    gpioInit.Pin = GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
-    gpioInit.Pull = GPIO_NOPULL;
-    gpioInit.Mode = GPIO_MODE_AF_PP;
-    gpioInit.Speed = GPIO_SPEED_FREQ_MEDIUM;
-    gpioInit.Alternate = GPIO_AF0_SPI1;
-
-    HAL_GPIO_Init(GPIOA, &gpioInit);
-
-    SPI_InitTypeDef ispi;
-    ispi.Mode = SPI_MODE_SLAVE;
-    ispi.Direction = SPI_DIRECTION_2LINES;
-    ispi.DataSize = SPI_DATASIZE_8BIT;
-    ispi.CLKPolarity = SPI_POLARITY_LOW;
-    ispi.CLKPhase = SPI_PHASE_1EDGE;
-    ispi.NSS = SPI_NSS_HARD_INPUT;
-    ispi.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-    ispi.FirstBit = SPI_FIRSTBIT_MSB;
-    ispi.TIMode = SPI_TIMODE_DISABLE;
-    ispi.NSSPMode =  SPI_NSS_PULSE_DISABLE;
-
-    SPI_HandleTypeDef hspi;
-    hspi.Instance = SPI1;
-    hspi.Init = ispi;
-
-    //HAL_StatusTypeDef stat = HAL_SPI_Init(&hspi);
-    HAL_SPI_Init(&hspi);
-
-    uint8_t reg; 
-    uint8_t data[2] = {'a', 'b'};
-    while(1){
-        HAL_SPI_Receive(&hspi, &reg, 1, 1000);
-        if(reg == 0xAA){
-            GPIOB -> ODR ^= GPIO_PIN_3;
-            HAL_SPI_Transmit(&hspi, (uint8_t*)data, 2, 1000);
-        }
-    }
+    HAL_SPI_Init(&hspi1);
 }
 
 void send_reg(SPI_HandleTypeDef *hspi, uint8_t reg){

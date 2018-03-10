@@ -93,13 +93,25 @@ int main(void)
     //GPIOB -> BSRR |= GPIO_PIN_3;
     GPIOB -> ODR &= ~GPIO_PIN_3;
 
-    init_spi_master();
+    MX_SPI1_Init();
 
     /* Infinite loop */
-    while (1)
-    {
-        HAL_Delay(500);
-        GPIOB -> ODR ^= GPIO_PIN_3;
+    /**
+    uint8_t reg; 
+    uint8_t data[4] = {'h', 'e', 'l', 'l'};
+    while(1){
+        HAL_SPI_Receive(&hspi1, &reg, 1, 1000);
+        if(reg == 0xAA){
+            GPIOB -> ODR |= GPIO_PIN_3;
+            HAL_SPI_Transmit(&hspi1, (uint8_t*)&data[0], 4, 1000);
+        }else{
+            GPIOB -> ODR &= ~GPIO_PIN_3;
+        }
+    }
+    **/
+
+    while(1){
+
     }
 }
 

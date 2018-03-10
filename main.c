@@ -83,19 +83,21 @@ int main(void)
 
     /* Configure the system clock */
     SystemClock_Config();
-    initIGVCCallbackTimer();
+    //initIGVCCallbackTimer();
 
     /* Initialize all configured peripherals */
-    MX_GPIO_Init();
-    MX_DMA_Init();
-    MX_ADC2_Init();
-    i2cInit();
+    //MX_GPIO_Init();
+    //MX_DMA_Init();
+    //MX_ADC2_Init();
+    MX_SPI1_Init();
+    //i2cInit();
 
-    commsUsartInit();
-    MX_USB_OTG_FS_USB_Init();
+    //commsUsartInit();
+    //MX_USB_OTG_FS_USB_Init();
 
-    adc_init();
+    //adc_init();
 
+    /**
     initSteeringMotor();
     initSteering();
     initSpeedDAC();
@@ -106,8 +108,18 @@ int main(void)
 
     printf("Hello.\r\n");
 
+    **/
+    uint8_t reg = 0xAA;
+    uint8_t val[2];
     while(1)
     {
+        GPIOA -> ODR &= ~GPIO_PIN_4;
+        HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
+        HAL_Delay(1);
+        HAL_SPI_Receive(&hspi1, (uint8_t*)val, 2, 1000);
+        GPIOA -> ODR |= GPIO_PIN_4;
+
+        /**
         serviceTxDma();
         serviceCallbackTimer();
         serviceUSBWrite();
@@ -122,6 +134,7 @@ int main(void)
         {
             runCommsFSM((char)dataIn);
         }
+        **/
     }
 }
 
