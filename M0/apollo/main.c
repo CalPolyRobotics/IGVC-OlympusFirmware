@@ -49,29 +49,27 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void test_master_mode(void);
+void test_master_tx(void);
 void test_slave_mode(void);
 
 /* Private functions ---------------------------------------------------------*/
-void test_master_mode(void){
+void test_master_tx(void){
     uint8_t reg = 0xAA;
-    uint8_t val[2];
-    while(1){
-        GPIOA -> ODR &= ~GPIO_PIN_4;
-        HAL_SPI_Transmit(&hspi, &reg, 1, 1000);
-        HAL_Delay(1);
-        HAL_SPI_Receive(&hspi, (uint8_t*)val, 4, 1000);
-        GPIOA -> ODR |= GPIO_PIN_4;
-    }
+    uint8_t val[4];
+    GPIOA -> ODR &= ~GPIO_PIN_4;
+    HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
+    HAL_Delay(1);
+    HAL_SPI_Receive(&hspi1, (uint8_t*)val, 4, 1000);
+    GPIOA -> ODR |= GPIO_PIN_4;
 }
 
 void test_slave_mode(void){
     uint8_t reg; 
     uint8_t data[2] = {'a', 'b'};
-    HAL_SPI_Receive(&hspi, &reg, 1, 1000);
+    HAL_SPI_Receive(&hspi1, &reg, 1, 1000);
     if(reg == 0xAA){
         GPIOB -> ODR ^= GPIO_PIN_3;
-        HAL_SPI_Transmit(&hspi, (uint8_t*)data, 2, 1000);
+        HAL_SPI_Transmit(&hspi1, (uint8_t*)data, 2, 1000);
     }
 }
 
@@ -129,12 +127,11 @@ int main(void)
         }
     }
     **/
+    init_spi_master();
 
     while (1)
     {
-        test_master_mode();
-        HAL_Delay(500);
-        GPIOB -> ODR ^= GPIO_PIN_3;
+        test_master_tx();
     }
 }
 
