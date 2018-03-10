@@ -12,9 +12,7 @@
   * are permitted provided that the following conditions are met:
   *   1. Redistributions of source code must retain the above copyright notice,
   *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
+  *   2. Redistributions in binary form must reproduce the above copyright notice, *      this list of conditions and the following disclaimer in the documentation *      and/or other materials provided with the distribution.
   *   3. Neither the name of STMicroelectronics nor the names of its contributors
   *      may be used to endorse or promote products derived from this software
   *      without specific prior written permission.
@@ -51,9 +49,31 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void test_master_mode(void);
+void test_slave_mode(void);
 
 /* Private functions ---------------------------------------------------------*/
+void test_master_mode(void){
+    uint8_t reg = 0xAA;
+    uint8_t val[2];
+    while(1){
+        GPIOA -> ODR &= ~GPIO_PIN_4;
+        HAL_SPI_Transmit(&hspi, &reg, 1, 1000);
+        HAL_Delay(1);
+        HAL_SPI_Receive(&hspi, (uint8_t*)val, 4, 1000);
+        GPIOA -> ODR |= GPIO_PIN_4;
+    }
+}
 
+void test_slave_mode(void){
+    uint8_t reg; 
+    uint8_t data[2] = {'a', 'b'};
+    HAL_SPI_Receive(&hspi, &reg, 1, 1000);
+    if(reg == 0xAA){
+        GPIOB -> ODR ^= GPIO_PIN_3;
+        HAL_SPI_Transmit(&hspi, (uint8_t*)data, 2, 1000);
+    }
+}
 
 /**
   * @brief  Main program
@@ -110,8 +130,11 @@ int main(void)
     }
     **/
 
-    while(1){
-
+    while (1)
+    {
+        test_master_mode();
+        HAL_Delay(500);
+        GPIOB -> ODR ^= GPIO_PIN_3;
     }
 }
 
@@ -128,8 +151,7 @@ int main(void)
 *            PLLMUL                         = 6
 *            Flash Latency(WS)              = 1
 * @param  None
-* @retval None
-*/
+* @retval None */
 void SystemClock_Config(void)
 {
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -142,8 +164,7 @@ void SystemClock_Config(void)
     RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
     RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct)!= HAL_OK)
-    {
-        /* Initialization Error */
+    { /* Initialization Error */
         while(1); 
     }
 
@@ -158,6 +179,8 @@ void SystemClock_Config(void)
         while(1); 
     }
 }
+
+
 #ifdef  USE_FULL_ASSERT
 
 /**

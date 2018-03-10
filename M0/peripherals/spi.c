@@ -99,6 +99,18 @@ void init_spi_master(){
     hspi1.Init.NSSPMode =  SPI_NSS_PULSE_DISABLE;
 
     HAL_SPI_Init(&hspi1);
+
+    /*
+    uint8_t reg = 0xAA;
+    uint8_t val[2];
+    while(1){
+        GPIOA -> ODR &= ~GPIO_PIN_4;
+        HAL_SPI_Transmit(&hspi, &reg, 1, 1000);
+        HAL_Delay(1);
+        HAL_SPI_Receive(&hspi, (uint8_t*)val, 4, 1000);
+        GPIOA -> ODR |= GPIO_PIN_4;
+    }
+    */
 }
 
 void send_reg(SPI_HandleTypeDef *hspi, uint8_t reg){
