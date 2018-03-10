@@ -15,6 +15,8 @@ void MX_SPI1_Init(){
     hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
     hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
     hspi1.Init.NSSPMode =  SPI_NSS_PULSE_DISABLE;
+
+    HAL_SPI_Init(&hspi1);
 }
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi){
@@ -39,8 +41,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi){
         gpioInit.Alternate = GPIO_AF0_SPI1;
 
         HAL_GPIO_Init(GPIOA, &gpioInit);
-
-        HAL_SPI_Init(&hspi1);
     }
 }
 
