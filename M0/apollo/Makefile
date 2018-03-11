@@ -12,6 +12,7 @@ PERIPHERALS = ../peripherals
 SOURCES += main.c
 
 SOURCES += $(PERIPHERALS)/spi.c
+SOURCES +=  src/lights.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \

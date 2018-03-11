@@ -36,7 +36,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "spi.h"
-
+#include "lights.h"
 /** @addtogroup STM32F0xx_HAL_Examples
   * @{
   */
@@ -76,6 +76,7 @@ int main(void)
 
     /* Configure the system clock to 48 MHz */
     SystemClock_Config();
+<<<<<<< Updated upstream:M0/hephaestus/main.c
 
     __HAL_RCC_GPIOB_CLK_ENABLE();
 
@@ -96,9 +97,10 @@ int main(void)
     init_spi_master();
 
     /* Infinite loop */
+    set_headlights(200);
     while (1)
     {
-        HAL_Delay(500);
+        HAL_Delay(100);
         GPIOB -> ODR ^= GPIO_PIN_3;
     }
 }
