@@ -8,11 +8,15 @@ CONFIG = ../config
 SYSTEM = ../system
 INC = ../inc
 PERIPHERALS = ../peripherals
+DRIVERS = drivers
 
 SOURCES += main.c
 
-SOURCES += $(PERIPHERALS)/spi.c
-SOURCES +=  src/lights.c
+SOURCES += $(DRIVERS)/lights.c \
+			$(DRIVERS)/comms.c
+
+SOURCES += $(PERIPHERALS)/spi.c \
+			$(PERIPHERALS)/gpio.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -34,6 +38,7 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
+			-I$(DRIVERS)/ \
 			-I$(SYSTEM) \
 			-I$(INC) \
 			-I$(PERIPHERALS) \
@@ -51,10 +56,10 @@ OBJCOPY = arm-none-eabi-objcopy
 
 WARNINGS = -Wall -Werror -Wno-unused-function
 	
-CFLAGS  = -O0 -g \
+CFLAGS  = $(INCLUDES) \
+	-O0 -g \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
-   $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
    -D STM32F042x6 \
    $(WARNINGS)
 
