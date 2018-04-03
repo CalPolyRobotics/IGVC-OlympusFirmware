@@ -57,7 +57,7 @@ OBJCOPY = arm-none-eabi-objcopy
 WARNINGS = -Wall -Werror -Wno-unused-function
 	
 CFLAGS  = $(INCLUDES) \
-	-O0 -g \
+	-Os -g \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
    -D STM32F042x6 \

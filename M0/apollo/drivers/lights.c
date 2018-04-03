@@ -57,6 +57,7 @@ void init_Timer(){
 
 
 }
+
 void init_apollo(){
     init_Timer(); 
     //Initializes pins 3 and 4 to outputs
@@ -76,6 +77,7 @@ void init_apollo(){
 
 
 }
+
 void set_turn_signal(uint8_t state){
     if (state & STATE_R_MASK){
         TURN_SIGNAL_PORT -> ODR |= TURN_SIGNAL_R;
@@ -90,13 +92,15 @@ void set_turn_signal(uint8_t state){
         TURN_SIGNAL_PORT -> ODR &= ~TURN_SIGNAL_L;
     }
 }
+
 void set_headlights( uint8_t speed){
     TIM3 -> CCR1=arr[speed];    
-
 }
+
 void misc(uint8_t light, uint8_t state, uint8_t speed){
 
 }
+
 uint16_t get_light_sensor(){
     return 0;
 }
