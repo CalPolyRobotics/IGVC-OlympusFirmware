@@ -9,11 +9,15 @@ SYSTEM = ../system
 INC = ../inc
 PERIPHERALS = ../peripherals
 DRIVERS = drivers
+SHRDRIVERS = ../drivers
 
 SOURCES += main.c
 
 SOURCES += $(DRIVERS)/lights.c \
 			$(DRIVERS)/comms.c
+
+SOURCES += $(SHRDRIVERS)/commsLib.c \
+			$(SHRDRIVERS)/boot.c \
 
 SOURCES += $(PERIPHERALS)/spi.c \
 			$(PERIPHERALS)/gpio.c
@@ -42,6 +46,7 @@ INCLUDES += -I$(HAL)/inc \
 			-I$(SYSTEM) \
 			-I$(INC) \
 			-I$(PERIPHERALS) \
+			-I$(SHRDRIVERS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf

@@ -2,9 +2,8 @@
 #define __COMMS_H_
 
 #include <stdint.h>
+#include "commsLib.h"
 
-void commsFSM(uint8_t data);
-
-#define COMMS_START_BYTE ((uint8_t)0xEA)
+extern msgInfo_t msgResp[MSG_INFO_SIZE];
 
 #endif

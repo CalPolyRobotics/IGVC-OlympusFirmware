@@ -1,4 +1,4 @@
-#include "main.h"
+#include "stm32f0xx_hal.h"
 #include "spi.h"
 
 SPI_HandleTypeDef hspi1;

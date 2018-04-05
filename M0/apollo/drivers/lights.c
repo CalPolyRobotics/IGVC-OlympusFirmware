@@ -1,5 +1,5 @@
+#include "stm32f0xx_hal.h"
 #include "lights.h"
-#include "main.h"
 
 uint16_t arr[257]=
 {24000,23906,23812,23718,23625,23531,23437,23343,
@@ -97,10 +97,10 @@ void set_headlights( uint8_t speed){
     TIM3 -> CCR1=arr[speed];    
 }
 
-void misc(uint8_t light, uint8_t state, uint8_t speed){
-
+void set_misc_lights(uint8_t light, uint8_t state, uint8_t speed){
+    /** TODO- implement **/
 }
 
 uint16_t get_light_sensor(){
-    return 0;
+    return 0xF0F0;
 }

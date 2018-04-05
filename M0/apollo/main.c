@@ -1,8 +1,10 @@
-#include "main.h"
+#include "stm32f0xx_hal.h"
 #include "spi.h"
 #include "gpio.h"
+#include "commsLib.h"
 
 void SystemClock_Config(void);
+
 void test_master_tx(void);
 void test_slave_rx(void);
 
@@ -28,14 +30,9 @@ void test_slave_rx(void){
     }
 }
 
-void runCommsFSM(){
-    return;
-}
-
 int main(void)
 {
     HAL_StatusTypeDef status;
-
     HAL_Init();
 
     /* Configure the system clock to 48 MHz */
