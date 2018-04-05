@@ -13,9 +13,15 @@ void test_master_tx(void){
     uint8_t val[4];
     GPIOA -> ODR &= ~GPIO_PIN_4;
     HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
-    HAL_Delay(1);
+    //HAL_Delay(1);
     HAL_SPI_Receive(&hspi1, (uint8_t*)val, 4, 1000);
     GPIOA -> ODR |= GPIO_PIN_4;
+
+    if (val[0] != 'a' || val[1] != 'b' || val[2] != 'c' || val[3] != 'd'){
+        GPIOB -> ODR |= GPIO_PIN_3;
+    } else {
+        GPIOB -> ODR &= ~GPIO_PIN_3;
+    }
 }
 
 void test_slave_rx(void){
