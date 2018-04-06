@@ -6,6 +6,8 @@
 #include "main.h"
 
 #include "comms.h"
+#include "submoduleComms.h"
+#include "bootComms.h"
 #include "led.h"
 #include "usart.h"
 #include "usb_otg.h"
@@ -43,6 +45,8 @@ typedef struct {
     uint8_t* inputData;
     uint32_t responseDataLen;
     uint8_t* responseData;
+    uint8_t  module;
+    uint8_t  moduleMsgType;
     commsCallback callback;
 } packetResponse_t;
 
@@ -61,26 +65,23 @@ void toggleLED3(Packet_t* packet)
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
 }
 
-static uint8_t echoBuf[256];
+static uint8_t inputBuf[256];
 
 void echoPacketCallback(Packet_t* packet);
 
-
 static packetResponse_t response[] = {
-    {250,  echoBuf, 0,  echoBuf, echoPacketCallback},           // Echo
-    {0,  NULL, 0,  NULL,  NULL},                                // Get 1 Sonar // TODO
-    {0,  NULL, 0,  NULL,  NULL},                                // Get all Sonars // TODO
-    {1,  NULL, 0,  NULL,  NULL},                                // Set FNR
-    {0,  NULL, 1,  dummy, NULL},                                // Get FNR
-    {2,  NULL, 0,  NULL,  commsSetThrottleCallback},            // Set Throttle
-    {1,  NULL, 0,  NULL,  commsSetThrottleEnableCallback},      // Set Throttle Enable
-    {0,  NULL, 4,  dummy, NULL},                                // Get Speed
-    {2,  NULL, 0,  NULL,  NULL},                                // Set Steering
-    {0,  NULL, 2,  dummy, NULL},                                // Get Steering Angle
-    {2,  NULL, 0,  NULL,  commsSetLightsCallback},              // Set Lights
-    {0,  NULL, 2,  dummy, NULL},                                // Get Pedal
-    {0,  NULL, 16, (uint8_t*)&commsPwradcValues[0], commsPwradcCallback}, //Get Power
-    {0,  NULL, 0,  NULL, killBoard}                            //Send Stop
+    {250,  inputBuf, 0,  inputBuf,           OLYMPUS,    0,                       echoPacketCallback}, // (0x00) Echo
+    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_ECHO,             NULL},               // (0x02) Apollo Echo
+    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_TURN_SIGNAL,  NULL},               // (0x04) Apollo Set Turn Signal
+    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_HEADLIGHTS,   NULL},               // (0x06) Apollo Set Headlights
+    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_GET_LIGHT_SENSOR, NULL},               // (0x08) Apollo Get Light Sensor
+    {1,    NULL,     1,  submoduleCommsBuff, HERA,       HERA_ECHO,               NULL},               // (0x00) Hera Echo
+    {1,    NULL,     1,  submoduleCommsBuff, HEPHAESTUS, HEPHAESTUS_ECHO,         NULL},               // (0x00) Hephaestus Echo
+    {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_ECHO,              NULL},               // (0x00) Janus Echo
+    {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_SET_FNR,           NULL},               // (0x00) Janus Set FNR
+    {0,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_GET_FNR,           NULL},               // (0x00) Janus Get FNR
+    {3,    NULL,     1,  NULL,               OLYMPUS,    0,                       bootloadBoard},      // (0x00) Enter Bootloader Mode
+    {0,    NULL,     0,  NULL,               OLYMPUS,    0,                       killBoard}           // Send Stop
 };
 
 void echoPacketCallback(Packet_t* packet)
@@ -93,6 +94,7 @@ static bool checkPacket(Packet_t* packet)
 {
     return crc8(packet, packet->header.packetLen) == 0;
 }
+
 
 static void runPacket(Packet_t* packet)
 {
@@ -115,12 +117,17 @@ static void runPacket(Packet_t* packet)
         }
     }
 
-    if (response[packetType].callback)
+    if (response[packetType].module == OLYMPUS)
     {
         response[packetType].callback(packet);
+    } else {
+        messageSubmodule(response[packetType].module,
+                      response[packetType].moduleMsgType,
+                      &packet->data[0],
+                      response[packetType].inputDataMaxLen,
+                      response[packetType].responseDataLen);
     }
 }
-
 
 static void sendResponse(Packet_t* packet)
 {
