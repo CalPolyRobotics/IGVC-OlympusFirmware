@@ -36,16 +36,6 @@
 #include "kill.h"
 #include "config.h"
 
-/** Configure pins as 
-        * Analog 
-        * Input 
-        * Output
-        * EVENT_OUT
-        * EXTI
-     PA10   ------> USB_OTG_FS_ID
-     PA11   ------> USB_OTG_FS_DM
-     PA12   ------> USB_OTG_FS_DP
-*/
 void MX_GPIO_Init(void)
 {
 
@@ -93,29 +83,18 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
 
     // Port A LED GPIOs
-    // TODO GPIO_PIN_5 is being used for encoder capture GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7;
-    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    // Port B LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
     // Port C LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7|GPIO_PIN_8;
+    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    // Port D LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_2;
-    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-    // THIS ONE DOESNT SEEM TO WORK TODO
-    // Port H LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_1;
-    HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-
     //---------------------------------------------------------------------------------
+    // Initialize USB GPIOs
+    //    PA10   ------> USB_OTG_FS_ID
+    //    PA11   ------> USB_OTG_FS_DM
+    //    PA12   ------> USB_OTG_FS_DP
 
     GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -124,17 +103,21 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_2;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
+    //---------------------------------------------------------------------------------
+    // Initialize SPI GPIOs
     GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_12;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    //---------------------------------------------------------------------------------
+    // Initialize GPIOs
+    GPIO_InitStruct.Pin = GPIO_PIN_2;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 }
 
