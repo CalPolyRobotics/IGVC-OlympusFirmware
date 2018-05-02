@@ -25,23 +25,9 @@
 
 void SystemClock_Config(void);
 
-void togglePin(GPIO_TypeDef* gpio, uint32_t pin)
-{
-    gpio->ODR ^= pin;
-}
-
 Timer_Return led6Toggle(void* dummy)
 {
-    static uint32_t num = 0;
-    //HAL_GPIO_TogglePin(GPIO_DEBUG_6);
-    togglePin(GPIO_DEBUG_6);
-
-    //setSevenSeg(num);
-    num++;
-    if (num > 15)
-    {
-        num = 0;
-    }
+    HAL_GPIO_TogglePin(GPIO_DEBUG_6);
 
     return CONTINUE_TIMER;
 }
@@ -79,58 +65,40 @@ int main(void)
 
     /* Configure the system clock */
     SystemClock_Config();
-    //initIGVCCallbackTimer();
+    initIGVCCallbackTimer();
 
     /* Initialize all configured peripherals */
-    //MX_GPIO_Init();
-    //MX_DMA_Init();
-    //MX_ADC2_Init();
+    MX_GPIO_Init();
+    MX_DMA_Init();
+    MX_ADC2_Init();
     MX_SPI1_Init();
-    //i2cInit();
+    i2cInit();
 
-    //commsUsartInit();
-    //MX_USB_OTG_FS_USB_Init();
+    commsUsartInit();
+    MX_USB_OTG_FS_USB_Init();
 
-    //adc_init();
+    adc_init();
 
-    /**
-    initSteeringMotor();
-    initSteering();
     initSpeedDAC();
-    initEncoderInputCapture();
-    initAutomanInt();
 
     addCallbackTimer(1000, led6Toggle, NULL);
 
     printf("Hello.\r\n");
 
-    **/
-    uint8_t reg = 0xAA;
-    uint8_t val[2];
     while(1)
     {
-        GPIOA -> ODR &= ~GPIO_PIN_4;
-        HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
-        HAL_Delay(1);
-        HAL_SPI_Receive(&hspi1, (uint8_t*)val, 2, 1000);
-        GPIOA -> ODR |= GPIO_PIN_4;
-
-        /**
         serviceTxDma();
         serviceCallbackTimer();
         serviceUSBWrite();
         serviceI2C();
-        serviceAutoman();
 
         consoleProcessBytes();
 
         uint8_t dataIn;
-
         while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
         {
             runCommsFSM((char)dataIn);
         }
-        **/
     }
 }
 
