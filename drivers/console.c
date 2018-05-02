@@ -9,13 +9,9 @@
 #include "pwradc.h"
 #include "sevenSeg.h"
 #include "kill.h"
-#include "fnr.h"
 #include "comms.h"
-#include "speedDAC.h"
 #include "usb_otg.h"
 #include "adc.h"
-#include "steering.h"
-#include "motorControl.h"
 #include "characterMapping.h"
 
 #define CONSOLE_MAX_CMD_LEN     255
@@ -56,7 +52,6 @@ static void console_getSteerTarget(uint32_t, char**);
 static void console_getSteerValue(uint32_t, char**);
 static void console_enableSteering(uint32_t, char**);
 static void console_hardmode(uint32_t, char**);
-static void console_getPower(uint32_t, char**);
 static void console_help(uint32_t, char**);
 static void console_clear(uint32_t, char**);
 
@@ -84,7 +79,6 @@ static ConsoleCommand commands[] = {
     {"getSteerValue", 0, console_getSteerValue},
     {"enableSteering", 1, console_enableSteering},
     {"hardmode", 1, console_hardmode},
-    {"getPower", 0, console_getPower},
     {"help", 0, console_help},
     {"clear", 0, console_clear},
     {NULL, 0, NULL}
@@ -423,47 +417,27 @@ static void console_kill(uint32_t argc, char** argv)
 
 static void console_writeFNR(uint32_t argc, char** argv)
 {
-    FNR_t fnr = atoi(argv[0]);
-    if (fnr >= 0 && fnr <= 2)
-    {
-        setFNR(fnr);
-        switch(fnr)
-        {
-            case FNR_NEUTRAL:
-                printf("Neutral");
-                break;
-            case FNR_FORWARD:
-                printf("Forward");
-                break;
-            case FNR_REVERSE:
-                printf("Reverse");
-                break;
-            case FNR_STATE_UNKNOWN:
-                break;
-        }
-    } else {
-        printf("Invalid State");
-    }
+    /** TODO **/
 }
 
 static void console_readFNR(uint32_t argc, char** argv)
 {
-    printf("%X", getFNR());
+    /** TODO **/
 }
 
 static void console_writeSpeed(uint32_t argc, char** argv)
 {
-    writeSpeedDAC(atoi(argv[0]));
+    /** TODO **/
 }
 
 static void console_readSpeed(uint32_t argc, char** argv)
 {
-
+    /** TODO **/
 }
 
 static void console_toggleSpeed(uint32_t argc, char** argv)
 {
-    toggleSpeedDAC(NULL);
+    /** TODO **/
 }
 
 /*
@@ -499,29 +473,27 @@ static void console_emulateUSB(uint32_t argc, char** argv)
 
 static void console_setSteerAngle(uint32_t argc, char** argv)
 {
-    setSteeringTarget(strtol(argv[0], NULL, 10));
-    enableSteering(atoi(argv[1]));
+    /** TODO **/
 }
 
 static void console_setRawSteerAngle(uint32_t argc, char** argv)
 {
-    setRawSteeringTarget(strtol(argv[0], NULL, 10));
+    /** TODO **/
 }
 
 static void console_getSteerTarget(uint32_t argc, char** argv)
 {
-    printf("%u", getRawSteeringTarget());
+    /** TODO **/
 }
 
 static void console_getSteerValue(uint32_t argc, char** argv)
 {
-    printf("%u", getRawSteeringPotValue());
+    /** TODO **/
 }
 
 static void console_readSteeringDir(uint32_t argc, char** argv)
 {
-    uint32_t data = getSteeringValue();
-    printf("%lu", data);
+    /** TODO **/
 }
 
 static void console_USBWrite(uint32_t argc, char** argv)
@@ -532,37 +504,12 @@ static void console_USBWrite(uint32_t argc, char** argv)
 
 static void console_enableSteering(uint32_t argc, char** argv)
 {
-    enableSteering(atoi(argv[0]));
+    /** TODO **/
 }
 
 static void console_hardmode(uint32_t argc, char** argv)
 {
     echoCharacters = strtol(argv[0], NULL, 10);
-}
-
-static void console_getPower(uint32_t argc, char** argv)
-{
-    //int i;
-    //uint16_t powerVals[] = {0,0,0,0,0,0,0,0,0,0,0,0};
-
-    //for(i = 0; i < ADC_LINES / 2; i++){
-        //int ind = periph_order[i * 2];
-        //powerVals[i * 3] = adc_conv(ind);
-        //ind = periph_order[i * 2 + 1];
-        //powerVals[i * 3 + 1] = adc_conv(ind);
-        //powerVals[i * 3 + 2] = powerVals[i * 3] * powerVals[i * 3 + 1] / 1000; // Calculate power in mW
-    //}
-
-    //printf("\r\n");
-
-    //for(i = 0; i < ADC_LINES / 2; i++){
-        //int ind = periph_order[i * 2];
-        //printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3] / 1000, powerVals[i * 3] % 1000, "V");                
-        //ind = periph_order[i * 2 + 1];
-        //printf("%s: %2u.%03u %s\r\n", periph_name[ind], powerVals[i * 3 + 1] / 1000, powerVals[i * 3 + 1] % 1000, "A");                
-        //printf("%s: %2u.%03u %s\r\n", "          Power", powerVals[i * 3 + 2] / 1000, powerVals[i * 3 + 2] % 1000, "W");     
-        //printf("\r\n");
-    //}
 }
 
 static void console_help(uint32_t argc, char** argv) 

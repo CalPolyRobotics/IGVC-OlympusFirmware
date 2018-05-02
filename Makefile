@@ -55,15 +55,11 @@ SOURCES += $(USB)/usbd_cdc.c \
 
 SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/console.c \
-		   $(DRIVERS)/fnr. \
 		   $(DRIVERS)/kill.c \
 		   $(DRIVERS)/led.c \
-		   $(DRIVERS)/motorControl.c \
-		   $(DRIVERS)/pwradc.c \
 		   $(DRIVERS)/sevenSeg.c \
 		   $(DRIVERS)/speedDAC.c \
-		   $(DRIVERS)/steering.c \
-		   $(DRIVERS)/encoder.c
+		   $(DRIVERS)/pwradc.c
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \

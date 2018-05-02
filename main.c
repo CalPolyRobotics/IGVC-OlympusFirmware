@@ -10,7 +10,6 @@
 #include "usb_otg.h"
 #include "gpio.h"
 #include "timerCallback.h"
-#include "steering.h"
 #include "main.h"
 #include "buffer8.h"
 #include "speedDAC.h"
@@ -18,10 +17,7 @@
 #include "sevenSeg.h"
 #include "led.h"
 #include "console.h"
-#include "motorControl.h"
 #include "adc.h"
-#include "encoder.h"
-#include "fnr.h"
 #include "config.h"
 #include "doubleBuffer.h"
 

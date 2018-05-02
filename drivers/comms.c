@@ -9,11 +9,9 @@
 #include "led.h"
 #include "usart.h"
 #include "usb_otg.h"
-#include "fnr.h"
 #include "pwradc.h"
 #include "speedDAC.h"
 #include "kill.h"
-#include "steering.h"
 #include "crc8.h"
 #include "adc.h"
 
@@ -24,11 +22,12 @@
 #define START_BYTE_1 0xF0
 #define START_BYTE_2 0x5A
 
-extern volatile uint16_t speedCommsValue[2];
 extern volatile uint8_t  commsPwradcValues[16];
-extern volatile uint8_t  commsCurrentSteeringValue[2];
-extern volatile uint8_t  FNRState;
-extern volatile uint8_t  commsPedalAdc[2];
+
+/* XXX Currently used to send return data for usb requests
+ * Remove when no longer needed
+ */
+uint8_t dummy[16] = {0};
 
 typedef enum {
     WAITING_FOR_START_1 = 0,
@@ -68,18 +67,18 @@ void echoPacketCallback(Packet_t* packet);
 
 
 static packetResponse_t response[] = {
-    {250,  echoBuf, 0,  echoBuf, echoPacketCallback},          // Echo
-    {0,  NULL, 0,  NULL, NULL},                                // Get 1 Sonar // TODO
-    {0,  NULL, 0,  NULL, NULL},                                // Get all Sonars // TODO
-    {1,  NULL, 0,  NULL, FNRCommsHandler},                     // Set FNR
-    {0,  NULL, 1,  (uint8_t*)&FNRState, NULL},                 // Get FNR
-    {2,  NULL, 0,  NULL, speedDACHandler},                     // Set Throttle
-    {2,  NULL, 0,  NULL, toggleSpeedDAC},                      // Set Speed
-    {0,  NULL, 4,  (uint8_t*)&speedCommsValue[0], NULL},       // Get Speed
-    {2,  NULL, 0,  NULL, setSteeringTargetFromComms},          // Set Steering
-    {0,  NULL, 2,  (uint8_t*)&commsCurrentSteeringValue[0], commsSteeringCallback},  // Get Steering Angle
-    {2,  NULL, 0,  NULL, commsSetLightsCallback},              // Set Lights
-    {0,  NULL, 2,  (uint8_t*)&commsPedalAdc[0], commsPedalAdcCallback}, // Get Pedal
+    {250,  echoBuf, 0,  echoBuf, echoPacketCallback},           // Echo
+    {0,  NULL, 0,  NULL,  NULL},                                // Get 1 Sonar // TODO
+    {0,  NULL, 0,  NULL,  NULL},                                // Get all Sonars // TODO
+    {1,  NULL, 0,  NULL,  NULL},                                // Set FNR
+    {0,  NULL, 1,  dummy, NULL},                                // Get FNR
+    {2,  NULL, 0,  NULL,  speedDACHandler},                     // Set Throttle
+    {2,  NULL, 0,  NULL,  toggleSpeedDAC},                      // Set Speed
+    {0,  NULL, 4,  dummy, NULL},                                // Get Speed
+    {2,  NULL, 0,  NULL,  NULL},                                // Set Steering
+    {0,  NULL, 2,  dummy, NULL},                                // Get Steering Angle
+    {2,  NULL, 0,  NULL,  commsSetLightsCallback},              // Set Lights
+    {0,  NULL, 2,  dummy, NULL},                                // Get Pedal
     {0,  NULL, 16, (uint8_t*)&commsPwradcValues[0], commsPwradcCallback}, //Get Power
     {0,  NULL, 0,  NULL, killBoard}                            //Send Stop
 };
