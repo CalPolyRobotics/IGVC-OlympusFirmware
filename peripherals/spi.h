@@ -39,11 +39,33 @@
 
 #include "stm32f2xx_hal.h"
 
+#define PORT_SS_ZADC GPIOA
+#define PIN_SS_ZADC  GPIO_PIN_8;
+
+#define PORT_SS_THDAC GPIOB
+#define PIN_SS_THDAC  GPIO_PIN_6;
+
+#define PORT_SS_THADC GPIOB
+#define PIN_SS_THADC  GPIO_PIN_7;
+
+#define PORT_SS_APOLLO GPIOB
+#define PIN_SS_APOLLO  GPIO_PIN_9;
+
+#define PORT_SS_HERA GPIOC
+#define PIN_SS_HERA  GPIO_PIN_3;
+
+#define PORT_SS_HEPHAESTUS GPIOC
+#define PIN_SS_HEPHAESTUS  GPIO_PIN_8;
+
+#define PORT_SS_IRIS GPIOC
+#define PIN_SS_IRIS  GPIO_PIN_9;
+
+#define PORT_SS_JANUS GPIOC
+#define PIN_SS_JANUS  GPIO_PIN_13;
+
 extern SPI_HandleTypeDef hspi3;
-extern SPI_HandleTypeDef hspi1;
 
 void MX_SPI3_Init(void);
-void MX_SPI1_Init(void);
 
 #ifdef __cplusplus
 }
