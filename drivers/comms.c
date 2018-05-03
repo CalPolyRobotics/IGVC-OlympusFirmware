@@ -72,8 +72,8 @@ static packetResponse_t response[] = {
     {0,  NULL, 0,  NULL,  NULL},                                // Get all Sonars // TODO
     {1,  NULL, 0,  NULL,  NULL},                                // Set FNR
     {0,  NULL, 1,  dummy, NULL},                                // Get FNR
-    {2,  NULL, 0,  NULL,  speedDACHandler},                     // Set Throttle
-    {2,  NULL, 0,  NULL,  toggleSpeedDAC},                      // Set Speed
+    {2,  NULL, 0,  NULL,  commsSetThrottleCallback},            // Set Throttle
+    {1,  NULL, 0,  NULL,  commsSetThrottleEnableCallback},      // Set Throttle Enable
     {0,  NULL, 4,  dummy, NULL},                                // Get Speed
     {2,  NULL, 0,  NULL,  NULL},                                // Set Steering
     {0,  NULL, 2,  dummy, NULL},                                // Get Steering Angle

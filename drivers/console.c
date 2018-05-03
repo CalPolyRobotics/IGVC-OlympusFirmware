@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <errno.h>
 
 #include "main.h"
 #include "usart.h"
@@ -8,6 +9,7 @@
 #include "i2c.h"
 #include "pwradc.h"
 #include "sevenSeg.h"
+#include "speedDAC.h"
 #include "kill.h"
 #include "comms.h"
 #include "usb_otg.h"
@@ -41,11 +43,10 @@ static void console_writeFNR(uint32_t, char**);
 static void console_readFNR(uint32_t, char**);
 static void console_writeSpeed(uint32_t, char**);
 static void console_readSpeed(uint32_t, char**);
-//static void console_readBatt(uint32_t, char**);
+static void console_setEnableSpeed(uint32_t, char**);
 static void console_emulateUSB(uint32_t, char**);
 static void console_setSteerAngle(uint32_t, char**);
 static void console_USBWrite(uint32_t, char**);
-static void console_toggleSpeed(uint32_t, char**);
 static void console_readSteeringDir(uint32_t, char**);
 static void console_setRawSteerAngle(uint32_t, char**);
 static void console_getSteerTarget(uint32_t, char**);
@@ -68,9 +69,8 @@ static ConsoleCommand commands[] = {
     {"readFNR", 0, console_readFNR},
     {"writeSpeed", 1, console_writeSpeed},
     {"readSpeed", 1, console_readSpeed},
-    {"toggleSpeed", 0, console_toggleSpeed},
+    {"setEnableSpeed", 0, console_setEnableSpeed},
     {"readSteeringDir", 0, console_readSteeringDir},
-    //{"readBatt", 1, console_readBatt},
     {"emulateUSB", 1, console_emulateUSB},
     {"setSteerAngle", 2, console_setSteerAngle},
     {"setRawSteerAngle", 1, console_setRawSteerAngle},
@@ -83,6 +83,15 @@ static ConsoleCommand commands[] = {
     {"clear", 0, console_clear},
     {NULL, 0, NULL}
 };
+
+static int parseUint16(char* str){
+    long int num = strtol(str, NULL, 10);
+    if(errno || num < 0 || num > UINT16_MAX){
+        printf("Could not parse input\r\n");
+    }
+
+    return (uint16_t)num;
+}
 
 static EchoState echoCharacters = CONSOLE_ECHO_ON;
 
@@ -427,25 +436,32 @@ static void console_readFNR(uint32_t argc, char** argv)
 
 static void console_writeSpeed(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    uint16_t num = parseUint16(argv[0]);
+    if(!errno){
+        writeSpeedDAC(num);
+    }
 }
+
 
 static void console_readSpeed(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    printf("%u\r\n", getSpeedDAC());
 }
 
-static void console_toggleSpeed(uint32_t argc, char** argv)
-{
-    /** TODO **/
+/**
+ * A value of zero will disable the speed output,
+ * a non-zero value [0,UINT16_MAX] will enable the speed output,
+ */
+static void console_setEnableSpeed(uint32_t argc, char** argv){
+    uint16_t num = parseUint16(argv[0]);
+    if(!errno){
+        if(num){
+            enableSpeedDAC();
+        }else{
+            disableSpeedDAC();
+        }
+    }
 }
-
-/*
-static void console_readBatt(uint32_t argc, char** argv)
-{
-
-}
-*/
 
 static void console_emulateUSB(uint32_t argc, char** argv)
 {

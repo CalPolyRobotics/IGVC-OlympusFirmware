@@ -4,14 +4,13 @@
 #include "comms.h"
 
 void initSpeedDAC();
-void writeSpeedDAC(uint8_t value);
+void writeSpeedDAC(uint16_t value);
 
-void setSpeedDACOutputEnable(uint8_t enable);
-void speedDACHandler(Packet_t* packet);
-void toggleSpeedDAC(Packet_t* packet);
+void commsSetThrottleCallback(Packet_t* packet);
+void commsSetThrottleEnableCallback(Packet_t* packet);
+
 void enableSpeedDAC();
 void disableSpeedDAC();
-
 
 void resetSpeedDAC();
 uint16_t getSpeedDAC();
