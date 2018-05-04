@@ -40,7 +40,6 @@ SOURCES += $(PERIPHERALS)/adc.c \
 		   $(PERIPHERALS)/dac.c \
 		   $(PERIPHERALS)/dma.c \
 		   $(PERIPHERALS)/gpio.c \
-		   $(PERIPHERALS)/i2c.c \
 		   $(PERIPHERALS)/spi.c \
 		   $(PERIPHERALS)/tim.c \
 		   $(PERIPHERALS)/usart.c \

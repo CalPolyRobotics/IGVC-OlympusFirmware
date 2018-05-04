@@ -14,6 +14,7 @@
 #define ADC_CS  1
 #define ADC_SGL 0
 
+/** TODO - Update to use SPI **/
 
 /* Value index is based off enum set in header */
 static uint32_t muls[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
@@ -34,6 +35,7 @@ Timer_Return adc_poll_data();
 void adc_init()
 {
     /* Set ADC to internal reference with output */
+    /**
     i2cAddTxTransaction(ZEUS_ADC_I2C_ADDR,
                         (uint8_t *)&adc_cfg,
                         sizeof(uint8_t),
@@ -41,6 +43,7 @@ void adc_init()
                         NULL);
 
     addCallbackTimer(30, adc_poll_data, NULL);
+    **/
 }
 
 void commsPwradcCallback(Packet_t* packet)
@@ -60,6 +63,7 @@ void commsPwradcCallback(Packet_t* packet)
 
 void adc_readDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
 {
+    /**
     if (status == I2C_ACK)
     {
         // Convert uint16 to two uint8s
@@ -71,10 +75,12 @@ void adc_readDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus st
     } else {
         printf("ADC Rx NACK\r\n");
     }
+    **/
 }
 
 void adc_readSetupCallback(void* dummy, I2CStatus status)
 {
+    /**
     if (status == I2C_ACK)
     {
         
@@ -86,10 +92,12 @@ void adc_readSetupCallback(void* dummy, I2CStatus status)
     } else {
         printf("ADC Tx NACK\r\n");
     }
+    **/
 }
 
 Timer_Return adc_poll_data() {
     /* Single-channel single-ended scan on selected periph */
+    /**
     uint8_t adc_cmd = (3 << ADC_SCN) | (currADCPeriph << ADC_CS) | (1 << ADC_SGL);
 
     i2cAddTxTransaction(ZEUS_ADC_I2C_ADDR,
@@ -98,6 +106,7 @@ Timer_Return adc_poll_data() {
                         adc_readSetupCallback,
                         NULL);
 
+    **/
     return CONTINUE_TIMER;
 }
 

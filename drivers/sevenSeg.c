@@ -6,6 +6,7 @@
 void setSevenSeg(char a)
 {
 
+    /** TODO Move TO SPI with 2 seven segments
     uint8_t lookupTable[] = {0x12, 0x7B, 0x26, 0x23, 0x4B, 0x83, 0x82, 0x3B,
                              0x02, 0x03, 0x0A, 0xC2, 0x96, 0x62, 0x86, 0x8E};
 
@@ -63,5 +64,6 @@ void setSevenSeg(char a)
     }    
 
     i2cAddTxTransaction(IRIS_SEG_I2C_ADDR, &magicNumber, 1, NULL, NULL);
+    **/
 }
 

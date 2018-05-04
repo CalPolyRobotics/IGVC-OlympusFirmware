@@ -72,7 +72,6 @@ int main(void)
     MX_DMA_Init();
     MX_ADC2_Init();
     MX_SPI3_Init();
-    i2cInit();
 
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
@@ -90,7 +89,6 @@ int main(void)
         serviceTxDma();
         serviceCallbackTimer();
         serviceUSBWrite();
-        serviceI2C();
 
         consoleProcessBytes();
 
