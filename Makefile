@@ -58,8 +58,8 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/sevenSeg.c \
 		   $(DRIVERS)/speedDAC.c \
 		   $(DRIVERS)/pwradc.c \
-			$(DRIVERS)/submoduleComms.c \
-			$(DRIVERS)/bootComms.c
+		   $(DRIVERS)/submoduleComms.c \
+		   $(DRIVERS)/bootComms.c
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
@@ -93,7 +93,7 @@ AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
 
 WARNINGS = -Wall -Werror -Wno-unused-function
-	
+
 CFLAGS  = -O0 -g \
    -mcpu=cortex-m3 -mthumb \
    -mfloat-abi=soft \
