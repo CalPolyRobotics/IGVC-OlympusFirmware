@@ -36,8 +36,7 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCES += $(PERIPHERALS)/adc.c \
-		   $(PERIPHERALS)/dac.c \
+SOURCES += $(PERIPHERALS)/dac.c \
 		   $(PERIPHERALS)/dma.c \
 		   $(PERIPHERALS)/gpio.c \
 		   $(PERIPHERALS)/spi.c \

@@ -70,13 +70,10 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_DMA_Init();
-    MX_ADC2_Init();
     MX_SPI3_Init();
 
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
-
-    adc_init();
 
     initSpeedDAC();
 

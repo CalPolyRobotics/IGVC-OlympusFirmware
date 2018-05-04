@@ -63,8 +63,8 @@ void initSpeedDAC()
 
 uint8_t isPedalDown()
 {
-    /** TODO - Request this from HERA **/
-    return getPedalValue() > 248;
+    /** TODO - Request Pin from HERA **/
+    return 0;
 }
 
 static Timer_Return speedDACCallback(void* dummy)
@@ -137,10 +137,4 @@ void commsSetThrottleEnableCallback(Packet_t* packet){
     }else{
         disableSpeedDAC();
     }
-}
-
-void commsPedalAdcCallback(){
-    uint16_t pedalVal = getPedalValue();
-    commsPedalAdc[0] = (pedalVal >> 8) & 0xFF;
-    commsPedalAdc[1] = pedalVal & 0xFF;
 }

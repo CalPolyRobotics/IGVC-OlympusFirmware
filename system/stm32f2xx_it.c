@@ -39,8 +39,6 @@
 #include "led.h"
 
 /* External variables --------------------------------------------------------*/
-extern ADC_HandleTypeDef hadc1;
-extern ADC_HandleTypeDef hadc2;
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern UART_HandleTypeDef huart1;
 extern PCD_HandleTypeDef hpcd;
@@ -78,15 +76,6 @@ void HardFault_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f2xx.s).                    */
 /******************************************************************************/
-
-/**
-* @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
-*/
-void ADC_IRQHandler(void)
-{
-    //HAL_ADC_IRQHandler(&hadc1);
-    HAL_ADC_IRQHandler(&hadc2);
-}
 
 void OTG_FS_IRQHandler(void)
 {

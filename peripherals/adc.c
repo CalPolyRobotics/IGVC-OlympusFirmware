@@ -61,31 +61,3 @@ void MX_ADC2_Init(void)
 
     ADC2->CR2 |= ADC_CR2_SWSTART; //Start ADC2
 }
-
-uint32_t getSteeringValue()
-{
-    uint32_t steeringValue = 0;
-    uint32_t i;
-
-    for (i = 0; i < 8; i++)
-    {
-        steeringValue += ADCData[i * 2];
-    }
-
-    return steeringValue / 8;
-}
-
-uint32_t getPedalValue()
-{
-    uint32_t pedalValue = 0;
-    uint32_t i;
-
-    for (i = 0; i < 8; i++)
-    {
-        pedalValue += ADCData[(i * 2) + 1];
-    }
-
-    return pedalValue / 8;
-}
-
-
