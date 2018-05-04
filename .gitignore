@@ -8,7 +8,7 @@
 *.map
 *.swp
 
-tags
+*tags
 
 build/*
 
