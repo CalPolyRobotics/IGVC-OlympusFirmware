@@ -62,7 +62,7 @@ static ConsoleCommand commands[] = {
     {"i2cScan", 0, console_i2cScan},
     //{"setGPIO", 3, console_setGPIO},
     {"setLED", 2, console_setLED},
-    {"setSegment", 1, console_setSegment},
+    {"setSegment", 2, console_setSegment},
     {"measPower", 1, console_measPower},
     {"kill", 0, console_kill},
     {"writeFNR", 1, console_writeFNR},
@@ -378,16 +378,20 @@ static void console_setLED(uint32_t argc, char** argv)
     }
 }
 
+static char segmentCharFromChar(char c){
+    if (c >= '0' && c <= '9')
+    {
+        return c - '0';
+    } else if(c >= 'a' && c <= 'f'){
+        return c - 'a' + 0xA;
+    } else {
+        return c;
+    }
+}
+
 static void console_setSegment(uint32_t argc, char** argv)
 {
-    if (*argv[0] >= '0' && *argv[0] <= '9')
-    {
-        setSevenSeg(*argv[0] - '0');
-    } else if(*argv[0] >= 'a' && *argv[0] <= 'f') {
-        setSevenSeg(*argv[0] - 'a' + 0xA);
-    } else {
-        setSevenSeg(*argv[0]);
-    }
+    setSevenSeg(segmentCharFromChar(*argv[0]), segmentCharFromChar(*argv[1]));
 }
 
 struct adc_cmd {

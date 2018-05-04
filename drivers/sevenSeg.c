@@ -1,19 +1,19 @@
-
 #include "main.h"
 #include "config.h"
-#include "i2c.h"
+#include "spi.h"
 
-void setSevenSeg(char a)
-{
+#define MCP23C17_ADDR ((uint8_t)0x20)
 
-    /** TODO Move TO SPI with 2 seven segments
+#define MCP23C17_WRITE (MCP23C17_ADDR << 1 )
+#define REG_GPIOA_ADDR ((uint8_t)0x12)
+
+uint8_t charToSevenSeg(char c){
     uint8_t lookupTable[] = {0x12, 0x7B, 0x26, 0x23, 0x4B, 0x83, 0x82, 0x3B,
                              0x02, 0x03, 0x0A, 0xC2, 0x96, 0x62, 0x86, 0x8E};
-
     uint8_t magicNumber;
 
-    if (a > 15) {
-        switch(a) {
+    if (c > 15) {
+        switch(c) {
             case ' ':
                 magicNumber = 0xFF;
                 break;
@@ -60,10 +60,28 @@ void setSevenSeg(char a)
                 break;
         }
     } else {
-        magicNumber = lookupTable[a & 0xF];
+        magicNumber = lookupTable[c & 0xF];
     }    
 
-    i2cAddTxTransaction(IRIS_SEG_I2C_ADDR, &magicNumber, 1, NULL, NULL);
-    **/
+    return magicNumber;
+}
+
+
+/**
+ * Communicating over SPI with MCP23S17 GPIO Expander
+ * to two seven segment displays
+ *
+ * Write (Address 7)(R/W 1) | Register Address | Data ....
+ * to set registers in the GPIO expander
+ */
+void setSevenSeg(char c1, char c2)
+{
+
+    uint8_t message[4] = {MCP23C17_WRITE, REG_GPIOA_ADDR, charToSevenSeg(c1), charToSevenSeg(c2)};
+
+    /** TODO Move SPI to DMA **/
+    HAL_GPIO_WritePin(PORT_SS_IRIS, PIN_SS_IRIS, GPIO_PIN_RESET);
+    HAL_SPI_Transmit(&hspi3, (uint8_t*)&message, sizeof(message), 500);
+    HAL_GPIO_WritePin(PORT_SS_IRIS, PIN_SS_IRIS, GPIO_PIN_SET);
 }
 
