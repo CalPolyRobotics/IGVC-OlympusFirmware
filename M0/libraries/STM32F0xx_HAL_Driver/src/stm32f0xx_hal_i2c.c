@@ -441,12 +441,11 @@ HAL_StatusTypeDef HAL_I2C_Init(I2C_HandleTypeDef *hi2c)
   /* Disable Own Address1 before set the Own Address1 configuration */
   hi2c->Instance->OAR1 &= ~I2C_OAR1_OA1EN;
 
-  /* Configure I2Cx: Own Address1 and ack own address1 mode */
   if (hi2c->Init.AddressingMode == I2C_ADDRESSINGMODE_7BIT)
   {
     hi2c->Instance->OAR1 = (I2C_OAR1_OA1EN | hi2c->Init.OwnAddress1);
   }
-  else /* I2C_ADDRESSINGMODE_10BIT */
+  else
   {
     hi2c->Instance->OAR1 = (I2C_OAR1_OA1EN | I2C_OAR1_OA1MODE | hi2c->Init.OwnAddress1);
   }
