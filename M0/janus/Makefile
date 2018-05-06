@@ -14,7 +14,8 @@ DRIVERS_SHR = ../drivers
 SOURCES += main.c
 
 SOURCES += $(DRIVERS_LOC)/comms.c \
-			$(DRIVERS_LOC)/fnr.c
+			$(DRIVERS_LOC)/fnr.c  \
+			$(DRIVERS_LOC)/sevenSeg.c
 
 SOURCES += $(DRIVERS_SHR)/commsLib.c \
 			$(DRIVERS_SHR)/boot.c \
@@ -25,6 +26,8 @@ SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_flash_ex.c \
 			$(HAL)/src/stm32f0xx_hal_spi.c \
 			$(HAL)/src/stm32f0xx_hal_spi_ex.c \
+			$(HAL)/src/stm32f0xx_hal_i2c.c \
+			$(HAL)/src/stm32f0xx_hal_i2c_ex.c \
 			$(HAL)/src/stm32f0xx_hal_dma.c \
 			$(HAL)/src/stm32f0xx_hal_gpio.c \
 			$(HAL)/src/stm32f0xx_hal_cortex.c \
@@ -37,8 +40,8 @@ SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
 
 SOURCES += $(PERIPH_SHR)/spi.c
 
-SOURCES += $(PERIPH_LOC)/gpio.c
-
+SOURCES += $(PERIPH_LOC)/gpio.c \
+		   $(PERIPH_LOC)/i2c.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
@@ -64,12 +67,12 @@ OBJCOPY = arm-none-eabi-objcopy
 
 WARNINGS = -Wall -Werror -Wno-unused-function
 	
-CFLAGS  = $(INCLUDES) \
-	-Os -g \
-   -mcpu=cortex-m0 -mthumb \
-   -mfloat-abi=soft \
-   -D STM32F042x6 \
-   $(WARNINGS)
+CFLAGS  = $(INCLUDES)\
+		-Os -g \
+		-mcpu=cortex-m0 -mthumb \
+		-mfloat-abi=soft \
+		-D STM32F042x6 \
+		$(WARNINGS)
 
 LDSCRIPT = ../buildTools/STM32F042K6Tx_FLASH.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools

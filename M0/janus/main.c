@@ -1,9 +1,10 @@
 #include "stm32f0xx_hal.h"
 #include "spi.h"
-#include "gpio.h"
 #include "commsLib.h"
+#include "i2c.h"
 #include "fnr.h"
 #include "gpio.h"
+#include "sevenSeg.h"
 
 void SystemClock_Config(void);
 
@@ -17,9 +18,10 @@ int main(void)
 
     MX_SPI1_Init();
     MX_GPIO_Init();
+    MX_I2C1_Init();
 
-
-    fnr_t currentState;
+    fnr_t currentState = NEUTRAL;
+    setSevenSegFNR(currentState);
 
     uint8_t data;
     while (1)
@@ -31,7 +33,8 @@ int main(void)
 
         fnr_t newState = getFNR();
         if(newState != currentState){
-            // Write to 7Seg
+            currentState = newState;
+            setSevenSegFNR(currentState);
         }
     }
 }
