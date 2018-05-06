@@ -2,6 +2,8 @@
 #include "spi.h"
 #include "gpio.h"
 #include "commsLib.h"
+#include "fnr.h"
+#include "gpio.h"
 
 void SystemClock_Config(void);
 
@@ -14,13 +16,22 @@ int main(void)
     SystemClock_Config();
 
     MX_SPI1_Init();
+    MX_GPIO_Init();
+
+
+    fnr_t currentState;
 
     uint8_t data;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 1000);
+        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
         if(status == HAL_OK){
             runCommsFSM(data);
+        }
+
+        fnr_t newState = getFNR();
+        if(newState != currentState){
+            // Write to 7Seg
         }
     }
 }

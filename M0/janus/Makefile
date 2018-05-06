@@ -6,18 +6,18 @@ UTILS = ../utils
 CONFIG = ../config
 SYSTEM = ../system
 INC = ../inc
-PERIPHERALS = ../peripherals
-DRIVERS = drivers
-SHRDRIVERS = ../drivers
+PERIPH_SHR = ../peripherals
+PERIPH_LOC = peripherals
+DRIVERS_LOC = drivers
+DRIVERS_SHR = ../drivers
 
 SOURCES += main.c
 
-SOURCES += $(DRIVERS)/comms.c
+SOURCES += $(DRIVERS_LOC)/comms.c \
+			$(DRIVERS_LOC)/fnr.c
 
-SOURCES += $(SHRDRIVERS)/commsLib.c \
-			$(SHRDRIVERS)/boot.c \
-
-SOURCES += $(PERIPHERALS)/spi.c
+SOURCES += $(DRIVERS_SHR)/commsLib.c \
+			$(DRIVERS_SHR)/boot.c \
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -35,15 +35,21 @@ SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
 		   $(SYSTEM)/stm32f0xx_it.c \
 		   $(SYSTEM)/system_stm32f0xx.c
 
+SOURCES += $(PERIPH_SHR)/spi.c
+
+SOURCES += $(PERIPH_LOC)/gpio.c
+
+
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
-			-I$(DRIVERS)/ \
 			-I$(SYSTEM) \
 			-I$(INC) \
-			-I$(PERIPHERALS) \
-			-I$(SHRDRIVERS) \
+			-I$(PERIPH_SHR) \
+			-I$(PERIPH_LOC) \
+			-I$(DRIVERS_SHR) \
+			-I$(DRIVERS_LOC)/ \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
