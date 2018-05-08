@@ -81,6 +81,8 @@ int main(void)
 
     printf("Hello.\r\n");
 
+    setSevenSeg('6', '9');
+
     while(1)
     {
         serviceTxDma();
