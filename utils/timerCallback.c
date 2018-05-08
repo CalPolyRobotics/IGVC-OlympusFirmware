@@ -97,8 +97,6 @@ void serviceCallbackTimer()
     }
 }
 
-void led6Toggle(void*);
-
 // The ISR called by the timer
 void CALLBACK_TIMER_ISR()
 {

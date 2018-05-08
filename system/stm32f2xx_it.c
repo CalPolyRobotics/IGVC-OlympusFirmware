@@ -35,11 +35,10 @@
 #include "stm32f2xx_hal.h"
 #include "stm32f2xx.h"
 #include "stm32f2xx_it.h"
-#include "usart.h"
-#include "led.h"
+#include "sevenSeg.h"
+#include "config.h"
 
 /* External variables --------------------------------------------------------*/
-extern DMA_HandleTypeDef hdma_usart1_rx;
 extern UART_HandleTypeDef huart1;
 extern PCD_HandleTypeDef hpcd;
 
@@ -66,7 +65,7 @@ void SysTick_Handler(void)
 
 void HardFault_Handler(void)
 {
-    writeLED(10, 1);
+    setSevenSeg(ERROR_HARD_FAULT);
     while(1);
 }
 
@@ -84,6 +83,7 @@ void OTG_FS_IRQHandler(void)
 
 void WWDG_IRQHandler(void)
 {
+    setSevenSeg(ERROR_WATCH_DOG);
     while(1);
 }
 

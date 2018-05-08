@@ -11,7 +11,7 @@
 #include "config.h"
 
 static uint8_t txBuffers[COMMS_TX_NUM_BUFFERS][COMMS_TX_BUFFER_SIZE];
-static uint8_t rxBuffer[COMMS_RX_BUFFER_SIZE];
+static volatile uint8_t rxBuffer[COMMS_RX_BUFFER_SIZE];
 static volatile uint32_t txBufferLengths[COMMS_TX_NUM_BUFFERS];
 static volatile uint32_t nextTxBuffer;
 static volatile uint32_t dmaTxBuffer;
@@ -341,5 +341,5 @@ void COMMS_TX_DMA_ISR()
 {
     shouldServiceTxDma = 1;
 
-    COMMS_TX_DMA->HIFCR = DMA_HIFCR_CTCIF7;
+    COMMS_TX_DMA->HIFCR = DMA_HIFCR_CTCIF6;
 }
