@@ -2,16 +2,18 @@
 #include "comms.h"
 #include "spi.h"
 
-void write_response(uint8_t *data, uint8_t length);
-
-typedef enum COMMS_STATE{
+typedef enum commState{
     START_BYTE=0, MSG_TYPE, DATA
-}COMMS_STATE;
+}commState_t;
 
-uint8_t buf[256];
+static uint8_t errorByte;
+static uint8_t buf[256];
 
+static void writeResponse(uint8_t *data, uint8_t length);
+
+/** TODO make sure error returns don't get confused as data by Olympus **/
 void runCommsFSM(uint8_t data){
-    static COMMS_STATE state = START_BYTE;
+    static commState_t state = START_BYTE;
     static uint8_t dataSize;
     static uint8_t dataIdx;
     static uint8_t msgType;
@@ -24,7 +26,9 @@ void runCommsFSM(uint8_t data){
             break;
 
         case MSG_TYPE:
-            if(data >= MSG_INFO_SIZE){
+            if(data > NUM_MSGS){
+                errorByte = WR_ERR_INV_MSG_TYPE;
+                writeResponse(&errorByte, 1);
                 state = START_BYTE;
                 break;
             }
@@ -33,7 +37,7 @@ void runCommsFSM(uint8_t data){
             dataSize = msgResp[msgType].txDataLength;
 
             if(dataSize == 0){
-                write_response(msgResp[msgType].callback(NULL), msgResp[msgType].rxDataLength);
+                writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].rxDataLength);
                 state = START_BYTE;
             }else{
                 dataIdx = 0;
@@ -44,7 +48,7 @@ void runCommsFSM(uint8_t data){
         case DATA:
             buf[dataIdx] = data;
             if(dataIdx == dataSize - 1){
-                write_response(msgResp[msgType].callback(buf), msgResp[msgType].rxDataLength);
+                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].rxDataLength);
                 state = START_BYTE;
             }else{
                 dataIdx++;
@@ -54,6 +58,6 @@ void runCommsFSM(uint8_t data){
 }
 
 
-void write_response(uint8_t *data, uint8_t length){
+void writeResponse(uint8_t *data, uint8_t length){
     HAL_SPI_Transmit(&hspi1, data, length, SPI_TIMEOUT);
 }
