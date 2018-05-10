@@ -1,6 +1,5 @@
 BUILDDIR = build/bin
 
-#DEVICE = libraries/CMSIS/device/ST/STM32F0xx
 CMSIS = ../libraries/CMSIS
 HAL = ../libraries/STM32F0xx_HAL_Driver
 UTILS = ../utils
@@ -8,8 +7,15 @@ CONFIG = ../config
 SYSTEM = ../system
 INC = ../inc
 PERIPHERALS = ../peripherals
+DRIVERS = drivers
+SHRDRIVERS = ../drivers
 
 SOURCES += main.c
+
+SOURCES += $(DRIVERS)/comms.c
+
+SOURCES += $(SHRDRIVERS)/commsLib.c \
+			$(SHRDRIVERS)/boot.c \
 
 SOURCES += $(PERIPHERALS)/spi.c
 
@@ -33,9 +39,11 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
+			-I$(DRIVERS)/ \
 			-I$(SYSTEM) \
 			-I$(INC) \
 			-I$(PERIPHERALS) \
+			-I$(SHRDRIVERS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -50,10 +58,10 @@ OBJCOPY = arm-none-eabi-objcopy
 
 WARNINGS = -Wall -Werror -Wno-unused-function
 	
-CFLAGS  = -O0 -g \
+CFLAGS  = $(INCLUDES) \
+	-Os -g \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
-   $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
    -D STM32F042x6 \
    $(WARNINGS)
 
