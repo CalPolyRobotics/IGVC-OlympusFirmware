@@ -5,37 +5,6 @@
 
 void SystemClock_Config(void);
 
-void test_master_tx(void);
-void test_slave_rx(void);
-
-void test_master_tx(void){
-    uint8_t reg = 0xAA;
-    uint8_t val[4];
-    GPIOA -> ODR &= ~GPIO_PIN_4;
-    HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
-    //HAL_Delay(1);
-    HAL_SPI_Receive(&hspi1, (uint8_t*)val, 4, 1000);
-    GPIOA -> ODR |= GPIO_PIN_4;
-
-    if (val[0] != 'a' || val[1] != 'b' || val[2] != 'c' || val[3] != 'd'){
-        GPIOB -> ODR |= GPIO_PIN_3;
-    } else {
-        GPIOB -> ODR &= ~GPIO_PIN_3;
-    }
-}
-
-void test_slave_rx(void){
-    uint8_t reg; 
-    uint8_t data[4] = {'a', 'b', 'c', 'd'};
-    HAL_SPI_Receive(&hspi1, &reg, 1, 1000);
-    if(reg == 0xAA){
-        GPIOB -> ODR |= GPIO_PIN_3;
-        HAL_SPI_Transmit(&hspi1, (uint8_t*)data, 4, 1000);
-    }else{
-        GPIOB -> ODR &= ~GPIO_PIN_3;
-    }
-}
-
 int main(void)
 {
     HAL_StatusTypeDef status;
