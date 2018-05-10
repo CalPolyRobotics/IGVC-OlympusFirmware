@@ -8,8 +8,15 @@ CONFIG = ../config
 SYSTEM = ../system
 INC = ../inc
 PERIPHERALS = ../peripherals
+DRIVERS = drivers
+SHRDRIVERS = ../drivers
 
 SOURCES += main.c
+
+SOURCES += $(DRIVERS)/comms.c
+
+SOURCES += $(SHRDRIVERS)/commsLib.c \
+			$(SHRDRIVERS)/boot.c \
 
 SOURCES += $(PERIPHERALS)/spi.c
 
@@ -33,9 +40,11 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
+			-I$(DRIVERS) \
 			-I$(SYSTEM) \
 			-I$(INC) \
 			-I$(PERIPHERALS) \
+			-I$(SHRDRIVERS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -50,14 +59,14 @@ OBJCOPY = arm-none-eabi-objcopy
 
 WARNINGS = -Wall -Werror -Wno-unused-function
 	
-CFLAGS  = -O0 -g \
+CFLAGS  = -Os -g \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
    -D STM32F042x6 \
    $(WARNINGS)
 
-LDSCRIPT = ../buildTools/STM32F042K6Tx_FLASH.ld
+LDSCRIPT = ../buildTools/STM32F042C6Tx_FLASH.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
