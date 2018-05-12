@@ -34,10 +34,10 @@ void runCommsFSM(uint8_t data){
             }
 
             msgType = data;
-            dataSize = msgResp[msgType].txDataLength;
+            dataSize = msgResp[msgType].rxDataLength;
 
             if(dataSize == 0){
-                writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].rxDataLength);
+                writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].txDataLength);
                 state = START_BYTE;
             }else{
                 dataIdx = 0;
@@ -48,7 +48,7 @@ void runCommsFSM(uint8_t data){
         case DATA:
             buf[dataIdx] = data;
             if(dataIdx == dataSize - 1){
-                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].rxDataLength);
+                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
                 state = START_BYTE;
             }else{
                 dataIdx++;
