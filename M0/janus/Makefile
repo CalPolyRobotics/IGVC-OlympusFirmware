@@ -80,7 +80,7 @@ LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = $(BUILD_TOOLS)/flash.jlink
+FLASH_SCRIPT = $(BUILD_TOOLS)/flashF042K6.jlink
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@

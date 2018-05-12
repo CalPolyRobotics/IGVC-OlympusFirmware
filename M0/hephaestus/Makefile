@@ -10,6 +10,7 @@ INC = ../inc
 PERIPHERALS = ../peripherals
 DRIVERS = drivers
 SHRDRIVERS = ../drivers
+BUILD_TOOLS = ../buildTools
 
 SOURCES += main.c
 
@@ -66,12 +67,12 @@ CFLAGS  = -Os -g \
    -D STM32F042x6 \
    $(WARNINGS)
 
-LDSCRIPT = ../buildTools/STM32F042C6Tx_FLASH.ld
+LDSCRIPT = $(BUILD_TOOLS)/STM32F042C6Tx_FLASH.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = ../buildTools/flash.jlink
+FLASH_SCRIPT = $(BUILD_TOOLS)/flashF042C6.jlink
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
@@ -92,6 +93,11 @@ $(BUILDDIR)/%.o: %.s
 	$(CC) -c $(CFLAGS) $< -o $@
 
 flash: $(BIN)
+	cp $(BIN) $(BUILD_TOOLS)/program.bin
+	JLinkExe -Device STM32F042K6 -CommanderScript $(FLASH_SCRIPT)
+	rm $(BUILD_TOOLS)/program.bin
+
+flash-st-link: $(BIN)
 	st-flash write $(BIN) 0x8000000
 
 clean:
