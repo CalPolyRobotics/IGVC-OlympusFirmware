@@ -2,65 +2,58 @@
 #include "i2c.h"
 #include "sevenSeg.h"
 
-#define MCP23008_ADDR ((uint8_t)0x20)
+#define MCP23008_ADDR ((uint8_t)0x40)
 #define REG_GPIO_ADDR ((uint8_t)0x09)
+#define REG_IODIR_ADDR ((uint8_t)0x00)
 
+/**
+ * Returns the value for the gpio expande
+ *
+ * Note only works for 0-9 and A/a-F/f
+ */
 uint8_t charToSevenSeg(char c){
-    uint8_t lookupTable[] = {0x12, 0x7B, 0x26, 0x23, 0x4B, 0x83, 0x82, 0x3B,
-                             0x02, 0x03, 0x0A, 0xC2, 0x96, 0x62, 0x86, 0x8E};
-
-    uint8_t magicNumber = lookupTable[c & 0xF];
-
-    if (c > 15) {
-        switch(c) {
-            case ' ':
-                magicNumber = 0xFF;
-                break;
-            case 'h':
-                magicNumber = 0x4A;
-                break;
-            case 'l': 
-                magicNumber = 0xD6;
-                break;
-            case 'n': 
-                magicNumber = 0xEA;
-                break;
-            case 'o': 
-                magicNumber = 0xE2;
-                break;
-            case 'r': 
-                magicNumber = 0xEE;
-                break;
-            case 'A': 
-                magicNumber = 0xBF;
-                break;
-            case 'B': 
-                magicNumber = 0x7F;
-                break;
-            case 'C': 
-                magicNumber = 0xFB;
-                break;
-            case 'D': 
-                magicNumber = 0xF7;
-                break;
-            case 'E': 
-                magicNumber = 0xFE;
-                break;
-            case 'F': 
-                magicNumber = 0xDF;
-                break;
-            case 'G': 
-                magicNumber = 0xEF;
-                break;
-            case 'H': 
-                magicNumber = 0xFD;
-                break;
-            default:
-                break;
-        }
-    }   
-
-    return magicNumber;
+    switch(c){
+        case '0':
+            return 0x88;
+        case '1':
+            return 0xEB;
+        case '2':
+            return 0x4C;
+        case '3':
+            return 0x49;
+        case '4':
+            return 0x2B;
+        case '5':
+            return 0x19;
+        case '6':
+            return 0x18;
+        case '7':
+            return 0x8B;
+        case '8':
+            return 0x08;
+        case '9':
+            return 0x0B;
+        case 'A':
+        case 'a':
+            return 0x0A;
+        case 'B':
+        case 'b':
+            return 0x38;
+        case 'C':
+        case 'c':
+            return 0x9C;
+        case 'D':
+        case 'd':
+            return 0x68;
+        case 'E':
+        case 'e':
+            return 0x1C;
+        case 'F':
+        case 'f':
+            return 0x1E;
+        default:
+            return 0xFF;
+    }
 }
 
 
@@ -69,12 +62,18 @@ uint8_t charToSevenSeg(char c){
  * to two seven segment displays
  *
  * Write (Address 7)(R/W 1) | Register Address | Data ....
- * to set registers in the GPIO expander
+ * to set registers in the GPIO expander and set pins as outputs
  */
-void setSevenSeg(char c1)
+void setSevenSeg(char c)
 {
-    uint8_t message[2] = {REG_GPIO_ADDR, charToSevenSeg(c1)};
+    uint8_t segVal = charToSevenSeg(c);
 
+    // Set low pins as outputs
+    uint8_t message[2] = {REG_IODIR_ADDR, segVal};
+    HAL_I2C_Master_Transmit(&hi2c1, MCP23008_ADDR, message, sizeof(message), 500);
+
+    // Set pins
+    message[0] = REG_GPIO_ADDR;
     HAL_I2C_Master_Transmit(&hi2c1, MCP23008_ADDR, message, sizeof(message), 500);
 }
 

@@ -2,7 +2,7 @@
 
 fnr_t getFNR(){
     // Check neutral first since neutral and forward could be high at the same time
-    if(HAL_GPIO_ReadPin(GPIO_FNR_SENSE_PORT, GPIO_REVERSE_SENSE_PIN) == GPIO_PIN_SET){
+    if(HAL_GPIO_ReadPin(GPIO_FNR_SENSE_PORT, GPIO_NEUTRAL_SENSE_PIN) == GPIO_PIN_SET){
         return NEUTRAL;
     }
 
