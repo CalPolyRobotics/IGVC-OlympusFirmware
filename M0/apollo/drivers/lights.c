@@ -36,23 +36,19 @@ uint16_t arr[256]=
 658,564,470,376,282,188,94,0};
 
 void init_Timer(){
-    __HAL_RCC_TIM3_CLK_ENABLE();
-    TIM3 -> CCMR1 =(TIM_CCMR1_OC1M_1|TIM_CCMR1_OC1M_2|TIM_CCMR1_OC1M_0|TIM_CCMR1_OC2M_1|TIM_CCMR1_OC2M_2|TIM_CCMR1_OC2M_0);
-    TIM3 -> CCMR2 =(TIM_CCMR1_OC1M_1|TIM_CCMR1_OC1M_2|TIM_CCMR1_OC1M_0|TIM_CCMR1_OC2M_1|TIM_CCMR1_OC2M_2|TIM_CCMR1_OC2M_0);
-    TIM3 -> CCER=TIM_CCER_CC1E_Msk;
-    TIM3 -> CR1 = TIM_CR1_CEN;
-    TIM3 -> CCR1= 16000;
-    TIM3 -> ARR= 24000;
-    TIM3 -> CCR2= 32000;
-    TIM3 -> CCR3= 8000;
-    TIM3 -> CCR4= 4000;
+    __HAL_RCC_TIM2_CLK_ENABLE();
+    TIM2 -> CCMR2 =(TIM_CCMR2_OC3M_2|TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0);
+    TIM2 -> CCER=TIM_CCER_CC3E_Msk;
+    TIM2 -> CR1 = TIM_CR1_CEN;
+    TIM2 -> ARR= 24000;
+    TIM2 -> CCR3= 24000;
     __HAL_RCC_GPIOA_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitTypeDef;
-    GPIO_InitTypeDef.Pin= TIMER_OUT;
+    GPIO_InitTypeDef.Pin= HEADLIGHTS;
     GPIO_InitTypeDef.Pull= GPIO_NOPULL;
     GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
-    GPIO_InitTypeDef.Alternate=GPIO_AF1_TIM3;
+    GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM2;
     HAL_GPIO_Init( TIMER_PORT, &GPIO_InitTypeDef );
 
 
@@ -60,20 +56,21 @@ void init_Timer(){
 
 void init_apollo(){
     init_Timer(); 
-    //Initializes pins 3 and 4 to outputs
-    //below needs to modified if GPIOB isn't used
-    __HAL_RCC_GPIOB_CLK_ENABLE();
+    //Initializes pins 1 and 0 to outputs
+    //below needs to modified if GPIOA isn't used
+    __HAL_RCC_GPIOA_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitTypeDef;
 
-    GPIO_InitTypeDef.Pin= TURN_SIGNAL_L | TURN_SIGNAL_R | HEADLIGHTS;
+    GPIO_InitTypeDef.Pin= TURN_SIGNAL_L | TURN_SIGNAL_R;
     GPIO_InitTypeDef.Pull= GPIO_NOPULL;
     GPIO_InitTypeDef.Mode=GPIO_MODE_OUTPUT_PP;
     GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
 
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
-    //GPIOB ->BSRR |=GPIO_PIN_
-    TURN_SIGNAL_PORT -> ODR |= TURN_SIGNAL_L | TURN_SIGNAL_R | HEADLIGHTS;
+    //GPIOA ->BSRR |=GPIO_PIN_
+    //Start with turn signals off
+    TURN_SIGNAL_PORT -> ODR &= ~(TURN_SIGNAL_L | TURN_SIGNAL_R);
 
 
 }
@@ -94,7 +91,7 @@ void set_turn_signal(uint8_t state){
 }
 
 void set_headlights( uint8_t speed){
-    TIM3 -> CCR1=arr[speed];    
+    TIM2 -> CCR3=arr[speed];
 }
 
 void set_misc_lights(uint8_t light, uint8_t state, uint8_t speed){

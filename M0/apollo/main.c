@@ -2,6 +2,7 @@
 #include "spi.h"
 #include "gpio.h"
 #include "commsLib.h"
+#include "lights.h"
 
 void SystemClock_Config(void);
 
@@ -15,7 +16,7 @@ int main(void)
 
     MX_GPIO_Init();
     MX_SPI1_Init();
-
+    init_apollo();
     uint8_t data;
     while (1)
     {

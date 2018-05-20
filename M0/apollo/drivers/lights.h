@@ -3,17 +3,16 @@
 
 #include <stdint.h>
 
-#define TURN_SIGNAL_L GPIO_PIN_3
-#define TURN_SIGNAL_PORT GPIOB
-#define TURN_SIGNAL_R GPIO_PIN_4
+#define TURN_SIGNAL_L GPIO_PIN_1
+#define TURN_SIGNAL_PORT GPIOA
+#define TURN_SIGNAL_R GPIO_PIN_0
 
 #define STATE_R_MASK 0x01
 #define STATE_L_MASK 0x02
 
 #define TIMER_PORT GPIOA
-#define TIMER_OUT GPIO_PIN_6
 
-#define HEADLIGHTS GPIO_PIN_5
+#define HEADLIGHTS GPIO_PIN_2
 
 void init_apollo();
 
