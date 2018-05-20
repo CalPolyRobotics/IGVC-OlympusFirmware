@@ -6,6 +6,6 @@ void killBoard()
 {
     HAL_GPIO_WritePin(GPIO_BOARD_KILL_PORT,
                       GPIO_BOARD_KILL_PIN,
-                      GPIO_PIN_RESET);
+                      GPIO_PIN_SET);
     while(1);
 }
