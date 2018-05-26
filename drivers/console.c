@@ -80,7 +80,7 @@ static ConsoleCommand commands[] = {
     {"getFNR", 0, console_getFNR},
     {"setEnableSpeed", 0, console_setEnableSpeed},
     {"setSpeedTarget", 1, console_setSpeedTarget},
-    {"getSpeedTarget", 1, console_getSpeedTarget},
+    {"getSpeedTarget", 0, console_getSpeedTarget},
     {"setEnableSteer", 1, console_setEnableSteer},
     {"setSteerTarget", 1, console_setSteerTarget},
     {"getSteerDir", 0, console_getSteerDir},

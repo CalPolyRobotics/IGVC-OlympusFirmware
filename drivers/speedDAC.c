@@ -15,8 +15,6 @@ static uint8_t enableSpeedOutput = 0;
 
 static Timer_Return speedDACCallback(void* dummy);
 
-#define BIT_MASK_LOW_12 ((uint16_t)0x0FFF)
-
 #define UPO_SET   ((uint16_t)0xE800)
 #define UPO_RESET ((uint16_t)0xE000)
 
@@ -63,7 +61,7 @@ void initSpeedDAC()
 uint8_t isPedalDown()
 {
     /** TODO - Request Pin from HERA **/
-    return 0;
+    return 1;
 }
 
 static Timer_Return speedDACCallback(void* dummy)
@@ -116,7 +114,7 @@ void resetSpeedDAC()
 
 void writeSpeedDAC(uint16_t value)
 {
-    targetSpeed = (value & BIT_MASK_LOW_12);
+    targetSpeed = value;
 }
 
 uint16_t getSpeedDAC()
