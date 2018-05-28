@@ -32,15 +32,21 @@ void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t 
     /** Send Start Byte **/
     HAL_SPI_Transmit(&hspi3, &start_byte, 1, SPI_DEFAULT_TIMEOUT);
 
-    /** Send Stop Byte **/
+    /** Send Msg Byte **/
     HAL_SPI_Transmit(&hspi3, &msg_type, 1, SPI_DEFAULT_TIMEOUT);
 
     /** Transmit Data **/
     /** TODO - Transfer to DMA **/
-    HAL_SPI_Transmit(&hspi3, buff, tx_size, 500);
+    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+
+    /** Delay to wait for Slave Response **/
+    int i;
+    for(i = 0; i < 200; i++){
+        asm("nop");
+    }
 
     /** Read Response Data **/
-    HAL_SPI_Receive(&hspi3, (uint8_t*)submoduleCommsBuff, rx_size, SPI_DEFAULT_TIMEOUT);
+    HAL_SPI_Receive(&hspi3, (uint8_t*)buff, rx_size, SPI_DEFAULT_TIMEOUT);
 
     deselectModule(module);
 }
@@ -67,14 +73,15 @@ module_t getSubmoduleStatus(){
     module_t modules_list[] = {HERA, JANUS};
     uint8_t return_buffer;
     int i;
-    for(i = 0; i < NUM_SUBMODULES; i++){
+    //for(i = 0; i < NUM_SUBMODULES; i++){
+    for(i = 0; i < sizeof(modules_list); i++){
         /* All status messages should have:
          * msg_type: 0
          * tx_size: 0
          * rx_size: 1 */
         messageSubmodule(modules_list[i], 0, &return_buffer, 0, 1);
         if(return_buffer != 0xAA){
-            printf("Error code: %d", i);
+            printf("Error code: %u", return_buffer);
             return modules_list[i];
         }
     }
