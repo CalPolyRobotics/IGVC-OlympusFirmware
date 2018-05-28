@@ -77,12 +77,13 @@ static Timer_Return speedDACCallback(void* dummy)
                 {
                     currentSpeed = targetSpeed;
                 }
+                setSpeedDAC((uint16_t)currentSpeed);
 
             } else if (currentSpeed > targetSpeed) {
                 currentSpeed = targetSpeed;
+                setSpeedDAC((uint16_t)currentSpeed);
             }
 
-            setSpeedDAC((uint16_t)currentSpeed);
         } else {
             currentSpeed = 0;
             setSpeedDAC(0);
