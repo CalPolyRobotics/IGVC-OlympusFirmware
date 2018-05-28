@@ -20,6 +20,7 @@
 #include "adc.h"
 #include "config.h"
 #include "doubleBuffer.h"
+#include "submoduleComms.h"
 
 #include <stddef.h>
 
@@ -82,6 +83,8 @@ int main(void)
     printf("Hello.\r\n");
 
     setSevenSeg('6', '9');
+
+    SubmoduleFault_Handler(getSubmoduleStatus());
 
     while(1)
     {

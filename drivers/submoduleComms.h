@@ -14,7 +14,8 @@ typedef enum module{
    HEPHAESTUS = 1,
    HERA       = 2,
    JANUS      = 3,
-   OLYMPUS    = 4
+   OLYMPUS    = 4,
+   NONE       = 255
 }module_t;
 
 typedef enum apolloMsg{
@@ -42,5 +43,8 @@ typedef enum janusMsg{
 extern uint8_t submoduleCommsBuff[256];
 
 void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);
+
+module_t getSubmoduleStatus();
+void SubmoduleFault_Handler(module_t fault_module);
 
 #endif
