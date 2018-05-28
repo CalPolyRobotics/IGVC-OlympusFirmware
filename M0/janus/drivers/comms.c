@@ -1,16 +1,21 @@
 #include <stdlib.h>
 #include "boot.h"
 #include "comms.h"
+#include "fnr.h"
 
 static uint8_t errorByte;
 
+static uint8_t dataBuf[256];
+
 static uint8_t *get_status_callback(uint8_t *data);
+static uint8_t *get_fnr_callback(uint8_t *data);
+static uint8_t *set_fnr_callback(uint8_t *data);
 
 /** tx or rx DataLengths can be no longer than 253(rx) 253(tx) **/
 msgInfo_t msgResp[NUM_MSGS] = {
     {0, 1, get_status_callback}, /** 0 Get Status **/
-    {0, 0, NULL}, /** 1 Unused **/
-    {0, 0, NULL}, /** 2 Unused **/
+    {0, 2, get_fnr_callback},    /** 1 Get FNR    **/
+    {1, 0, set_fnr_callback},    /** 2 Set FNR    **/
     {0, 0, NULL}, /** 3 Unused **/
     {0, 0, NULL}, /** 4 Unused **/
     {0, 0, NULL}, /** 5 Unused **/
@@ -24,4 +29,16 @@ msgInfo_t msgResp[NUM_MSGS] = {
 static uint8_t *get_status_callback(uint8_t *data){
     errorByte = WR_OK;
     return &errorByte;
+}
+
+static uint8_t *set_fnr_callback(uint8_t *data){
+    errorByte = WR_OK;
+    setFNR(data[0]);
+    return &errorByte;
+}
+
+static uint8_t *get_fnr_callback(uint8_t *data){
+    dataBuf[0] = WR_OK;
+    dataBuf[1] = getFNR();
+    return dataBuf;
 }

@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "usart.h"
+#include "submoduleComms.h"
 #include "led.h"
 #include "pwradc.h"
 #include "sevenSeg.h"
@@ -93,6 +94,15 @@ static ConsoleCommand commands[] = {
     {"clear", 0, console_clear},
     {NULL, 0, NULL}
 };
+
+static int parseUint8(char* str){
+    long int num = strtol(str, NULL, 10);
+    if(errno || num < 0 || num > UINT8_MAX){
+        printf("Could not parse input\r\n");
+    }
+
+    return (uint8_t)num;
+}
 
 static int parseUint16(char* str){
     long int num = strtol(str, NULL, 10);
@@ -394,12 +404,17 @@ static void console_kill(uint32_t argc, char** argv)
 
 static void console_setFNR(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    uint8_t message[1] = {parseUint8(argv[0])};
+    messageSubmodule(JANUS, 0x02, message, 1, 0);
 }
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    uint8_t message[1];
+    messageSubmodule(JANUS, 0x01, message, 0, 1);
+
+    //TODO: make generic number to ascii
+    printf("%c", (char)(message[1] + 0x30));
 }
 
 /**
