@@ -36,11 +36,6 @@ typedef enum apolloMsg{
    APOLLO_GET_LIGHT_SENSOR = 0x04
 }apolloMsg_t;
 
-
-typedef enum hephaestusMsg{
-   HEPHAESTUS_ECHO = 0
-}hephaestusMsg_t;
-
 extern uint8_t submoduleCommsBuff[256];
 
 commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);

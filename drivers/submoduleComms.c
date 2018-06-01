@@ -9,6 +9,7 @@
 #include "led.h"
 #include "janus.h"
 #include "hera.h"
+#include "hephaestus.h"
 
 #define SPI_DEFAULT_TIMEOUT 100
 #define STATUS_MAX_ATTEMPTS 20
@@ -18,7 +19,6 @@ static void deselectModule(module_t module);
 static bool checkSubmoduleStatus(module_t module);
 
 static commsStatus_t getApolloStatus(){return COMMS_OK;}
-static commsStatus_t getHephaestusStatus(){return COMMS_OK;}
 
 uint8_t submoduleCommsBuff[256];
 

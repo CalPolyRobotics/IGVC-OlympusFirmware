@@ -61,7 +61,8 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/submoduleComms.c \
 		   $(DRIVERS)/bootComms.c \
 		   $(DRIVERS)/janus.c \
-		   $(DRIVERS)/hera.c
+		   $(DRIVERS)/hera.c \
+		   $(DRIVERS)/hephaestus.c
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
