@@ -22,33 +22,41 @@ static pin_t CS_PINS[NUM_SUBMODULES] = {
 };
 
 
-void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
+
+commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
 {
 
-    uint8_t start_byte = SUBMODULE_START_BYTE;
+    uint8_t header[2] = {SUBMODULE_START_BYTE, msg_type};
+    commsStatus_t status = COMMS_OK;
 
     selectModule(module);
 
-    /** Send Start Byte **/
-    HAL_SPI_Transmit(&hspi3, &start_byte, 1, SPI_DEFAULT_TIMEOUT);
-
-    /** Send Msg Byte **/
-    HAL_SPI_Transmit(&hspi3, &msg_type, 1, SPI_DEFAULT_TIMEOUT);
-
-    /** Transmit Data **/
-    /** TODO - Transfer to DMA **/
-    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+    /** Send Start Byte & Message Type **/
+    HAL_SPI_Transmit(&hspi3, header, sizeof(header), SPI_DEFAULT_TIMEOUT);
 
     /** Delay to wait for Slave Response **/
     int i;
-    for(i = 0; i < 200; i++){
+    for(i = 0; i < 200; i++)
+    {
         asm("nop");
     }
 
-    /** Read Response Data **/
-    HAL_SPI_Receive(&hspi3, (uint8_t*)buff, rx_size, SPI_DEFAULT_TIMEOUT);
+    /** Receive Status **/
+    HAL_SPI_Receive(&hspi3, (uint8_t*)&status, 1, SPI_DEFAULT_TIMEOUT);
+    if(status != COMMS_OK)
+    {
+        deselectModule(module);
+        return status;
+    }
+
+    /** Transmit Data **/
+    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+
+    /** Receive Data **/
+    HAL_SPI_Receive(&hspi3, buff, rx_size, SPI_DEFAULT_TIMEOUT);
 
     deselectModule(module);
+    return status;
 }
 
 /** Lower the CS bit for the given module **/
