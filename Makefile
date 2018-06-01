@@ -60,7 +60,8 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/pwradc.c \
 		   $(DRIVERS)/submoduleComms.c \
 		   $(DRIVERS)/bootComms.c \
-		   $(DRIVERS)/janus.c
+		   $(DRIVERS)/janus.c \
+		   $(DRIVERS)/hera.c
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \

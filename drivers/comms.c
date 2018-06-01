@@ -17,6 +17,7 @@
 #include "crc8.h"
 #include "adc.h"
 #include "janus.h"
+#include "hera.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
@@ -76,7 +77,7 @@ static packetResponse_t response[] = {
     {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_TURN_SIGNAL,  NULL},               // (0x04) Apollo Set Turn Signal
     {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_HEADLIGHTS,   NULL},               // (0x06) Apollo Set Headlights
     {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_GET_LIGHT_SENSOR, NULL},               // (0x08) Apollo Get Light Sensor
-    {1,    NULL,     1,  submoduleCommsBuff, HERA,       HERA_ECHO,               NULL},               // (0x00) Hera Echo
+    {1,    NULL,     1,  submoduleCommsBuff, HERA,       HERA_STATUS,               NULL},               // (0x00) Hera Echo
     {1,    NULL,     1,  submoduleCommsBuff, HEPHAESTUS, HEPHAESTUS_ECHO,         NULL},               // (0x00) Hephaestus Echo
     {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_STATUS,              NULL},             // (0x00) Janus Status
     {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_SET_FNR,           NULL},               // (0x00) Janus Set FNR

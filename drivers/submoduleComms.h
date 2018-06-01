@@ -36,9 +36,6 @@ typedef enum apolloMsg{
    APOLLO_GET_LIGHT_SENSOR = 0x04
 }apolloMsg_t;
 
-typedef enum heraMsg{
-   HERA_ECHO = 0
-}heraMsg_t;
 
 typedef enum hephaestusMsg{
    HEPHAESTUS_ECHO = 0
