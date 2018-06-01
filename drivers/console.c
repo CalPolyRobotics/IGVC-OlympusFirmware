@@ -15,6 +15,7 @@
 #include "usb_otg.h"
 #include "adc.h"
 #include "characterMapping.h"
+#include "janus.h"
 
 #define CONSOLE_MAX_CMD_LEN     255
 #define CONSOLE_MAX_NUM_ARGS    32
@@ -404,17 +405,16 @@ static void console_kill(uint32_t argc, char** argv)
 
 static void console_setFNR(uint32_t argc, char** argv)
 {
-    uint8_t message[1] = {parseUint8(argv[0])};
-    messageSubmodule(JANUS, 0x02, message, 1, 0);
+    uint8_t state = parseUint8(argv[0]);
+    if (state <= 2)
+    {
+        setFNR(state);
+    }
 }
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    uint8_t message[1];
-    messageSubmodule(JANUS, 0x01, message, 0, 1);
-
-    //TODO: make generic number to ascii
-    printf("%c", (char)(message[1] + 0x30));
+    printf("%u\r\n", getFNR());
 }
 
 /**

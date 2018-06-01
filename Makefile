@@ -59,7 +59,8 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/speedDAC.c \
 		   $(DRIVERS)/pwradc.c \
 		   $(DRIVERS)/submoduleComms.c \
-		   $(DRIVERS)/bootComms.c
+		   $(DRIVERS)/bootComms.c \
+		   $(DRIVERS)/janus.c
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \

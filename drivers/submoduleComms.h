@@ -44,12 +44,6 @@ typedef enum hephaestusMsg{
    HEPHAESTUS_ECHO = 0
 }hephaestusMsg_t;
 
-typedef enum janusMsg{
-   JANUS_ECHO    = 0,
-   JANUS_SET_FNR = 1,
-   JANUS_GET_FNR = 2
-}janusMsg_t;
-
 extern uint8_t submoduleCommsBuff[256];
 
 commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);
