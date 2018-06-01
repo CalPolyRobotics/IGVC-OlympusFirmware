@@ -48,7 +48,6 @@ extern uint8_t submoduleCommsBuff[256];
 
 commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);
 
-module_t getSubmoduleStatus();
-void SubmoduleFault_Handler(module_t fault_module);
+void checkAllSubmodules();
 
 #endif

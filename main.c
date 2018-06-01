@@ -84,7 +84,7 @@ int main(void)
 
     setSevenSeg('6', '9');
 
-    SubmoduleFault_Handler(getSubmoduleStatus());
+    checkAllSubmodules();
 
     while(1)
     {
