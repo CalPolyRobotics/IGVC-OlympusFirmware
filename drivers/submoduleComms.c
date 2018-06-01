@@ -7,6 +7,7 @@
 #include "config.h"
 #include "sevenSeg.h"
 #include "led.h"
+#include "apollo.h"
 #include "janus.h"
 #include "hera.h"
 #include "hephaestus.h"
@@ -17,8 +18,6 @@
 static void selectModule(module_t module);
 static void deselectModule(module_t module);
 static bool checkSubmoduleStatus(module_t module);
-
-static commsStatus_t getApolloStatus(){return COMMS_OK;}
 
 uint8_t submoduleCommsBuff[256];
 

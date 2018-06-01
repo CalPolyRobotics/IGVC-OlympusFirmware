@@ -28,13 +28,6 @@ typedef enum module{
    NONE       = 255
 }module_t;
 
-typedef enum apolloMsg{
-   APOLLO_ECHO             = 0x00,
-   APOLLO_SET_TURN_SIGNAL  = 0x01,
-   APOLLO_SET_HEADLIGHTS   = 0x02,
-   APOLLO_SET_MISC_LIGHTS  = 0x03,
-   APOLLO_GET_LIGHT_SENSOR = 0x04
-}apolloMsg_t;
 
 extern uint8_t submoduleCommsBuff[256];
 

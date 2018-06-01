@@ -16,6 +16,7 @@
 #include "kill.h"
 #include "crc8.h"
 #include "adc.h"
+#include "apollo.h"
 #include "janus.h"
 #include "hera.h"
 #include "hephaestus.h"
@@ -74,13 +75,12 @@ void echoPacketCallback(Packet_t* packet);
 
 static packetResponse_t response[] = {
     {250,  inputBuf, 0,  inputBuf,           OLYMPUS,    0,                       echoPacketCallback}, // (0x00) Echo
-    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_ECHO,             NULL},               // (0x02) Apollo Echo
+    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_STATUS,           NULL},               // (0x02) Apollo Echo
     {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_TURN_SIGNAL,  NULL},               // (0x04) Apollo Set Turn Signal
     {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_HEADLIGHTS,   NULL},               // (0x06) Apollo Set Headlights
-    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_GET_LIGHT_SENSOR, NULL},               // (0x08) Apollo Get Light Sensor
-    {1,    NULL,     1,  submoduleCommsBuff, HERA,       HERA_STATUS,               NULL},               // (0x00) Hera Echo
-    {1,    NULL,     1,  submoduleCommsBuff, HEPHAESTUS, HEPHAESTUS_STATUS,         NULL},               // (0x00) Hephaestus Echo
-    {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_STATUS,              NULL},             // (0x00) Janus Status
+    {1,    NULL,     1,  submoduleCommsBuff, HERA,       HERA_STATUS,             NULL},               // (0x00) Hera Echo
+    {1,    NULL,     1,  submoduleCommsBuff, HEPHAESTUS, HEPHAESTUS_STATUS,       NULL},               // (0x00) Hephaestus Echo
+    {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_STATUS,            NULL},               // (0x00) Janus Status
     {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_SET_FNR,           NULL},               // (0x00) Janus Set FNR
     {0,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_GET_FNR,           NULL},               // (0x00) Janus Get FNR
     {3,    NULL,     1,  NULL,               OLYMPUS,    0,                       bootloadBoard},      // (0x00) Enter Bootloader Mode
