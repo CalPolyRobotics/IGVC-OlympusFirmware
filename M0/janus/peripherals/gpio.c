@@ -34,9 +34,6 @@
 
 #include "gpio.h"
 
-#define GPIO_FNR_CTRL_PORT GPIOA
-#define GPIO_FORWARD_CTRL_PIN GPIO_PIN_8
-#define GPIO_REVERSE_CTRL_PIN GPIO_PIN_10
 
 void MX_GPIO_Init(void)
 {

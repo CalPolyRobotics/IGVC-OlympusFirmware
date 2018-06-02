@@ -19,7 +19,7 @@ int main(void)
     MX_SPI1_Init();
     MX_GPIO_Init();
     MX_I2C1_Init();
-
+    setFNR(FORWARD);
     fnr_t currentState = NEUTRAL;
     setSevenSegFNR(currentState);
 
