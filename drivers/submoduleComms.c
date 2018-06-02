@@ -65,19 +65,19 @@ void checkAllSubmodules()
     if(!checkSubmoduleStatus(HEPHAESTUS))
     {
         printf("Status check failed for Hephaestus\r\n");
-        setSevenSeg(APOLLO_STATUS_FAIL);
+        setSevenSeg(HEPHAESTUS_STATUS_FAIL);
     }
 
     if(!checkSubmoduleStatus(HERA))
     {
         printf("Status check failed for Hera\r\n");
-        setSevenSeg(APOLLO_STATUS_FAIL);
+        setSevenSeg(HERA_STATUS_FAIL);
     }
 
     if(!checkSubmoduleStatus(JANUS))
     {
         printf("Status check failed for Janus\r\n");
-        setSevenSeg(APOLLO_STATUS_FAIL);
+        setSevenSeg(JANUS_STATUS_FAIL);
     }
 }
 
