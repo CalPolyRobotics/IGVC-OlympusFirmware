@@ -12,7 +12,9 @@
 
 commsStatus_t getApolloStatus()
 {
-    return messageSubmodule(APOLLO, APOLLO_STATUS, NULL, 0, 0);
+    uint8_t data[1];
+    messageSubmodule(APOLLO, APOLLO_STATUS, data, 0, 1);
+    return data[0];
 }
 
 void setTurnSignal(bool leftSignal, bool rightSignal)

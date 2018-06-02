@@ -28,11 +28,10 @@ static pin_t CS_PINS[NUM_SUBMODULES] = {
     {PORT_SS_JANUS, PIN_SS_JANUS},
 };
 
-commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
+void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
 {
 
     uint8_t header[2] = {SUBMODULE_START_BYTE, msg_type};
-    commsStatus_t status = COMMS_OK;
 
     selectModule(module);
 
@@ -46,14 +45,6 @@ commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff,
         asm("nop");
     }
 
-    /** Receive Status **/
-    HAL_SPI_Receive(&hspi3, (uint8_t*)&status, 1, SPI_DEFAULT_TIMEOUT);
-    if(status != COMMS_OK)
-    {
-        deselectModule(module);
-        return status;
-    }
-
     /** Transmit Data **/
     HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
 
@@ -61,7 +52,6 @@ commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff,
     HAL_SPI_Receive(&hspi3, buff, rx_size, SPI_DEFAULT_TIMEOUT);
 
     deselectModule(module);
-    return status;
 }
 
 void checkAllSubmodules()

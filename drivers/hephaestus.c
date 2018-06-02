@@ -12,5 +12,7 @@
 
 commsStatus_t getHephaestusStatus()
 {
-    return messageSubmodule(HEPHAESTUS, HEPHAESTUS_STATUS, NULL, 0, 0);
+    uint8_t data[1];
+    messageSubmodule(HEPHAESTUS, HEPHAESTUS_STATUS, data, 0, 1);
+    return data[0];
 }

@@ -12,5 +12,7 @@
 
 commsStatus_t getHeraStatus()
 {
-    return messageSubmodule(HERA, HERA_STATUS, NULL, 0, 0);
+    uint8_t data[1];
+    messageSubmodule(HERA, HERA_STATUS, data, 0, 1);
+    return data[0];
 }

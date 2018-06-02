@@ -14,7 +14,7 @@ static uint8_t *set_fnr_callback(uint8_t *data);
 /** tx or rx DataLengths can be no longer than 253(rx) 253(tx) **/
 msgInfo_t msgResp[NUM_MSGS] = {
     {0, 1, get_status_callback}, /** 0 Get Status **/
-    {0, 2, get_fnr_callback},    /** 1 Get FNR    **/
+    {0, 1, get_fnr_callback},    /** 1 Get FNR    **/
     {1, 0, set_fnr_callback},    /** 2 Set FNR    **/
     {0, 0, NULL}, /** 3 Unused **/
     {0, 0, NULL}, /** 4 Unused **/
@@ -32,13 +32,11 @@ static uint8_t *get_status_callback(uint8_t *data){
 }
 
 static uint8_t *set_fnr_callback(uint8_t *data){
-    errorByte = WR_OK;
     setFNR(data[0]);
-    return &errorByte;
+    return NULL;
 }
 
 static uint8_t *get_fnr_callback(uint8_t *data){
-    dataBuf[0] = WR_OK;
-    dataBuf[1] = getFNR();
+    dataBuf[0] = getFNR();
     return dataBuf;
 }

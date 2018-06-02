@@ -6,7 +6,6 @@ typedef enum commState{
     START_BYTE=0, MSG_TYPE, DATA
 }commState_t;
 
-static uint8_t errorByte;
 static uint8_t buf[256];
 
 static void writeResponse(uint8_t *data, uint8_t length);
@@ -27,9 +26,6 @@ void runCommsFSM(uint8_t data){
 
         case MSG_TYPE:
             if(data > NUM_MSGS){
-                errorByte = WR_ERR_INV_MSG_TYPE;
-                writeResponse(&errorByte, 1);
-                state = START_BYTE;
                 break;
             }
 
@@ -59,5 +55,7 @@ void runCommsFSM(uint8_t data){
 
 
 void writeResponse(uint8_t *data, uint8_t length){
-    HAL_SPI_Transmit(&hspi1, data, length, SPI_TIMEOUT);
+    if(data != NULL){
+        HAL_SPI_Transmit(&hspi1, data, length, SPI_TIMEOUT);
+    }
 }

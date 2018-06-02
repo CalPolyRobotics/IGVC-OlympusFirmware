@@ -15,7 +15,9 @@
 
 commsStatus_t getJanusStatus()
 {
-    return messageSubmodule(JANUS, JANUS_STATUS, NULL, 0, 0);
+    uint8_t data[1];
+    messageSubmodule(JANUS, JANUS_STATUS, data, 0, 1);
+    return data[0];
 }
 
 /**
