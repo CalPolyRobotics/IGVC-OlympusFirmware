@@ -17,7 +17,7 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 1000);
+        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
         if(status == HAL_OK){
             runCommsFSM(data);
         }

@@ -17,10 +17,10 @@ int main(void)
 
     init_apollo();
 
-    uint8_t data;
+    uint8_t data = 0x69;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 1000);
+        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
         if(status == HAL_OK){
             runCommsFSM(data);
         }
