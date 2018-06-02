@@ -414,7 +414,7 @@ static void console_setFNR(uint32_t argc, char** argv)
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    printf("%u\r\n", getFNR());
+    printf("%u", getFNR());
 }
 
 /**
