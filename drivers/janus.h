@@ -4,6 +4,11 @@
 #include <stdint.h>
 #include "submoduleComms.h"
 
+typedef struct janusData{
+   uint8_t fnr[1];
+   uint8_t ctrl[1];
+} __attribute__((packed)) janusData_t;
+
 typedef uint8_t fnr_t;
 #define FNR_NEUTRAL ((fnr_t)0u)
 #define FNR_FORWARD ((fnr_t)1u)

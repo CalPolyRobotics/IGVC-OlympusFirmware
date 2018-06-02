@@ -30,11 +30,6 @@
 
 extern volatile uint8_t  commsPwradcValues[16];
 
-/* XXX Currently used to send return data for usb requests
- * Remove when no longer needed
- */
-uint8_t dummy[16] = {0};
-
 typedef enum {
     WAITING_FOR_START_1 = 0,
     WAITING_FOR_START_2,
@@ -43,14 +38,11 @@ typedef enum {
     WAITING_FOR_CRC
 } CommsState_t;
 
-
 typedef struct {
-    uint32_t inputDataMaxLen;
+    uint32_t inputDataLen;
     uint8_t* inputData;
     uint32_t responseDataLen;
     uint8_t* responseData;
-    uint8_t  module;
-    uint8_t  moduleMsgType;
     commsCallback callback;
 } packetResponse_t;
 
@@ -69,29 +61,52 @@ void toggleLED3(Packet_t* packet)
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
 }
 
+/** XXX - Remove these when they are reimplemented **/
+static uint8_t status[5] = {0};
+
+static heraData_t heraData;
+static janusData_t janusData;
+static olympusData_t olympusData;
+
+static void commsSetTurnSignal(uint8_t* data){return;}
+static void commsSetHeadlights(uint8_t* data){return;}
+static void commsSetMiscLights(uint8_t* data){return;}
+static void commsSetFNR(uint8_t* data){return;}
+static void commsSetSteering(uint8_t* data){return;}
+static void commsSetBrake(uint8_t* data){return;}
+static void commsSetSpeed(uint8_t* data){return;}
+static void commsSetLeds(uint8_t* data){return;}
 static uint8_t inputBuf[256];
 
-void echoPacketCallback(Packet_t* packet);
-
 static packetResponse_t response[] = {
-    {250,  inputBuf, 0,  inputBuf,           OLYMPUS,    0,                       echoPacketCallback}, // (0x00) Echo
-    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_STATUS,           NULL},               // (0x02) Apollo Echo
-    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_TURN_SIGNAL,  NULL},               // (0x04) Apollo Set Turn Signal
-    {1,    NULL,     1,  submoduleCommsBuff, APOLLO,     APOLLO_SET_HEADLIGHTS,   NULL},               // (0x06) Apollo Set Headlights
-    {1,    NULL,     1,  submoduleCommsBuff, HERA,       HERA_STATUS,             NULL},               // (0x00) Hera Echo
-    {1,    NULL,     1,  submoduleCommsBuff, HEPHAESTUS, HEPHAESTUS_STATUS,       NULL},               // (0x00) Hephaestus Echo
-    {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_STATUS,            NULL},               // (0x00) Janus Status
-    {1,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_SET_FNR,           NULL},               // (0x00) Janus Set FNR
-    {0,    NULL,     1,  submoduleCommsBuff, JANUS,      JANUS_GET_FNR,           NULL},               // (0x00) Janus Get FNR
-    {3,    NULL,     1,  NULL,               OLYMPUS,    0,                       bootloadBoard},      // (0x00) Enter Bootloader Mode
-    {0,    NULL,     0,  NULL,               OLYMPUS,    0,                       killBoard}           // Send Stop
-};
+    {0u,    NULL,     0u,   status,               NULL},
 
-void echoPacketCallback(Packet_t* packet)
-{
-    // CRC is of length 1
-    response[0].responseDataLen = packet->header.packetLen - sizeof(PacketHeader_t) - 1;
-}
+    // Hera
+    {0u,    NULL,     4u,   heraData.speed,       NULL}, 
+    {0u,    NULL,     2u,   heraData.pedal,       NULL}, 
+    {0u,    NULL,     0u,   heraData.sonar,       NULL}, 
+
+    // Apollo
+    {1u,    inputBuf, 0u,   NULL,                 commsSetTurnSignal}, 
+    {2u,    inputBuf, 0u,   NULL,                 commsSetHeadlights}, 
+    {2u,    inputBuf, 0u,   NULL,                 commsSetMiscLights}, 
+
+    // Janus
+    {0u,    NULL,     1u,   janusData.fnr,        NULL}, 
+    {0u,    NULL,     1u,   janusData.ctrl,       NULL}, 
+    {1u,    inputBuf, 0u,   NULL,                 commsSetFNR}, 
+
+    // Hephaestus
+    {2u,    inputBuf, 0u,   NULL,                 commsSetSteering}, 
+    {0u,    inputBuf, 4u,   NULL,                 commsSetBrake}, 
+
+    // Olympus
+    {2u,    inputBuf, 0u,   NULL,                 commsSetSpeed}, 
+    {0u,    inputBuf, 0u,   NULL,                 commsSetLeds}, 
+    {0u,    NULL,     16u,  olympusData.power.u8, NULL}, 
+    {0u,    NULL,     0u,   NULL,                 killBoard},
+    {2u,    NULL,     1u,   NULL,                 bootloadBoard}
+};
 
 static bool checkPacket(Packet_t* packet)
 {
@@ -105,13 +120,13 @@ static void runPacket(Packet_t* packet)
     uint8_t packetType = packet->header.msgType >> 1;
     uint8_t dataLen = packet->header.packetLen - sizeof(PacketHeader_t);
 
-    if (response[packetType].inputDataMaxLen > 0)
+    if (response[packetType].inputDataLen > 0)
     {
-        if (response[packetType].inputDataMaxLen > dataLen)
+        if (response[packetType].inputDataLen > dataLen)
         {
             bytesToCopy = dataLen;
         } else {
-            bytesToCopy = response[packetType].inputDataMaxLen;
+            bytesToCopy = response[packetType].inputDataLen;
         }
 
         for (idx = 0; idx < bytesToCopy; idx++)
@@ -120,15 +135,9 @@ static void runPacket(Packet_t* packet)
         }
     }
 
-    if (response[packetType].module == OLYMPUS)
+    if (response[packetType].callback != NULL)
     {
-        response[packetType].callback(packet);
-    } else {
-        messageSubmodule(response[packetType].module,
-                      response[packetType].moduleMsgType,
-                      &packet->data[0],
-                      response[packetType].inputDataMaxLen,
-                      response[packetType].responseDataLen);
+        response[packetType].callback(response[packetType].inputData);
     }
 }
 

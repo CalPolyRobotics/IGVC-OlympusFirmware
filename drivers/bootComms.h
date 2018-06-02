@@ -2,7 +2,8 @@
 #define _BOOTCOMMS_H_
 
 #include "comms.h"
+#include <stdint.h>
 
-void bootloadBoard(Packet_t* pkt);
+void bootloadBoard(uint8_t* data);
 
 #endif
