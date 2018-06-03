@@ -39,11 +39,9 @@ void writeLED(uint8_t ledNum, LEDState state)
     }
 }
 
-void commsSetLightsCallback(Packet_t* packet){
-    // Currently the upper four bits of byte 1 are unhandled
-    // TODO
-    uint8_t byte0 = packet->data[1];
-    uint8_t byte1 = packet->data[0];
+void commsSetLeds(uint8_t* data){
+    uint8_t byte0 = data[1];
+    uint8_t byte1 = data[0];
 
     int i;
     for(i = 0; i < 8; i++){

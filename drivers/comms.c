@@ -75,7 +75,6 @@ static void commsSetMiscLights(uint8_t* data){return;}
 static void commsSetSteering(uint8_t* data){return;}
 static void commsSetBrake(uint8_t* data){return;}
 static void commsSetSpeed(uint8_t* data){return;}
-static void commsSetLeds(uint8_t* data){return;}
 static uint8_t inputBuf[256];
 
 static packetResponse_t response[] = {
