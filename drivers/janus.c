@@ -13,6 +13,11 @@
 #include "janus.h"
 #include "spi.h"
 
+void commsSetFNR(uint8_t* data)
+{
+    setFNR(data[0]);
+}
+
 commsStatus_t getJanusStatus()
 {
     uint8_t data[1];

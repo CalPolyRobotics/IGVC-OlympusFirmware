@@ -72,7 +72,6 @@ static olympusData_t olympusData;
 static void commsSetTurnSignal(uint8_t* data){return;}
 static void commsSetHeadlights(uint8_t* data){return;}
 static void commsSetMiscLights(uint8_t* data){return;}
-static void commsSetFNR(uint8_t* data){return;}
 static void commsSetSteering(uint8_t* data){return;}
 static void commsSetBrake(uint8_t* data){return;}
 static void commsSetSpeed(uint8_t* data){return;}

@@ -20,6 +20,7 @@ typedef uint8_t janusMsg_t;
 #define JANUS_GET_FNR ((janusMsg_t)1u)
 #define JANUS_SET_FNR ((janusMsg_t)2u)
 
+void commsSetFNR(uint8_t* data);
 commsStatus_t getJanusStatus();
 fnr_t getFNR();
 void setFNR(fnr_t state);
