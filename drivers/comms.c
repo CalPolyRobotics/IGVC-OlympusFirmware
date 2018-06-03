@@ -66,6 +66,7 @@ static uint8_t status[5] = {0};
 
 static heraData_t heraData;
 static janusData_t janusData;
+static hephaestusData_t hephaestusData;
 static olympusData_t olympusData;
 
 static void commsSetTurnSignal(uint8_t* data){return;}
@@ -79,33 +80,34 @@ static void commsSetLeds(uint8_t* data){return;}
 static uint8_t inputBuf[256];
 
 static packetResponse_t response[] = {
-    {0u,    NULL,     0u,   status,               NULL},
+    {0u,    NULL,     0u,   status,                  NULL},                // (0x00)
 
     // Hera
-    {0u,    NULL,     4u,   heraData.speed,       NULL}, 
-    {0u,    NULL,     2u,   heraData.pedal,       NULL}, 
-    {0u,    NULL,     0u,   heraData.sonar,       NULL}, 
+    {0u,    NULL,     4u,   heraData.speed,          NULL},                // (0x02)
+    {0u,    NULL,     2u,   heraData.pedal,          NULL},                // (0x04)
+    {0u,    NULL,     8u,   heraData.sonar,          NULL},                // (0x06)
 
     // Apollo
-    {1u,    inputBuf, 0u,   NULL,                 commsSetTurnSignal}, 
-    {2u,    inputBuf, 0u,   NULL,                 commsSetHeadlights}, 
-    {2u,    inputBuf, 0u,   NULL,                 commsSetMiscLights}, 
+    {1u,    inputBuf, 0u,   NULL,                    commsSetTurnSignal},  // (0x08)
+    {2u,    inputBuf, 0u,   NULL,                    commsSetHeadlights},  // (0x0A)
+    {2u,    inputBuf, 0u,   NULL,                    commsSetMiscLights},  // (0x0C)
 
     // Janus
-    {0u,    NULL,     1u,   janusData.fnr,        NULL}, 
-    {0u,    NULL,     1u,   janusData.ctrl,       NULL}, 
-    {1u,    inputBuf, 0u,   NULL,                 commsSetFNR}, 
+    {0u,    NULL,     1u,   janusData.fnr,           NULL},                // (0x0E)
+    {0u,    NULL,     1u,   janusData.ctrl,          NULL},                // (0x10)
+    {1u,    inputBuf, 0u,   NULL,                    commsSetFNR},         // (0x12)
 
     // Hephaestus
-    {2u,    inputBuf, 0u,   NULL,                 commsSetSteering}, 
-    {0u,    inputBuf, 4u,   NULL,                 commsSetBrake}, 
+    {2u,    inputBuf, 0u,   NULL,                    commsSetSteering},    // (0x14)
+    {2u,    inputBuf, 0u,   NULL,                    commsSetBrake},       // (0x16)
+    {0u,    NULL,     2u,   hephaestusData.steering, NULL},                // (0x18)
 
     // Olympus
-    {2u,    inputBuf, 0u,   NULL,                 commsSetSpeed}, 
-    {0u,    inputBuf, 0u,   NULL,                 commsSetLeds}, 
-    {0u,    NULL,     16u,  olympusData.power.u8, NULL}, 
-    {0u,    NULL,     0u,   NULL,                 killBoard},
-    {2u,    NULL,     1u,   NULL,                 bootloadBoard}
+    {2u,    inputBuf, 0u,   NULL,                    commsSetSpeed},       // (0x1A)
+    {2u,    inputBuf, 0u,   NULL,                    commsSetLeds},        // (0x1C)
+    {0u,    NULL,     16u,  olympusData.power.u8,    NULL},                // (0x1E)
+    {0u,    NULL,     0u,   NULL,                    killBoard},           // (0x20)
+    {2u,    NULL,     0u,   NULL,                    bootloadBoard}        // (0x22)
 };
 
 static bool checkPacket(Packet_t* packet)
@@ -171,7 +173,7 @@ void runCommsFSM(char data)
     static CommsState_t state = WAITING_FOR_START_1;
     static uint8_t packetBuffer[MAX_PACKET_SIZE];
     static Packet_t* packet = (Packet_t*)packetBuffer;
-    static uint32_t packetIdx; 
+    static uint32_t packetIdx;
 
     switch(state)
     {
