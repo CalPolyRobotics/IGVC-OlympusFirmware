@@ -80,7 +80,7 @@ static void commsSetLeds(uint8_t* data){return;}
 static uint8_t inputBuf[256];
 
 static packetResponse_t response[] = {
-    {0u,    NULL,     0u,   status,                  NULL},                // (0x00)
+    {0u,    NULL,     5u,   status,                  NULL},                // (0x00)
 
     // Hera
     {0u,    NULL,     4u,   heraData.speed,          NULL},                // (0x02)
