@@ -80,12 +80,12 @@ int main(void)
 
     addCallbackTimer(1000, led6Toggle, NULL);
 
-    printf("Hello.\r\n");
 
     setSevenSeg('6', '9');
 
     checkAllSubmodules();
-
+    
+    printf("Hello.\r\n");
     while(1)
     {
         serviceTxDma();
