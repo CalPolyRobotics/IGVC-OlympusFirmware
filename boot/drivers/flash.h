@@ -3,15 +3,23 @@
 
 #include "stdint.h"
 
-#define FLASH_PROG_START   (uint32_t*)0x080A0000
-#define KEY_1              0x45670123
-#define KEY_2              0xCDEF89AB
-#define NUM_SECTORS        12
+#define KEY_1            0x45670123
+#define KEY_2            0xCDEF89AB
 
-void writeInit(uint8_t);
+#define BOOT_START        ((uint32_t*)0x08000000)
+
+#define PROG_START        ((uint32_t*)0x08020000)
+#define PROG_START_SECTOR (5u)
+#define PROG_NUM_SECTORS  (2u)
+
+/** Program Structure **
+ * Sector 0 - 4 : Bootloader (0x08000000 - 0x0801FFFF)
+ * Sector 5 - 6 : Program    (0x08020000 - 0x0805FFFF)
+ */
+
+void writeInit();
 void writeFlash(uint32_t*, uint32_t);
 void completeWrite();
 void jumpToApp();
-void eraseSector(uint8_t);
 
 #endif

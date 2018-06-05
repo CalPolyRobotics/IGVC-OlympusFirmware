@@ -3,6 +3,7 @@
 #include "boot.h"
 #include "doubleBuffer.h"
 #include "usb_otg.h"
+#include "flash.h"
 
 #include <stddef.h>
 
@@ -27,15 +28,22 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
 
-    MX_USB_OTG_FS_USB_Init();
-
-    uint8_t dataIn;
-    while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
-    {
-        runBootFSM((char)dataIn);
+    if(!(RCC -> CSR & RCC_CSR_SFTRSTF) /** && boot pin is high**/){
+        // Jump to application
     }
 
-    return 0;
+    MX_USB_OTG_FS_USB_Init();
+
+    writeInit();
+
+    while(1)
+    {
+        uint8_t dataIn;
+        while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
+        {
+            runBootFSM((char)dataIn);
+        }
+    }
 }
 
 /** System Clock Configuration **/
