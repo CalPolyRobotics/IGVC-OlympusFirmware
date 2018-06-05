@@ -3,8 +3,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "main.h"
-
 #include "comms.h"
 #include "submoduleComms.h"
 #include "bootComms.h"

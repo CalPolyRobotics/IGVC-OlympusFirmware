@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include "stm32f2xx_hal.h"
 #include "pwradc.h"
 #include "dac.h"
@@ -10,7 +11,6 @@
 #include "usb_otg.h"
 #include "gpio.h"
 #include "timerCallback.h"
-#include "main.h"
 #include "buffer8.h"
 #include "speedDAC.h"
 #include "kill.h"

@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
+
 #include "submoduleComms.h"
 #include "comms.h"
 #include "gpio.h"

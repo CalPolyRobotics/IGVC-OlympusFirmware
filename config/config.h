@@ -1,8 +1,6 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_G__
 
-#include "main.h"
-
 #define FIRMWARE_MAJOR_VERSION   1
 #define FIRMWARE_MINOR_VERSION   1
 #define FIRMWARE_REVISION  0

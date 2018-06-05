@@ -1,6 +1,6 @@
 //A circular buffer for 8bit values
-#include "main.h"
 #include <stdint.h>
+#include <stdio.h>
 
 #include "buffer8.h"
 

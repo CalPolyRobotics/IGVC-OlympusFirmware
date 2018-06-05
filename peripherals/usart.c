@@ -1,12 +1,12 @@
 #include "stm32f2xx_hal_dma.h"
 
-#include "main.h"
 #include "usart.h"
 #include "gpio.h"
 #include "dma.h"
 #include "utils/buffer8.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #include "config.h"
 

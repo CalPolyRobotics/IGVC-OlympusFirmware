@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <errno.h>
 
-#include "main.h"
 #include "usart.h"
 #include "submoduleComms.h"
 #include "led.h"
@@ -16,6 +15,8 @@
 #include "adc.h"
 #include "characterMapping.h"
 #include "janus.h"
+
+#include <stdlib.h>
 
 #define CONSOLE_MAX_CMD_LEN     255
 #define CONSOLE_MAX_NUM_ARGS    32
