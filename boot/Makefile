@@ -1,37 +1,46 @@
-BUILDDIR = build
+BUILDDIR = build/bin
 
-DEVICE = libraries/CMSIS/device/ST/STM32F2xx
-CMSIS = libraries/CMSIS
-LIBRARIES = libraries/STM32F2xx_HAL_Driver
-UTILS = utils
+DEVICE = ../libraries/CMSIS/device/ST/STM32F2xx
+CMSIS = ../libraries/CMSIS
+LIBRARIES = ../libraries/STM32F2xx_HAL_Driver
 DRIVERS = drivers
-CONFIG = config
-PERIPHERALS = peripherals
-USB = peripherals/USB
+PERIPH_LOC = peripherals
+PERIPH_SHR = ../peripherals
 SYSTEM = system
+USB = $(PERIPH_SHR)/USB
+BUILDTOOLS = ../buildTools
+UTILS = utils
 
 SOURCES += main.c
 
 SOURCES += $(LIBRARIES)/source/stm32f2xx_hal_gpio.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal_rcc.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal_cortex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal.c
+		   $(LIBRARIES)/source/stm32f2xx_hal.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_pcd.c \
+		   $(LIBRARIES)/source/stm32f2xx_hal_pcd_ex.c \
+
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_hal_msp.c \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCES += $(PERIPHERALS)/gpio.c \
-		   $(PERIPHERALS)/usart.c
+SOURCE += $(PERIPH_SHR)/usb_otg.c
+
+SOURCES += $(USB)/usbd_cdc.c \
+		   $(USB)/usbd_conf.c \
+		   $(USB)/usbd_core.c \
+		   $(USB)/usbd_ctlreq.c \
+		   $(USB)/usbd_desc.c \
+		   $(USB)/usbd_ioreq.c
+
+SOURCES += $(PERIPH_LOC)/gpio.c
 
 SOURCES += $(DRIVERS)/boot.c \
-			  $(DRIVERS)/flash.c \
-			  $(DRIVERS)/comms.c \
-			  $(DRIVERS)/led.c
+			  $(DRIVERS)/flash.c
 
-SOURCES +=  $(UTILS)/newlib_hooks.c \
-		   $(UTILS)/crc8.c
+SOURCES += $(UTILS)/doubleBuffer.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
@@ -40,11 +49,11 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(CMSIS)/include \
 			-I$(USB)/include \
 			-I$(SYSTEM) \
-			-I$(CONFIG)\
 			-I$(DRIVERS)\
-			-I$(UTILS)\
-			-I$(PERIPHERALS)\
+			-I$(PERIPH_LOC)\
+			-I$(PERIPH_SHR)\
 			-I$(USB)\
+			-I$(UTILS)\
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -66,12 +75,12 @@ CFLAGS  = -O0 -g \
    -D STM32F205xx -DUSE_USB_FS \
    $(WARNINGS)
 
-LDSCRIPT = buildTools/stm32_flash.ld
-LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -LbuildTools
+LDSCRIPT = $(BUILDTOOLS)/stm32_flash.ld
+LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = buildTools/flash.jlink
+FLASH_SCRIPT = $(BUILDTOOLS)/flash.jlink
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@

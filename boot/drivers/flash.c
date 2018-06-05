@@ -21,17 +21,7 @@ void writeInit(uint8_t startSector){
     FLASH -> CR |= FLASH_CR_PG;
 }
 
-void writePacket(Packet_t * packet){
-    static uint8_t* loc = 0x080A0000;
-
-
-    int dataIdx;
-    for(dataIdx = 0; dataIdx < (packet -> packetLength - HEADER_SIZE); dataIdx++){
-        writeFlash(loc++, packet -> data[dataIdx]);
-    }
-}
-
-void writeFlash(uint8_t* loc, uint8_t data){
+void writeFlash(uint32_t* loc, uint32_t data){
 
     *loc = data;
     while(FLASH -> SR & FLASH_SR_BSY);
@@ -58,10 +48,6 @@ void jumpToApp(){
 }
 
 void eraseSector(uint8_t sector){
-    if(sector > LAST_SECTOR){
-        return;
-    }
-
     while(FLASH -> SR & FLASH_SR_BSY);     // Wait for Flash to be ready
 
     FLASH -> CR |= FLASH_CR_SER;           // Set Sector Erase mode

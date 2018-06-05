@@ -2,9 +2,9 @@
 #include "dma.h"
 #include "usart.h"
 #include "gpio.h"
-#include "main.h"
 #include "boot.h"
-#include "led.h"
+#include "doubleBuffer.h"
+#include "usb_otg.h"
 
 #include <stddef.h>
 
@@ -29,12 +29,15 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
 
-    commsUsartInit();
+    MX_USB_OTG_FS_USB_Init();
 
-    usartWrite("Hello.\r\n", 9);
-    //printf("ABC.\r\n");
+    uint8_t dataIn;
+    while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
+    {
+        runBootFSM((char)dataIn);
+    }
 
-    bootloaderFSM();
+    return 0;
 }
 
 /** System Clock Configuration **/

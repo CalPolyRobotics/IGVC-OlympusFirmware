@@ -35,8 +35,6 @@
 #include "stm32f2xx_hal.h"
 #include "stm32f2xx.h"
 #include "stm32f2xx_it.h"
-#include "usart.h"
-#include "led.h"
 
 /* External variables --------------------------------------------------------*/
 extern ADC_HandleTypeDef hadc1;
@@ -68,7 +66,6 @@ void SysTick_Handler(void)
 
 void HardFault_Handler(void)
 {
-    setLED(10, 1);
     while(1);
 }
 

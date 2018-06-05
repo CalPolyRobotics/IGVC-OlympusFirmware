@@ -1,10 +1,13 @@
 #include <stdint.h>
 
+#include "stm32f205xx.h"
 #include "flash.h"
 #include "usart.h"
 
+#define PROG_COMPLETE 0x4444
 
-void bootloaderFSM(){
+
+void runBootFSM(uint8_t data){
 
     //if(RCC -> CSR & SFTRSTF){
         // Boot loader
@@ -12,41 +15,32 @@ void bootloaderFSM(){
         uint32_t* writeLoc = FLASH_PROG_START;
         uint32_t wrData = 0; 
         uint8_t cnt = 0;
-        uint8_t data;
 
-        writeInit();
+        writeInit(0);
 
         while(1){
-            serviceTxDma();
+            wrData |= 0xFFFFFFFF & data;
+            cnt ++;
 
-            while(usartRead(&data, 1)){
-                if( 
-            }
+            if(cnt == 4){
+                // When Data Finished Reading
+                if(wrData == PROG_COMPLETE){
+                    //writeComplete();
 
-            while((usartRead(&data, 1))){
-                wrData |= 0xFFFFFFFF & data;
-                cnt ++;
+                    // run checksum and Jump
+                    //printf("Running Checksum\r\n");
+                    jumpToApp();
+                }else{
+                    writeFlash(writeLoc, wrData);
+                    while(FLASH -> SR & FLASH_SR_BSY);
 
-                if(cnt == 4){
-                    // When Data Finished Reading
-                    if(wrData == PROG_COMPLETE){
-                        writeComplete();
+                    writeLoc ++;
 
-                        // run checksum and Jump
-                        //printf("Running Checksum\r\n");
-                        jumpToApp();
-                    }else{
-                        writeFlash(writeLoc, wrData);
-                        while(FLASH -> SR & FLASH_SR_BSY);
-
-                        writeLoc ++;
-
-                        cnt = 0;
-                    }
+                    cnt = 0;
                 }
-
-                wrData <<= 8;
             }
+
+            wrData <<= 8;
         }
 
     //}else{
