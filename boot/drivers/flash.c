@@ -1,6 +1,5 @@
 #include "stm32f205xx.h"
 #include "flash.h"
-#include "usart.h"
 
 void writeInit(uint8_t startSector){
 

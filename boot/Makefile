@@ -19,14 +19,15 @@ SOURCES += $(LIBRARIES)/source/stm32f2xx_hal_gpio.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal_pcd.c \
 		   $(LIBRARIES)/source/stm32f2xx_hal_pcd_ex.c \
-
+		   $(LIBRARIES)/source/stm32f2xx_ll_usb.c
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_hal_msp.c \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCE += $(PERIPH_SHR)/usb_otg.c
+SOURCES += $(PERIPH_LOC)/gpio.c \
+			$(PERIPH_LOC)/usb_otg.c
 
 SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usbd_conf.c \
@@ -34,8 +35,6 @@ SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usbd_ctlreq.c \
 		   $(USB)/usbd_desc.c \
 		   $(USB)/usbd_ioreq.c
-
-SOURCES += $(PERIPH_LOC)/gpio.c
 
 SOURCES += $(DRIVERS)/boot.c \
 			  $(DRIVERS)/flash.c
@@ -51,7 +50,6 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(SYSTEM) \
 			-I$(DRIVERS)\
 			-I$(PERIPH_LOC)\
-			-I$(PERIPH_SHR)\
 			-I$(USB)\
 			-I$(UTILS)\
 			-I.

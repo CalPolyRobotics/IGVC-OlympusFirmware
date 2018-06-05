@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32f2xx_it.c
-  * @brief   Interrupt Service Routines.
+  * File Name          : USB_OTG.h
+  * Description        : This file provides code for the configuration
+  *                      of the USB_OTG instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -31,64 +32,24 @@
   ******************************************************************************
   */
 
-#include <stdio.h>
+#ifndef __usb_otg_H
+#define __usb_otg_H
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include "stm32f2xx_hal.h"
-#include "stm32f2xx.h"
-#include "stm32f2xx_it.h"
+#include "doubleBuffer.h"
 
-/* External variables --------------------------------------------------------*/
-extern PCD_HandleTypeDef hpcd;
+void MX_USB_OTG_FS_USB_Init(void);
 
-/******************************************************************************/
-/*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
-/******************************************************************************/
+extern DoubleBuffer_t usbReceiveBuffer;
+void usbWrite(uint8_t* data, uint32_t size);
+void serviceUSBWrite(void);
 
-/**
-* @brief This function handles Non maskable interrupt.
-*/
-void NMI_Handler(void)
-{
-    HAL_RCC_NMI_IRQHandler();
+#ifdef __cplusplus
 }
-
-/**
-* @brief This function handles System tick timer.
-*/
-void SysTick_Handler(void)
-{
-//    HAL_IncTick();
-//    HAL_SYSTICK_IRQHandler();
-}
-
-void HardFault_Handler(void)
-{
-    while(1);
-}
-
-/******************************************************************************/
-/* STM32F2xx Peripheral Interrupt Handlers                                    */
-/* Add here the Interrupt Handlers for the used peripherals.                  */
-/* For the available peripheral interrupt handler names,                      */
-/* please refer to the startup file (startup_stm32f2xx.s).                    */
-/******************************************************************************/
-
-/**
-* @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
-*/
-void ADC_IRQHandler(void)
-{
-    //HAL_ADC_IRQHandler(&hadc1);
-    //HAL_ADC_IRQHandler(&hadc2);
-}
-
-void OTG_FS_IRQHandler(void)
-{
-    //HAL_PCD_IRQHandler(&hpcd);
-}
-
-void WWDG_IRQHandler(void)
-{
-    while(1);
-}
+#endif
+#endif /*__ usb_otg_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -2,7 +2,6 @@
 
 #include "stm32f205xx.h"
 #include "flash.h"
-#include "usart.h"
 
 #define PROG_COMPLETE 0x4444
 

@@ -1,6 +1,4 @@
 #include "stm32f2xx_hal.h"
-#include "dma.h"
-#include "usart.h"
 #include "gpio.h"
 #include "boot.h"
 #include "doubleBuffer.h"
