@@ -46,7 +46,6 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 INCLUDES += -I$(DEVICE)/include \
 			-I$(LIBRARIES)/include \
 			-I$(CMSIS)/include \
-			-I$(USB)/include \
 			-I$(SYSTEM) \
 			-I$(DRIVERS)\
 			-I$(PERIPH_LOC)\
@@ -70,7 +69,7 @@ CFLAGS  = -O0 -g \
    -mcpu=cortex-m3 -mthumb \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
-   -D STM32F205xx -DUSE_USB_FS \
+   -DUSE_USB_FS \
    $(WARNINGS)
 
 LDSCRIPT = $(BUILDTOOLS)/stm32_flash.ld
@@ -79,6 +78,9 @@ LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
 LDLIBS += -lc -lm -lnosys
 
 FLASH_SCRIPT = $(BUILDTOOLS)/flash.jlink
+
+all: CFLAGS += -DSTM32F205xx
+all: $(BIN)
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
@@ -98,8 +100,13 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
+flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
+
+flash-dev: CFLAGS += -DSTM32F207xx
+flash-dev: $(BIN)
+	st-flash write $(BIN) 0x8000000
 
 clean:
 	rm -rf build
