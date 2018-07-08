@@ -40,9 +40,8 @@
 
 void NMI_Handler(void);
 void SysTick_Handler(void);
-void ADC_IRQHandler(void);
-void USART1_IRQHandler(void);
-void DMA2_Stream2_IRQHandler(void);
+void OTG_FS_IRQHandler(void);
+void WWDG_IRQHandler(void);
 
 #ifdef __cplusplus
 }

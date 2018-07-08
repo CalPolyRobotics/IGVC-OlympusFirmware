@@ -56,8 +56,8 @@ void NMI_Handler(void)
 */
 void SysTick_Handler(void)
 {
-//    HAL_IncTick();
-//    HAL_SYSTICK_IRQHandler();
+    HAL_IncTick();
+    HAL_SYSTICK_IRQHandler();
 }
 
 void HardFault_Handler(void)
@@ -72,18 +72,9 @@ void HardFault_Handler(void)
 /* please refer to the startup file (startup_stm32f2xx.s).                    */
 /******************************************************************************/
 
-/**
-* @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
-*/
-void ADC_IRQHandler(void)
-{
-    //HAL_ADC_IRQHandler(&hadc1);
-    //HAL_ADC_IRQHandler(&hadc2);
-}
-
 void OTG_FS_IRQHandler(void)
 {
-    //HAL_PCD_IRQHandler(&hpcd);
+    HAL_PCD_IRQHandler(&hpcd);
 }
 
 void WWDG_IRQHandler(void)

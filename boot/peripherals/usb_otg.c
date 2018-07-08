@@ -12,8 +12,6 @@
 #define USB_RECEIVE_BUFFER_SIZE 128
 #define USB_SEND_BUFFER_SIZE 64
 #define USB_SEND_BUFFER_NUM  4
-#define USB_SEND_BUFFER_SIZE 64
-#define USB_SEND_BUFFER_NUM  4
 
 USBD_HandleTypeDef  USBD_Device;
 static uint8_t usbRecvData[USB_RECEIVE_BUFFER_SIZE];
