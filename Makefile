@@ -112,7 +112,10 @@ LDLIBS += -lc -lm -lnosys
 
 FLASH_SCRIPT = buildTools/flash.jlink
 
-$(BIN): CFLAGS += -DSTM32F205xx
+
+all: CFLAGS += -DSTM32F205xx
+all: $(BIN)
+
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
 
@@ -135,7 +138,7 @@ flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
 
-flash-dev: CFLAGS += -DSTM32F205xx
+flash-dev: CFLAGS += -DSTM32F207xx
 flash-dev: $(BIN)
 	st-flash write $(BIN) 0x8000000
 
