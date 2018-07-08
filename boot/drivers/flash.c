@@ -11,7 +11,7 @@ void writeInit()
     FLASH -> KEYR = KEY_2;
     
     uint32_t sector;
-    for(sector = PROG_START_SECTOR; sector < PROG_NUM_SECTORS; sector++)
+    for(sector = PROG_START_SECTOR; sector < PROG_START_SECTOR + PROG_NUM_SECTORS; sector++)
     {
         eraseSector(sector);
     }
@@ -51,13 +51,13 @@ void jumpToApp(){
 static void eraseSector(uint8_t sector){
     while(FLASH -> SR & FLASH_SR_BSY);     // Wait for Flash to be ready
 
-    FLASH -> CR |= FLASH_CR_SER;           // Set Sector Erase mode
+    FLASH -> CR = FLASH_CR_SER;           // Set Sector Erase mode
 
     // Select the given sector
     FLASH -> CR |= (sector >> 3 & 1) ? FLASH_CR_SNB_3 : 0;
     FLASH -> CR |= (sector >> 2 & 1) ? FLASH_CR_SNB_2 : 0;
     FLASH -> CR |= (sector >> 1 & 1) ? FLASH_CR_SNB_1 : 0;
-    FLASH -> CR |= (sector >> 0 & 1) ? FLASH_CR_SNB_0 : 0;
+    FLASH -> CR |= (sector & 1) ? FLASH_CR_SNB_0 : 0;
 
     FLASH -> CR |= FLASH_CR_STRT;          // Start Erase
 
