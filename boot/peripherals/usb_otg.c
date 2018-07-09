@@ -65,7 +65,9 @@ void usbWrite(uint8_t* data, uint32_t size)
     if ((usbBufferOverrun == 0) &&
         (usbIsActive == 0 || nextUsbBuffer != activeUsbBuffer))
     {
-        //printf("Writing %lu bytes\r\n", size);
+#ifdef STM32F205xx
+        printf("Writing %lu bytes\r\n", size);
+#endif
 
         while (size > 0)
         {
@@ -93,8 +95,10 @@ void usbWrite(uint8_t* data, uint32_t size)
 
                 if (nextUsbBuffer == activeUsbBuffer)
                 {
+#ifdef STM32F205xx
                     printf("WARNING: Overran USB Buffers by %lu bytes. Further USB data is corrupted!!!!!!!!!\r\n", size);
                     printf("Increase the size of the input buffers using USB_SEND_BUFFER_NUM and USB_SEND_BUFFER_SIZE\r\n");
+#endif
 
                     usbBufferOverrun = 1;
                     size = 0;
@@ -102,7 +106,9 @@ void usbWrite(uint8_t* data, uint32_t size)
             }
         }
     } else {
+#ifdef STM32F205xx
         printf("Can't write\r\n");
+#endif
     }
 }
 
@@ -110,7 +116,6 @@ void serviceUSBWrite()
 {
     if (usbTransferHasCompleted)
     {
-        //printf("USB Transfer Completed\r\n");
         // Set USB as no longer active
         usbIsActive = 0;
 
@@ -147,8 +152,6 @@ void serviceUSBWrite()
                 nextUsbBuffer = 0;
             }
         }
-
-        //printf("Writing %lu bytes to USB stack\r\n", usbTransmitBufferLengths[activeUsbBuffer]);
 
         // Transmit the current active buffer across USB
         // Actual transmission will take place in a later USB IRQ
