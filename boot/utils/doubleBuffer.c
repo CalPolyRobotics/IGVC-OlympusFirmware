@@ -36,33 +36,25 @@ void doubleBuffer_switchActive(DoubleBuffer_t* buffer)
 
 static uint8_t doubleBuffer_getInactive(DoubleBuffer_t* buffer)
 {
-    if (buffer->activeBuffer == 0)
-    {
-        return 1;
-    } else {
-        return 0;
-    }
+    return buffer->activeBuffer == 0 ? 1 : 0;
 }
 
-uint8_t doubleBuffer_write(DoubleBuffer_t* buffer, uint8_t* data, uint32_t len)
+bool doubleBuffer_write(DoubleBuffer_t* buffer, uint8_t* data, uint32_t len)
 {
     uint8_t active = buffer->activeBuffer;
-    uint8_t status = 0;
 
-    if (buffer->bufferSize - buffer->bufferLengths[active] >= len)
+    if (len > buffer->bufferSize - buffer->bufferLengths[active])
     {
-        memcpy(&buffer->buffers[active][buffer->bufferLengths[active]],
-               data,
-               len);
-
-        buffer->bufferLengths[active] += len;
-
-        status = true;
-    } else {
-        status = false;
+        return false;
     }
 
-    return status;
+    memcpy(&buffer->buffers[active][buffer->bufferLengths[active]],
+           data,
+           len);
+
+    buffer->bufferLengths[active] += len;
+
+    return true;
 }
 
 uint32_t doubleBuffer_getReadLength(DoubleBuffer_t* buffer)
