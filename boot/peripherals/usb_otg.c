@@ -9,7 +9,7 @@
 
 #include <string.h>
 
-#define USB_RECEIVE_BUFFER_SIZE 128
+#define USB_RECEIVE_BUFFER_SIZE 1024
 #define USB_SEND_BUFFER_SIZE 64
 #define USB_SEND_BUFFER_NUM  4
 
@@ -20,19 +20,18 @@ DoubleBuffer_t usbReceiveBuffer;
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-    doubleBuffer_write(&usbReceiveBuffer, data, *len);
+    if(!doubleBuffer_write(&usbReceiveBuffer, data, *len)){
+        return USBD_FAIL;
+    }
 
-    USBD_CDC_ReceivePacket(&USBD_Device);
-
-    return USBD_OK;
+    return USBD_CDC_ReceivePacket(&USBD_Device);
 }
 
 static int8_t tunnelInit(void)
 {
     doubleBuffer_init(&usbReceiveBuffer, usbRecvData, sizeof(usbRecvData));
 
-    USBD_CDC_SetRxBuffer(&USBD_Device, usbRecvData);
-    return USBD_OK;
+    return USBD_CDC_SetRxBuffer(&USBD_Device, usbRecvData);
 }
 
 static int8_t dummyDeinit(void)

@@ -6,9 +6,11 @@
 #define KEY_1            0x45670123
 #define KEY_2            0xCDEF89AB
 
-#define BOOT_START        ((uint32_t*)0x08000000)
+#define BOOT_BASE_PTR      ((uint32_t*)0x08000000)
 
-#define PROG_START        ((uint32_t*)0x08020000)
+#define USER_APP_BASE_ADDR ((uint32_t)0x08020000)
+#define USER_APP_BASE_PTR  ((uint32_t*)USER_APP_BASE_ADDR)
+
 #define PROG_START_SECTOR (5u)
 #define PROG_NUM_SECTORS  (2u)
 
@@ -20,6 +22,6 @@
 void writeInit();
 void writeFlash(uint32_t*, uint32_t);
 void completeWrite();
-void jumpToApp();
+void jumpToApp(uint32_t* address);
 
 #endif

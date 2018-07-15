@@ -33,8 +33,8 @@
 
 #include <stdio.h>
 #include "stm32f2xx_hal.h"
-#include "stm32f2xx.h"
-#include "stm32f2xx_it.h"
+//#include "stm32f2xx.h"
+//#include "stm32f2xx_it.h"
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd;
@@ -62,6 +62,7 @@ void SysTick_Handler(void)
 
 void HardFault_Handler(void)
 {
+    GPIOB->BSRRL |= (uint32_t)GPIO_PIN_14;
     while(1);
 }
 

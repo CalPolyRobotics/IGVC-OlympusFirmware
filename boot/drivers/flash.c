@@ -5,7 +5,6 @@ static void eraseSector(uint8_t sector);
 
 void writeInit()
 {
-
     // Unlock Flash for Writing 
     FLASH -> KEYR = KEY_1;
     FLASH -> KEYR = KEY_2;
@@ -35,17 +34,22 @@ void completeWrite()
     FLASH -> CR &= ~FLASH_CR_PG;
 }
 
-void jumpToApp(){
+void jumpToApp(uint32_t* address)
+{
+    // Ensure priveledge mode
+    // Disable Interrupts
+    // Disable Interrupting Peripherals
+    // Clear pending interrupt requests
+    // Disable systick and clear pending exception bit
+    // Disable individual fault handlers
+    // Active MSP if core is using PSP
+    // Load VTOR Address & make sure it matches alignment
 
-    // +4ul is to skip SP at start of bin and + 1ul is to put in thumb mode
-    void (* const jumpFunction)(void) = (void (*)(void))(PROG_START + 4ul + 1ul);
-    //void (* const jumpFunction)(void) = *(FLASH_PROG_START + 4ul) + 1ul;
+    // Set SP to first entry in the vector table
+    __set_MSP(address[0]);
 
-    // Set the Main stack pointer to the first 4 bytes at FLASH_PROG_START
-    __set_MSP((uint32_t)*PROG_START);
-
-    jumpFunction();
-
+    // Set PC to reset value in vector table
+    ((void (*)(void))address[1])();
 }
 
 static void eraseSector(uint8_t sector){

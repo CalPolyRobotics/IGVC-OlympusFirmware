@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 BootComms
@@ -9,6 +9,8 @@ Python script to flash the microcontroller
 import os
 import sys
 import serial
+import time
+import math
 
 def buildHeader(key, size):
     """
@@ -20,32 +22,48 @@ def buildHeader(key, size):
 
 port = '/dev/ttyACM1'
 binname = ''
-if len(sys.argv) < 2:
-    print 'usage: rosrun communication_ros BoardComms.py [ttyACM1]'
+if(len(sys.argv) < 2):
+    print('usage: BootCooms.py filename')
     exit(1)
 else:
     binname = sys.argv[1]
 
+
+# Attempt to connect to serial port
+ser = None
+count = 0
+while count < 10:
+    try:
+        ser = serial.Serial(port, timeout=0)
+        break
+    except:
+        time.sleep(1)
+        count = count + 1
+
+if(ser is None):
+    print('Failed to connect to device')
+    sys.exit(1)
+
+# Check for Ready Flag
+"""
+flag = True
+while flag:
+    data = ser.read()
+    if(data == b'\x05'):
+        print('Device Ready')
+        flag = False
+    print(data)
+    """
+
 statinfo = os.stat(binname)
 header = buildHeader("OLYM", statinfo.st_size)
-
-ser = serial.Serial(port, timeout=1)
-while True:
-    data = ser.read()
-    if data != b'':
-        print data
 
 ser.write(header)
 fp = open(binname, 'rb')
 
-for i in range(0, int((statinfo.st_size)/128)):
-    ser.write(fp.read(128))
-    flag = False
-    while not flag:
-        data = ser.read()
-        if data == '\x05':
-            flag = True
-        print data
+for i in range(0, math.ceil((statinfo.st_size)/64)):
+    ser.write(fp.read(64))
+    time.sleep(.0005)
 
 fp.close()
-print "Flash Complete"
+print("Flash Complete")
