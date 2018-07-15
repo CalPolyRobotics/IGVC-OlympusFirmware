@@ -72,7 +72,7 @@ CFLAGS  = -O0 -g \
    -DUSE_USB_FS \
    $(WARNINGS)
 
-LDSCRIPT = $(BUILDTOOLS)/stm32_flash.ld
+LDSCRIPT = $(BUILDTOOLS)/stm32_boot.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
 
 LDLIBS += -lc -lm -lnosys
