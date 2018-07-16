@@ -8,9 +8,9 @@ Python script to flash the microcontroller
 
 import os
 import sys
-import serial
 import time
 import math
+import serial
 
 def buildHeader(key, size):
     """
@@ -22,7 +22,7 @@ def buildHeader(key, size):
 
 port = '/dev/ttyACM1'
 binname = ''
-if(len(sys.argv) < 2):
+if len(sys.argv) < 2:
     print('usage: BootCooms.py filename')
     exit(1)
 else:
@@ -40,7 +40,7 @@ while count < 10:
         time.sleep(1)
         count = count + 1
 
-if(ser is None):
+if ser is None:
     print('Failed to connect to device')
     sys.exit(1)
 
