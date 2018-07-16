@@ -14,12 +14,15 @@
 #define PROG_START_SECTOR (5u)
 #define PROG_NUM_SECTORS  (2u)
 
+/** 128 kB Sector Size **/
+#define BOOT_SECTOR_SIZE ((uint32_t)131072)
+
 /** Program Structure **
  * Sector 0 - 4 : Bootloader (0x08000000 - 0x0801FFFF)
  * Sector 5 - 6 : Program    (0x08020000 - 0x0805FFFF)
  */
 
-void writeInit();
+void writeInit(uint32_t progsize);
 void writeFlash(uint32_t*, uint32_t);
 void completeWrite();
 void jumpToApp(uint32_t* address);

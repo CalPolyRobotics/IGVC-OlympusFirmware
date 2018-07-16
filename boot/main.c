@@ -39,10 +39,14 @@ int main(void)
 
     MX_USB_OTG_FS_USB_Init();
 
-    writeInit();
 
     /** Wait until USB device is ready **/
     while(USBD_Device.pClassData == NULL);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
+
+    /** This should Only erase what is necessary**/
+    writeInit(64000);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET);
 
     uint8_t dataIn;
     while(1)

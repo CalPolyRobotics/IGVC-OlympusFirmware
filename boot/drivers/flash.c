@@ -3,16 +3,19 @@
 
 static void eraseSector(uint8_t sector);
 
-void writeInit()
+void writeInit(uint32_t progsize)
 {
     // Unlock Flash for Writing 
     FLASH -> KEYR = KEY_1;
     FLASH -> KEYR = KEY_2;
     
     uint32_t sector;
-    for(sector = PROG_START_SECTOR; sector < PROG_START_SECTOR + PROG_NUM_SECTORS; sector++)
+
+    /** Calculate the minimum number of sectors to erase **/
+    uint32_t numSectors = (progsize / BOOT_SECTOR_SIZE) + (progsize % BOOT_SECTOR_SIZE ? 1 : 0);
+    for(sector = 0; sector < numSectors; sector++)
     {
-        eraseSector(sector);
+        eraseSector(PROG_START_SECTOR + sector);
     }
 
     // Parallelism to 32 bit
