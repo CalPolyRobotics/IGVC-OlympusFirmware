@@ -5,10 +5,10 @@ static void eraseSector(uint8_t sector);
 
 void writeInit(uint32_t progsize)
 {
-    // Unlock Flash for Writing 
+    // Unlock Flash for Writing
     FLASH -> KEYR = KEY_1;
     FLASH -> KEYR = KEY_2;
-    
+
     uint32_t sector;
 
     /** Calculate the minimum number of sectors to erase **/
@@ -35,24 +35,6 @@ void writeFlash(uint32_t* loc, uint32_t data)
 void completeWrite()
 {
     FLASH -> CR &= ~FLASH_CR_PG;
-}
-
-void jumpToApp(uint32_t* address)
-{
-    // Ensure priveledge mode
-    // Disable Interrupts
-    // Disable Interrupting Peripherals
-    // Clear pending interrupt requests
-    // Disable systick and clear pending exception bit
-    // Disable individual fault handlers
-    // Active MSP if core is using PSP
-    // Load VTOR Address & make sure it matches alignment
-
-    // Set SP to first entry in the vector table
-    __set_MSP(address[0]);
-
-    // Set PC to reset value in vector table
-    ((void (*)(void))address[1])();
 }
 
 static void eraseSector(uint8_t sector){

@@ -25,6 +25,5 @@
 void writeInit(uint32_t progsize);
 void writeFlash(uint32_t*, uint32_t);
 void completeWrite();
-void jumpToApp(uint32_t* address);
 
 #endif

@@ -42,6 +42,7 @@
 #include "doubleBuffer.h"
 
 void MX_USB_OTG_FS_USB_Init(void);
+void MX_USB_OTG_FS_USB_DeInit(void);
 
 extern DoubleBuffer_t usbReceiveBuffer;
 void usbWrite(uint8_t* data, uint32_t size);

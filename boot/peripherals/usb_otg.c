@@ -193,4 +193,9 @@ void MX_USB_OTG_FS_USB_Init(void)
     USBD_Start(&USBD_Device);
 }
 
+void MX_USB_OTG_FS_USB_DeInit(void)
+{
+    USBD_DeInit(&USBD_Device);
+}
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

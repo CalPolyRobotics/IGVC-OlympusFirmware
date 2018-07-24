@@ -63,7 +63,7 @@ fp = open(binname, 'rb')
 
 for i in range(0, math.ceil((statinfo.st_size)/64)):
     ser.write(fp.read(64))
-    time.sleep(.0005)
+    time.sleep(.0003)
 
 fp.close()
 print("Flash Complete")

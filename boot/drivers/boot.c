@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+#include "boot.h"
 #include "flash.h"
 #include "usb_otg.h"
 
@@ -87,7 +88,39 @@ void runBootFSM(uint8_t data){
 
         case COMPLETE:
             //completeWrite();
-            //jumpToApp(USER_APP_BASE_PTR);
+            jumpToApp(USER_APP_BASE_PTR);
             break;
     }
+}
+
+void jumpToApp(uint32_t* address)
+{
+    // Disable Interrupts
+    int i;
+    for(i = 0; i < 8; i++){
+        NVIC->ICER[i] = 0xFFFFFFFF;
+    }
+
+    // Disable Interrupting Peripherals
+    MX_USB_OTG_FS_USB_DeInit();
+
+    // Clear pending interrupt requests
+    for(i = 0; i < 8; i++){
+        NVIC->ICPR[i] = 0xFFFFFFFF;
+    }
+
+    // Disable systick and clear pending exception bit
+    SysTick->CTRL = 0;
+    SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
+
+    // Disable individual fault handlers
+    SCB->SHCSR &= ~( SCB_SHCSR_USGFAULTENA_Msk | \
+                  SCB_SHCSR_BUSFAULTENA_Msk | \
+                  SCB_SHCSR_MEMFAULTENA_Msk ) ;
+
+    // Set SP to first entry in the vector table
+    __set_MSP(address[0]);
+
+    // Set PC to reset value in vector table
+    ((void (*)(void))address[1])();
 }
