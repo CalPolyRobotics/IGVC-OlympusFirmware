@@ -138,9 +138,9 @@ flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
 
-flash-dev: CFLAGS += -DSTM32F207xx
+flash-dev: CFLAGS += -DSTM32F207xx -DBOOTLOAD
 flash-dev: $(BIN)
-	st-flash write $(BIN) 0x8000000
+	st-flash write $(BIN) 0x8020000
 
 clean:
 	rm -rf build
