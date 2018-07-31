@@ -1,26 +1,19 @@
-# Calculate Size
-# Write Size Word
-# Wait for OK
+#!/usr/bin/env python3
 
-# Write Erase Flash
-# Wait for OK
+"""
+BootSerial
 
-# for math.floor(size/(4*256))
-#   write 256 words
-#   Wait for OK
+An extended Serial class for communicating with the IGVC bootloader
+"""
 
-# Write Checksum Message
-# Write Checksum
-# Wait for OK
-
-# Program is Flashed
-
-# b'' - No Repsponse
-# b'\x00' - OK
-# b'\x01' - FAILED
-
-from serial import Serial
 import time
+from serial import Serial, SerialException
+
+USB_BUFF_SIZE = 64
+NUM_CHUNKS_32K = int(32768/USB_BUFF_SIZE)
+
+OK_BYTE_STRING = b'\x00'
+FAIL_BYTE_STRING = b'\x01'
 
 class BootSerial(Serial):
     """
@@ -28,16 +21,20 @@ class BootSerial(Serial):
     STM Microcontroller
     """
 
-    def __init__(self, port, readTimeout=1, connectTimeout=5):
+    def __init__(self, port, readTimeout=15, connectTimeout=2):
+        self.data_count = 0
         count = 0
 
         while count < connectTimeout:
             try:
                 Serial.__init__(self, port, timeout=readTimeout)
                 break
-            except:
+            except SerialException:
                 time.sleep(1)
                 count += 1
+
+        if count == connectTimeout:
+            raise Exception('Failed to connect to Device')
 
 
     def _writeMessage(self, msgType=None, data=[], messageStr='writeMessage'):
@@ -48,13 +45,17 @@ class BootSerial(Serial):
         if msgType is not None:
             pkt += msgType.to_bytes(4, byteorder='little')
 
-        for datum in data:
-            pkt += datum.to_bytes(4, byteorder='little')
+        # If data is already in bytes format, add it to the pkt
+        if type(data) is bytes:
+            pkt += data
+        else:
+            for datum in data:
+                pkt += datum.to_bytes(4, byteorder='little')
 
         self.write(bytearray(pkt))
 
         resp = self.read(1)
-        if resp != b'\x00':
+        if resp != OK_BYTE_STRING:
             raise Exception(messageStr + ' received response: 0x' + resp.hex())
 
 
@@ -65,7 +66,7 @@ class BootSerial(Serial):
 
     def eraseFlash(self):
         """Initiates a flash erase"""
-        self._writeMessage(3, [], 'eraseFlash')
+        self._writeMessage(3, [int(0x666C6170)], 'eraseFlash')
 
 
     def initData(self):
@@ -75,7 +76,8 @@ class BootSerial(Serial):
 
     def writeData(self, data):
         """Writes data to the STM MCU"""
-        self._writeMessage(0, data, 'writeData')
+        self._writeMessage(data=data, messageStr='writeData')
+
 
     def writeChecksum(self, checksum):
         """Writes the checksum to check validity of application on MCU"""

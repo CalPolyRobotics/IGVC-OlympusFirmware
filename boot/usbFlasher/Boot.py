@@ -10,9 +10,7 @@ import sys
 import os
 import math
 
-from BootSerial import BootSerial
-
-CHUNK_SIZE = 1024
+from BootSerial import BootSerial, USB_BUFF_SIZE, NUM_CHUNKS_32K
 
 def openBinary(binName):
     """Opens binName in byte read mode and returns the file pointer and size of the file"""
@@ -28,7 +26,7 @@ if __name__ == '__main__':
 
     filename = sys.argv[1]
 
-    ser = BootSerial('/dev/ttyACM1')
+    ser = BootSerial('/dev/igvc_boot_1')
 
     fp, size = openBinary(filename)
 
@@ -40,10 +38,13 @@ if __name__ == '__main__':
 
     print('Writing flash...')
     ser.initData()
+    print('Write ready...')
 
-    # Write in 256 Word Chunks
-    for i in range(0, math.ceil(size)/CHUNK_SIZE):
-        ser.writeData(fp.read(CHUNK_SIZE))
+    # Write in CHUNK_SIZE Word Chunks
+    for i in range(0, math.ceil(size/USB_BUFF_SIZE)):
+        ser.writeData(fp.read(USB_BUFF_SIZE))
+        if i != 0 and i % NUM_CHUNKS_32K == 0:
+            print("Data 32K Written")
 
     print('Checking application...')
     ser.writeChecksum([0xAAAA])
