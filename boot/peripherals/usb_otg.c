@@ -15,6 +15,8 @@ USBD_HandleTypeDef USBD_Device;
 static uint8_t usbRecvData[USB_RECEIVE_BUFFER_SIZE];
 DoubleBuffer_t usbReceiveBuffer;
 
+static bool CDC_Device_Initialized = false;
+
 static int8_t CDC_Receive(uint8_t* data, uint32_t* len);
 static int8_t CDC_Init(void);
 static int8_t CDC_Deinit(void);
@@ -71,9 +73,13 @@ void MX_USB_OTG_FS_USB_Init(void)
 
     /* Start Device Process */
     USBD_Start(&USBD_Device);
+
+    CDC_Device_Initialized = true;
 }
 
 void MX_USB_OTG_FS_USB_DeInit(void)
 {
-    USBD_DeInit(&USBD_Device);
+    if(CDC_Device_Initialized){
+        USBD_DeInit(&USBD_Device);
+    }
 }

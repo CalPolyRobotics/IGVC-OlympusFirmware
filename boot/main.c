@@ -31,9 +31,16 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
 
-    if(!(RCC -> CSR & RCC_CSR_SFTRSTF) /** && boot pin is high**/){
+    /* If button is not pressed, jump to application */
+    if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
+        jumpToApp(USER_APP_BASE_PTR);
+    }
+
+    /**
+    if(!(RCC -> CSR & RCC_CSR_SFTRSTF)){
         // Jump to application
     }
+    **/
 
     MX_USB_OTG_FS_USB_Init();
 

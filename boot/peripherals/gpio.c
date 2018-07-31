@@ -41,6 +41,7 @@ void MX_GPIO_Init(void)
 
     /* GPIO Ports Clock Enable */
     __GPIOA_CLK_ENABLE();
+    __GPIOB_CLK_ENABLE();
     __GPIOC_CLK_ENABLE();
     __GPIOG_CLK_ENABLE();
 
@@ -87,6 +88,13 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    /** User Button **/
+    GPIO_InitStruct.Pin = GPIO_PIN_13;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 #endif
 }
 
