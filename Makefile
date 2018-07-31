@@ -9,6 +9,7 @@ CONFIG = config
 PERIPHERALS = peripherals
 USB = peripherals/USB
 SYSTEM = system
+BOOT_APP = boot/usbFlasher/Boot.py
 
 SOURCES += main.c
 
@@ -134,13 +135,18 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
+.PHONY: flash
 flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
 
-flash-dev: CFLAGS += -DSTM32F207xx -DBOOTLOAD
-flash-dev: $(BIN)
-	st-flash write $(BIN) 0x8020000
+.PHONY: dev
+dev: CFLAGS += -DSTM32F207xx -DBOOTLOAD
+dev: $(BIN)
+
+.PHONY: flash-dev
+flash-dev: dev
+	$(BOOT_APP) $(BIN)
 
 clean:
 	rm -rf build
