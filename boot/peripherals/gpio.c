@@ -47,7 +47,7 @@ void MX_GPIO_Init(void)
 
     //---------------------------------------------------------------------------------
     // Initialize Power Kill Pin
-    /**
+#ifdef STM32F205xx
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
 
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -55,30 +55,24 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
     GPIO_InitStruct.Pin = GPIO_PIN_9;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    **/
+#endif
 
     //---------------------------------------------------------------------------------
     // Initialize USB GPIOs
-    //    PA8    ------> USB_OTH_FS_SOF
-    //    PA9    ------> USB_OTG_FS_VBUS
     //    PA10   ------> USB_OTG_FS_ID
     //    PA11   ------> USB_OTG_FS_DM
     //    PA12   ------> USB_OTG_FS_DP
 
-    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
+    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_9;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
     HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, GPIO_PIN_RESET);
 
+#ifdef STM32F207xx
     /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
     GPIO_InitStruct.Pin = GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -93,6 +87,7 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#endif
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
