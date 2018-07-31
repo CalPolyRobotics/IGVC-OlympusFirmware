@@ -44,9 +44,9 @@
 void MX_USB_OTG_FS_USB_Init(void);
 void MX_USB_OTG_FS_USB_DeInit(void);
 
+uint8_t usbWrite(uint8_t* data, uint16_t size);
+
 extern DoubleBuffer_t usbReceiveBuffer;
-void usbWrite(uint8_t* data, uint32_t size);
-void serviceUSBWrite(void);
 
 #ifdef __cplusplus
 }

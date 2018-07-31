@@ -12,8 +12,6 @@
 
 void SystemClock_Config(void);
 
-extern USBD_HandleTypeDef  USBD_Device;
-
 int main(void)
 {
     RCC->AHB1ENR |= 0xFFFFFFFF;
@@ -39,23 +37,17 @@ int main(void)
 
     MX_USB_OTG_FS_USB_Init();
 
-
-
-    /** Wait until USB device is ready **/
-    while(USBD_Device.pClassData == NULL);
-
-    /** This should Only erase what is necessary and it should be dynamic**/
-    writeInit(140000);
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
 
-    uint8_t dataIn;
+    uint32_u dataIn;
+    uint32_t offset = 0;
     while(1)
     {
-        while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
-        {
-            runBootFSM((char)dataIn);
+        offset += doubleBuffer_read(&usbReceiveBuffer, dataIn.u8 + offset, 4 - offset);
+        if(offset == 4){
+            runBootFSM(dataIn.u32);
+            offset = 0;
         }
-        // serviceUSBWrite();
     }
 }
 
