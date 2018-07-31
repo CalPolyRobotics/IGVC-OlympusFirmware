@@ -27,13 +27,13 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/system_stm32f2xx.c
 
 SOURCES += $(PERIPH_LOC)/gpio.c \
-			$(PERIPH_LOC)/usb_otg.c
+			$(PERIPH_LOC)/usb_otg.c \
+		   $(PERIPH_LOC)/usbd_desc.c \
 
 SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usbd_conf.c \
 		   $(USB)/usbd_core.c \
 		   $(USB)/usbd_ctlreq.c \
-		   $(USB)/usbd_desc.c \
 		   $(USB)/usbd_ioreq.c
 
 SOURCES += $(DRIVERS)/boot.c \
