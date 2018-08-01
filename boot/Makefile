@@ -1,54 +1,56 @@
-BUILDDIR = build
+LIBRARIES = libraries
+DEVICE = $(LIBRARIES)/CMSIS/device/ST/STM32F2xx
+CMSIS = $(LIBRARIES)/CMSIS
+HAL = $(LIBRARIES)/STM32F2xx_HAL_Driver
 
-DEVICE = ../libraries/CMSIS/device/ST/STM32F2xx
-CMSIS = ../libraries/CMSIS
-LIBRARIES = ../libraries/STM32F2xx_HAL_Driver
 DRIVERS = drivers
-PERIPH_LOC = peripherals
-PERIPH_SHR = ../peripherals
+PERIPH = peripherals
 SYSTEM = system
-USB = $(PERIPH_SHR)/USB
-BUILDTOOLS = ../buildTools
 UTILS = utils
+
+USB = $(PERIPH)/USB
+
+BUILDTOOLS = ../buildTools
+BUILDDIR = build
 
 SOURCES += main.c
 
-SOURCES += $(LIBRARIES)/source/stm32f2xx_hal_gpio.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_rcc.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_cortex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_pcd.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_pcd_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_ll_usb.c
+SOURCES += $(HAL)/source/stm32f2xx_hal_gpio.c \
+		   $(HAL)/source/stm32f2xx_hal_rcc.c \
+		   $(HAL)/source/stm32f2xx_hal_cortex.c \
+		   $(HAL)/source/stm32f2xx_hal.c \
+		   $(HAL)/source/stm32f2xx_hal_pcd.c \
+		   $(HAL)/source/stm32f2xx_hal_pcd_ex.c \
+		   $(HAL)/source/stm32f2xx_ll_usb.c
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_hal_msp.c \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCES += $(PERIPH_LOC)/gpio.c \
-			$(PERIPH_LOC)/usb_otg.c \
-		   $(PERIPH_LOC)/usbd_desc.c \
-
 SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usbd_conf.c \
 		   $(USB)/usbd_core.c \
 		   $(USB)/usbd_ctlreq.c \
-		   $(USB)/usbd_ioreq.c
+		   $(USB)/usbd_ioreq.c \
+		   $(USB)/usbd_desc.c \
+		   $(USB)/usb_otg.c
 
 SOURCES += $(DRIVERS)/boot.c \
 			  $(DRIVERS)/flash.c
+
+SOURCES += $(PERIPH)/gpio.c
 
 SOURCES += $(UTILS)/doubleBuffer.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(DEVICE)/include \
-			-I$(LIBRARIES)/include \
+			-I$(HAL)/include \
 			-I$(CMSIS)/include \
 			-I$(SYSTEM) \
 			-I$(DRIVERS)\
-			-I$(PERIPH_LOC)\
+			-I$(PERIPH)\
 			-I$(USB)\
 			-I$(UTILS)\
 			-I.
