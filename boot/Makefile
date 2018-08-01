@@ -93,16 +93,16 @@ $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
 $(ELF): $(OBJECTS)
-	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(subst ../,,$(OBJECTS)) $(LDLIBS)
-	arm-none-eabi-size $(subst ../,,$@)
+	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
+	arm-none-eabi-size $@
 
 $(BUILDDIR)/%.o: %.c
-	mkdir -p $(dir $(subst ../,,$@))
-	$(CC) -c $(CFLAGS) $< -o $(subst ../,,$@)
+	mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
 
 $(BUILDDIR)/%.o: %.s
-	mkdir -p $(dir $(subst ../,,$@))
-	$(CC) -c $(CFLAGS) $< -o $(subst ../,,$@)
+	mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
 
 flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
