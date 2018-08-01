@@ -19,8 +19,12 @@ FAIL_BYTE_STRING = b'\x01'
 # Constants For Reset
 START_BYTE_1 = 0xF0
 START_BYTE_2 = 0x5A
-BOOTLOAD_MTYPE = 0x22
+RESET_MTYPE = 0x22
 HEADER_SIZE = 6
+
+# Reset Key in Little Endian
+RESET_KEY_LE = [0x50, 0x41, 0x4C, 0x46]
+RESET_DATA_SIZE = len(RESET_KEY_LE)
 
 class BootSerial(Serial):
     """
@@ -92,7 +96,10 @@ class BootSerial(Serial):
 
     def resetDevice(self):
         """Resets the device from its running state"""
-        reset_pkt = [START_BYTE_1, START_BYTE_2, BOOTLOAD_MTYPE, 0x00, HEADER_SIZE]
+        reset_pkt = [START_BYTE_1, START_BYTE_2, RESET_MTYPE, 0x00, HEADER_SIZE + RESET_DATA_SIZE]
+        reset_pkt.extend(RESET_KEY_LE)
+
         crc = crc8(reset_pkt)
         reset_pkt.append(crc)
+
         self.write(bytearray(reset_pkt))

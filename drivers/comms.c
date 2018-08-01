@@ -5,7 +5,6 @@
 
 #include "comms.h"
 #include "submoduleComms.h"
-#include "bootComms.h"
 #include "led.h"
 #include "usart.h"
 #include "usb_otg.h"
@@ -103,7 +102,7 @@ static packetResponse_t response[] = {
     {2u,    inputBuf, 0u,   NULL,                    commsSetLeds},        // (0x1C)
     {0u,    NULL,     16u,  olympusData.power.u8,    NULL},                // (0x1E)
     {0u,    NULL,     0u,   NULL,                    killBoard},           // (0x20)
-    {0u,    NULL,     0u,   NULL,                    bootloadBoard}        // (0x22)
+    {4u,    inputBuf, 0u,   NULL,                    resetBoard}           // (0x22)
 };
 
 static bool checkPacket(Packet_t* packet)

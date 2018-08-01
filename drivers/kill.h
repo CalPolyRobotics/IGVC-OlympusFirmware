@@ -3,6 +3,7 @@
 
 #include "gpio.h"
 
+void resetBoard(uint8_t* data);
 void killBoard();
 
 #endif
