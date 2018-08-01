@@ -8,12 +8,19 @@ An extended Serial class for communicating with the IGVC bootloader
 
 import time
 from serial import Serial, SerialException
+from CRC8 import crc8
 
 USB_BUFF_SIZE = 64
 NUM_CHUNKS_32K = int(32768/USB_BUFF_SIZE)
 
 OK_BYTE_STRING = b'\x00'
 FAIL_BYTE_STRING = b'\x01'
+
+# Constants For Reset
+START_BYTE_1 = 0xF0
+START_BYTE_2 = 0x5A
+BOOTLOAD_MTYPE = 0x22
+HEADER_SIZE = 6
 
 class BootSerial(Serial):
     """
@@ -82,3 +89,10 @@ class BootSerial(Serial):
     def writeChecksum(self, checksum):
         """Writes the checksum to check validity of application on MCU"""
         self._writeMessage(1, checksum, 'writeData')
+
+    def resetDevice(self):
+        """Resets the device from its running state"""
+        reset_pkt = [START_BYTE_1, START_BYTE_2, BOOTLOAD_MTYPE, 0x00, HEADER_SIZE]
+        crc = crc8(reset_pkt)
+        reset_pkt.append(crc)
+        self.write(bytearray(reset_pkt))

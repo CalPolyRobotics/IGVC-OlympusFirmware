@@ -31,16 +31,19 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
 
-    /* If button is not pressed, jump to application */
-    if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
+    /*
+     * Start Bootloader if
+     * Software Reset or Boot Btn Pressed
+     */
+    if((RCC -> CSR & RCC_CSR_SFTRSTF) == 0 &&
+       HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
+    {
+
         jumpToApp(USER_APP_BASE_PTR);
     }
 
-    /**
-    if(!(RCC -> CSR & RCC_CSR_SFTRSTF)){
-        // Jump to application
-    }
-    **/
+    /* Clear Reset Flags for Detection on Startup */
+    RCC -> CSR |= RCC_CSR_RMVF;
 
     MX_USB_OTG_FS_USB_Init();
 

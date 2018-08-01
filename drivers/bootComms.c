@@ -1,6 +1,8 @@
-#include "bootComms.h"
+#include "stm32f2xx_hal.h"
 
-/** TODO - Communicate with boards to bootload **/
-void bootloadBoard(uint8_t* data){
-    return;
+void bootloadBoard(){
+    // Clear Reset Flags for Detection on Startup
+    RCC -> CSR |= RCC_CSR_RMVF;
+
+    NVIC_SystemReset();
 }

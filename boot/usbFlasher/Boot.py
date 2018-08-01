@@ -26,27 +26,34 @@ if __name__ == '__main__':
 
     filename = sys.argv[1]
 
-    ser = BootSerial('/dev/igvc_boot_1')
+    serComm = BootSerial('/dev/igvc_comm_1')
+
+    print('Restarting Device...')
+    serComm.resetDevice()
+    serComm.close()
+
+    serBoot = BootSerial('/dev/igvc_boot_1')
 
     fp, size = openBinary(filename)
 
     print('Writing application size ' + str(size) + '...')
-    ser.writeSize(size)
+    serBoot.writeSize(size)
 
     print('Erasing flash...') 
-    ser.eraseFlash()
+    serBoot.eraseFlash()
 
     print('Writing flash...')
-    ser.initData()
+    serBoot.initData()
     print('Write ready...')
 
     # Write in CHUNK_SIZE Word Chunks
     for i in range(0, math.ceil(size/USB_BUFF_SIZE)):
-        ser.writeData(fp.read(USB_BUFF_SIZE))
+        serBoot.writeData(fp.read(USB_BUFF_SIZE))
         if i != 0 and i % NUM_CHUNKS_32K == 0:
             print("Data 32K Written")
 
     print('Checking application...')
-    ser.writeChecksum([0xAAAA])
+    serBoot.writeChecksum([0xAAAA])
 
+    serBoot.close()
     print('Terry Flaps Installed')

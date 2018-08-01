@@ -4,6 +4,6 @@
 #include "comms.h"
 #include <stdint.h>
 
-void bootloadBoard(uint8_t* data);
+void bootloadBoard();
 
 #endif
