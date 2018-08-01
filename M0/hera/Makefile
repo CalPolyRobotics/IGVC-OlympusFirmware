@@ -1,24 +1,26 @@
-BUILDDIR = build/bin
+BUILDDIR = build
 
-CMSIS = ../libraries/CMSIS
-HAL = ../libraries/STM32F0xx_HAL_Driver
-UTILS = ../utils
-CONFIG = ../config
-SYSTEM = ../system
-INC = ../inc
-PERIPHERALS = ../peripherals
+SSTD = slave_std
+
+BUILD_TOOLS = $(SSTD)/buildTools
+LIBRARIES = $(SSTD)/libraries
+SYSTEM = $(SSTD)/system
+STD_PERIPHS = $(SSTD)/peripherals
+STD_DRIVERS = $(SSTD)/drivers
+
+CMSIS = $(LIBRARIES)/CMSIS
+HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
+
 DRIVERS = drivers
-SHRDRIVERS = ../drivers
-BUILD_TOOLS = ../buildTools
 
 SOURCES += main.c
 
+SOURCES += $(STD_DRIVERS)/commsLib.c \
+			$(STD_DRIVERS)/boot.c \
+
+SOURCES += $(STD_PERIPHS)/spi.c
+
 SOURCES += $(DRIVERS)/comms.c
-
-SOURCES += $(SHRDRIVERS)/commsLib.c \
-			$(SHRDRIVERS)/boot.c \
-
-SOURCES += $(PERIPHERALS)/spi.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -40,11 +42,10 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
-			-I$(DRIVERS)/ \
+			-I$(DRIVERS) \
 			-I$(SYSTEM) \
-			-I$(INC) \
-			-I$(PERIPHERALS) \
-			-I$(SHRDRIVERS) \
+			-I$(STD_PERIPHS) \
+			-I$(STD_DRIVERS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -73,6 +74,10 @@ LDLIBS += -lc -lm -lnosys
 
 FLASH_SCRIPT = $(BUILD_TOOLS)/flashF042K6.jlink
 
+.PHONY: all flash flash-dev clean
+
+all: $(BIN)
+
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
 
@@ -96,7 +101,7 @@ flash: $(BIN)
 	JLinkExe -Device STM32F042K6 -CommanderScript $(FLASH_SCRIPT)
 	rm $(BUILD_TOOLS)/program.bin
 
-flash-st-link: $(BIN)
+flash-dev: $(BIN)
 	st-flash write $(BIN) 0x8000000
 
 clean:
