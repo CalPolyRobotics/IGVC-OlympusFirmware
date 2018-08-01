@@ -116,7 +116,9 @@ static void runPacket(Packet_t* packet)
 {
     uint32_t bytesToCopy, idx;
     uint8_t packetType = packet->header.msgType >> 1;
-    uint8_t dataLen = packet->header.packetLen - sizeof(PacketHeader_t);
+
+    // CRC is of length 1 and is not included in PacketHeader_t
+    uint8_t dataLen = packet->header.packetLen - sizeof(PacketHeader_t) - 1;
 
     if (response[packetType].inputDataLen > 0)
     {
