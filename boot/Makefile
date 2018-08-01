@@ -1,4 +1,4 @@
-BUILDDIR = build/bin
+BUILDDIR = build
 
 DEVICE = ../libraries/CMSIS/device/ST/STM32F2xx
 CMSIS = ../libraries/CMSIS
@@ -79,6 +79,8 @@ LDLIBS += -lc -lm -lnosys
 
 FLASH_SCRIPT = $(BUILDTOOLS)/flash.jlink
 
+.PHONY: all flash dev flash-dev clean
+
 all: CFLAGS += -DSTM32F205xx
 all: $(BIN)
 
@@ -89,23 +91,25 @@ $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
 $(ELF): $(OBJECTS)
-	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
-	arm-none-eabi-size $@
+	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(subst ../,,$(OBJECTS)) $(LDLIBS)
+	arm-none-eabi-size $(subst ../,,$@)
 
 $(BUILDDIR)/%.o: %.c
-	mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $< -o $@
+	mkdir -p $(dir $(subst ../,,$@))
+	$(CC) -c $(CFLAGS) $< -o $(subst ../,,$@)
 
 $(BUILDDIR)/%.o: %.s
-	mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $< -o $@
+	mkdir -p $(dir $(subst ../,,$@))
+	$(CC) -c $(CFLAGS) $< -o $(subst ../,,$@)
 
 flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
 
-flash-dev: CFLAGS += -DSTM32F207xx
-flash-dev: $(BIN)
+dev: CFLAGS += -DSTM32F207xx
+dev: $(BIN)
+
+flash-dev: dev
 	st-flash write $(BIN) 0x8000000
 
 clean:
