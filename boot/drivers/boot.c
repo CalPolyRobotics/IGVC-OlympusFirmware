@@ -7,10 +7,26 @@
 #define CHUNK_SIZE 64U
 #define ERASE_FLASH_KEY ((uint32_t)0x666C6170)
 
+#define OLYMPUS_KEY     ((uint32_t)0x4F4C594D)
+#define HERA_KEY        ((uint32_t)0x48455241)
+#define HEPHAESTUS_KEY  ((uint32_t)0x48455048)
+#define HERMES_KEY      ((uint32_t)0x4845524D)
+#define JANUS_KEY       ((uint32_t)0x4A414E55)
+
 /** 32 Bit message type **/
 typedef enum msgType{
-    DATA = 0, CHECKSUM = 1, SIZE = 2, ERASE_FLASH = 3, NONE = 65535
+    DATA = 0, CHECKSUM = 1, HEADER = 2, NONE = 65535
 }msgType_t;
+
+/**
+ * Bootloader Header
+ * Device Key, Program Size, and Erase Flash Key
+ **/
+typedef struct bootHeader{
+    uint32_t dkey;
+    uint32_t size;
+    uint32_t fkey;
+}bootHeader_t;
 
 /** Response Data for USB **/
 uint8_t okResponseData = 0x00;
@@ -21,7 +37,7 @@ void runBootFSM(uint32_t data){
 
     static msgType_t msg = NONE;
     static uint32_t count = 0;
-    static uint32_t size = 0;
+    static bootHeader_t header;
 
     msgType_t newMsg;
 
@@ -34,12 +50,13 @@ void runBootFSM(uint32_t data){
             // Writing one word at a time
             count += 4;
 
-            if(count % CHUNK_SIZE == 0 || count == size){
+            if(count % CHUNK_SIZE == 0 || count == header.size){
                 usbWrite(&okResponseData, 1U);
             }
 
-            if(count == size){
+            if(count == header.size){
                 completeWrite();
+                count = 0;
                 msg = NONE;
             }
 
@@ -63,25 +80,45 @@ void runBootFSM(uint32_t data){
             msg = NONE;
             break;
 
-        case SIZE:
-            size = data;
-            usbWrite(&okResponseData, 1U);
-
-            msg = NONE;
-            break;
-
-        case ERASE_FLASH:
-            if(data == ERASE_FLASH_KEY && size != 0)
+        case HEADER:
+            if(count == 0)
             {
-                writeInit(size);
-                usbWrite(&okResponseData, 1U);
+                header.dkey = data;
+                count++;
+            }
+            else if(count == 1)
+            {
+                header.size = data;
+                count++;
             }
             else
             {
-                usbWrite(&failedResponseData, 1U);
-            }
+                header.fkey = data;
+                count = 0;
 
-            msg = NONE;
+                if(header.fkey != ERASE_FLASH_KEY)
+                {
+                    usbWrite(&failedResponseData, 1U);
+                    msg = NONE;
+                    break;
+                }
+
+                if(header.dkey != OLYMPUS_KEY &&
+                   header.dkey != HEPHAESTUS_KEY &&
+                   header.dkey != HERMES_KEY &&
+                   header.dkey != HERA_KEY &&
+                   header.dkey != JANUS_KEY)
+                {
+                    usbWrite(&failedResponseData, 1U);
+                    msg = NONE;
+                    break;
+                }
+                
+                // Erase Flash
+                writeInit(header.size);
+                usbWrite(&okResponseData, 1U);
+                msg = NONE;
+            }
             break;
 
         case NONE:

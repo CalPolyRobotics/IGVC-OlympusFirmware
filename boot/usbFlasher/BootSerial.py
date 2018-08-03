@@ -10,11 +10,22 @@ import time
 from serial import Serial, SerialException
 from CRC8 import crc8
 
+
+DEVICE_KEY_LUT = {
+    'olympus': 0x4F4C594D,
+    'hera': 0x48455241,
+    'hephaestus': 0x48455048,
+    'hermes': 0x4845524D,
+    'janus': 0x4A414E55
+}
+
 USB_BUFF_SIZE = 64
 NUM_CHUNKS_32K = int(32768/USB_BUFF_SIZE)
 
 OK_BYTE_STRING = b'\x00'
 FAIL_BYTE_STRING = b'\x01'
+
+FLASH_KEY = 0x666C6170
 
 # Constants For Reset
 START_BYTE_1 = 0xF0
@@ -70,14 +81,9 @@ class BootSerial(Serial):
             raise Exception(messageStr + ' received response: 0x' + resp.hex())
 
 
-    def writeSize(self, size):
-        """Writes the size message for the given size"""
-        self._writeMessage(2, [size], 'writeSize')
-
-
-    def eraseFlash(self):
-        """Initiates a flash erase"""
-        self._writeMessage(3, [int(0x666C6170)], 'eraseFlash')
+    def writeData(self, data):
+        """Writes data to the STM MCU"""
+        self._writeMessage(data=data, messageStr='writeData')
 
 
     def initData(self):
@@ -85,14 +91,15 @@ class BootSerial(Serial):
         self._writeMessage(0, [], 'initData')
 
 
-    def writeData(self, data):
-        """Writes data to the STM MCU"""
-        self._writeMessage(data=data, messageStr='writeData')
-
-
     def writeChecksum(self, checksum):
         """Writes the checksum to check validity of application on MCU"""
         self._writeMessage(1, checksum, 'writeData')
+
+
+    def writeHeader(self, device, size):
+        """Writes the header packet to initiate flash erase"""
+        self._writeMessage(2, [int(DEVICE_KEY_LUT[device]), int(size), int(FLASH_KEY)])
+
 
     def resetDevice(self):
         """Resets the device from its running state"""

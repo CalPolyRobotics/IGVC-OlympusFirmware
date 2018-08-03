@@ -145,7 +145,7 @@ dev: $(BIN)
 
 .PHONY: flash-dev
 flash-dev: dev
-	$(BOOT_APP) $(BIN)
+	$(BOOT_APP) -m olympus -f $(BIN)
 
 clean:
 	rm -rf build
