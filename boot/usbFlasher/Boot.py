@@ -26,13 +26,13 @@ if __name__ == '__main__':
 
     filename = sys.argv[1]
 
-    serComm = BootSerial('/dev/igvc_comm_1')
+    serComm = BootSerial('/dev/igvc_comm')
 
     print('Restarting Device...')
     serComm.resetDevice()
     serComm.close()
 
-    serBoot = BootSerial('/dev/igvc_boot_1')
+    serBoot = BootSerial('/dev/igvc_boot')
 
     fp, size = openBinary(filename)
 
