@@ -3,7 +3,7 @@ SUBDIRS = apollo \
 			 hephaestus \
 			 janus
 
-.PHONY: all clean
+.PHONY: all clean tags
 
 all:
 	$(MAKE) -C apollo
@@ -17,3 +17,9 @@ clean:
 	$(MAKE) -C hera $@
 	$(MAKE) -C hephaestus $@
 	$(MAKE) -C janus $@
+
+tags:
+	cd apollo; ctags -R; cd ..
+	cd hera; ctags -R; cd ..
+	cd hephaestus; ctags -R; cd ..
+	cd janus; ctags -R; cd ..
