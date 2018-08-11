@@ -1,5 +1,7 @@
 BUILDDIR = build
 
+BUILD_TOOLS = ../buildTools
+
 DEVICE = libraries/CMSIS/device/ST/STM32F2xx
 CMSIS = libraries/CMSIS
 LIBRARIES = libraries/STM32F2xx_HAL_Driver
@@ -105,12 +107,12 @@ CFLAGS  = -O0 -g \
    -DUSE_USB_FS \
    $(WARNINGS)
 
-LDSCRIPT = buildTools/stm32_flash.ld
-LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -LbuildTools
+LDSCRIPT = $(BUILD_TOOLS)/stm32_flash.ld
+LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -L$(BUILD_TOOLS)
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = buildTools/flash.jlink
+FLASH_SCRIPT = $(BUILD_TOOLS)/flash.jlink
 
 
 all: CFLAGS += -DSTM32F205xx
