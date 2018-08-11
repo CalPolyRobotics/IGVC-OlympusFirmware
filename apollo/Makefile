@@ -18,7 +18,8 @@ SOURCES += main.c
 SOURCES += $(STD_DRIVERS)/commsLib.c \
 			$(STD_DRIVERS)/boot.c \
 
-SOURCES += $(STD_PERIPHS)/spi.c
+SOURCES += $(STD_PERIPHS)/spi.c \
+			$(STD_PERIPHS)/systemClock.c
 
 SOURCES += $(DRIVERS)/lights.c \
 			$(DRIVERS)/comms.c

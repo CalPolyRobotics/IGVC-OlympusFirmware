@@ -23,6 +23,7 @@ SOURCES += $(DRIVERS)/comms.c \
 			$(DRIVERS)/fnr.c  \
 			$(DRIVERS)/sevenSeg.c
 
+SOURCES += $(STD_PERIPH)/systemClock.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
