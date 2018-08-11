@@ -1,12 +1,12 @@
 BUILDDIR = build
 
-SSTD = slave_std
+SLIB = slave_lib
 
-BUILD_TOOLS = $(SSTD)/buildTools
-LIBRARIES = $(SSTD)/libraries
-SYSTEM = $(SSTD)/system
-STD_PERIPHS = $(SSTD)/peripherals
-STD_DRIVERS = $(SSTD)/drivers
+BUILD_TOOLS = $(SLIB)/buildTools
+LIBRARIES = $(SLIB)/libraries
+SYSTEM = $(SLIB)/system
+STD_PERIPHS = $(SLIB)/peripherals
+STD_DRIVERS = $(SLIB)/drivers
 
 CMSIS = $(LIBRARIES)/CMSIS
 HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
