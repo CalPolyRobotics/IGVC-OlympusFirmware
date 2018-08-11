@@ -8,7 +8,8 @@ uint8_t *bootload(){
 
     HAL_SPI_Transmit(&hspi1, &we, 1, SPI_TIMEOUT);
 
-    /** TODO - Run a software reset to put in bootloader mode **/
+    NVIC_SystemReset();
 
+    /** The code will not execute this return because of the Reset **/
     return &we;
 }

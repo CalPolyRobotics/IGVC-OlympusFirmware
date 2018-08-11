@@ -10,7 +10,6 @@ static uint8_t buf[256];
 
 static void writeResponse(uint8_t *data, uint8_t length);
 
-/** TODO make sure error returns don't get confused as data by Olympus **/
 void runCommsFSM(uint8_t data){
     static commState_t state = START_BYTE;
     static uint8_t dataSize;

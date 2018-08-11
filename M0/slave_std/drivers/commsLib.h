@@ -17,6 +17,7 @@ typedef uint8_t wrError_t;
 #define WR_ERR_INT          ((wrError_t)0x02)
 #define WR_ERR_GEN          ((wrError_t)0x03)
 #define WR_ERR_INV_MSG_TYPE ((wrError_t)0x04)
+#define WR_ERR              ((wrError_t)0x05)
 #define WR_OK               ((wrError_t)0xAA)
 
 /** Message Info Struct **/
