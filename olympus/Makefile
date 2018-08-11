@@ -2,37 +2,40 @@ BUILDDIR = build
 
 BUILD_TOOLS = ../buildTools
 
-DEVICE = libraries/CMSIS/device/ST/STM32F2xx
-CMSIS = libraries/CMSIS
-LIBRARIES = libraries/STM32F2xx_HAL_Driver
+MLIB = master_lib
+DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
+CMSIS = $(MLIB)/CMSIS
+HAL = $(MLIB)/STM32F2xx_HAL_Driver
+
 UTILS = utils
 DRIVERS = drivers
 CONFIG = config
 PERIPHERALS = peripherals
 USB = peripherals/USB
 SYSTEM = system
-BOOT_APP = master_boot/usbFlasher/Boot.py
+
+BOOT_APP = ../master_boot/usbFlasher/Boot.py
 
 SOURCES += main.c
 
-SOURCES += $(LIBRARIES)/source/stm32f2xx_hal_gpio.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_i2c.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_rcc.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_spi.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_usart.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_uart.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_tim.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_tim_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_dma.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_cortex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_adc.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_adc_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_dac.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_dac_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_pcd.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal_pcd_ex.c \
-		   $(LIBRARIES)/source/stm32f2xx_ll_usb.c \
-		   $(LIBRARIES)/source/stm32f2xx_hal.c
+SOURCES += $(HAL)/source/stm32f2xx_hal_gpio.c \
+		   $(HAL)/source/stm32f2xx_hal_i2c.c \
+		   $(HAL)/source/stm32f2xx_hal_rcc.c \
+		   $(HAL)/source/stm32f2xx_hal_spi.c \
+		   $(HAL)/source/stm32f2xx_hal_usart.c \
+		   $(HAL)/source/stm32f2xx_hal_uart.c \
+		   $(HAL)/source/stm32f2xx_hal_tim.c \
+		   $(HAL)/source/stm32f2xx_hal_tim_ex.c \
+		   $(HAL)/source/stm32f2xx_hal_dma.c \
+		   $(HAL)/source/stm32f2xx_hal_cortex.c \
+		   $(HAL)/source/stm32f2xx_hal_adc.c \
+		   $(HAL)/source/stm32f2xx_hal_adc_ex.c \
+		   $(HAL)/source/stm32f2xx_hal_dac.c \
+		   $(HAL)/source/stm32f2xx_hal_dac_ex.c \
+		   $(HAL)/source/stm32f2xx_hal_pcd.c \
+		   $(HAL)/source/stm32f2xx_hal_pcd_ex.c \
+		   $(HAL)/source/stm32f2xx_ll_usb.c \
+		   $(HAL)/source/stm32f2xx_hal.c
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_hal_msp.c \
@@ -77,7 +80,7 @@ SOURCES += $(UTILS)/buffer8.c \
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(DEVICE)/include \
-			-I$(LIBRARIES)/include \
+			-I$(HAL)/include \
 			-I$(CMSIS)/include \
 			-I$(USB)/include \
 			-I$(SYSTEM) \

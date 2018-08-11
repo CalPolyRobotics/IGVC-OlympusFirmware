@@ -1,7 +1,7 @@
-LIBRARIES = libraries
-DEVICE = $(LIBRARIES)/CMSIS/device/ST/STM32F2xx
-CMSIS = $(LIBRARIES)/CMSIS
-HAL = $(LIBRARIES)/STM32F2xx_HAL_Driver
+MLIB = master_lib
+DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
+CMSIS = $(MLIB)/CMSIS
+HAL = $(MLIB)/STM32F2xx_HAL_Driver
 
 DRIVERS = drivers
 PERIPH = peripherals
