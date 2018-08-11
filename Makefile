@@ -4,24 +4,30 @@ SUBDIRS = olympus \
 			 hephaestus \
 			 janus
 
-.PHONY: all clean tags olympus apollo hera hephaestus janus
+.PHONY: all clean tags olympus apollo hera hephaestus janus master_boot slave_boot
 
 all: olympus apollo hera hephaestus janus
 
 olympus:
-	$(MAKE) -C olympus
+	$(MAKE) -C $@
 
 apollo:
-	$(MAKE) -C apollo
+	$(MAKE) -C $@
 
 hera:
-	$(MAKE) -C hera
+	$(MAKE) -C $@
 
 hephaestus:
-	$(MAKE) -C hephaestus
+	$(MAKE) -C $@
 
 janus:
-	$(MAKE) -C janus
+	$(MAKE) -C $@
+
+master_boot:
+	$(MAKE) -C $@
+
+slave_boot:
+	$(MAKE) -C $@
 
 clean:
 	$(MAKE) -C olympus $@
@@ -29,6 +35,8 @@ clean:
 	$(MAKE) -C hera $@
 	$(MAKE) -C hephaestus $@
 	$(MAKE) -C janus $@
+	$(MAKE) -C master_boot $@
+	$(MAKE) -C slave_boot $@
 
 tags:
 	cd olympus; ctags -R; cd ..
