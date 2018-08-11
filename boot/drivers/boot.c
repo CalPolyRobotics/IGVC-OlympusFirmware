@@ -1,13 +1,17 @@
 #include <stdint.h>
+#include <string.h>
 
 #include "boot.h"
 #include "flash.h"
 #include "usb_otg.h"
+#include "spi.h"
+#include "submoduleComms.h"
 
 #define CHUNK_SIZE 64U
 #define ERASE_FLASH_KEY ((uint32_t)0x666C6170)
 
 #define OLYMPUS_KEY     ((uint32_t)0x4F4C594D)
+#define APOLLO_KEY      ((uint32_t)0x41504F4C)
 #define HERA_KEY        ((uint32_t)0x48455241)
 #define HEPHAESTUS_KEY  ((uint32_t)0x48455048)
 #define HERMES_KEY      ((uint32_t)0x4845524D)
@@ -15,8 +19,10 @@
 
 /** 32 Bit message type **/
 typedef enum msgType{
-    DATA = 0, CHECKSUM = 1, HEADER = 2, NONE = 65535
+    DATA = 0, CHECKSUM = 1, HEADER = 2, DMY = 65535
 }msgType_t;
+
+extern uint8_t submoduleCommsBuff[256];
 
 /**
  * Bootloader Header
@@ -35,8 +41,9 @@ uint8_t failedResponseData = 0x01;
 void runBootFSM(uint32_t data){
     static uint32_t* dataAddr = USER_APP_BASE_PTR;
 
-    static msgType_t msg = NONE;
+    static msgType_t msg = DMY;
     static uint32_t count = 0;
+    static module_t module = NONE;
     static bootHeader_t header;
 
     msgType_t newMsg;
@@ -57,7 +64,7 @@ void runBootFSM(uint32_t data){
             if(count == header.size){
                 completeWrite();
                 count = 0;
-                msg = NONE;
+                msg = DMY;
             }
 
             break;
@@ -77,7 +84,7 @@ void runBootFSM(uint32_t data){
                 usbWrite(&failedResponseData, 1U);
             }
 
-            msg = NONE;
+            msg = DMY;
             break;
 
         case HEADER:
@@ -96,32 +103,76 @@ void runBootFSM(uint32_t data){
                 header.fkey = data;
                 count = 0;
 
-                if(header.fkey != ERASE_FLASH_KEY)
+                switch(header.dkey)
                 {
-                    usbWrite(&failedResponseData, 1U);
-                    msg = NONE;
-                    break;
+                    case OLYMPUS_KEY:
+                        module =  OLYMPUS;
+                        break;
+                    case APOLLO_KEY:
+                        module = APOLLO;
+                        break;
+                    case HEPHAESTUS_KEY:
+                        module = HEPHAESTUS;
+                        break;
+                    case HERA_KEY:
+                        module = HERA;
+                        break;
+                    case JANUS_KEY:
+                        module = JANUS;
+                        break;
+                    default:
+                        module = NONE;
+                        break;
                 }
 
-                if(header.dkey != OLYMPUS_KEY &&
-                   header.dkey != HEPHAESTUS_KEY &&
-                   header.dkey != HERMES_KEY &&
-                   header.dkey != HERA_KEY &&
-                   header.dkey != JANUS_KEY)
+                if(header.fkey != ERASE_FLASH_KEY || module == NONE)
                 {
+                    failedResponseData = 0x02;
                     usbWrite(&failedResponseData, 1U);
-                    msg = NONE;
+                    msg = DMY;
                     break;
                 }
                 
-                // Erase Flash
-                writeInit(header.size);
+                if(module == OLYMPUS)
+                {
+                    // Erase Flash
+                    writeInit(header.size);
+                }
+                else
+                {
+                    // Only Need to transfer size through fkey
+                    /**
+                    memcpy(submoduleCommsBuff, ((uint8_t*)&header) + sizeof(header.dkey),
+                           sizeof(header) - sizeof(header.dkey));
+                    messageSubmodule(module, 0x01, submoduleCommsBuff,
+                                     sizeof(header) - sizeof(header.dkey), 1);
+                    **/
+                    messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
+                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    {
+                        failedResponseData = 0xAA;
+                        usbWrite(&failedResponseData, 1U);
+                        msg = DMY;
+                        break;
+                    }
+
+                    memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), 8);
+                    messageSubmodule(module, 0x01, submoduleCommsBuff, 8, 1);
+                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    {
+                        failedResponseData = 0x04;
+                        usbWrite(&failedResponseData, 1U);
+                        msg = DMY;
+                        break;
+                    }
+                }
+
                 usbWrite(&okResponseData, 1U);
-                msg = NONE;
+                msg = DMY;
             }
             break;
 
-        case NONE:
+        case DMY:
             // Data is the message type
             newMsg = (msgType_t)data;
 
@@ -135,7 +186,7 @@ void runBootFSM(uint32_t data){
             break;
 
         default:
-            msg = NONE;
+            msg = DMY;
             break;
     }
 }
@@ -150,6 +201,7 @@ void jumpToApp(uint32_t* address)
 
     // Disable Interrupting Peripherals
     MX_USB_OTG_FS_USB_DeInit();
+    HAL_SPI_DeInit(&hspi3);
 
     // Clear pending interrupt requests
     for(i = 0; i < 8; i++){
@@ -171,3 +223,5 @@ void jumpToApp(uint32_t* address)
     // Set PC to reset value in vector table
     ((void (*)(void))address[1])();
 }
+
+

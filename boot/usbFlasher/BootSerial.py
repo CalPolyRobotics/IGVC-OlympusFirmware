@@ -13,6 +13,7 @@ from CRC8 import crc8
 
 DEVICE_KEY_LUT = {
     'olympus': 0x4F4C594D,
+    'apollo': 0x41504F4C,
     'hera': 0x48455241,
     'hephaestus': 0x48455048,
     'hermes': 0x4845524D,
