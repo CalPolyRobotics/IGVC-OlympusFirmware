@@ -9,7 +9,7 @@ CONFIG = config
 PERIPHERALS = peripherals
 USB = peripherals/USB
 SYSTEM = system
-BOOT_APP = boot/usbFlasher/Boot.py
+BOOT_APP = master_boot/usbFlasher/Boot.py
 
 SOURCES += main.c
 
