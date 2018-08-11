@@ -21,7 +21,9 @@ SOURCES += $(HAL)/source/stm32f2xx_hal_gpio.c \
 		   $(HAL)/source/stm32f2xx_hal.c \
 		   $(HAL)/source/stm32f2xx_hal_pcd.c \
 		   $(HAL)/source/stm32f2xx_hal_pcd_ex.c \
-		   $(HAL)/source/stm32f2xx_ll_usb.c
+		   $(HAL)/source/stm32f2xx_ll_usb.c \
+		   $(HAL)/source/stm32f2xx_hal_dma.c \
+		   $(HAL)/source/stm32f2xx_hal_spi.c \
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_hal_msp.c \
@@ -37,9 +39,11 @@ SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usb_otg.c
 
 SOURCES += $(DRIVERS)/boot.c \
-			  $(DRIVERS)/flash.c
+			  $(DRIVERS)/flash.c \
+			  $(DRIVERS)/submoduleComms.c
 
-SOURCES += $(PERIPH)/gpio.c
+SOURCES += $(PERIPH)/gpio.c \
+           $(PERIPH)/spi.c
 
 SOURCES += $(UTILS)/doubleBuffer.c
 

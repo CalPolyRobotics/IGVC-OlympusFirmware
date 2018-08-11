@@ -4,6 +4,7 @@
 #include "doubleBuffer.h"
 #include "usb_otg.h"
 #include "flash.h"
+#include "spi.h"
 
 #include <stddef.h>
 #include <stdio.h>
@@ -45,6 +46,7 @@ int main(void)
     /* Clear Reset Flags for Detection on Startup */
     RCC -> CSR |= RCC_CSR_RMVF;
 
+    MX_SPI3_Init();
     MX_USB_OTG_FS_USB_Init();
 
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
