@@ -117,12 +117,7 @@ static bool checkSubmoduleStatus(module_t module)
         attempts++;
     }
 
-    if(attempts == STATUS_MAX_ATTEMPTS)
-    {
-        return false;
-    }
-
-    return true;
+    return attempts != STATUS_MAX_ATTEMPTS;
 }
 
 /** Lower the CS bit for the given module **/

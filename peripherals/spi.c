@@ -110,23 +110,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
         HAL_GPIO_WritePin(GPIOC, GPIO_InitStruct.Pin, GPIO_PIN_SET);
-    }}
-
-void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
-{
-    if(hspi->Instance==SPI3)
-    {
-        /* Peripheral clock disable */
-        __SPI3_CLK_DISABLE();
-
-        /**SPI3 GPIO Configuration    
-        PA15     ------> SPI3_NSS
-        PC10     ------> SPI3_SCK
-        PC12     ------> SPI3_MOSI 
-        */
-        HAL_GPIO_DeInit(GPIOA, GPIO_PIN_15);
-
-        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_12);
     }
 }
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
