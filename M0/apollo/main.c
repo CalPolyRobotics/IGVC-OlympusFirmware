@@ -17,7 +17,7 @@ int main(void)
 
     init_apollo();
 
-    uint8_t data = 0x69;
+    uint8_t data;
     while (1)
     {
         status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
