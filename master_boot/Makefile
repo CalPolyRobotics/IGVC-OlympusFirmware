@@ -10,7 +10,7 @@ UTILS = utils
 
 USB = $(PERIPH)/USB
 
-BUILDTOOLS = ../buildTools
+BUILDTOOLS = $(MLIB)/buildTools
 BUILDDIR = build
 
 SOURCES += main.c

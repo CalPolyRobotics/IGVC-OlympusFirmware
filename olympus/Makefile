@@ -1,11 +1,10 @@
 BUILDDIR = build
 
-BUILD_TOOLS = ../buildTools
-
 MLIB = master_lib
 DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
 CMSIS = $(MLIB)/CMSIS
 HAL = $(MLIB)/STM32F2xx_HAL_Driver
+BUILD_TOOLS = $(MLIB)/buildTools
 
 UTILS = utils
 DRIVERS = drivers
