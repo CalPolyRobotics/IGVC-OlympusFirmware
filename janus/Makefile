@@ -116,3 +116,4 @@ flash-dev: $(BIN)
 
 clean:
 	rm -rf build
+	rm -f tags

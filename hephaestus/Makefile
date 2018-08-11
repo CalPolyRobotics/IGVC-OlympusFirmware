@@ -106,3 +106,4 @@ flash-st-link: $(BIN)
 
 clean:
 	rm -rf build
+	rm -f tags

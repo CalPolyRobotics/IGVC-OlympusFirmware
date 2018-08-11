@@ -151,3 +151,4 @@ flash-dev: dev
 
 clean:
 	rm -rf build
+	rm -f tags
