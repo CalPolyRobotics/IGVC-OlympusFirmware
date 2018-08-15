@@ -138,7 +138,7 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-.PHONY: flash
+.PHONY: flash tags
 flash: CFLAGS += -DSTM32F205xx
 flash: $(BIN)
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
@@ -150,6 +150,9 @@ dev: $(BIN)
 .PHONY: flash-dev
 flash-dev: dev
 	$(BOOT_APP) -m olympus -f $(BIN)
+
+tags:
+	ctags -R
 
 clean:
 	rm -rf build

@@ -85,7 +85,7 @@ LDLIBS += -lc -lm -lnosys
 
 FLASH_SCRIPT = $(BUILDTOOLS)/flash.jlink
 
-.PHONY: all flash dev flash-dev clean
+.PHONY: all flash dev flash-dev clean tags
 
 all: CFLAGS += -DSTM32F205xx
 all: $(BIN)
@@ -117,6 +117,9 @@ dev: $(BIN)
 
 flash-dev: dev
 	st-flash write $(BIN) 0x8000000
+
+tags:
+	ctags -R
 
 clean:
 	rm -rf build
