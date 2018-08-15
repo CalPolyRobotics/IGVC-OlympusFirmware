@@ -140,13 +140,6 @@ void runBootFSM(uint32_t data){
                 }
                 else
                 {
-                    // Only Need to transfer size through fkey
-                    /**
-                    memcpy(submoduleCommsBuff, ((uint8_t*)&header) + sizeof(header.dkey),
-                           sizeof(header) - sizeof(header.dkey));
-                    messageSubmodule(module, 0x01, submoduleCommsBuff,
-                                     sizeof(header) - sizeof(header.dkey), 1);
-                    **/
                     messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
                     if(submoduleCommsBuff[0] != COMMS_OK)
                     {
@@ -156,11 +149,13 @@ void runBootFSM(uint32_t data){
                         break;
                     }
 
-                    memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), 8);
-                    messageSubmodule(module, 0x01, submoduleCommsBuff, 8, 1);
+                    size_t headerSize = sizeof(header.size) + sizeof(header.fkey);
+                    memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
+                    messageSubmodule(module, 0x01, submoduleCommsBuff, headerSize, 1);
+
                     if(submoduleCommsBuff[0] != COMMS_OK)
                     {
-                        failedResponseData = 0x04;
+                        failedResponseData = submoduleCommsBuff[0];
                         usbWrite(&failedResponseData, 1U);
                         msg = DMY;
                         break;

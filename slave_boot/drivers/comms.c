@@ -33,25 +33,18 @@ msgInfo_t msgResp[NUM_MSGS] = {
     {0,  0, NULL},                     /** 10 Unused     **/
 };
 
-#include "stm32f0xx_hal.h"
 static uint8_t *get_status_callback(uint8_t *data){
     errorByte = WR_OK;
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
     return &errorByte;
 }
 
 static uint8_t *write_header(uint8_t *data){
     header_t header = *((header_t*)data);
 
-
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-
     if(header.key != ERASE_FLASH_KEY){
         errorByte = WR_ERR;
         return &errorByte;
     }
-
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 
     size = header.size;
     errorByte = WR_OK;
