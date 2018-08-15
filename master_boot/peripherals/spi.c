@@ -37,7 +37,7 @@
 #include "gpio.h"
 
 SPI_HandleTypeDef hspi3;
-bool spi3Initialized = false;
+static bool spi3Initialized = false;
 
 /* SPI1 init function */
 void MX_SPI3_Init(void)
@@ -63,7 +63,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 {
 
     GPIO_InitTypeDef GPIO_InitStruct;
-    if(spi3Initialized && hspi->Instance==SPI3)
+    if(hspi->Instance==SPI3)
     {
         /* Peripheral clock enable */
         __SPI3_CLK_ENABLE();
@@ -89,12 +89,12 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
         GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
         GPIO_InitStruct.Pin = GPIO_PIN_9;
         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-        HAL_GPIO_WritePin(GPIOB, GPIO_InitStruct.Pin, GPIO_PIN_SET);
 
 #ifdef STM32F205xx
         GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_8|GPIO_PIN_13;
@@ -109,7 +109,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
 
 void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
 {
-    if(hspi->Instance==SPI3)
+    if(spi3Initialized && hspi->Instance==SPI3)
     {
         /* Peripheral clock disable */
         __SPI3_CLK_DISABLE();
