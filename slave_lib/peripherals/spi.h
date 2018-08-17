@@ -2,7 +2,6 @@
 #define SPI_H_
 
 #include "stm32f0xx_hal.h"
-#include "commsLib.h"
 
 extern SPI_HandleTypeDef hspi1;
 

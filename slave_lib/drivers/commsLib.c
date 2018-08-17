@@ -1,6 +1,13 @@
 #include <stdlib.h>
 #include "comms.h"
+
+/* Use tinySpi library if TINY is defined */
+#ifdef TINY
+#include "tinySpi.h"
+#else
 #include "spi.h"
+#endif
+
 
 typedef enum commState{
     START_BYTE=0, MSG_TYPE, DATA

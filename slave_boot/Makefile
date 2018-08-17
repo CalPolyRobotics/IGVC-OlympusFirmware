@@ -9,36 +9,25 @@ STD_PERIPHS = $(SLIB)/peripherals
 STD_DRIVERS = $(SLIB)/drivers
 
 CMSIS = $(LIBRARIES)/CMSIS
-HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
 
 DRIVERS = drivers
 PERIPHS = peripherals
 
 SOURCES += main.c
 
-SOURCES += $(STD_DRIVERS)/commsLib.c \
-			$(STD_DRIVERS)/boot.c
+SOURCES += $(STD_DRIVERS)/commsLib.c
 
 SOURCES += $(DRIVERS)/comms.c
 
 SOURCES += $(PERIPHS)/tinySpi.c \
 			$(PERIPHS)/systemClock.c
 
-SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
-			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
-			$(HAL)/src/stm32f0xx_hal_gpio.c \
-			$(HAL)/src/stm32f0xx_hal_cortex.c \
-			$(HAL)/src/stm32f0xx_hal.c
-
 SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
-		   $(SYSTEM)/stm32f0xx_hal_msp.c \
-		   $(SYSTEM)/stm32f0xx_it.c \
 		   $(SYSTEM)/system_stm32f0xx.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-INCLUDES += -I$(HAL)/inc \
-			-I$(CMSIS)/inc \
+INCLUDES += -I$(CMSIS)/inc \
 			-I$(DRIVERS) \
 			-I$(SYSTEM) \
 			-I$(STD_PERIPHS) \
@@ -63,6 +52,7 @@ CFLAGS  = $(INCLUDES) \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
    -D STM32F042x6 \
+	-D TINY \
    $(WARNINGS)
 
 LDSCRIPT = $(BUILD_TOOLS)/STM32F042K6Tx_FLASH.ld
