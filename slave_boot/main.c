@@ -1,6 +1,5 @@
 #include "stm32f0xx_hal.h"
-#include "spi.h"
-#include "commsLib.h"
+#include "stm32f0xx.h"
 #include "systemClock.h"
 #include "tinySpi.h"
 
@@ -14,15 +13,11 @@ int main(void)
 
     MX_SPI1_Init();
 
-    GPIO_InitTypeDef gpioInit;
-    __HAL_RCC_GPIOB_CLK_ENABLE();
+    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
 
-    gpioInit.Pin = GPIO_PIN_3;
-    gpioInit.Pull = GPIO_NOPULL;
-    gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
-    gpioInit.Speed = GPIO_SPEED_FREQ_MEDIUM;
-    HAL_GPIO_Init(GPIOB, &gpioInit);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+    /** Set PIN3 as output push pull **/
+    GPIOB->MODER |= GPIO_MODER_MODER3_0;
+    GPIOB->ODR |= GPIO_ODR_3;
 
     uint8_t data;
     while (1)
