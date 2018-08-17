@@ -2,10 +2,11 @@
 #include "spi.h"
 #include "commsLib.h"
 #include "systemClock.h"
+#include "tinySpi.h"
 
 int main(void)
 {
-    HAL_StatusTypeDef status;
+    wrError_t status;
     HAL_Init();
 
     /* Configure the system clock to 48 MHz */
@@ -26,8 +27,8 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
-        if(status == HAL_OK){
+        status = readResponse(&data, 1);
+        if(status == WR_OK){
             runCommsFSM(data);
         }
     }

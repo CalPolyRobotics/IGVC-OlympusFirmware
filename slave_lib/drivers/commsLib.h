@@ -28,5 +28,4 @@ typedef struct pktInfo{
 }msgInfo_t;
 
 void runCommsFSM(uint8_t data);
-
 #endif

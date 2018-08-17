@@ -2,12 +2,11 @@
 #define SPI_H_
 
 #include "stm32f0xx_hal.h"
+#include "commsLib.h"
 
 extern SPI_HandleTypeDef hspi1;
 
 void MX_SPI1_Init();
 
-void init_spi_master();
-void init_spi_slave();
-
+wrError_t writeResponse(uint8_t *data, uint16_t length);
 #endif

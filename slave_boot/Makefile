@@ -12,16 +12,18 @@ CMSIS = $(LIBRARIES)/CMSIS
 HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
 
 DRIVERS = drivers
+PERIPHS = peripherals
 
 SOURCES += main.c
 
 SOURCES += $(STD_DRIVERS)/commsLib.c \
-			$(STD_DRIVERS)/boot.c \
+			$(STD_DRIVERS)/boot.c
 
-SOURCES += $(STD_PERIPHS)/spi.c \
-			$(STD_PERIPHS)/systemClock.c
+SOURCES += $(STD_PERIPHS)/systemClock.c
 
 SOURCES += $(DRIVERS)/comms.c
+
+SOURCES += $(PERIPHS)/tinySpi.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -47,6 +49,7 @@ INCLUDES += -I$(HAL)/inc \
 			-I$(SYSTEM) \
 			-I$(STD_PERIPHS) \
 			-I$(STD_DRIVERS) \
+			-I$(PERIPHS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf

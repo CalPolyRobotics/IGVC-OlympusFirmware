@@ -60,64 +60,10 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi){
     }
 }
 
-void send_reg(SPI_HandleTypeDef *hspi, uint8_t reg){
-    uint16_t size = 1;
-    while (size > 0U)
-    {
-        /* Wait until TXE flag is set to send data */
-        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_TXE))
-        {
-          *((__IO uint8_t *)&hspi->Instance->DR) = reg;
-          size--;
-        }
-    }
-}
-void send_data(SPI_HandleTypeDef *hspi, uint8_t* pData, uint16_t size){
-    while (size > 0U)
-    {
-        /* Wait until TXE flag is set to send data */
-        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_TXE))
-        {
-            if (size > 1U) { /* write on the data register in packing mode */
-              hspi->Instance->DR = *((uint16_t *)pData);
-              pData += sizeof(uint16_t);
-              size -= 2U;
-            } else {
-              *((__IO uint8_t *)&hspi->Instance->DR) = (*pData++);
-              size--;
-            }
-        }
-    }
-}
-
-void receive_datum(SPI_HandleTypeDef *hspi, uint8_t* pData){
-    /* set fiforxthresold according the reception data length: 8bit */
-    SET_BIT(hspi->Instance->CR2, SPI_RXFIFO_THRESHOLD);
-    int size = 1;
-    while (size > 0U)
-    {
-        /* Check the RXNE flag */
-        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_RXNE))
-        {
-            /* read the received data */
-            *pData = *(__IO uint8_t *)&hspi->Instance->DR;
-            pData += sizeof(uint8_t);
-            size--;
-        }
+wrError_t writeResponse(uint8_t *data, uint16_t length){
+    if(data != NULL){
+        HAL_SPI_Transmit(&hspi1, data, length, SPI_TIMEOUT);
     }
 
-}
-
-void receive_data(SPI_HandleTypeDef *hspi, uint8_t* pData, uint16_t size){
-    while (size > 0U)
-    {
-        /* Check the RXNE flag */
-        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_RXNE))
-        {
-            /* read the received data */
-            *pData = *(__IO uint8_t *)&hspi->Instance->DR;
-            pData += sizeof(uint8_t);
-            size--;
-        }
-    }
+    return WR_OK;
 }
