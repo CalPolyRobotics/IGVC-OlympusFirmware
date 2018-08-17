@@ -19,11 +19,10 @@ SOURCES += main.c
 SOURCES += $(STD_DRIVERS)/commsLib.c \
 			$(STD_DRIVERS)/boot.c
 
-SOURCES += $(STD_PERIPHS)/systemClock.c
-
 SOURCES += $(DRIVERS)/comms.c
 
-SOURCES += $(PERIPHS)/tinySpi.c
+SOURCES += $(PERIPHS)/tinySpi.c \
+			$(PERIPHS)/systemClock.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
