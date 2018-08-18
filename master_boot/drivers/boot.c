@@ -51,18 +51,41 @@ void runBootFSM(uint32_t data){
     switch(msg)
     {
         case DATA:
-            writeFlash(dataAddr, data);
-            dataAddr++;
+            if(module == OLYMPUS)
+            {
+                writeFlash(dataAddr, data);
+                dataAddr++;
+                count += 4u;
+            }
+            else
+            {
+                memcpy(submoduleCommsBuff + (count % CHUNK_SIZE), &data, sizeof(data));
+                count += 4u;
 
-            // Writing one word at a time
-            count += 4;
+                if((count % CHUNK_SIZE) == 0 || count == header.size)
+                {
+                    messageSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, 1);
+
+                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    {
+                        failedResponseData = 0x01;
+                        usbWrite(&failedResponseData, 1U);
+                        msg = DMY;
+                        break;
+                    }
+                }
+            }
 
             if(count % CHUNK_SIZE == 0 || count == header.size){
                 usbWrite(&okResponseData, 1U);
             }
 
+
             if(count == header.size){
-                completeWrite();
+                if(module == OLYMPUS){
+                    completeWrite();
+                }
+
                 count = 0;
                 msg = DMY;
             }
@@ -143,7 +166,7 @@ void runBootFSM(uint32_t data){
                     messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
                     if(submoduleCommsBuff[0] != COMMS_OK)
                     {
-                        failedResponseData = 0xAA;
+                        failedResponseData = 0x01;
                         usbWrite(&failedResponseData, 1U);
                         msg = DMY;
                         break;
@@ -155,7 +178,7 @@ void runBootFSM(uint32_t data){
 
                     if(submoduleCommsBuff[0] != COMMS_OK)
                     {
-                        failedResponseData = submoduleCommsBuff[0];
+                        failedResponseData = 0x01;
                         usbWrite(&failedResponseData, 1U);
                         msg = DMY;
                         break;
