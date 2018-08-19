@@ -5,18 +5,16 @@ void MX_SPI1_Init(){
     /* Init the low level hardware : GPIO, CLOCK, NVIC... */
     SPI1_LL_Init();
 
-    /* Set FIFO threshold to 8-bits */
-    SPI1->CR2 |= SPI_CR2_FRXTH;
-
-    /* Set 8-bit transfers */
-    SPI1->CR2 = SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
+    /* Set 8-bit transfers & 8-bit FIFO threshold */
+    SPI1->CR2 = (SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0) |
+                SPI_CR2_FRXTH;
 
     /* Enable SPI as Slave and Hardware NSS*/
     SPI1->CR1 = SPI_CR1_SPE;
 }
 
 void SPI1_LL_Init(){
-    /** Enable GPIO and SPI Clocks **/
+    /* Enable GPIO and SPI Clocks */
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
 
@@ -52,7 +50,7 @@ wrError_t writeResponse(uint8_t *data, uint16_t length){
     uint8_t* pData = data;
     uint16_t count = length;
 
-    /** Write first piece of data to DR since in slave mode **/
+    /* Write first piece of data to DR since in slave mode */
     if (count > 1u)
     {
         /* write on the data register in packing mode */
@@ -103,16 +101,6 @@ wrError_t writeResponse(uint8_t *data, uint16_t length){
 wrError_t readResponse(uint8_t *data, uint16_t length){
     uint32_t tickstart = 0u;
     uint16_t count = length;
-
-    /* set fiforxthresold according the reception data length: 8bit */
-    SPI1->CR2 |= SPI_CR2_FRXTH;
-
-    /* Check if the SPI is already enabled */
-    if ((SPI1->CR1 & SPI_CR1_SPE) != SPI_CR1_SPE)
-    {
-    /* Enable SPI peripheral */
-    SPI1->CR1 |= SPI_CR1_SPE;
-    }
 
     /* Receive data in 8 Bit mode */
     /* Transfer loop */
