@@ -17,12 +17,20 @@
 #define HERMES_KEY      ((uint32_t)0x4845524D)
 #define JANUS_KEY       ((uint32_t)0x4A414E55)
 
+#define NO_ERR             ((uint8_t)0x00)
+#define ERR_DATA_WRITE     ((uint8_t)0x01)
+#define ERR_CHECKSUM       ((uint8_t)0x02)
+#define ERR_INVALID_HEADER ((uint8_t)0x03)
+#define ERR_FLASH_ERASE    ((uint8_t)0x04)
+
 /** 32 Bit message type **/
 typedef enum msgType{
     DATA = 0, CHECKSUM = 1, HEADER = 2, DMY = 65535
 }msgType_t;
 
 extern uint8_t submoduleCommsBuff[256];
+
+static void writeResponse(uint8_t response);
 
 /**
  * Bootloader Header
@@ -35,8 +43,7 @@ typedef struct bootHeader{
 }bootHeader_t;
 
 /** Response Data for USB **/
-uint8_t okResponseData = 0x00;
-uint8_t failedResponseData = 0x01;
+uint8_t responseData = NO_ERR;
 
 void runBootFSM(uint32_t data){
     static uint32_t* dataAddr = USER_APP_BASE_PTR;
@@ -66,7 +73,7 @@ void runBootFSM(uint32_t data){
                 {
                     messageSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, 1);
 
-                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    if(submoduleCommsBuff[0] != NO_ERR)
                     {
                         failedResponseData = 0x01;
                         usbWrite(&failedResponseData, 1U);
@@ -77,7 +84,7 @@ void runBootFSM(uint32_t data){
             }
 
             if(count % CHUNK_SIZE == 0 || count == header.size){
-                usbWrite(&okResponseData, 1U);
+                writeResponse(NO_ERR);
             }
 
 
@@ -95,7 +102,7 @@ void runBootFSM(uint32_t data){
         case CHECKSUM:
             if(data == 0x0000AAAA)
             {
-                usbWrite(&okResponseData, 1U);
+                writeResponse(NO_ERR);
 
                 // Give time to application to read data
                 HAL_Delay(10);
@@ -104,7 +111,7 @@ void runBootFSM(uint32_t data){
             }
             else
             {
-                usbWrite(&failedResponseData, 1U);
+                writeResponse(ERR_CHECKSUM);
             }
 
             msg = DMY;
@@ -150,8 +157,7 @@ void runBootFSM(uint32_t data){
 
                 if(header.fkey != ERASE_FLASH_KEY || module == NONE)
                 {
-                    failedResponseData = 0x02;
-                    usbWrite(&failedResponseData, 1U);
+                    writeResponse(ERR_INVALID_HEADER);
                     msg = DMY;
                     break;
                 }
@@ -176,7 +182,7 @@ void runBootFSM(uint32_t data){
                     memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
                     messageSubmodule(module, 0x01, submoduleCommsBuff, headerSize, 1);
 
-                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    if(submoduleCommsBuff[0] != NO_ERR)
                     {
                         failedResponseData = 0x01;
                         usbWrite(&failedResponseData, 1U);
@@ -185,7 +191,7 @@ void runBootFSM(uint32_t data){
                     }
                 }
 
-                usbWrite(&okResponseData, 1U);
+                writeResponse(NO_ERR);
                 msg = DMY;
             }
             break;
@@ -197,7 +203,7 @@ void runBootFSM(uint32_t data){
             // Signal to bootloader successful switch to data mode
             if(newMsg == DATA)
             {
-                usbWrite(&okResponseData, 1U);
+                writeResponse(NO_ERR);
             }
 
             msg = newMsg;
@@ -242,4 +248,8 @@ void jumpToApp(uint32_t* address)
     ((void (*)(void))address[1])();
 }
 
-
+static void writeResponse(uint8_t response)
+{
+    responseData = response;
+    usbWrite(&responseData, sizeof(responseData));
+}
