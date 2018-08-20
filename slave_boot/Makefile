@@ -20,7 +20,8 @@ SOURCES += $(STD_DRIVERS)/commsLib.c
 SOURCES += $(DRIVERS)/comms.c
 
 SOURCES += $(PERIPHS)/tinySpi.c \
-			$(PERIPHS)/systemClock.c
+			$(PERIPHS)/systemClock.c \
+			$(PERIPHS)/flash.c
 
 SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
 		   $(SYSTEM)/system_stm32f0xx.c
