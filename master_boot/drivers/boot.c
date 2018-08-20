@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "boot.h"
 #include "flash.h"
@@ -73,12 +74,13 @@ void runBootFSM(uint32_t data){
                 {
                     messageSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, 1);
 
-                    if(submoduleCommsBuff[0] != NO_ERR)
+                    if(submoduleCommsBuff[0] != COMMS_OK)
                     {
-                        failedResponseData = 0x01;
-                        usbWrite(&failedResponseData, 1U);
-                        msg = DMY;
-                        break;
+                        if(!checkStatus(module, 50, 1)){
+                            writeResponse(ERR_DATA_WRITE);
+                            msg = DMY;
+                            break;
+                        }
                     }
                 }
             }
@@ -86,7 +88,6 @@ void runBootFSM(uint32_t data){
             if(count % CHUNK_SIZE == 0 || count == header.size){
                 writeResponse(NO_ERR);
             }
-
 
             if(count == header.size){
                 if(module == OLYMPUS){
@@ -169,25 +170,18 @@ void runBootFSM(uint32_t data){
                 }
                 else
                 {
-                    messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
-                    if(submoduleCommsBuff[0] != COMMS_OK)
-                    {
-                        failedResponseData = 0x01;
-                        usbWrite(&failedResponseData, 1U);
-                        msg = DMY;
-                        break;
-                    }
-
                     size_t headerSize = sizeof(header.size) + sizeof(header.fkey);
                     memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
                     messageSubmodule(module, 0x01, submoduleCommsBuff, headerSize, 1);
 
-                    if(submoduleCommsBuff[0] != NO_ERR)
+                    if(submoduleCommsBuff[0] != COMMS_OK)
                     {
-                        failedResponseData = 0x01;
-                        usbWrite(&failedResponseData, 1U);
-                        msg = DMY;
-                        break;
+                        /* writeHeader can take longer than expected because of the flash erase */
+                        if(!checkStatus(module, 1500, 1)){
+                            writeResponse(ERR_FLASH_ERASE);
+                            msg = DMY;
+                            break;
+                        }
                     }
                 }
 

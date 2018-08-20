@@ -2,6 +2,7 @@
 #define __SUBMODULECOMMS_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define SUBMODULE_START_BYTE 0xEA
 
@@ -32,6 +33,6 @@ typedef enum module{
 
 void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);
 
-void checkAllSubmodules();
+bool checkStatus(module_t module, int numTimes, int delay);
 
 #endif
