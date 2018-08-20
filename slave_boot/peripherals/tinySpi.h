@@ -6,7 +6,7 @@
 void MX_SPI1_Init();
 void SPI1_LL_Init();
 
-wrError_t readResponse(uint8_t *data, uint16_t length);
+wrError_t readByte(uint8_t *data);
 wrError_t writeResponse(uint8_t* data, uint16_t length);
 
 /** @brief  Clear the SPI OVR pending flag.

@@ -20,7 +20,7 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = readResponse(&data, 1);
+        status = readByte(&data);
         if(status == WR_OK){
             runCommsFSM(data);
         }

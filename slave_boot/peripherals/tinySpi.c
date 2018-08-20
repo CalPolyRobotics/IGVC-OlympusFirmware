@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "stm32f0xx.h"
 #include "tinySpi.h"
 
@@ -98,13 +99,17 @@ wrError_t writeResponse(uint8_t *data, uint16_t length){
 }
 
 
-wrError_t readResponse(uint8_t *data, uint16_t length){
+wrError_t readByte(uint8_t *data){
     uint32_t tickstart = 0u;
-    uint16_t count = length;
+    bool readData = true;
+
+    /* Write a 0 while reading byte */
+    if(SPI1->SR & SPI_SR_TXE){
+        SPI1->DR = (uint8_t)0x00u;
+    }
 
     /* Receive data in 8 Bit mode */
-    /* Transfer loop */
-    while (count > 0U)
+    while (readData)
     {
         /* Check the RXNE flag */
         if(SPI1->SR & SPI_SR_RXNE)
@@ -112,9 +117,7 @@ wrError_t readResponse(uint8_t *data, uint16_t length){
             /* read the received data */
             *data = SPI1->DR;
             data += sizeof(uint8_t);
-            count--;
-
-            tickstart = 0;
+            readData = false;
         }
         else
         {
