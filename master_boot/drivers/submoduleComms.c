@@ -37,6 +37,9 @@ void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t 
     /** Send Start Byte & Message Type **/
     HAL_SPI_Transmit(&hspi3, header, sizeof(header), SPI_DEFAULT_TIMEOUT);
 
+    /** Transmit Data **/
+    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+
     /** Delay to wait for Slave Response **/
     int i;
     for(i = 0; i < 200; i++)
@@ -44,8 +47,11 @@ void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t 
         asm("nop");
     }
 
-    /** Transmit Data **/
-    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+    /* Clear out data in buffer to prevent receiving bad data */
+    for(i = 0; i < rx_size; i++)
+    {
+        buff[i] = 0;
+    }
 
     /** Receive Data **/
     HAL_SPI_Receive(&hspi3, buff, rx_size, SPI_DEFAULT_TIMEOUT);
