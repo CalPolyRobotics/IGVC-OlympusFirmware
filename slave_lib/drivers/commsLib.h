@@ -6,9 +6,6 @@
 #define COMMS_START_BYTE ((uint8_t)0xEA)
 #define NUM_MSGS 11
 
-/** TODO - This might need to be modified **/
-#define SPI_TIMEOUT 100
-
 /** Error Response on Writes **/
 typedef uint8_t wrError_t;
 

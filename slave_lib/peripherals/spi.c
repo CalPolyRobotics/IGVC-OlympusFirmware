@@ -60,10 +60,8 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi){
     }
 }
 
-wrError_t writeResponse(uint8_t *data, uint16_t length){
+void writeResponse(uint8_t *data, uint16_t length){
     if(data != NULL){
         HAL_SPI_Transmit(&hspi1, data, length, SPI_TIMEOUT);
     }
-
-    return WR_OK;
 }
