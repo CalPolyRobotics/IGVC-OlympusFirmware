@@ -15,7 +15,7 @@ typedef enum commState{
 
 static uint8_t buf[256];
 
-void runCommsFSM(uint8_t data){
+wrError_t runCommsFSM(uint8_t data){
     static commState_t state = START_BYTE;
     static uint8_t dataSize;
     static uint8_t dataIdx;
@@ -30,6 +30,7 @@ void runCommsFSM(uint8_t data){
 
         case MSG_TYPE:
             if(data >= NUM_MSGS){
+                state = START_BYTE;
                 break;
             }
 
@@ -38,6 +39,7 @@ void runCommsFSM(uint8_t data){
 
             if(dataSize == 0){
                 writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].txDataLength);
+
                 state = START_BYTE;
             }else{
                 dataIdx = 0;
@@ -46,13 +48,14 @@ void runCommsFSM(uint8_t data){
             break;
 
         case DATA:
-            buf[dataIdx] = data;
-            if(dataIdx == dataSize - 1){
+            buf[dataIdx++] = data;
+            if(dataIdx == dataSize){
                 writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
                 state = START_BYTE;
-            }else{
-                dataIdx++;
             }
+
             break;
     }
+
+    return 0;
 }

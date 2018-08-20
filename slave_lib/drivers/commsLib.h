@@ -27,5 +27,5 @@ typedef struct pktInfo{
     uint8_t* (*callback)(uint8_t* data);
 }msgInfo_t;
 
-void runCommsFSM(uint8_t data);
+wrError_t runCommsFSM(uint8_t data);
 #endif
