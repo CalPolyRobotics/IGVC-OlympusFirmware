@@ -7,8 +7,10 @@ An extended Serial class for communicating with the IGVC bootloader
 """
 
 import time
+import sys
 from serial import Serial, SerialException
 from CRC8 import crc8
+from BootError import BootError
 
 
 DEVICE_KEY_LUT = {
@@ -22,9 +24,6 @@ DEVICE_KEY_LUT = {
 
 USB_BUFF_SIZE = 64
 NUM_CHUNKS_32K = int(32768/USB_BUFF_SIZE)
-
-OK_BYTE_STRING = b'\x00'
-FAIL_BYTE_STRING = b'\x01'
 
 FLASH_KEY = 0x666C6170
 
@@ -57,7 +56,7 @@ class BootSerial(Serial):
                 count += 1
 
         if count == connectTimeout:
-            raise Exception('Failed to connect to Device')
+            self._reportError('Failed to connect to Device')
 
 
     def _writeMessage(self, msgType=None, data=[], messageStr='writeMessage'):
@@ -77,9 +76,15 @@ class BootSerial(Serial):
 
         self.write(bytearray(pkt))
 
-        resp = self.read(1)
-        if resp != OK_BYTE_STRING:
-            raise Exception(messageStr + ' received response: 0x' + resp.hex())
+        resp = BootError(int.from_bytes(self.read(1), byteorder='little'))
+        if resp != BootError.NO_ERR:
+            self._reportError(resp)
+
+
+    def _reportError(self, error):
+        """Prints the given error and exits the program"""
+        print(error)
+        sys.exit(1)
 
 
     def writeData(self, data):
