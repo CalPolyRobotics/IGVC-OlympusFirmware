@@ -11,6 +11,8 @@ STD_DRIVERS = $(SLIB)/drivers
 CMSIS = $(LIBRARIES)/CMSIS
 HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
 
+BOOT_APP = ../usbFlasher/Boot.py
+
 DRIVERS = drivers
 
 SOURCES += main.c
@@ -69,8 +71,15 @@ CFLAGS  = $(INCLUDES) \
    -D STM32F042x6 \
    $(WARNINGS)
 
-LDSCRIPT = $(BUILD_TOOLS)/STM32F042K6Tx_FLASH.ld
-LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools
+PP = cpp
+PPFLAGS = -P
+
+LDSCRIPT_PRE = $(BUILD_TOOLS)/stm32f042_32k.ld
+LDSCRIPT = $(BUILDDIR)/linker.ld
+LDFLAGS += -T$(LDSCRIPT) \
+           -mthumb \
+           -mcpu=cortex-m0 \
+           -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
 
@@ -86,7 +95,10 @@ $(BIN): $(ELF)
 $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
-$(ELF): $(OBJECTS)
+$(LDSCRIPT): $(LDSCRIPT_PRE)
+	$(PP) $(PPFLAGS) $< -o $@
+
+$(ELF): $(OBJECTS) $(LDSCRIPT)
 	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 
@@ -99,12 +111,15 @@ $(BUILDDIR)/%.o: %.s
 	$(CC) -c $(CFLAGS) $< -o $@
 
 flash: $(BIN)
+	$(BOOT_APP) -m apollo -f $(BIN)
+
+flash-st-link: $(BIN)
+	st-flash write $(BIN) 0x8001400
+
+flash-jlink: $(BIN)
 	cp $(BIN) $(BUILD_TOOLS)/program.bin
 	JLinkExe -Device STM32F042K6 -CommanderScript $(FLASH_SCRIPT)
 	rm $(BUILD_TOOLS)/program.bin
-
-flash-dev: $(BIN)
-	st-flash write $(BIN) 0x8000000
 
 tags:
 	ctags -R

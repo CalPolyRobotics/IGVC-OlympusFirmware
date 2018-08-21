@@ -53,11 +53,19 @@ CFLAGS  = $(INCLUDES) \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
    -D STM32F042x6 \
-	-D TINY \
+   -D BOOTLOAD \
+   -D TINY \
    $(WARNINGS)
 
-LDSCRIPT = $(BUILD_TOOLS)/STM32F042K6Tx_FLASH.ld
-LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m0 -LbuildTools
+PP = cpp
+PPFLAGS = -P -D BOOTLOAD
+
+LDSCRIPT_PRE = $(BUILD_TOOLS)/stm32f042_32k.ld
+LDSCRIPT = $(BUILDDIR)/linker.ld
+LDFLAGS += -T$(LDSCRIPT) \
+           -mthumb \
+           -mcpu=cortex-m0 \
+           -LbuildTools
 
 LDLIBS += -lc -lm -lnosys
 
@@ -73,7 +81,10 @@ $(BIN): $(ELF)
 $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
-$(ELF): $(OBJECTS)
+$(LDSCRIPT): $(LDSCRIPT_PRE)
+	$(PP) $(PPFLAGS) $< -o $@
+
+$(ELF): $(OBJECTS) $(LDSCRIPT)
 	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 

@@ -4,7 +4,7 @@
 
 **  File        : LinkerScript.ld
 **
-**  Abstract    : Linker script for STM32F042K6Tx Device with
+**  Abstract    : Linker script for STM32F042C6Tx Device with
 **                32KByte FLASH, 6KByte RAM
 **
 **                Set heap size, stack size and stack location according
@@ -41,22 +41,29 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 32K
-RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 6K
+   RAM (xrw)  : ORIGIN = 0x20000000, LENGTH = 6K - 192
+   BOOT  (rx) : ORIGIN = 0x8000000,  LENGTH = 5K 
+   FLASH (rx) : ORIGIN = 0x8001400,  LENGTH = 27K
 }
+
+#ifdef BOOTLOAD
+REGION_ALIAS("ROM", BOOT)
+#else
+REGION_ALIAS("ROM", FLASH)
+#endif
 
 /* Define output sections */
 SECTIONS
 {
-  /* The startup code goes first into FLASH */
+  /* The startup code goes first into ROM */
   .isr_vector :
   {
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
-  } >FLASH
+  } >ROM
 
-  /* The program code and other data goes into FLASH */
+  /* The program code and other data goes into ROM */
   .text :
   {
     . = ALIGN(4);
@@ -71,44 +78,44 @@ SECTIONS
 
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
-  } >FLASH
+  } >ROM
 
-  /* Constant data goes into FLASH */
+  /* Constant data goes into ROM */
   .rodata :
   {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(4);
-  } >FLASH
+  } >ROM
 
-  .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
+  .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >ROM
   .ARM : {
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
-  } >FLASH
+  } >ROM
 
   .preinit_array     :
   {
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-  } >FLASH
+  } >ROM
   .init_array :
   {
     PROVIDE_HIDDEN (__init_array_start = .);
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
-  } >FLASH
+  } >ROM
   .fini_array :
   {
     PROVIDE_HIDDEN (__fini_array_start = .);
     KEEP (*(SORT(.fini_array.*)))
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
-  } >FLASH
+  } >ROM
 
   /* used by the startup to initialize data */
   _sidata = LOADADDR(.data);
@@ -123,7 +130,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-  } >RAM AT> FLASH
+  } >RAM AT> ROM
 
   
   /* Uninitialized data section */

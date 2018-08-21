@@ -3,6 +3,6 @@ Device STM32F042K6
 speed 2000
 r
 h
-loadbin ../buildTools/program.bin, 0x08000000
+loadbin ../buildTools/program.bin, 0x08001400
 r
 q
