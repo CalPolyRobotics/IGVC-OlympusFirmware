@@ -13,7 +13,7 @@ PERIPHERALS = peripherals
 USB = peripherals/USB
 SYSTEM = system
 
-BOOT_APP = ../master_boot/usbFlasher/Boot.py
+BOOT_APP = ../usbFlasher/Boot.py
 
 SOURCES += main.c
 
