@@ -11,7 +11,7 @@
 *tags
 *.pyc
 
-build/*
+build
 boot/build/*
 
 .DS_Store
