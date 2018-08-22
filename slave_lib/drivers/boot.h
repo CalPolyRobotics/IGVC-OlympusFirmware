@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+void remapVectorTable();
+
 uint8_t *bootload();
 
 #endif

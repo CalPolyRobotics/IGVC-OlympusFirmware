@@ -115,7 +115,7 @@ flash: $(BIN)
 dev: CFLAGS += -DSTM32F207xx
 dev: $(BIN)
 
-flash-dev: dev
+flash-stlink: dev
 	st-flash write $(BIN) 0x8000000
 
 tags:

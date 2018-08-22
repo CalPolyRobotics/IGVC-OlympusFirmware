@@ -23,6 +23,8 @@
 #define ERR_CHECKSUM       ((uint8_t)0x02)
 #define ERR_INVALID_HEADER ((uint8_t)0x03)
 #define ERR_FLASH_ERASE    ((uint8_t)0x04)
+#define ERR_REBOOT_START   ((uint8_t)0x05)
+#define ERR_REBOOT_TIMEOUT ((uint8_t)0x06)
 
 /** 32 Bit message type **/
 typedef enum msgType{
@@ -76,7 +78,7 @@ void runBootFSM(uint32_t data){
 
                     if(submoduleCommsBuff[0] != COMMS_OK)
                     {
-                        if(!checkStatus(module, 50, 1)){
+                        if(!checkStatus(module, 50, 5)){
                             writeResponse(ERR_DATA_WRITE);
                             msg = DMY;
                             break;
@@ -170,18 +172,32 @@ void runBootFSM(uint32_t data){
                 }
                 else
                 {
+                    messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
+
+                    messageSubmodule(module, 0x0A, submoduleCommsBuff, 0, 1);
+                    if(submoduleCommsBuff[0] != COMMS_OK){
+                        writeResponse(ERR_REBOOT_START);
+                        msg = DMY;
+                        break;
+                    }
+
+                    if(!checkStatus(module, 50, 100))
+                    {
+                        writeResponse(ERR_REBOOT_TIMEOUT);
+                        msg = DMY;
+                        break;
+                    }
+
                     size_t headerSize = sizeof(header.size) + sizeof(header.fkey);
                     memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
                     messageSubmodule(module, 0x01, submoduleCommsBuff, headerSize, 1);
 
-                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    if(!checkStatus(module, 50, 100))
                     {
                         /* writeHeader can take longer than expected because of the flash erase */
-                        if(!checkStatus(module, 1500, 1)){
-                            writeResponse(ERR_FLASH_ERASE);
-                            msg = DMY;
-                            break;
-                        }
+                        writeResponse(ERR_FLASH_ERASE);
+                        msg = DMY;
+                        break;
                     }
                 }
 

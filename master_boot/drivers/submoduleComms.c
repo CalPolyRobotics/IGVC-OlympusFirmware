@@ -63,19 +63,15 @@ void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t 
  * message is sent numTimes with delay in between each check 
  */
 bool checkStatus(module_t module, int numTimes, int delay){
-    submoduleCommsBuff[0] = 0;
-
-    int i;
-    for(i = 0; i < numTimes; i++){
-        HAL_Delay(delay);
-
-        selectModule(module);
-        HAL_SPI_Receive(&hspi3, submoduleCommsBuff, 1, SPI_DEFAULT_TIMEOUT);
-        deselectModule(module);
-
-        if(submoduleCommsBuff[0] == COMMS_OK){
+    int count = numTimes;
+    while(count > 0){
+        messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
+        if(submoduleCommsBuff[0] == COMMS_OK)
+        {
             return true;
         }
+        HAL_Delay(delay);
+        count--;
     }
 
     return false;
