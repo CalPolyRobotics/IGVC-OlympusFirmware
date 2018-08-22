@@ -101,7 +101,7 @@ flash: $(BIN)
 	JLinkExe -Device STM32F042K6 -CommanderScript $(FLASH_SCRIPT)
 	rm $(BUILD_TOOLS)/program.bin
 
-flash-dev: $(BIN)
+flash-stlink: $(BIN)
 	st-flash write $(BIN) 0x8000000
 
 tags:

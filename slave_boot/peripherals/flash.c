@@ -6,9 +6,6 @@ static void checkEOP();
 
 void writeInit(uint32_t progsize)
 {
-    /* Wait for FLASH to be ready */
-    //while (FLASH->SR & FLASH_SR_BSY)
-
     /* Unlock FLASH registers */
     FLASH->KEYR = FLASH_KEY1;
     FLASH->KEYR = FLASH_KEY2;
@@ -42,6 +39,25 @@ void writeComplete()
 {
     /* Disable flash programming */
     FLASH->CR &= ~FLASH_CR_PG;
+}
+
+void jumpToApp(uint32_t* address)
+{
+    // Disable Interrupts
+    NVIC->ICER[0] = 0xFFFFFFFF;
+
+    // Clear pending interrupt requests
+    NVIC->ICPR[0] = 0xFFFFFFFF;
+
+    // Disable systick and clear pending exception bit
+    SysTick->CTRL = 0;
+    SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
+
+    // Set SP to first entry in the vector table
+    __set_MSP(address[0]);
+
+    // Set PC to reset value in vector table
+    ((void (*)(void))address[1])();
 }
 
 static void erasePage(uint8_t page){

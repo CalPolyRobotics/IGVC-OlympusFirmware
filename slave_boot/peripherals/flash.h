@@ -13,5 +13,6 @@
 void writeInit(uint32_t progSize);
 void writeFlash(uint16_t* addr, uint16_t data);
 void writeComplete();
+void jumpToApp(uint32_t* data);
 
 #endif

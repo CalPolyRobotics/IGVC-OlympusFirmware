@@ -83,6 +83,7 @@ static uint8_t *write_data(uint8_t *data){
     if(count >= size){
         writeComplete();
         flashComplete = true;
+        jumpToApp(APP_START_ADDR);
     }
 
     errorByte = WR_OK;
@@ -100,6 +101,8 @@ static uint8_t *run_checksum(uint8_t *data){
 }
 
 static uint8_t *jump_to_app(uint8_t *data){
-    errorByte = WR_OK;
+    jumpToApp((uint32_t*)data);
+
+    errorByte = WR_ERR;
     return &errorByte;
 }
