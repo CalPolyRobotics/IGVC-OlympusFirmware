@@ -1,10 +1,13 @@
 #include "stm32f0xx_hal.h"
-#include "spi.h"
+#include "boot.h"
 #include "commsLib.h"
+#include "spi.h"
 #include "systemClock.h"
 
 int main(void)
 {
+    remapVectorTable();
+
     HAL_StatusTypeDef status;
     HAL_Init();
 
@@ -16,7 +19,7 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 1000);
+        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
         if(status == HAL_OK){
             runCommsFSM(data);
         }
@@ -33,7 +36,7 @@ int main(void)
 * @retval None
 */
 void assert_failed(char* file, uint32_t line)
-{ 
+{
 /* User can add his own implementation to report the file name and line number,
  ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 

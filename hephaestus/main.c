@@ -1,12 +1,13 @@
 #include "stm32f0xx_hal.h"
+#include "boot.h"
 #include "commsLib.h"
 #include "spi.h"
 #include "systemClock.h"
 
-void SystemClock_Config(void);
-
 int main(void)
 {
+    remapVectorTable();
+
     HAL_StatusTypeDef status;
     HAL_Init();
 

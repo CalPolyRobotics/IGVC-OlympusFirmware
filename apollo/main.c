@@ -1,4 +1,5 @@
 #include "stm32f0xx_hal.h"
+#include "boot.h"
 #include "spi.h"
 #include "commsLib.h"
 #include "lights.h"
@@ -6,6 +7,8 @@
 
 int main(void)
 {
+    remapVectorTable();
+
     HAL_StatusTypeDef status;
     HAL_Init();
 
