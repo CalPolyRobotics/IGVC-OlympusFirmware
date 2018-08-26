@@ -12,26 +12,36 @@ _estack = 0x2000A000;    /* end of 40K RAM */
 _Min_Heap_Size = 0x200;      /* required amount of heap  */
 _Min_Stack_Size = 0x400; 	/* required amount of stack */
 
+_START_OF_BOOT = 0x8000000;
+_START_OF_FLASH = 0x8020000;
+
 /* Specify the memory areas */
 MEMORY
 {
-  FLASH (rx)      : ORIGIN = 0x8020000, LENGTH = 896K
-  RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 128K
-  MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
+  BOOT  (rx)      : ORIGIN = _START_OF_BOOT,  LENGTH = 128K
+  FLASH (rx)      : ORIGIN = _START_OF_FLASH, LENGTH = 1024K - 128K
+  RAM (xrw)       : ORIGIN = 0x20000000,      LENGTH = 128K
+  MEMORY_B1 (rx)  : ORIGIN = 0x60000000,      LENGTH = 0K
 }
+
+#ifdef BOOTLOADER
+REGION_ALIAS("APP", BOOT)
+#else
+REGION_ALIAS("APP", FLASH)
+#endif
 
 /* Define output sections */
 SECTIONS
 {
-  /* The startup code goes first into FLASH */
+  /* The startup code goes first into APP */
   .isr_vector :
   {
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
-  } >FLASH
+  } >APP
 
-  /* The program code and other data goes into FLASH */
+  /* The program code and other data goes into APP */
   .text :
   {
     . = ALIGN(4);
@@ -47,36 +57,36 @@ SECTIONS
 
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
-  } >FLASH
+  } >APP
 
 
-   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
+   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >APP
     .ARM : {
     __exidx_start = .;
       *(.ARM.exidx*)
       __exidx_end = .;
-    } >FLASH
+    } >APP
 
   .preinit_array     :
   {
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-  } >FLASH
+  } >APP
   .init_array :
   {
     PROVIDE_HIDDEN (__init_array_start = .);
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
-  } >FLASH
+  } >APP
   .fini_array :
   {
     PROVIDE_HIDDEN (__fini_array_start = .);
     KEEP (*(.fini_array*))
     KEEP (*(SORT(.fini_array.*)))
     PROVIDE_HIDDEN (__fini_array_end = .);
-  } >FLASH
+  } >APP
 
   /* used by the startup to initialize data */
   _sidata = .;

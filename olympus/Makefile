@@ -109,7 +109,11 @@ CFLAGS  = -O0 -g \
    -DUSE_USB_FS \
    $(WARNINGS)
 
-LDSCRIPT = $(BUILD_TOOLS)/stm32_flash.ld
+PP = cpp
+PPFLAGS = -P
+
+LDSCRIPT_PRE = $(BUILD_TOOLS)/stm32f20.ld
+LDSCRIPT = $(BUILDDIR)/linker.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -L$(BUILD_TOOLS)
 
 LDLIBS += -lc -lm -lnosys
@@ -117,6 +121,7 @@ LDLIBS += -lc -lm -lnosys
 FLASH_SCRIPT = $(BUILD_TOOLS)/flash.jlink
 
 
+.PHONY: all flash tags dev flash-dev
 all: CFLAGS += -DSTM32F205xx
 all: $(BIN)
 
@@ -126,7 +131,10 @@ $(BIN): $(ELF)
 $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
-$(ELF): $(OBJECTS)
+$(LDSCRIPT): $(LDSCRIPT_PRE)
+	$(PP) $(PPFLAGS) $< -o $@
+
+$(ELF): $(OBJECTS) $(LDSCRIPT)
 	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 
@@ -138,18 +146,26 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-.PHONY: flash tags
-flash: CFLAGS += -DSTM32F205xx
-flash: $(BIN)
+# Devices using STM32F205xx
+std: CFLAGS += -DSTM32F205xx
+std: $(BIN)
+
+flash: std
+	$(BOOT_APP) -m olympus -f $(BIN)
+
+flash-jlink: std
 	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
 
-.PHONY: dev
-dev: CFLAGS += -DSTM32F207xx -DBOOTLOAD
+
+# Devices using STM32F207xx
+dev: CFLAGS += -DSTM32F207xx
 dev: $(BIN)
 
-.PHONY: flash-dev
 flash-dev: dev
 	$(BOOT_APP) -m olympus -f $(BIN)
+
+flash-dev-stlink: dev
+	st-flash write $(BIN) 0x8020000
 
 tags:
 	ctags -R

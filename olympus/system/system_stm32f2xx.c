@@ -5,17 +5,17 @@
   * @version V2.0.1
   * @date    25-March-2014
   * @brief   CMSIS Cortex-M3 Device Peripheral Access Layer System Source File.
-  *             
-  *   This file provides two functions and one global variable to be called from 
+  *
+  *   This file provides two functions and one global variable to be called from
   *   user application:
-  *      - SystemInit(): This function is called at startup just after reset and 
+  *      - SystemInit(): This function is called at startup just after reset and
   *                      before branch to main program. This call is made inside
   *                      the "startup_stm32f2xx.s" file.
   *
   *      - SystemCoreClock variable: Contains the core clock (HCLK), it can be used
-  *                                  by the user application to setup the SysTick 
+  *                                  by the user application to setup the SysTick
   *                                  timer or configure other parameters.
-  *                                     
+  *
   *      - SystemCoreClockUpdate(): Updates the variable SystemCoreClock and must
   *                                 be called whenever the core clock is changed
   *                                 during program execution.
@@ -60,15 +60,16 @@
 /*!< Uncomment the following line if you need to relocate your vector Table in
      Internal SRAM. */
 /* #define VECT_TAB_SRAM */
-#ifdef BOOTLOAD
-    #define VECT_TAB_OFFSET  0x20000 /*!< Vector Table base offset field.
-                                       This value must be a multiple of 0x200. */
+
+/*!< Vector Table base offset field.  This value must be a multiple of 0x200. */
+#ifdef BOOTLOADER
+    #define VECT_TAB_OFFSET  0x00000
 #else
-    #define VECT_TAB_OFFSET  0x00000 /*!< Vector Table base offset field.
-                                       This value must be a multiple of 0x200. */
+    extern uint32_t _START_OF_FLASH;
+    #define VECT_TAB_OFFSET  ((uint32_t)&_START_OF_FLASH - FLASH_BASE)
 #endif
 /******************************************************************************/
-  
+
   /* This varaible can be updated in Three ways :
       1) by calling CMSIS function SystemCoreClockUpdate()
       2) by calling HAL API function HAL_RCC_GetHCLKFreq()

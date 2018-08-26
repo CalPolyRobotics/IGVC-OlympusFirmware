@@ -76,9 +76,14 @@ CFLAGS  = -O0 -g \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
    -DUSE_USB_FS \
+   -DBOOTLOADER \
    $(WARNINGS)
 
-LDSCRIPT = $(BUILDTOOLS)/stm32_boot.ld
+PP = cpp
+PPFLAGS = -P -D BOOTLOADER
+
+LDSCRIPT_PRE = $(BUILDTOOLS)/stm32f20.ld
+LDSCRIPT = $(BUILDDIR)/linker.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
 
 LDLIBS += -lc -lm -lnosys
@@ -96,7 +101,10 @@ $(BIN): $(ELF)
 $(HEX): $(ELF)
 	$(OBJCOPY) -O ihex $< $@
 
-$(ELF): $(OBJECTS)
+$(LDSCRIPT): $(LDSCRIPT_PRE)
+	$(PP) $(PPFLAGS) $< -o $@
+
+$(ELF): $(OBJECTS) $(LDSCRIPT)
 	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 
