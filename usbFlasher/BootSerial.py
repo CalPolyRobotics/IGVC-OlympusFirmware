@@ -18,7 +18,6 @@ DEVICE_KEY_LUT = {
     'apollo': 0x41504F4C,
     'hera': 0x48455241,
     'hephaestus': 0x48455048,
-    'hermes': 0x4845524D,
     'janus': 0x4A414E55
 }
 
@@ -44,7 +43,7 @@ class BootSerial(Serial):
     """
 
     def __init__(self, port, readTimeout=15, connectTimeout=2):
-        self.data_count = 0
+        self.checksum = 0
         count = 0
 
         while count < connectTimeout:
@@ -88,18 +87,22 @@ class BootSerial(Serial):
 
 
     def writeData(self, data):
-        """Writes data to the STM MCU"""
+        """Writes data to the STM MCU and adds to cheksum"""
+        for i in range(0, len(data), 4):
+            self.checksum = (self.checksum + int.from_bytes(data[i:i+4], byteorder='little')) & 0xFFFFFFFF
         self._writeMessage(data=data, messageStr='writeData')
 
 
     def initData(self):
         """Initiates a data transfer"""
+        self.checksum = 0
         self._writeMessage(0, [], 'initData')
 
 
-    def writeChecksum(self, checksum):
+    def writeChecksum(self):
         """Writes the checksum to check validity of application on MCU"""
-        self._writeMessage(1, checksum, 'writeData')
+        print(str(self.checksum))
+        self._writeMessage(1, [self.checksum], 'writeChecksum')
 
 
     def writeHeader(self, device, size):

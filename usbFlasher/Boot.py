@@ -47,7 +47,7 @@ if __name__ == '__main__':
         print('Erasing Flash...')
         serBoot.writeHeader(mcu, size)
 
-        print('Writing flash...')
+        print('Writing Flash...')
         serBoot.initData()
 
         # Write in CHUNK_SIZE Word Chunks
@@ -56,8 +56,8 @@ if __name__ == '__main__':
             if i != 0 and i % NUM_CHUNKS_32K == 0:
                 print("Data 32K Written")
 
-        print('Checking application...')
-        serBoot.writeChecksum([0xAAAA])
+        print('Checking Application Checksum...')
+        serBoot.writeChecksum()
 
         serBoot.close()
         print('Terry Flaps Installed')

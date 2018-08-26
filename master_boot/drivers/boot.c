@@ -47,6 +47,7 @@ typedef struct bootHeader{
 
 /** Response Data for USB **/
 uint8_t responseData = NO_ERR;
+uint32_t checksum = 0;
 
 void runBootFSM(uint32_t data){
     static uint32_t* dataAddr = USER_APP_BASE_PTR;
@@ -66,6 +67,7 @@ void runBootFSM(uint32_t data){
                 writeFlash(dataAddr, data);
                 dataAddr++;
                 count += 4u;
+                checksum += data;
             }
             else
             {
@@ -74,6 +76,12 @@ void runBootFSM(uint32_t data){
 
                 if((count % CHUNK_SIZE) == 0 || count == header.size)
                 {
+                    if(count == header.size)
+                    {
+                        /* Zero fill end of buffer if last packet */
+                        memset(submoduleCommsBuff + (count % CHUNK_SIZE), 0u, CHUNK_SIZE - (count % CHUNK_SIZE));
+                    }
+
                     messageSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, 1);
 
                     if(submoduleCommsBuff[0] != COMMS_OK)
@@ -103,18 +111,39 @@ void runBootFSM(uint32_t data){
             break;
 
         case CHECKSUM:
-            if(data == 0x0000AAAA)
+            if(module == OLYMPUS)
             {
-                writeResponse(NO_ERR);
+                if(data == checksum)
+                {
+                    writeResponse(NO_ERR);
 
-                // Give time to application to read data
-                HAL_Delay(10);
+                    // Give time to application to read data
+                    HAL_Delay(10);
 
-                jumpToApp(USER_APP_BASE_PTR);
+                    jumpToApp(USER_APP_BASE_PTR);
+                }
+                else
+                {
+                    writeResponse(ERR_CHECKSUM);
+                }
             }
             else
             {
-                writeResponse(ERR_CHECKSUM);
+                memcpy(submoduleCommsBuff, &data, sizeof(data));
+                messageSubmodule(module, 0x03, submoduleCommsBuff, 4u, 1);
+
+
+                if(submoduleCommsBuff[0] != COMMS_OK)
+                {
+                    if(!checkStatus(module, 50, 10))
+                    {
+                        writeResponse(ERR_CHECKSUM);
+                        msg = DMY;
+                        break;
+                    }
+                }
+
+                writeResponse(NO_ERR);
             }
 
             msg = DMY;
@@ -168,6 +197,7 @@ void runBootFSM(uint32_t data){
                 if(module == OLYMPUS)
                 {
                     // Erase Flash
+                    checksum = 0;
                     writeInit(header.size);
                 }
                 else
