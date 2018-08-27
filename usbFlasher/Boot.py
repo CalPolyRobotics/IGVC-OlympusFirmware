@@ -11,6 +11,7 @@ import os
 import math
 import argparse
 
+from BootError import BootError
 from BootSerial import BootSerial, USB_BUFF_SIZE, NUM_CHUNKS_32K, DEVICE_KEY_LUT
 
 def openBinary(binName):
@@ -18,7 +19,6 @@ def openBinary(binName):
 
     statinfo = os.stat(binName)
     return open(binName, 'rb'), statinfo.st_size
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -30,6 +30,11 @@ if __name__ == '__main__':
 
     if len(args.mcu) != len(args.file):
         print('Number of MCUs must match number of files')
+        sys.exit(1)
+
+    # Make sure olympus is always the last bootloader run
+    if len(args.mcu) > 1 and args.mcu[-1] != 'olympus':
+        print('Olympus must be the last bootloader run')
         sys.exit(1)
 
     serComm = BootSerial('/dev/igvc_comm')
@@ -45,19 +50,36 @@ if __name__ == '__main__':
         print('Application size for ' + mcu + ': ' + str(size))
 
         print('Erasing Flash...')
-        serBoot.writeHeader(mcu, size)
+        resp = serBoot.writeHeader(mcu, size)
+        if resp != BootError.NO_ERR:
+            print(resp)
+            continue
+
 
         print('Writing Flash...')
-        serBoot.initData()
+        resp = serBoot.initData()
+        if resp != BootError.NO_ERR:
+            print(resp)
+            continue
 
         # Write in CHUNK_SIZE Word Chunks
         for i in range(0, math.ceil(size/USB_BUFF_SIZE)):
-            serBoot.writeData(fp.read(USB_BUFF_SIZE))
+            resp = serBoot.writeData(fp.read(USB_BUFF_SIZE))
+            if resp != BootError.NO_ERR:
+                print(resp)
+                break
+
             if i != 0 and i % NUM_CHUNKS_32K == 0:
                 print("Data 32K Written")
 
+        if resp != BootError.NO_ERR:
+            continue
+
         print('Checking Application Checksum...')
-        serBoot.writeChecksum()
+        resp = serBoot.writeChecksum()
+        if resp != BootError.NO_ERR:
+            print(resp)
+            continue
 
         serBoot.close()
         print('Terry Flaps Installed')

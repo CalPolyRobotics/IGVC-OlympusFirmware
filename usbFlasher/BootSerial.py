@@ -56,6 +56,7 @@ class BootSerial(Serial):
 
         if count == connectTimeout:
             self._reportError('Failed to connect to Device')
+            sys.exit(1)
 
 
     def _writeMessage(self, msgType=None, data=[], messageStr='writeMessage'):
@@ -76,38 +77,30 @@ class BootSerial(Serial):
         self.write(bytearray(pkt))
 
         resp = BootError(int.from_bytes(self.read(1), byteorder='little'))
-        if resp != BootError.NO_ERR:
-            self._reportError(resp)
-
-
-    def _reportError(self, error):
-        """Prints the given error and exits the program"""
-        print(error)
-        sys.exit(1)
+        return resp
 
 
     def writeData(self, data):
         """Writes data to the STM MCU and adds to cheksum"""
         for i in range(0, len(data), 4):
             self.checksum = (self.checksum + int.from_bytes(data[i:i+4], byteorder='little')) & 0xFFFFFFFF
-        self._writeMessage(data=data, messageStr='writeData')
+        return self._writeMessage(data=data, messageStr='writeData')
 
 
     def initData(self):
         """Initiates a data transfer"""
         self.checksum = 0
-        self._writeMessage(0, [], 'initData')
+        return self._writeMessage(0, [], 'initData')
 
 
     def writeChecksum(self):
         """Writes the checksum to check validity of application on MCU"""
-        print(str(self.checksum))
-        self._writeMessage(1, [self.checksum], 'writeChecksum')
+        return self._writeMessage(1, [self.checksum], 'writeChecksum')
 
 
     def writeHeader(self, device, size):
         """Writes the header packet to initiate flash erase"""
-        self._writeMessage(2, [int(DEVICE_KEY_LUT[device]), int(size), int(FLASH_KEY)])
+        return self._writeMessage(2, [int(DEVICE_KEY_LUT[device]), int(size), int(FLASH_KEY)])
 
 
     def resetDevice(self):
