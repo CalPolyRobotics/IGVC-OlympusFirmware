@@ -113,7 +113,7 @@ $(BUILDDIR)/%.o: %.s
 flash: $(BIN)
 	$(BOOT_APP) -m apollo -f $(BIN)
 
-flash-st-link: $(BIN)
+flash-stlink: $(BIN)
 	st-flash write $(BIN) 0x8001400
 
 flash-jlink: $(BIN)
