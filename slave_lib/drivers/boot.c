@@ -1,3 +1,4 @@
+#include "stm32f0xx_hal.h"
 #include "commsLib.h"
 #include "spi.h"
 
@@ -28,7 +29,7 @@ static wrError_t we;
 uint8_t *bootload(uint8_t* data){
     we = WR_OK;
 
-    writeResponse(&we, 1);
+    writeResponse(&we, 1, 100u);
 
     NVIC_SystemReset();
 

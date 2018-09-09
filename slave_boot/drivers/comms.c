@@ -4,7 +4,7 @@
 #include "boot.h"
 #include "comms.h"
 #include "flash.h"
-#include "tinySpi.h"
+#include "spi.h"
 
 #define ERASE_FLASH_KEY ((uint32_t)0x666C6170)
 
@@ -127,7 +127,7 @@ static uint8_t *run_checksum(uint8_t *data){
 
     /* Write success since jumpToApp wont return */
     errorByte = WR_OK;
-    writeResponse(&errorByte, 1u);
+    writeResponse(&errorByte, 1u, 100u);
 
     jumpToApp(APP_START_ADDR);
 

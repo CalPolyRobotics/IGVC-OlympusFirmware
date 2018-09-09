@@ -18,6 +18,9 @@ int main(void)
     /* Configure the system clock to 48 MHz */
     SystemClock_Config();
 
+    /* Enable interrupts */
+    __enable_irq();
+
     MX_SPI1_Init();
     MX_GPIO_Init();
     MX_I2C1_Init();
@@ -28,7 +31,7 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
+        status = readByte(&data, STD_SPI_DELAY);
         if(status == HAL_OK){
             runCommsFSM(data);
         }

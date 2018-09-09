@@ -19,9 +19,10 @@ SOURCES += $(STD_DRIVERS)/commsLib.c
 
 SOURCES += $(DRIVERS)/comms.c
 
-SOURCES += $(PERIPHS)/tinySpi.c \
-			$(PERIPHS)/systemClock.c \
-			$(PERIPHS)/flash.c
+SOURCES += $(STD_PERIPHS)/spi.c \
+			$(STD_PERIPHS)/systemClock.c \
+
+SOURCES += $(PERIPHS)/flash.c
 
 SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
 		   $(SYSTEM)/system_stm32f0xx.c
@@ -31,8 +32,8 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 INCLUDES += -I$(CMSIS)/inc \
 			-I$(DRIVERS) \
 			-I$(SYSTEM) \
-			-I$(STD_PERIPHS) \
 			-I$(STD_DRIVERS) \
+			-I$(STD_PERIPHS) \
 			-I$(PERIPHS) \
 			-I.
 

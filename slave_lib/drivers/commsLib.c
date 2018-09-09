@@ -1,13 +1,6 @@
 #include <stdlib.h>
 #include "comms.h"
-
-/* Use tinySpi library if TINY is defined */
-#ifdef TINY
-#include "tinySpi.h"
-#else
 #include "spi.h"
-#endif
-
 
 typedef enum commState{
     START_BYTE=0, MSG_TYPE, DATA
@@ -38,7 +31,7 @@ wrError_t runCommsFSM(uint8_t data){
             dataSize = msgResp[msgType].rxDataLength;
 
             if(dataSize == 0){
-                writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].txDataLength);
+                writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].txDataLength, STD_SPI_DELAY);
 
                 state = START_BYTE;
             }else{
@@ -50,7 +43,7 @@ wrError_t runCommsFSM(uint8_t data){
         case DATA:
             buf[dataIdx++] = data;
             if(dataIdx == dataSize){
-                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
+                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength, STD_SPI_DELAY);
                 state = START_BYTE;
             }
 

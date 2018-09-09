@@ -31,8 +31,6 @@ SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
 			$(HAL)/src/stm32f0xx_hal_flash.c \
 			$(HAL)/src/stm32f0xx_hal_flash_ex.c \
-			$(HAL)/src/stm32f0xx_hal_spi.c \
-			$(HAL)/src/stm32f0xx_hal_spi_ex.c \
 			$(HAL)/src/stm32f0xx_hal_i2c.c \
 			$(HAL)/src/stm32f0xx_hal_i2c_ex.c \
 			$(HAL)/src/stm32f0xx_hal_dma.c \

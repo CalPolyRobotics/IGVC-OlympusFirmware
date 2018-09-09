@@ -1,4 +1,8 @@
-#include "stm32f0xx_hal.h"
+#include "stm32f0xx.h"
+
+volatile uint32_t systickCount = 0;
+
+static void SysTick_Init(uint32_t tickNums);
 
 /**
 * @brief  System Clock Configuration
@@ -8,36 +12,57 @@
 *            HCLK(Hz)                       = 48000000
 *            AHB Prescaler                  = 1
 *            APB1 Prescaler                 = 1
-*            HSI Frequency(Hz)              = 8000000
-*            PREDIV                         = 1
+*            HSI Frequency(Hz)              = 8000000 *            PREDIV                         = 1
 *            PLLMUL                         = 6
 *            Flash Latency(WS)              = 1
 * @param  None
 * @retval None */
-void SystemClock_Config(void)
+void SystemClock_Config()
 {
-    RCC_ClkInitTypeDef RCC_ClkInitStruct;
-    RCC_OscInitTypeDef RCC_OscInitStruct;
-
     /* No HSE Oscillator on Nucleo, Activate PLL with HSI as source */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-    RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
-    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
-    if (HAL_RCC_OscConfig(&RCC_OscInitStruct)!= HAL_OK)
-    { /* Initialization Error */
-        while(1); 
-    }
+    RCC->CFGR2 |= RCC_CFGR2_PREDIV_DIV1;
+    RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_PREDIV | RCC_CFGR_PLLMUL6;
 
-    /* Select PLL as system clock source and configure the HCLK, PCLK1 clocks dividers */
-    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1)!= HAL_OK)
-    {
-        /* Initialization Error */
-        while(1); 
-    }
+    RCC->CR |= RCC_CR_PLLON;
+    while(!(RCC->CR & RCC_CR_PLLRDY));
+
+    /* Init HCLK */
+    RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
+
+    /* Init System Clock to PLL **/
+    RCC->CFGR |= RCC_CFGR_SW_PLL;
+    while(!(RCC->CFGR & RCC_CFGR_SWS_PLL));
+
+    /* Flash Wait State of 1 */
+    FLASH->ACR = (FLASH->ACR&(~FLASH_ACR_LATENCY_Msk)) | FLASH_ACR_LATENCY;
+
+    /* Set APB divider */
+    RCC->CFGR = (RCC->CFGR&(~RCC_CFGR_PPRE_Msk)) | RCC_CFGR_PPRE_DIV1;
+
+    /* Update clock speed LUT */
+    SystemCoreClock = 48000000u;
+
+    /* Enable 1ms systick clock */
+    SysTick_Init(SystemCoreClock/1000u);
+}
+
+void SysTick_Delay(uint32_t ms)
+{
+    uint32_t finish = systickCount + ms;
+    while(systickCount < finish);
+}
+
+void SysTick_Handler()
+{
+    systickCount++;
+}
+
+static void SysTick_Init(uint32_t tickNums)
+{
+    SysTick->LOAD = tickNums - 1u;
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |
+                    SysTick_CTRL_TICKINT_Msk |
+                    SysTick_CTRL_ENABLE_Msk;
+
+    NVIC_EnableIRQ(SysTick_IRQn);
 }
