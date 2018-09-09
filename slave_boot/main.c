@@ -24,7 +24,7 @@ int main(void)
     /* Clear Reset Flags for Detection on Startup */
     RCC -> CSR |= RCC_CSR_RMVF;
 
-    MX_SPI1_Init();
+    MX_COMMS_SPI_Init();
 
     /** Set PIN3 as output push pull **/
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
@@ -35,7 +35,7 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = readByte(&data, 100u);
+        status = readByte(&data);
         if(status == WR_OK){
             runCommsFSM(data);
         }

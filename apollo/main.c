@@ -19,7 +19,7 @@ int main(void)
     /* Enable interrupts */
     __enable_irq();
 
-    MX_SPI1_Init();
+    MX_COMMS_SPI_Init();
 
     init_apollo();
 

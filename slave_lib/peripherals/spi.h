@@ -5,8 +5,10 @@
 
 #define STD_SPI_DELAY ((uint32_t)100u)
 
-void MX_SPI1_Init();
-void SPI1_LL_Init();
+#define COMMS_SPI SPI1
+
+void MX_COMMS_SPI_Init();
+void COMMS_SPI_LL_Init();
 
 wrError_t readByte(uint8_t *data, uint32_t timeout);
 wrError_t writeResponse(uint8_t* data, uint16_t length, uint32_t timeout);

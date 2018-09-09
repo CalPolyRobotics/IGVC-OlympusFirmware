@@ -17,7 +17,7 @@ int main(void)
     /* Enable interrupts */
     __enable_irq();
 
-    MX_SPI1_Init();
+    MX_COMMS_SPI_Init();
 
     uint8_t data;
     while (1)

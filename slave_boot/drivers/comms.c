@@ -127,7 +127,7 @@ static uint8_t *run_checksum(uint8_t *data){
 
     /* Write success since jumpToApp wont return */
     errorByte = WR_OK;
-    writeResponse(&errorByte, 1u, 100u);
+    writeResponse(&errorByte, 1u);
 
     jumpToApp(APP_START_ADDR);
 

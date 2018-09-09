@@ -3,29 +3,29 @@
 #include "spi.h"
 #include "systemClock.h"
 
-void MX_SPI1_Init(){
-    /* Init the low level hardware : GPIO, CLOCK, NVIC... */
-    SPI1_LL_Init();
+void MX_COMMS_SPI_Init(){
+    /* Init the low level hardware : GPIO, CLOCK */
+    COMMS_SPI_LL_Init();
 
     /* Set 8-bit transfers & 8-bit FIFO threshold */
-    SPI1->CR2 = (SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0) |
+    COMMS_SPI->CR2 = (SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0) |
                 SPI_CR2_FRXTH;
 
     /* Enable SPI as Slave and Hardware NSS*/
-    SPI1->CR1 = SPI_CR1_SPE;
+    COMMS_SPI->CR1 = SPI_CR1_SPE;
 }
 
-void SPI1_LL_Init(){
+void COMMS_SPI_LL_Init(){
     /* Enable GPIO and SPI Clocks */
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
 
-    /** SPI1 GPIO Configuration
-     *  (Alternate Function, Push Pull, High Speed, No Pull, AF0_SPI1)
-     *  PA4 ----------> SPI1_NSS
-     *  PA5 ----------> SPI1_SCK
-     *  PA6 ----------> SPI1_MISO
-     *  PA7 ----------> SPI1_MOSI
+    /** COMMS_SPI GPIO Configuration
+     *  (Alternate Function, Push Pull, High Speed, No Pull, AF0_COMMS_SPI)
+     *  PA4 ----------> COMMS_SPI_NSS
+     *  PA5 ----------> COMMS_SPI_SCK
+     *  PA6 ----------> COMMS_SPI_MISO
+     *  PA7 ----------> COMMS_SPI_MOSI
      */
 
     GPIOA->OSPEEDR |=  GPIO_OSPEEDR_OSPEEDR4_Msk |
@@ -42,7 +42,6 @@ void SPI1_LL_Init(){
                     GPIO_MODER_MODER5_1 |
                     GPIO_MODER_MODER6_1 |
                     GPIO_MODER_MODER7_1;
-
 }
 
 wrError_t writeResponse(uint8_t *data, uint16_t length, uint32_t timeout){
@@ -53,13 +52,13 @@ wrError_t writeResponse(uint8_t *data, uint16_t length, uint32_t timeout){
     if (count > 1u)
     {
         /* write on the data register in packing mode */
-        SPI1->DR = *((uint16_t *)pData);
+        COMMS_SPI->DR = *((uint16_t *)pData);
         pData += sizeof(uint16_t);
         count -= 2u;
     }
     else
     {
-        SPI1->DR = (*pData++);
+        COMMS_SPI->DR = (*pData++);
         count--;
     }
 
@@ -73,18 +72,18 @@ wrError_t writeResponse(uint8_t *data, uint16_t length, uint32_t timeout){
         }
 
         /* Wait until TXE flag is set to send data */
-        if (SPI1->SR & SPI_SR_TXE)
+        if (COMMS_SPI->SR & SPI_SR_TXE)
         {
             if (count > 1u)
             {
                 /* write on the data register in packing mode */
-                SPI1->DR = *((uint16_t *)pData);
+                COMMS_SPI->DR = *((uint16_t *)pData);
                 pData += sizeof(uint16_t);
                 count -= 2u;
             }
             else
             {
-                SPI1->DR = (*pData++);
+                COMMS_SPI->DR = (*pData++);
                 count--;
             }
         }
@@ -92,7 +91,7 @@ wrError_t writeResponse(uint8_t *data, uint16_t length, uint32_t timeout){
 
 
     /* Clear overrun flag in 2 Lines communication mode because received is not read */
-    __SPI_CLEAR_OVRFLAG(SPI1);
+    __SPI_CLEAR_OVRFLAG(COMMS_SPI);
 
     return WR_OK;
 }
@@ -102,8 +101,8 @@ wrError_t readByte(uint8_t *data, uint32_t timeout){
     bool readData = true;
 
     /* Write a 0 while reading byte */
-    if(SPI1->SR & SPI_SR_TXE){
-        SPI1->DR = (uint8_t)0x00u;
+    if(COMMS_SPI->SR & SPI_SR_TXE){
+        COMMS_SPI->DR = (uint8_t)0x00u;
     }
 
     /* Receive data in 8 Bit mode */
@@ -117,10 +116,10 @@ wrError_t readByte(uint8_t *data, uint32_t timeout){
         }
 
         /* Check the RXNE flag */
-        if(SPI1->SR & SPI_SR_RXNE)
+        if(COMMS_SPI->SR & SPI_SR_RXNE)
         {
             /* read the received data */
-            *data = SPI1->DR;
+            *data = COMMS_SPI->DR;
             data += sizeof(uint8_t);
             readData = false;
         }
