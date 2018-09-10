@@ -55,9 +55,8 @@ class BootSerial(Serial):
                 count += 1
 
         if count == connectTimeout:
-            self._reportError('Failed to connect to Device')
+            print('Failed to connect to Device')
             sys.exit(1)
-
 
     def _writeMessage(self, msgType=None, data=[], messageStr='writeMessage'):
         """Writes the msgType followed by the data, throws exception with messageStr if fails"""
@@ -79,29 +78,28 @@ class BootSerial(Serial):
         resp = BootError(int.from_bytes(self.read(1), byteorder='little'))
         return resp
 
-
     def writeData(self, data):
         """Writes data to the STM MCU and adds to cheksum"""
         for i in range(0, len(data), 4):
             self.checksum = (self.checksum + int.from_bytes(data[i:i+4], byteorder='little')) & 0xFFFFFFFF
         return self._writeMessage(data=data, messageStr='writeData')
 
-
     def initData(self):
         """Initiates a data transfer"""
         self.checksum = 0
         return self._writeMessage(0, [], 'initData')
 
-
     def writeChecksum(self):
         """Writes the checksum to check validity of application on MCU"""
         return self._writeMessage(1, [self.checksum], 'writeChecksum')
-
 
     def writeHeader(self, device, size):
         """Writes the header packet to initiate flash erase"""
         return self._writeMessage(2, [int(DEVICE_KEY_LUT[device]), int(size), int(FLASH_KEY)])
 
+    def writeJump(self):
+        """Writes the jump message to cause the master mcu to jump to the main application"""
+        return self._writeMessage(3, [], 'writeJump')
 
     def resetDevice(self):
         """Resets the device from its running state"""

@@ -28,7 +28,7 @@
 
 /** 32 Bit message type **/
 typedef enum msgType{
-    DATA = 0, CHECKSUM = 1, HEADER = 2, DMY = 65535
+    DATA = 0, CHECKSUM = 1, HEADER = 2, JUMP=3, DMY = 65535
 }msgType_t;
 
 extern uint8_t submoduleCommsBuff[256];
@@ -116,11 +116,6 @@ void runBootFSM(uint32_t data){
                 if(data == checksum)
                 {
                     writeResponse(NO_ERR);
-
-                    // Give time to application to read data
-                    HAL_Delay(10);
-
-                    jumpToApp(USER_APP_BASE_PTR);
                 }
                 else
                 {
@@ -244,6 +239,16 @@ void runBootFSM(uint32_t data){
             if(newMsg == DATA)
             {
                 writeResponse(NO_ERR);
+            }
+
+            if(newMsg == JUMP)
+            {
+                writeResponse(NO_ERR);
+
+                // Give time to process message
+                HAL_Delay(10);
+
+                jumpToApp(USER_APP_BASE_PTR);
             }
 
             msg = newMsg;
