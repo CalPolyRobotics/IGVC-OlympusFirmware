@@ -3,7 +3,7 @@
 #include "comms.h"
 #include "fnr.h"
 
-static uint8_t errorByte;
+static uint8_t errorByte = WR_OK;
 
 static uint8_t dataBuf[256];
 
@@ -27,7 +27,6 @@ msgInfo_t msgResp[NUM_MSGS] = {
 };
 
 static uint8_t *get_status_callback(uint8_t *data){
-    errorByte = WR_OK;
     return &errorByte;
 }
 

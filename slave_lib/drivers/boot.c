@@ -1,5 +1,6 @@
 #include "stm32f0xx_hal.h"
 #include "commsLib.h"
+#include "systemClock.h"
 #include "spi.h"
 
 #define VECTOR_TABLE_LENGTH 48
@@ -29,7 +30,10 @@ static wrError_t we;
 uint8_t *bootload(uint8_t* data){
     we = WR_OK;
 
-    writeResponse(&we, 1, 100u);
+    writeResponse(&we, 1u);
+
+    /* Give time for response to be sent */
+    SysTick_Delay(50u);
 
     NVIC_SystemReset();
 

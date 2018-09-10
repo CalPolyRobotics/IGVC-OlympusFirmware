@@ -2,6 +2,21 @@
 #include "stm32f0xx.h"
 #include "spi.h"
 #include "systemClock.h"
+#include "string.h"
+
+#define COMMS_SPI SPI1
+#define COMMS_SPI_IRQn SPI1_IRQn
+
+#define TX_BUFFER_SIZE ((uint32_t)256u)
+#define RX_BUFFER_SIZE ((uint32_t)256u)
+
+uint8_t txBuffer[TX_BUFFER_SIZE];
+volatile uint8_t txBufferStart = 0;
+volatile uint8_t txBufferLen = 0;
+
+uint8_t rxBuffer[RX_BUFFER_SIZE];
+volatile uint8_t rxBufferStart = 0;
+volatile uint8_t rxBufferLen = 0;
 
 void MX_COMMS_SPI_Init(){
     /* Init the low level hardware : GPIO, CLOCK */
@@ -11,8 +26,15 @@ void MX_COMMS_SPI_Init(){
     COMMS_SPI->CR2 = (SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0) |
                 SPI_CR2_FRXTH;
 
+    /* Enable Interrupts */
+    COMMS_SPI->CR2 |= SPI_CR2_TXEIE | SPI_CR2_RXNEIE | SPI_CR2_ERRIE;
+   
+    NVIC_EnableIRQ(COMMS_SPI_IRQn);
+
     /* Enable SPI as Slave and Hardware NSS*/
     COMMS_SPI->CR1 = SPI_CR1_SPE;
+
+    //COMMS_SPI->DR = 0xFF;
 }
 
 void COMMS_SPI_LL_Init(){
@@ -44,86 +66,103 @@ void COMMS_SPI_LL_Init(){
                     GPIO_MODER_MODER7_1;
 }
 
-wrError_t writeResponse(uint8_t *data, uint16_t length, uint32_t timeout){
-    uint8_t* pData = data;
-    uint16_t count = length;
-
-    /* Write first piece of data to DR since in slave mode */
-    if (count > 1u)
+wrError_t writeResponse(uint8_t *data, uint16_t length)
+{
+    if(txBufferLen + length > TX_BUFFER_SIZE)
     {
-        /* write on the data register in packing mode */
-        COMMS_SPI->DR = *((uint16_t *)pData);
-        pData += sizeof(uint16_t);
-        count -= 2u;
-    }
-    else
-    {
-        COMMS_SPI->DR = (*pData++);
-        count--;
+        return WR_BUFF_FULL;
     }
 
-    uint32_t finish = systickCount + timeout;
-    while (count > 0u)
+    if(data == NULL || length == 0)
     {
-        /* Timeout */
-        if(systickCount > finish)
-        {
-            return WR_ERR;
-        }
-
-        /* Wait until TXE flag is set to send data */
-        if (COMMS_SPI->SR & SPI_SR_TXE)
-        {
-            if (count > 1u)
-            {
-                /* write on the data register in packing mode */
-                COMMS_SPI->DR = *((uint16_t *)pData);
-                pData += sizeof(uint16_t);
-                count -= 2u;
-            }
-            else
-            {
-                COMMS_SPI->DR = (*pData++);
-                count--;
-            }
-        }
+        return WR_ERR;
     }
 
+    /* Disable interrupt to protect shared data */
+    COMMS_SPI->CR2 &= ~SPI_CR2_TXEIE;
 
-    /* Clear overrun flag in 2 Lines communication mode because received is not read */
-    __SPI_CLEAR_OVRFLAG(COMMS_SPI);
+    uint32_t writeIdx = (txBufferStart + txBufferLen) % TX_BUFFER_SIZE;
+    uint16_t firstLen = writeIdx + length <= TX_BUFFER_SIZE ? length : TX_BUFFER_SIZE - writeIdx;
+
+    /* Write idx to end */
+    memcpy(txBuffer + writeIdx, data, firstLen);
+
+    if(firstLen != length)
+    {
+        /* Write overflow data */
+        memcpy(txBuffer, data + firstLen, length - firstLen);
+    }
+
+    txBufferLen += length;
+
+    COMMS_SPI->CR2 |= SPI_CR2_TXEIE;
 
     return WR_OK;
 }
 
 
-wrError_t readByte(uint8_t *data, uint32_t timeout){
-    bool readData = true;
-
-    /* Write a 0 while reading byte */
-    if(COMMS_SPI->SR & SPI_SR_TXE){
-        COMMS_SPI->DR = (uint8_t)0x00u;
-    }
-
-    /* Receive data in 8 Bit mode */
-    uint32_t finish = systickCount + timeout;
-    while (readData)
+wrError_t readByte(uint8_t *data)
+{
+    if(rxBufferLen == 0u)
     {
-        /* Timeout */
-        if(systickCount > finish)
-        {
-            return WR_ERR;
-        }
+        return WR_NO_DATA;
+    }
 
-        /* Check the RXNE flag */
-        if(COMMS_SPI->SR & SPI_SR_RXNE)
+    /* Disable interrupt to protect shared data */
+    COMMS_SPI->CR2 &= ~SPI_CR2_RXNEIE;
+
+    *data = rxBuffer[rxBufferStart];
+
+    rxBufferLen--;
+    rxBufferStart = (rxBufferStart + 1u) % RX_BUFFER_SIZE;
+
+    COMMS_SPI->CR2 |= SPI_CR2_RXNEIE;
+
+    return WR_OK;
+}
+
+void SPI1_IRQHandler()
+{
+    if(SPI1->SR & SPI_SR_RXNE)
+    {
+        uint32_t idx = (rxBufferStart + rxBufferLen) % RX_BUFFER_SIZE;
+        rxBuffer[idx] = (volatile uint8_t)SPI1->DR;
+        rxBufferLen++;
+    }
+
+    if(SPI1->SR & SPI_SR_TXE)
+    {
+        if(txBufferLen)
         {
-            /* read the received data */
-            *data = COMMS_SPI->DR;
-            data += sizeof(uint8_t);
-            readData = false;
+            SPI1->DR = txBuffer[txBufferStart];
+
+            txBufferStart = (txBufferStart + 1u) % TX_BUFFER_SIZE;
+            txBufferLen--;
+        }
+        else
+        {
+            /* Disable interrupt - there is nothing to write */
+            COMMS_SPI->CR2 &= ~SPI_CR2_TXEIE;
         }
     }
 
-  return WR_OK;
+    if(SPI1->SR & SPI_SR_FRE)
+    {
+        SPI1->SR &= ~SPI_SR_FRE;
+    }
+
+    if(SPI1->SR & SPI_SR_OVR)
+    {
+        SPI1->SR &= ~SPI_SR_OVR;
+    }
+
+    if(SPI1->SR & SPI_SR_MODF)
+    {
+        SPI1->SR &= ~SPI_SR_MODF;
+    }
+
+    if(SPI1->SR & SPI_SR_CRCERR)
+    {
+        SPI1->SR &= ~SPI_SR_CRCERR;
+    }
 }

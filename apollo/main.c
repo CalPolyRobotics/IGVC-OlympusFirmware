@@ -26,7 +26,7 @@ int main(void)
     uint8_t data;
     while (1)
     {
-        status = readByte(&data, STD_SPI_DELAY);
+        status = readByte(&data);
         if(status == HAL_OK){
             runCommsFSM(data);
         }

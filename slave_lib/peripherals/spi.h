@@ -5,13 +5,11 @@
 
 #define STD_SPI_DELAY ((uint32_t)100u)
 
-#define COMMS_SPI SPI1
-
 void MX_COMMS_SPI_Init();
 void COMMS_SPI_LL_Init();
 
-wrError_t readByte(uint8_t *data, uint32_t timeout);
-wrError_t writeResponse(uint8_t* data, uint16_t length, uint32_t timeout);
+wrError_t readByte(uint8_t *data);
+wrError_t writeResponse(uint8_t* data, uint16_t length);
 
 /** @brief  Clear the SPI OVR pending flag.
   * @param  __HANDLE__ specifies the SPI Handle.
