@@ -9,6 +9,8 @@
 #define NUM_MODULES    5
 #define NUM_SUBMODULES 4
 
+#define SUBMODULE_TIMEOUT ((uint16_t)5000u)
+
 /** Error Responses **/
 typedef uint8_t commsStatus_t;
 
@@ -18,6 +20,8 @@ typedef uint8_t commsStatus_t;
 #define COMMS_ERR_GEN          ((commsStatus_t)0x03)
 #define COMMS_ERR_INV_MSG_TYPE ((commsStatus_t)0x04)
 #define COMMS_OK               ((commsStatus_t)0xAA)
+#define COMMS_ERR_TIMEOUT      ((commsStatus_t)0xAB)
+
 
 /** Note Submodules must proceed OLYMPUS **/
 typedef enum module{
@@ -29,10 +33,6 @@ typedef enum module{
    NONE       = 255
 }module_t;
 
-
-
-void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);
-
-bool checkStatus(module_t module, int numTimes, int delay);
+uint8_t writeSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint32_t timeout);
 
 #endif

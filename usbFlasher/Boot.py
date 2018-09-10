@@ -80,10 +80,11 @@ if __name__ == '__main__':
             print(resp)
             continue
 
+        print('Terry Flaps Installed')
+
     resp = serBoot.writeJump()
     if resp != BootError.NO_ERR:
         print(resp)
         sys.exit(1)
 
     serBoot.close()
-    print('Terry Flaps Installed')
