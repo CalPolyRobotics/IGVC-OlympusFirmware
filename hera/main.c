@@ -4,6 +4,7 @@
 #include "commsLib.h"
 #include "spi.h"
 #include "systemClock.h"
+#include "gpio.h"
 
 int main(void)
 {
@@ -19,6 +20,7 @@ int main(void)
     __enable_irq();
 
     MX_ADC1_Init();
+    MX_GPIO_Init();
     MX_COMMS_SPI_Init();
 
     uint8_t data;
