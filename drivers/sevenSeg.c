@@ -89,7 +89,7 @@ uint8_t charToSevenSeg(char c){
         case '4':
             return 0x99;
         case '5':
-            return 0x4A;
+            return 0x49;
         case '6':
             return 0x41;
         case '7':

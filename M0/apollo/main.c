@@ -1,6 +1,5 @@
 #include "stm32f0xx_hal.h"
 #include "spi.h"
-#include "gpio.h"
 #include "commsLib.h"
 #include "lights.h"
 
@@ -14,13 +13,14 @@ int main(void)
     /* Configure the system clock to 48 MHz */
     SystemClock_Config();
 
-    MX_GPIO_Init();
     MX_SPI1_Init();
+
     init_apollo();
-    uint8_t data;
+
+    uint8_t data = 0x69;
     while (1)
     {
-        status = HAL_SPI_Receive(&hspi1, &data, 1, 1000);
+        status = HAL_SPI_Receive(&hspi1, &data, 1, 100);
         if(status == HAL_OK){
             runCommsFSM(data);
         }

@@ -20,8 +20,7 @@ SOURCES += $(DRIVERS)/lights.c \
 SOURCES += $(SHRDRIVERS)/commsLib.c \
 			$(SHRDRIVERS)/boot.c \
 
-SOURCES += $(PERIPHERALS)/spi.c \
-			$(PERIPHERALS)/gpio.c
+SOURCES += $(PERIPHERALS)/spi.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \

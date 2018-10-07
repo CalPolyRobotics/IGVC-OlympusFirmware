@@ -1,6 +1,5 @@
 #include "stm32f0xx_hal.h"
 #include "spi.h"
-#include "gpio.h"
 #include "commsLib.h"
 
 void SystemClock_Config(void);
@@ -66,7 +65,6 @@ void SystemClock_Config(void)
         while(1); 
     }
 }
-
 
 #ifdef  USE_FULL_ASSERT
 

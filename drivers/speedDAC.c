@@ -15,17 +15,12 @@ static uint8_t enableSpeedOutput = 0;
 
 static Timer_Return speedDACCallback(void* dummy);
 
-#define BIT_MASK_LOW_12 ((uint16_t)0x0FFF)
+#define UPO_SET   ((uint16_t)0xE800)
+#define UPO_RESET ((uint16_t)0xE000)
 
-#define UPO_MASK      ((uint16_t)0x4000)
-#define UPO_DATA_MASK ((uint16_t)0x03FF)
-#define UPO_OFFSET    2u
-
-#define DATA_MASK      ((uint16_t)0xE000)
-#define DATA_DATA_MASK ((uint16_t)0x0001)
-#define DATA_OFFSET    11u
-
-#define SPI_WORD(mask, data_mask, offset, data) (((data & data_mask) << offset) | mask)
+#define DATA_CTRL_MASK ((uint16_t)0x4000)
+#define DATA_MASK      ((uint16_t)0x3FFC)
+#define DATA_OFFSET    2u
 
 /**
  * Using MAX517X 12-Bit DAC
@@ -42,16 +37,18 @@ static Timer_Return speedDACCallback(void* dummy);
  * 0b1110[high/low]xxxxxxxxxxx
  * Release CS
  */
-static void writeDataMAX517(uint16_t value){
+static void writeDataMAX517(uint16_t dacData){
+    uint8_t spiData[2] = {(dacData >> 8u) & 0xFF, dacData & 0xFF};
+
     /** TODO - Move SPI to DMA **/
-    HAL_GPIO_WritePin(PORT_SS_THDAC, PIN_SS_THADC, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(&hspi3, (uint8_t*)&value, sizeof(value), 500);
-    HAL_GPIO_WritePin(PORT_SS_THDAC, PIN_SS_THADC, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(PORT_SS_THDAC, PIN_SS_THDAC, GPIO_PIN_RESET);
+    HAL_SPI_Transmit(&hspi3, spiData, 2, 500);
+    HAL_GPIO_WritePin(PORT_SS_THDAC, PIN_SS_THDAC, GPIO_PIN_SET);
 }
 
 static void setSpeedDAC(uint16_t value)
 {
-    writeDataMAX517(SPI_WORD(DATA_MASK, DATA_DATA_MASK, DATA_OFFSET, value));
+    writeDataMAX517(DATA_CTRL_MASK | ((value << DATA_OFFSET) & DATA_MASK));
 }
 
 void initSpeedDAC()
@@ -64,7 +61,7 @@ void initSpeedDAC()
 uint8_t isPedalDown()
 {
     /** TODO - Request Pin from HERA **/
-    return 0;
+    return 1;
 }
 
 static Timer_Return speedDACCallback(void* dummy)
@@ -80,12 +77,13 @@ static Timer_Return speedDACCallback(void* dummy)
                 {
                     currentSpeed = targetSpeed;
                 }
+                setSpeedDAC((uint16_t)currentSpeed);
 
             } else if (currentSpeed > targetSpeed) {
                 currentSpeed = targetSpeed;
+                setSpeedDAC((uint16_t)currentSpeed);
             }
 
-            setSpeedDAC((uint16_t)currentSpeed);
         } else {
             currentSpeed = 0;
             setSpeedDAC(0);
@@ -97,13 +95,13 @@ static Timer_Return speedDACCallback(void* dummy)
 
 void enableSpeedDAC()
 {
-    writeDataMAX517(SPI_WORD(UPO_MASK, UPO_DATA_MASK, UPO_OFFSET, 1u));
+    writeDataMAX517(UPO_SET);
     enableSpeedOutput = 1u;
 }
 
 void disableSpeedDAC()
 {
-    writeDataMAX517(SPI_WORD(UPO_MASK, UPO_DATA_MASK, UPO_OFFSET, 0u));
+    writeDataMAX517(UPO_RESET);
     enableSpeedOutput = 0u;
     resetSpeedDAC();
 }
@@ -117,7 +115,7 @@ void resetSpeedDAC()
 
 void writeSpeedDAC(uint16_t value)
 {
-    targetSpeed = (value & BIT_MASK_LOW_12);
+    targetSpeed = value;
 }
 
 uint16_t getSpeedDAC()

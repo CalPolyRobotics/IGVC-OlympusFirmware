@@ -120,8 +120,8 @@
 #define GPIO_AUTO_THROTTLE_ENABLE_PORT  GPIOB
 #define GPIO_AUTO_THROTTLE_ENABLE GPIO_AUTO_THROTTLE_ENABLE_PORT, GPIO_AUTO_THROTTLE_ENABLE_PIN
 
-#define SPEED_DAC_INCR_PERIOD   (201)
-#define SPEED_DAC_INCR      (5)
+#define SPEED_DAC_INCR_PERIOD   (20)
+#define SPEED_DAC_INCR          (10)
 
 //Janus GPIO
 #define GPIO_FNR_DIRECTION_PIN  GPIO_PIN_13
@@ -135,7 +135,11 @@
 #define POLL_FNR_UPDATE_PERIOD (100)
 
 //Error Codes
-#define ERROR_HARD_FAULT 'F','F'
-#define ERROR_WATCH_DOG  'F','E'
+#define ERROR_HARD_FAULT        'F','F'
+#define ERROR_WATCH_DOG         'F','E'
+#define APOLLO_STATUS_FAIL      'F','D'
+#define HEPHAESTUS_STATUS_FAIL  'F','C'
+#define HERA_STATUS_FAIL        'F','B'
+#define JANUS_STATUS_FAIL       'F','A'
 
 #endif

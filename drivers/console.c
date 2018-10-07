@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "usart.h"
+#include "submoduleComms.h"
 #include "led.h"
 #include "pwradc.h"
 #include "sevenSeg.h"
@@ -14,6 +15,7 @@
 #include "usb_otg.h"
 #include "adc.h"
 #include "characterMapping.h"
+#include "janus.h"
 
 #define CONSOLE_MAX_CMD_LEN     255
 #define CONSOLE_MAX_NUM_ARGS    32
@@ -80,7 +82,7 @@ static ConsoleCommand commands[] = {
     {"getFNR", 0, console_getFNR},
     {"setEnableSpeed", 0, console_setEnableSpeed},
     {"setSpeedTarget", 1, console_setSpeedTarget},
-    {"getSpeedTarget", 1, console_getSpeedTarget},
+    {"getSpeedTarget", 0, console_getSpeedTarget},
     {"setEnableSteer", 1, console_setEnableSteer},
     {"setSteerTarget", 1, console_setSteerTarget},
     {"getSteerDir", 0, console_getSteerDir},
@@ -93,6 +95,15 @@ static ConsoleCommand commands[] = {
     {"clear", 0, console_clear},
     {NULL, 0, NULL}
 };
+
+static int parseUint8(char* str){
+    long int num = strtol(str, NULL, 10);
+    if(errno || num < 0 || num > UINT8_MAX){
+        printf("Could not parse input\r\n");
+    }
+
+    return (uint8_t)num;
+}
 
 static int parseUint16(char* str){
     long int num = strtol(str, NULL, 10);
@@ -394,12 +405,16 @@ static void console_kill(uint32_t argc, char** argv)
 
 static void console_setFNR(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    uint8_t state = parseUint8(argv[0]);
+    if (state <= 2)
+    {
+        setFNR(state);
+    }
 }
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    printf("%u\r\n", getFNR());
 }
 
 /**

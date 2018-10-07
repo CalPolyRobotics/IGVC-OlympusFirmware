@@ -70,11 +70,11 @@ void setSevenSeg(char c)
 
     // Set low pins as outputs
     uint8_t message[2] = {REG_IODIR_ADDR, segVal};
-    HAL_I2C_Master_Transmit(&hi2c1, MCP23008_ADDR, message, sizeof(message), 500);
+    HAL_I2C_Master_Transmit(&hi2c1, MCP23008_ADDR, message, sizeof(message), 1);
 
     // Set pins
     message[0] = REG_GPIO_ADDR;
-    HAL_I2C_Master_Transmit(&hi2c1, MCP23008_ADDR, message, sizeof(message), 500);
+    HAL_I2C_Master_Transmit(&hi2c1, MCP23008_ADDR, message, sizeof(message), 1);
 }
 
 void setSevenSegFNR(fnr_t state)
