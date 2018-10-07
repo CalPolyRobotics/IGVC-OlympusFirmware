@@ -1,6 +1,8 @@
 #ifndef __DOUBLE_BUFFER_H__
 #define __DOUBLE_BUFFER_H__
 
+#include <stdbool.h>
+
 typedef struct {
     uint8_t* buffers[2];
     uint32_t bufferLengths[2];
@@ -13,7 +15,7 @@ void doubleBuffer_init(DoubleBuffer_t* buffer, uint8_t* base, uint32_t bufLen);
 
 void doubleBuffer_switchActive(DoubleBuffer_t* buffer);
 
-uint8_t doubleBuffer_write(DoubleBuffer_t* buffer, uint8_t* data, uint32_t len);
+bool doubleBuffer_write(DoubleBuffer_t* buffer, uint8_t* data, uint32_t len);
 
 uint32_t doubleBuffer_getReadLength(DoubleBuffer_t* buffer);
 
