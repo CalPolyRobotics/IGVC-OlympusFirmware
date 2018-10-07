@@ -36,20 +36,77 @@ uint16_t arr[256]=
 658,564,470,376,282,188,94,0};
 
 void init_Timer(){
+     
     __HAL_RCC_TIM2_CLK_ENABLE();
     TIM2 -> CCMR2 =(TIM_CCMR2_OC3M_2|TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0);
     TIM2 -> CCER=TIM_CCER_CC3E_Msk;
     TIM2 -> CR1 = TIM_CR1_CEN;
     TIM2 -> ARR= 24000;
+    TIM2 -> CCR2 = 24000;
     TIM2 -> CCR3= 24000;
     __HAL_RCC_GPIOA_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitTypeDef;
-    GPIO_InitTypeDef.Pin= HEADLIGHTS;
+    GPIO_InitTypeDef.Pin= (HEADLIGHTS|MISC5);
     GPIO_InitTypeDef.Pull= GPIO_NOPULL;
     GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
     GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM2;
-    HAL_GPIO_Init( TIMER_PORT, &GPIO_InitTypeDef );
+    HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
+
+    __HAL_RCC_TIM17_CLK_ENABLE();
+    TIM17 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1);
+    TIM17 -> CCER=TIM_CCER_CC1E_Msk;
+    TIM17 -> CR1 = TIM_CR1_CEN;
+    TIM17 -> ARR= 24000;
+    TIM17 -> CCR1= 24000;
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    GPIO_InitTypeDef.Pin= MISC1;
+    GPIO_InitTypeDef.Pull= GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate=GPIO_AF0_TIM17;
+    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
+               
+    __HAL_RCC_TIM16_CLK_ENABLE();                                               
+    TIM16 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1);
+    TIM16 -> CCER=TIM_CCER_CC1E_Msk;
+    TIM16 -> CR1 = TIM_CR1_CEN;
+    TIM16 -> ARR= 24000;
+    TIM16 -> CCR1= 24000;
+    GPIO_InitTypeDef.Pin= MISC2;
+    GPIO_InitTypeDef.Pull= GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM16;
+    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
+
+    __HAL_RCC_TIM3_CLK_ENABLE();
+     TIM3 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0);
+     TIM3 -> CCER=TIM_CCER_CC1E_Msk;
+     TIM3 -> CR1 = TIM_CR1_CEN;
+     TIM3 -> ARR= 24000;
+     TIM3 -> CCR1= 24000;
+     TIM3 -> CCR3= 24000;
+     GPIO_InitTypeDef.Pin=( MISC3| MISC4); 
+     GPIO_InitTypeDef.Pull= GPIO_NOPULL;
+     GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
+     GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+     HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
+    
+    __HAL_RCC_TIM1_CLK_ENABLE();
+    TIM1 -> CCMR2 =(TIM_CCMR2_OC3M_2|TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0);     
+    TIM1 -> CCER=TIM_CCER_CC3E_Msk;
+    TIM1 -> CR1 = TIM_CR1_CEN;
+    TIM1 -> ARR= 24000;
+    TIM1 -> CCR4= 24000;
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    GPIO_InitTypeDef.Pin= MISC6;
+    GPIO_InitTypeDef.Pull= GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM1;
+    HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
+
 
 
 }
@@ -61,10 +118,10 @@ void init_apollo(){
     __HAL_RCC_GPIOA_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitTypeDef;
 
-    GPIO_InitTypeDef.Pin= TURN_SIGNAL_L | TURN_SIGNAL_R;
-    GPIO_InitTypeDef.Pull= GPIO_NOPULL;
-    GPIO_InitTypeDef.Mode=GPIO_MODE_OUTPUT_PP;
-    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Pin= TURN_SIGNAL_L | TURN_SIGNAL_R;  //dont we do this in the init_apollo function????
+    GPIO_InitTypeDef.Pull= GPIO_NOPULL;  //see above comment
+    GPIO_InitTypeDef.Mode=GPIO_MODE_OUTPUT_PP; // see above above comment
+    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW; // ^
 
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
@@ -94,8 +151,30 @@ void set_headlights( uint8_t speed){
     TIM2 -> CCR3=arr[speed];
 }
 
-void set_misc_lights(uint8_t light, uint8_t state, uint8_t speed){
-    /** TODO- implement **/
+void set_misc_lights(uint8_t light, uint8_t speed){
+    if (light==0){
+    TIM17 -> CCR1=arr[speed];    
+    }
+    
+    if (light==1){
+    TIM16 -> CCR1 = arr[speed];
+    }
+    
+    if (light==2){
+   TIM3 -> CCR3 = arr[speed]; 
+    }
+    
+    if (light==3){
+    TIM3 -> CCR1 = arr[speed];
+    }
+    
+    if (light==4){
+    TIM2 -> CCR2 = arr[speed];
+    }
+    
+    if (light==5){
+    TIM1 -> CCR4 = arr[speed];
+    }
 }
 
 uint16_t get_light_sensor(){
