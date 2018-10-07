@@ -79,7 +79,7 @@ LDFLAGS += -T$(LDSCRIPT) \
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = $(BUILD_TOOLS)/flashF042C6.jlink
+FLASH_SCRIPT = $(BUILD_TOOLS)/app.jlink
 
 .PHONY: all flash flash-dev clean tags
 

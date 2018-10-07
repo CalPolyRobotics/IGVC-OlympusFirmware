@@ -88,7 +88,7 @@ LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = $(BUILDTOOLS)/flash.jlink
+FLASH_SCRIPT = $(BUILDTOOLS)/flash_boot.jlink
 
 .PHONY: all flash dev flash-dev clean tags
 

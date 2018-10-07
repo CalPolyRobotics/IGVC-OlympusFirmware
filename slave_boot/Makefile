@@ -70,7 +70,7 @@ LDFLAGS += -T$(LDSCRIPT) \
 
 LDLIBS += -lc -lm -lnosys
 
-FLASH_SCRIPT = $(BUILD_TOOLS)/flashF042K6.jlink
+FLASH_SCRIPT = $(BUILD_TOOLS)/boot.jlink
 
 .PHONY: all flash flash-dev clean tags
 
@@ -97,9 +97,14 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-flash: $(BIN)
+flash-k6: $(BIN)
 	cp $(BIN) $(BUILD_TOOLS)/program.bin
 	JLinkExe -Device STM32F042K6 -CommanderScript $(FLASH_SCRIPT)
+	rm $(BUILD_TOOLS)/program.bin
+
+flash-c6: $(BIN)
+	cp $(BIN) $(BUILD_TOOLS)/program.bin
+	JLinkExe -Device STM32F042C6 -CommanderScript $(FLASH_SCRIPT)
 	rm $(BUILD_TOOLS)/program.bin
 
 flash-stlink: $(BIN)

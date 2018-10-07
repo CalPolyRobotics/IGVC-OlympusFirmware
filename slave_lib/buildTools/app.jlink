@@ -1,0 +1,7 @@
+If SWD
+speed 2000
+r
+h
+loadbin slave_lib/buildTools/program.bin, 0x08001400
+r
+q

@@ -1,8 +1,0 @@
-If SWD
-Device STM32F042C6
-speed 2000
-r
-h
-loadbin ../buildTools/program.bin, 0x08001400
-r
-q
