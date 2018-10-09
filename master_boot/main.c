@@ -37,7 +37,7 @@ int main(void)
      * Software Reset or Boot Btn Pressed
      */
     if((RCC -> CSR & RCC_CSR_SFTRSTF) == 0 &&
-       HAL_GPIO_ReadPin(BOOT_GPIO_PORT, BOOT_GPIO_PIN) == GPIO_PIN_RESET)
+       HAL_GPIO_ReadPin(BOOT_GPIO_PORT, BOOT_GPIO_PIN) == GPIO_PIN_SET)
     {
 
         jumpToApp(USER_APP_BASE_PTR);
