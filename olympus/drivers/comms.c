@@ -61,7 +61,7 @@ void toggleLED3(Packet_t* packet)
 /** XXX - Remove these when they are reimplemented **/
 static uint8_t status[5] = {0};
 
-static heraData_t heraData;
+extern heraData_t heraData;
 static janusData_t janusData;
 static hephaestusData_t hephaestusData;
 static olympusData_t olympusData;
