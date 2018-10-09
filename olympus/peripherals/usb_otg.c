@@ -11,32 +11,36 @@
 #include <string.h>
 
 USBD_HandleTypeDef  USBD_Device;
+
 static uint8_t usbRecvData[USB_RECEIVE_BUFFER_SIZE];
-static uint8_t reinitUSB = 0;
 DoubleBuffer_t usbReceiveBuffer;
+
+static int8_t usbReceive(uint8_t* data, uint32_t* len);
+static int8_t tunnelInit(void);
+static int8_t dummyDeinit(void);
+static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len);
+
+static USBD_CDC_ItfTypeDef cdcInterface = {tunnelInit, dummyDeinit, dummyControl, usbReceive};
 
 static int8_t usbReceive(uint8_t* data, uint32_t* len)
 {
-    doubleBuffer_write(&usbReceiveBuffer, data, *len);
+    if(!doubleBuffer_write(&usbReceiveBuffer, data, *len)){
+        return USBD_OK;
+    }
 
-    USBD_CDC_ReceivePacket(&USBD_Device);
-
-    return USBD_OK;
+    return USBD_CDC_ReceivePacket(&USBD_Device);
 }
 
 static int8_t tunnelInit(void)
 {
     doubleBuffer_init(&usbReceiveBuffer, usbRecvData, sizeof(usbRecvData));
 
-    USBD_CDC_SetRxBuffer(&USBD_Device, usbRecvData);
-    return USBD_OK;
+    return USBD_CDC_SetRxBuffer(&USBD_Device, usbRecvData);
 }
 
 static int8_t dummyDeinit(void)
 {
-    reinitUSB = 1;
-
-    return USBD_OK;
+    return USBD_CDC_RegisterInterface(&USBD_Device, &cdcInterface);
 }
 
 static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len)
@@ -44,7 +48,6 @@ static int8_t dummyControl(uint8_t cmd, uint8_t* pbuf, uint16_t len)
     return USBD_OK;
 }
 
-static USBD_CDC_ItfTypeDef cdcInterface = {tunnelInit, dummyDeinit, dummyControl, usbReceive};
 
 static uint8_t usbTransmitBuffers[USB_SEND_BUFFER_NUM][USB_SEND_BUFFER_SIZE];
 static uint32_t usbTransmitBufferLengths[USB_SEND_BUFFER_NUM];
@@ -154,13 +157,6 @@ void serviceUSBWrite()
                              usbTransmitBufferLengths[activeUsbBuffer]);
 
         USBD_CDC_TransmitPacket(&USBD_Device);
-    }
-
-    if (reinitUSB)
-    {
-        reinitUSB = 0;
-
-        USBD_CDC_RegisterInterface(&USBD_Device, &cdcInterface);
     }
 }
 

@@ -14,6 +14,7 @@ static void selectModule(module_t module);
 static void deselectModule(module_t module);
 
 uint8_t submoduleCommsBuff[256];
+uint8_t dummyData[256] = {0};
 
 typedef struct pin{
     GPIO_TypeDef* port;
@@ -27,7 +28,40 @@ static pin_t CS_PINS[NUM_SUBMODULES] = {
     {PORT_SS_JANUS, PIN_SS_JANUS},
 };
 
-void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
+static uint8_t statusTimeout(uint32_t timeout)
+{
+    uint8_t header[2] = {SUBMODULE_START_BYTE, 0x00};
+
+    uint32_t timeUp = HAL_GetTick() + timeout;
+    uint8_t resp = 0x00u;
+
+
+    do{
+        HAL_SPI_TransmitReceive(&hspi3, header, dummyData, sizeof(header), SPI_DEFAULT_TIMEOUT);
+
+        /** Clear Possible Write to dummyData **/
+        dummyData[0] = 0u;
+
+        /** Delay to wait for slave response **/
+        int i;
+        for(i = 0; i < 200; i++)
+        {
+            asm("nop");
+        }
+
+        HAL_SPI_TransmitReceive(&hspi3, dummyData, &resp, sizeof(resp), SPI_DEFAULT_TIMEOUT);
+
+    }while(resp != COMMS_OK && HAL_GetTick() < timeUp);
+
+    if(resp != COMMS_OK)
+    {
+        return COMMS_ERR_TIMEOUT;
+    }
+
+    return COMMS_OK;
+}
+
+uint8_t writeSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint32_t timeout)
 {
 
     uint8_t header[2] = {SUBMODULE_START_BYTE, msg_type};
@@ -35,46 +69,31 @@ void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t 
     selectModule(module);
 
     /** Send Start Byte & Message Type **/
-    HAL_SPI_Transmit(&hspi3, header, sizeof(header), SPI_DEFAULT_TIMEOUT);
+    HAL_SPI_TransmitReceive(&hspi3, header, dummyData, sizeof(header), SPI_DEFAULT_TIMEOUT);
 
     /** Transmit Data **/
-    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+    HAL_SPI_TransmitReceive(&hspi3, buff, dummyData, tx_size, SPI_DEFAULT_TIMEOUT);
 
-    /** Delay to wait for Slave Response **/
+    /** Delay to wait for slave response **/
     int i;
     for(i = 0; i < 200; i++)
     {
         asm("nop");
     }
 
-    /* Clear out data in buffer to prevent receiving bad data */
-    for(i = 0; i < rx_size; i++)
-    {
-        buff[i] = 0;
-    }
+    dummyData[0] = 0u;
 
-    /** Receive Data **/
-    HAL_SPI_Receive(&hspi3, buff, rx_size, SPI_DEFAULT_TIMEOUT);
+    uint8_t resp = 0x00u;
+    HAL_SPI_TransmitReceive(&hspi3, dummyData, &resp, 1u, SPI_DEFAULT_TIMEOUT);
+
+    if(resp != COMMS_OK)
+    {
+        resp = statusTimeout(timeout);
+    }
 
     deselectModule(module);
-}
 
-/* Continuously request data from the module, checking against COMMS_OK, the
- * message is sent numTimes with delay in between each check 
- */
-bool checkStatus(module_t module, int numTimes, int delay){
-    int count = numTimes;
-    while(count > 0){
-        messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
-        if(submoduleCommsBuff[0] == COMMS_OK)
-        {
-            return true;
-        }
-        HAL_Delay(delay);
-        count--;
-    }
-
-    return false;
+    return resp;
 }
 
 /** Lower the CS bit for the given module **/

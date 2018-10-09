@@ -23,7 +23,7 @@ int main(void)
     while (1)
     {
         status = readByte(&data);
-        if(status == HAL_OK){
+        if(status == WR_OK){
             runCommsFSM(data);
         }
     }

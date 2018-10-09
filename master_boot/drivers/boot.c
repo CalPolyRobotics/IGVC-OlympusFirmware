@@ -23,8 +23,10 @@
 #define ERR_CHECKSUM       ((uint8_t)0x02)
 #define ERR_INVALID_HEADER ((uint8_t)0x03)
 #define ERR_FLASH_ERASE    ((uint8_t)0x04)
-#define ERR_REBOOT_START   ((uint8_t)0x05)
-#define ERR_REBOOT_TIMEOUT ((uint8_t)0x06)
+#define ERR_REBOOT_FAIL    ((uint8_t)0x05)
+#define ERR_REBOOT_START   ((uint8_t)0x06)
+#define ERR_REBOOT_TIMEOUT ((uint8_t)0x07)
+#define ERR_REBOOT_STATUS  ((uint8_t)0x08)
 
 /** 32 Bit message type **/
 typedef enum msgType{
@@ -82,15 +84,11 @@ void runBootFSM(uint32_t data){
                         memset(submoduleCommsBuff + (count % CHUNK_SIZE), 0u, CHUNK_SIZE - (count % CHUNK_SIZE));
                     }
 
-                    messageSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, 1);
-
-                    if(submoduleCommsBuff[0] != COMMS_OK)
+                    if(writeSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
-                        if(!checkStatus(module, 50, 5)){
-                            writeResponse(ERR_DATA_WRITE);
-                            msg = DMY;
-                            break;
-                        }
+                        writeResponse(ERR_DATA_WRITE);
+                        msg = DMY;
+                        break;
                     }
                 }
             }
@@ -125,17 +123,11 @@ void runBootFSM(uint32_t data){
             else
             {
                 memcpy(submoduleCommsBuff, &data, sizeof(data));
-                messageSubmodule(module, 0x03, submoduleCommsBuff, 4u, 1);
-
-
-                if(submoduleCommsBuff[0] != COMMS_OK)
+                if(writeSubmodule(module, 0x03, submoduleCommsBuff, 4u, SUBMODULE_TIMEOUT) != COMMS_OK)
                 {
-                    if(!checkStatus(module, 50, 10))
-                    {
-                        writeResponse(ERR_CHECKSUM);
-                        msg = DMY;
-                        break;
-                    }
+                    writeResponse(ERR_CHECKSUM);
+                    msg = DMY;
+                    break;
                 }
 
                 writeResponse(NO_ERR);
@@ -197,29 +189,35 @@ void runBootFSM(uint32_t data){
                 }
                 else
                 {
-                    messageSubmodule(module, 0x00, submoduleCommsBuff, 0, 1);
+                    if(writeSubmodule(module, 0x00, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    {
+                        writeResponse(ERR_REBOOT_FAIL);
+                        msg = DMY;
+                        break;
+                    }
 
-                    messageSubmodule(module, 0x0A, submoduleCommsBuff, 0, 1);
-                    if(submoduleCommsBuff[0] != COMMS_OK){
+                    if(writeSubmodule(module, 0x0A, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    {
                         writeResponse(ERR_REBOOT_START);
                         msg = DMY;
                         break;
                     }
 
-                    if(!checkStatus(module, 50, 100))
+                    /** Wait for device to reboot **/
+                    HAL_Delay(500);
+
+                    if(writeSubmodule(module, 0x00, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
-                        writeResponse(ERR_REBOOT_TIMEOUT);
+                        writeResponse(ERR_REBOOT_STATUS);
                         msg = DMY;
                         break;
                     }
 
                     size_t headerSize = sizeof(header.size) + sizeof(header.fkey);
                     memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
-                    messageSubmodule(module, 0x01, submoduleCommsBuff, headerSize, 1);
 
-                    if(!checkStatus(module, 50, 100))
+                    if(writeSubmodule(module, 0x01, submoduleCommsBuff, headerSize, SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
-                        /* writeHeader can take longer than expected because of the flash erase */
                         writeResponse(ERR_FLASH_ERASE);
                         msg = DMY;
                         break;

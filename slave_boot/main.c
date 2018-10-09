@@ -26,12 +26,6 @@ int main(void)
 
     MX_COMMS_SPI_Init();
 
-    /** Set PIN3 as output push pull **/
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-    GPIOB->MODER |= GPIO_MODER_MODER3_0;
-    GPIOB->ODR &= ~GPIO_ODR_3;
-
-
     uint8_t data;
     while (1)
     {

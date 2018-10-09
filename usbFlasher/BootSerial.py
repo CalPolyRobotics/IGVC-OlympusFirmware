@@ -75,7 +75,11 @@ class BootSerial(Serial):
 
         self.write(bytearray(pkt))
 
-        resp = BootError(int.from_bytes(self.read(1), byteorder='little'))
+        bts = self.read(1)
+        if len(bts) == 0:
+            return BootError.ERR_WRITE_TIMEOUT
+
+        resp = BootError(int.from_bytes(bts, byteorder='little'))
         return resp
 
     def writeData(self, data):
