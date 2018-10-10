@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "adc.h"
 #include "boot.h"
 #include "comms.h"
 
@@ -49,8 +50,7 @@ static uint8_t *get_speed_callback(uint8_t *data){
 static uint8_t *get_steer_callback(uint8_t *data){
     data[0] = errorByte;
 
-    /* TODO - Implement Steer Data */
-    memset(data + STATUS_SIZE, 0u, msgResp[STEER_IDX].txDataLength);
+    memcpy(data + STATUS_SIZE, &adcChnAvg[STEER_AVG_IDX], msgResp[STEER_IDX].txDataLength);
 
     return data;
 }

@@ -7,6 +7,7 @@ LIBRARIES = $(SLIB)/libraries
 SYSTEM = $(SLIB)/system
 STD_PERIPHS = $(SLIB)/peripherals
 STD_DRIVERS = $(SLIB)/drivers
+PERIPHS = peripherals
 
 CMSIS = $(LIBRARIES)/CMSIS
 HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
@@ -24,6 +25,8 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 			$(STD_PERIPHS)/systemClock.c
 
 SOURCES += $(DRIVERS)/comms.c
+
+SOURCES += $(PERIPHS)/adc.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -46,6 +49,7 @@ INCLUDES += -I$(HAL)/inc \
 			-I$(SYSTEM) \
 			-I$(STD_PERIPHS) \
 			-I$(STD_DRIVERS) \
+			-I$(PERIPHS) \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
