@@ -37,7 +37,7 @@ commsStatus_t updateHeraSteer()
 commsStatus_t updateHeraSonar()
 {
     messageSubmodule(HERA, HERA_SONAR, submoduleCommsBuff, 0u, STATUS_LENGTH + SONAR_LENGTH);
-    memcpy(&heraData.pedal, &submoduleCommsBuff[DATA_IDX], SONAR_LENGTH);
+    memcpy(&heraData.sonar, &submoduleCommsBuff[DATA_IDX], SONAR_LENGTH);
     return submoduleCommsBuff[STATUS_IDX];
 }
 
