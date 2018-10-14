@@ -37,15 +37,22 @@ uint16_t arr[256]=
 
 void init_Timer(){
     __HAL_RCC_TIM2_CLK_ENABLE();
-    TIM2 -> CCMR2 =(TIM_CCMR2_OC3M_2|TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0);
+    TIM2 -> CCMR2 = (TIM_CCMR2_OC3M_2|TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0);
     TIM2 -> CCMR1 =(TIM_CCMR1_OC2M_2|TIM_CCMR1_OC2M_1|TIM_CCMR1_OC2M_0);
-    TIM2 -> CCER=TIM_CCER_CC3E_Msk;
+    TIM2 -> CCER=(TIM_CCER_CC3E_Msk|TIM_CCER_CC2E_Msk);
     TIM2 -> CR1 = TIM_CR1_CEN;
     TIM2 -> ARR= 24000;
     TIM2 -> CCR2 = 24000;
     TIM2 -> CCR3= 24000;
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitTypeDef;
+    GPIO_InitTypeDef.Pin= (HEADLIGHTS|MISC5);
+    GPIO_InitTypeDef.Pull= GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM2;
+    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
+    __HAL_RCC_GPIOA_CLK_ENABLE();
     GPIO_InitTypeDef.Pin= (HEADLIGHTS|MISC5);
     GPIO_InitTypeDef.Pull= GPIO_NOPULL;
     GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
@@ -53,20 +60,6 @@ void init_Timer(){
     GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM2;
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
-    __HAL_RCC_TIM17_CLK_ENABLE();
-    TIM17 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0);
-    TIM17 -> CCER=TIM_CCER_CC1E_Msk;
-    TIM17 -> CR1 = TIM_CR1_CEN;
-    TIM17 -> ARR= 24000;
-    TIM17 -> CCR1= 24000;
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    GPIO_InitTypeDef.Pin= MISC1;
-    GPIO_InitTypeDef.Pull= GPIO_NOPULL;
-    GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
-    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
-    GPIO_InitTypeDef.Alternate=GPIO_AF0_TIM17;
-    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
-               
     __HAL_RCC_TIM16_CLK_ENABLE();                                               
     TIM16 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0);
     TIM16 -> CCER=TIM_CCER_CC1E_Msk;
@@ -81,9 +74,8 @@ void init_Timer(){
     HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
 
     __HAL_RCC_TIM3_CLK_ENABLE();
-     TIM3 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0);
-     TIM3 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1| TIM_CCMR1_OC2M_0);
-     TIM3 -> CCER=TIM_CCER_CC3E_Msk;
+     TIM3 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0|TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1| TIM_CCMR1_OC2M_0);
+     TIM3 -> CCER=(TIM_CCER_CC2E_Msk|TIM_CCER_CC1E_Msk);
      TIM3 -> CR1 = TIM_CR1_CEN;
      TIM3 -> ARR= 24000;
      TIM3 -> CCR1= 24000;
@@ -93,16 +85,18 @@ void init_Timer(){
      GPIO_InitTypeDef.Pull= GPIO_NOPULL;
      GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
      GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
+     GPIO_InitTypeDef.Alternate=GPIO_AF1_TIM3; 
      HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
     
     __HAL_RCC_TIM1_CLK_ENABLE();
-    TIM1 -> CCMR2 =(TIM_CCMR2_OC3M_2|TIM_CCMR2_OC3M_1|TIM_CCMR2_OC3M_0);     
-    TIM1 -> CCER=TIM_CCER_CC3E_Msk;
+    TIM1 -> CCMR2 =(TIM_CCMR2_OC4M_2|TIM_CCMR2_OC4M_1|TIM_CCMR2_OC4M_0);     
+    TIM1 -> CCMR1 = (TIM_CCMR1_OC1M_2|TIM_CCMR1_OC1M_1|TIM_CCMR1_OC1M_0);
+    TIM1 -> CCER=(TIM_CCER_CC4E_Msk|TIM_CCER_CC1E_Msk);
     TIM1 -> CR1 = TIM_CR1_CEN;
     TIM1 -> ARR= 24000;
     TIM1 -> CCR4= 24000;
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef.Pin= MISC6;
+    GPIO_InitTypeDef.Pin= (MISC6|MISC1);
     GPIO_InitTypeDef.Pull= GPIO_NOPULL;
     GPIO_InitTypeDef.Mode=GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
