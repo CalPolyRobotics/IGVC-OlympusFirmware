@@ -1,0 +1,133 @@
+MLIB = master_lib
+DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
+CMSIS = $(MLIB)/CMSIS
+HAL = $(MLIB)/STM32F2xx_HAL_Driver
+
+DRIVERS = drivers
+PERIPH = peripherals
+SYSTEM = system
+UTILS = utils
+
+USB = $(PERIPH)/USB
+
+BUILDTOOLS = $(MLIB)/buildTools
+BUILDDIR = build
+
+SOURCES += main.c
+
+SOURCES += $(HAL)/source/stm32f2xx_hal_gpio.c \
+		   $(HAL)/source/stm32f2xx_hal_rcc.c \
+		   $(HAL)/source/stm32f2xx_hal_cortex.c \
+		   $(HAL)/source/stm32f2xx_hal.c \
+		   $(HAL)/source/stm32f2xx_hal_pcd.c \
+		   $(HAL)/source/stm32f2xx_hal_pcd_ex.c \
+		   $(HAL)/source/stm32f2xx_ll_usb.c \
+		   $(HAL)/source/stm32f2xx_hal_dma.c \
+		   $(HAL)/source/stm32f2xx_hal_spi.c \
+
+SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
+		   $(SYSTEM)/stm32f2xx_hal_msp.c \
+		   $(SYSTEM)/stm32f2xx_it.c \
+		   $(SYSTEM)/system_stm32f2xx.c
+
+SOURCES += $(USB)/usbd_cdc.c \
+		   $(USB)/usbd_conf.c \
+		   $(USB)/usbd_core.c \
+		   $(USB)/usbd_ctlreq.c \
+		   $(USB)/usbd_ioreq.c \
+		   $(USB)/usbd_desc.c \
+		   $(USB)/usb_otg.c
+
+SOURCES += $(DRIVERS)/boot.c \
+			  $(DRIVERS)/flash.c \
+			  $(DRIVERS)/submoduleComms.c
+
+SOURCES += $(PERIPH)/gpio.c \
+           $(PERIPH)/spi.c
+
+SOURCES += $(UTILS)/doubleBuffer.c
+
+OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
+
+INCLUDES += -I$(DEVICE)/include \
+			-I$(HAL)/include \
+			-I$(CMSIS)/include \
+			-I$(SYSTEM) \
+			-I$(DRIVERS)\
+			-I$(PERIPH)\
+			-I$(USB)\
+			-I$(UTILS)\
+			-I.
+
+ELF = $(BUILDDIR)/program.elf
+HEX = $(BUILDDIR)/program.hex
+BIN = $(BUILDDIR)/program.bin
+MAP = $(BUILDDIR)/program.map
+
+CC = arm-none-eabi-gcc
+LD = arm-none-eabi-gcc
+AR = arm-none-eabi-ar
+OBJCOPY = arm-none-eabi-objcopy
+
+WARNINGS = -Wall -Werror
+	
+CFLAGS  = -O0 -g \
+   -mcpu=cortex-m3 -mthumb \
+   -mfloat-abi=soft \
+   $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
+   -DUSE_USB_FS \
+   -DBOOTLOADER \
+   $(WARNINGS)
+
+PP = cpp
+PPFLAGS = -P -D BOOTLOADER
+
+LDSCRIPT_PRE = $(BUILDTOOLS)/stm32f20.ld
+LDSCRIPT = $(BUILDDIR)/linker.ld
+LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
+
+LDLIBS += -lc -lm -lnosys
+
+FLASH_SCRIPT = $(BUILDTOOLS)/flash_boot.jlink
+
+.PHONY: all flash dev flash-dev clean tags
+
+all: CFLAGS += -DSTM32F205xx
+all: $(BIN)
+
+$(BIN): $(ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(HEX): $(ELF)
+	$(OBJCOPY) -O ihex $< $@
+
+$(LDSCRIPT): $(LDSCRIPT_PRE)
+	$(PP) $(PPFLAGS) $< -o $@
+
+$(ELF): $(OBJECTS) $(LDSCRIPT)
+	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
+	arm-none-eabi-size $@
+
+$(BUILDDIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+$(BUILDDIR)/%.o: %.s
+	mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+flash: CFLAGS += -DSTM32F205xx
+flash: $(BIN)
+	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
+
+dev: CFLAGS += -DSTM32F207xx
+dev: $(BIN)
+
+flash-stlink: dev
+	st-flash write $(BIN) 0x8000000
+
+tags:
+	ctags -R
+
+clean:
+	rm -rf build
