@@ -102,29 +102,24 @@ void init_Timer(){
     GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW;
     GPIO_InitTypeDef.Alternate=GPIO_AF2_TIM1;
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
-
-
+    
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+                                                            
+    GPIO_InitTypeDef.Pin= TURN_SIGNAL_L | TURN_SIGNAL_R; 
+    GPIO_InitTypeDef.Pull= GPIO_NOPULL;  
+    GPIO_InitTypeDef.Mode=GPIO_MODE_OUTPUT_PP; 
+    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW; 
+                                                            
+    HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
+                                                            
+    //GPIOA ->BSRR |=GPIO_PIN_
+    //Start with turn signals off
+    TURN_SIGNAL_PORT -> ODR &= ~(TURN_SIGNAL_L | TURN_SIGNAL_R);
 
 }
 
 void init_apollo(){
     init_Timer(); 
-    //Initializes pins 1 and 0 to outputs
-    //below needs to modified if GPIOA isn't used
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef GPIO_InitTypeDef;
-
-    GPIO_InitTypeDef.Pin= TURN_SIGNAL_L | TURN_SIGNAL_R;  //dont we do this in the init_apollo function????
-    GPIO_InitTypeDef.Pull= GPIO_NOPULL;  //see above comment
-    GPIO_InitTypeDef.Mode=GPIO_MODE_OUTPUT_PP; // see above above comment
-    GPIO_InitTypeDef.Speed=GPIO_SPEED_FREQ_LOW; // ^
-
-    HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
-
-    //GPIOA ->BSRR |=GPIO_PIN_
-    //Start with turn signals off
-    TURN_SIGNAL_PORT -> ODR &= ~(TURN_SIGNAL_L | TURN_SIGNAL_R);
-
 
 }
 
