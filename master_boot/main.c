@@ -49,8 +49,6 @@ int main(void)
     MX_SPI3_Init();
     MX_USB_OTG_FS_USB_Init();
 
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
-
     uint32_u dataIn;
     uint32_t offset = 0;
     while(1)

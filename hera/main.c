@@ -1,4 +1,5 @@
 #include "stm32f0xx_hal.h"
+#include "adc.h"
 #include "boot.h"
 #include "commsLib.h"
 #include "spi.h"
@@ -17,6 +18,7 @@ int main(void)
     /* Enable interrupts */
     __enable_irq();
 
+    MX_ADC1_Init();
     MX_COMMS_SPI_Init();
 
     uint8_t data;

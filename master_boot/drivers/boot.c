@@ -78,7 +78,7 @@ void runBootFSM(uint32_t data){
 
                 if((count % CHUNK_SIZE) == 0 || count == header.size)
                 {
-                    if(count == header.size)
+                    if(count == header.size && count % CHUNK_SIZE != 0u)
                     {
                         /* Zero fill end of buffer if last packet */
                         memset(submoduleCommsBuff + (count % CHUNK_SIZE), 0u, CHUNK_SIZE - (count % CHUNK_SIZE));
@@ -203,8 +203,8 @@ void runBootFSM(uint32_t data){
                         break;
                     }
 
-                    /** Wait for device to reboot **/
-                    HAL_Delay(500);
+                    /** Give Time for Restart **/
+                    HAL_Delay(200u);
 
                     if(writeSubmodule(module, 0x00, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
@@ -216,7 +216,7 @@ void runBootFSM(uint32_t data){
                     size_t headerSize = sizeof(header.size) + sizeof(header.fkey);
                     memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
 
-                    if(writeSubmodule(module, 0x01, submoduleCommsBuff, headerSize, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    if(writeSubmodule(module, 0x01, submoduleCommsBuff, headerSize, FLASH_TIMEOUT) != COMMS_OK)
                     {
                         writeResponse(ERR_FLASH_ERASE);
                         msg = DMY;

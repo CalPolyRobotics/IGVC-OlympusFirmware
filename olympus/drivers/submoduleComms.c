@@ -30,6 +30,82 @@ static pin_t CS_PINS[NUM_SUBMODULES] = {
     {PORT_SS_JANUS, PIN_SS_JANUS},
 };
 
+static pin_t INT_PINS[NUM_SUBMODULES] = {
+    {PORT_INT_APOLLO, PIN_INT_APOLLO},
+    {PORT_INT_HEPHAESTUS, PIN_INT_HEPHAESTUS},
+    {PORT_INT_HERA, PIN_INT_HERA},
+    {PORT_INT_JANUS, PIN_INT_JANUS},
+};
+
+
+void SPI_Transmit(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_t timeout)
+{
+    uint32_t tickend = HAL_GetTick() + timeout;
+
+    if ((pData == NULL) || (size == 0U))
+    {
+        return;
+    }
+
+    __HAL_SPI_1LINE_TX(hspi);
+
+    while (size > 0u)
+    {
+        /* Wait until TXE flag is set to send data */
+        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_TXE))
+        {
+            if (hspi->TxXferCount > 1u)
+            {
+                /* write on the data register in packing mode */
+                hspi->Instance->DR = *((uint16_t *)pData);
+                pData += sizeof(uint16_t);
+                size -= 2u;
+            }
+            else
+            {
+                *((__IO uint8_t *)&hspi->Instance->DR) = (*pData++);
+                size--;
+            }
+        }
+        else
+        {
+            /* Timeout management */
+            if (HAL_GetTick() >= tickend)
+            {
+                return;
+            }
+        }
+    }
+}
+
+
+void SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_t timeout)
+{
+    if ((pData == NULL) || (size == 0u))
+    {
+        return;
+    }
+
+    uint32_t tickend = HAL_GetTick() + timeout;
+
+    /* Transfer loop */
+    while (size > 0u && HAL_GetTick() < tickend)
+    {
+        __HAL_SPI_1LINE_RX(hspi);
+
+        /* Check the RXNE flag */
+        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_RXNE))
+        {
+            __HAL_SPI_1LINE_TX(hspi);
+
+            /* read the received data */
+            (* (uint8_t *)pData) = *(__IO uint8_t *)&hspi->Instance->DR;
+            pData += sizeof(uint8_t);
+            size--;
+        }
+    }
+}
+
 void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
 {
 
@@ -38,22 +114,29 @@ void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t 
     selectModule(module);
 
     /** Send Start Byte & Message Type **/
-    HAL_SPI_Transmit(&hspi3, header, sizeof(header), SPI_DEFAULT_TIMEOUT);
-
-    /** Delay to wait for Slave Response **/
-    int i;
-    for(i = 0; i < 200; i++)
-    {
-        asm("nop");
-    }
+    SPI_Transmit(&hspi3, header, sizeof(header), SPI_DEFAULT_TIMEOUT);
 
     /** Transmit Data **/
-    HAL_SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
+    SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
 
-    /** Receive Data **/
-    HAL_SPI_Receive(&hspi3, buff, rx_size, SPI_DEFAULT_TIMEOUT);
+    /** Listen for Data **/
+    //__HAL_SPI_1LINE_RX(&hspi3);
+
+    /** Wait for slave device to finish processing data **/
+    uint32_t timeUp = HAL_GetTick() + SPI_DEFAULT_TIMEOUT;
+    while(HAL_GPIO_ReadPin(INT_PINS[module].port, INT_PINS[module].pin_mask) != GPIO_PIN_SET &&
+          HAL_GetTick() < timeUp);
+
+    SPI_Receive(&hspi3, buff, 1u, SPI_DEFAULT_TIMEOUT);
+
+    /** Wait for slave device to finish sending data back **/
+    timeUp = HAL_GetTick() + SPI_DEFAULT_TIMEOUT;
+    while(HAL_GPIO_ReadPin(INT_PINS[module].port, INT_PINS[module].pin_mask) != GPIO_PIN_RESET &&
+          HAL_GetTick() < timeUp);
 
     deselectModule(module);
+
+    //return resp;
 }
 
 void checkAllSubmodules()
@@ -110,14 +193,7 @@ static bool checkSubmoduleStatus(module_t module)
             return false;
     }
 
-
-    int attempts = 0;
-    while (getStatus() != COMMS_OK && attempts < STATUS_MAX_ATTEMPTS)
-    {
-        attempts++;
-    }
-
-    return attempts != STATUS_MAX_ATTEMPTS;
+    return getStatus() == COMMS_OK;
 }
 
 /** Lower the CS bit for the given module **/

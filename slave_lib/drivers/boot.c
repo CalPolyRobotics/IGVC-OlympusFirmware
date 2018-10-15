@@ -28,17 +28,12 @@ void remapVectorTable()
 
 static wrError_t we;
 uint8_t *bootload(uint8_t* data){
-    we = WR_OK;
-
-    writeResponse(&we, 1u);
-
     /* Give time for response to be sent */
     SysTick_Delay(50u);
 
     NVIC_SystemReset();
 
-    we = WR_ERR;
-
     /** The code should not execute this return because of the Reset **/
+    we = WR_ERR;
     return &we;
 }

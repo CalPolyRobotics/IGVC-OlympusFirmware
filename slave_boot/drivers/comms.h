@@ -4,6 +4,6 @@
 #include <stdint.h>
 #include "commsLib.h"
 
-extern msgInfo_t msgResp[NUM_MSGS];
+extern const msgInfo_t msgResp[NUM_MSGS];
 
 #endif
