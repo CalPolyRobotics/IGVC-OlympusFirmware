@@ -35,7 +35,8 @@ msgInfo_t msgResp[NUM_MSGS] = {
 };
 
 static uint8_t *get_status_callback(uint8_t *data){
-    return &errorByte;
+    data[0] = errorByte;
+    return data;
 }
 
 static uint8_t *get_speed_callback(uint8_t *data){

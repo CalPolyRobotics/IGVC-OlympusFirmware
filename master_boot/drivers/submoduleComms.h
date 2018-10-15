@@ -9,7 +9,8 @@
 #define NUM_MODULES    5
 #define NUM_SUBMODULES 4
 
-#define SUBMODULE_TIMEOUT ((uint16_t)5000u)
+#define SUBMODULE_TIMEOUT ((uint16_t)100u)
+#define FLASH_TIMEOUT     ((uint16_t)5000u)
 
 /** Error Responses **/
 typedef uint8_t commsStatus_t;

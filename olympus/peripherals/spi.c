@@ -42,7 +42,7 @@ void MX_SPI3_Init(void)
 {
     hspi3.Instance = SPI3;
     hspi3.Init.Mode = SPI_MODE_MASTER;
-    hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+    hspi3.Init.Direction = SPI_DIRECTION_1LINE;
     hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -73,6 +73,12 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
          *  PB4     ------> SPI3_MISO
          *  PB5     ------> SPI3_MOSI
          *
+         *  Active High Interrupt:
+         *  PB10    ------> INT_APOLLO
+         *  PB11    ------> INT_HERA
+         *  PB12    ------> INT_HEPHAESTUS
+         *  PB13    ------> INT_JANUS
+         *
          *  Active Low Chip Select:
          *  PA8     ------> SS_ZADC
          *  PB6     ------> SS_THDAC
@@ -83,11 +89,17 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
          *  PC9     ------> SS_IRIS
          *  PC13    ------> SS_JANUS
          */
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
+        GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_8;
