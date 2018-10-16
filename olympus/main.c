@@ -22,6 +22,9 @@
 #include "doubleBuffer.h"
 #include "submoduleComms.h"
 
+#include "hephaestus.h"
+#include "hera.h"
+
 #include <stddef.h>
 
 void SystemClock_Config(void);
@@ -78,13 +81,13 @@ int main(void)
 
     initSpeedDAC();
 
-    addCallbackTimer(1000, led6Toggle, NULL);
-
-
     setSevenSeg('4', '2');
 
     checkAllSubmodules();
-    
+
+    addCallbackTimer(1000, led6Toggle, NULL);
+    addCallbackTimer(10, updateHeraSteer, NULL);
+
     printf("Hello.\r\n");
     while(1)
     {

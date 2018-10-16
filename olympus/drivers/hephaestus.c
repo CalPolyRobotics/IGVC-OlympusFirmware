@@ -9,10 +9,22 @@
 
 #include "hephaestus.h"
 #include "spi.h"
+#include "string.h"
 
 commsStatus_t getHephaestusStatus()
 {
-    uint8_t data[1];
-    messageSubmodule(HEPHAESTUS, HEPHAESTUS_STATUS, data, 0, 1);
-    return data[0];
+    return messageSubmodule(HEPHAESTUS, HEPHAESTUS_STATUS, NULL, 0u, 0u, SPI_TIMEOUT);
+}
+
+commsStatus_t updateHephaestusSteerPot(uint8_t* potVal)
+{
+    /**
+     * Must create additional buffer to ensure messageSubmodule does not overwrite
+     * potVal
+     */
+    uint8_t data[2];
+    memcpy(data, potVal, sizeof(uint16_t));
+
+    return messageSubmodule(HEPHAESTUS, HEPHAESTUS_UPDATE_POT, potVal, sizeof(uint16_t), 0u,
+                            SPI_TIMEOUT);
 }

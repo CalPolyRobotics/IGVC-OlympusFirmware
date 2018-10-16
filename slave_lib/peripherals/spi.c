@@ -84,11 +84,12 @@ void setSPIInt()
 
 void runResponse()
 {
-    setSPIInt();
     COMMS_SPI->CR1 |= SPI_CR1_BIDIOE;
+    setSPIInt();
 
-    while(!(COMMS_SPI->SR & SPI_SR_BSY));
-    while(COMMS_SPI->SR & SPI_SR_BSY);
+    /* Write txBuffer data */
+    while(txBufferLen > 0u || (((COMMS_SPI->SR & SPI_SR_FTLVL) >> SPI_SR_FTLVL_Pos) > 0u) ||
+          COMMS_SPI->SR & SPI_SR_BSY);
 
     COMMS_SPI->CR1 &= ~SPI_CR1_BIDIOE;
     clearSPIInt();
@@ -111,8 +112,8 @@ wrError_t writeResponse(uint8_t status, uint8_t *data, uint8_t dataLen)
     uint16_t firstLen = writeIdx + respLen <= TX_BUFFER_SIZE ? respLen : TX_BUFFER_SIZE - writeIdx;
 
     /* Write idx to end */
-    memcpy(txBuffer + writeIdx, &status, sizeof(status));
-    memcpy(txBuffer + writeIdx + sizeof(status), data, firstLen - sizeof(status));
+    txBuffer[writeIdx++] = status;
+    memcpy(txBuffer + writeIdx, data, firstLen - sizeof(status));
 
     if(firstLen != respLen)
     {

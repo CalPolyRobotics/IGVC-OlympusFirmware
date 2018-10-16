@@ -14,6 +14,8 @@
 #include "usb_otg.h"
 #include "adc.h"
 #include "characterMapping.h"
+
+#include "hera.h"
 #include "janus.h"
 
 #include <stdlib.h>
@@ -415,7 +417,7 @@ static void console_setFNR(uint32_t argc, char** argv)
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    printf("%u", getFNR());
+    printf("%u", *janusData.fnr);
 }
 
 /**
@@ -469,7 +471,7 @@ static void console_getSteerTarget(uint32_t argc, char** argv)
 
 static void console_getSteerPot(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    printf("%u", *((uint16_t*)heraData.steer));
 }
 
 static void console_emulateUSB(uint32_t argc, char** argv)

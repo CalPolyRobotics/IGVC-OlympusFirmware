@@ -54,18 +54,8 @@ void SPI_Transmit(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32
         /* Wait until TXE flag is set to send data */
         if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_TXE))
         {
-            if (hspi->TxXferCount > 1u)
-            {
-                /* write on the data register in packing mode */
-                hspi->Instance->DR = *((uint16_t *)pData);
-                pData += sizeof(uint16_t);
-                size -= 2u;
-            }
-            else
-            {
-                *((__IO uint8_t *)&hspi->Instance->DR) = (*pData++);
-                size--;
-            }
+            *((__IO uint8_t *)&hspi->Instance->DR) = (*pData++);
+            size--;
         }
         else
         {
@@ -106,37 +96,37 @@ void SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_
     }
 }
 
-void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size)
+commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size,
+                               uint8_t rx_size, uint32_t timeout)
 {
-
     uint8_t header[2] = {SUBMODULE_START_BYTE, msg_type};
 
     selectModule(module);
 
     /** Send Start Byte & Message Type **/
-    SPI_Transmit(&hspi3, header, sizeof(header), SPI_DEFAULT_TIMEOUT);
+    SPI_Transmit(&hspi3, header, sizeof(header), timeout);
 
     /** Transmit Data **/
-    SPI_Transmit(&hspi3, buff, tx_size, SPI_DEFAULT_TIMEOUT);
-
-    /** Listen for Data **/
-    //__HAL_SPI_1LINE_RX(&hspi3);
+    SPI_Transmit(&hspi3, buff, tx_size, timeout);
 
     /** Wait for slave device to finish processing data **/
-    uint32_t timeUp = HAL_GetTick() + SPI_DEFAULT_TIMEOUT;
+    uint32_t timeUp = HAL_GetTick() + timeout;
     while(HAL_GPIO_ReadPin(INT_PINS[module].port, INT_PINS[module].pin_mask) != GPIO_PIN_SET &&
           HAL_GetTick() < timeUp);
 
-    SPI_Receive(&hspi3, buff, 1u, SPI_DEFAULT_TIMEOUT);
+    /** Receive Data **/
+    uint8_t status;
+    SPI_Receive(&hspi3, &status, STATUS_LEN, timeout);
+    SPI_Receive(&hspi3, buff, rx_size, timeout);
 
     /** Wait for slave device to finish sending data back **/
-    timeUp = HAL_GetTick() + SPI_DEFAULT_TIMEOUT;
+    timeUp = HAL_GetTick() + timeout;
     while(HAL_GPIO_ReadPin(INT_PINS[module].port, INT_PINS[module].pin_mask) != GPIO_PIN_RESET &&
           HAL_GetTick() < timeUp);
 
     deselectModule(module);
 
-    //return resp;
+    return status;
 }
 
 void checkAllSubmodules()
