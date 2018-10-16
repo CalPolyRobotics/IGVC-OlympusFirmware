@@ -19,7 +19,7 @@ void setSPIInt();
 void clearSPIInt();
 
 wrError_t readByte(uint8_t *data);
-wrError_t writeResponse(uint8_t* data, uint16_t length);
+wrError_t writeResponse(uint8_t status, uint8_t* data, uint8_t length);
 
 /** @brief  Clear the SPI OVR pending flag.
   * @param  __HANDLE__ specifies the SPI Handle.

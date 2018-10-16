@@ -81,7 +81,7 @@ int main(void)
     addCallbackTimer(1000, led6Toggle, NULL);
 
 
-    setSevenSeg('6', '9');
+    setSevenSeg('4', '2');
 
     checkAllSubmodules();
     

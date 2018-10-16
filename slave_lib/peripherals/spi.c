@@ -95,34 +95,32 @@ void runResponse()
 }
 
 
-wrError_t writeResponse(uint8_t *data, uint16_t length)
+wrError_t writeResponse(uint8_t status, uint8_t *data, uint8_t dataLen)
 {
-    if(txBufferLen + length > TX_BUFFER_SIZE)
+    if(txBufferLen + sizeof(status) + dataLen > TX_BUFFER_SIZE)
     {
         return WR_BUFF_FULL;
-    }
-
-    if(data == NULL || length == 0)
-    {
-        return WR_ERR;
     }
 
     /* Disable interrupt to protect shared data */
     COMMS_SPI->CR2 &= ~SPI_CR2_TXEIE;
 
+    uint16_t respLen = sizeof(status) + dataLen;
+
     uint32_t writeIdx = (txBufferStart + txBufferLen) % TX_BUFFER_SIZE;
-    uint16_t firstLen = writeIdx + length <= TX_BUFFER_SIZE ? length : TX_BUFFER_SIZE - writeIdx;
+    uint16_t firstLen = writeIdx + respLen <= TX_BUFFER_SIZE ? respLen : TX_BUFFER_SIZE - writeIdx;
 
     /* Write idx to end */
-    memcpy(txBuffer + writeIdx, data, firstLen);
+    memcpy(txBuffer + writeIdx, &status, sizeof(status));
+    memcpy(txBuffer + writeIdx + sizeof(status), data, firstLen - sizeof(status));
 
-    if(firstLen != length)
+    if(firstLen != respLen)
     {
         /* Write overflow data */
-        memcpy(txBuffer, data + firstLen, length - firstLen);
+        memcpy(txBuffer, data + firstLen, respLen - firstLen);
     }
 
-    txBufferLen += length;
+    txBufferLen += respLen;
 
     COMMS_SPI->CR2 |= SPI_CR2_TXEIE;
 

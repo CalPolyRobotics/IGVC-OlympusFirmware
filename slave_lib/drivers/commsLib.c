@@ -8,7 +8,7 @@ typedef enum commState{
     START_BYTE=0, MSG_TYPE, DATA
 }commState_t;
 
-static uint8_t buf[256];
+static uint8_t buff[256];
 
 wrError_t runCommsFSM(uint8_t data){
     static commState_t state = START_BYTE;
@@ -40,26 +40,25 @@ wrError_t runCommsFSM(uint8_t data){
             if(dataSize == 0){
                 if(msgType == BOOT_MSG)
                 {
-                    //Bootload message must be handled seperately since it never returns
-                    buf[0] = WR_OK;
-                    writeResponse(buf, 1u);
+                    // Bootload message must be handled seperately since it never returns
+                    writeResponse(WR_OK, NULL, 0u);
                 }
 
-                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
+                writeResponse(msgResp[msgType].callback(buff), buff, msgResp[msgType].txDataLength);
 
                 state = START_BYTE;
             }else{
-                dataIdx = 0;
+                dataIdx = 0u;
                 state = DATA;
             }
 
             break;
 
         case DATA:
-            buf[dataIdx++] = data;
+            buff[dataIdx++] = data;
             if(dataIdx == dataSize)
             {
-                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
+                writeResponse(msgResp[msgType].callback(buff), buff, msgResp[msgType].txDataLength);
 
                 state = START_BYTE;
             }

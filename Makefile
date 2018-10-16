@@ -24,6 +24,7 @@ all: $(MODDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
+	@echo ""
 
 flash: $(MODDIRS)
 	$(BOOT_APP) -m $(MODDIRS) -f $(MODDIR_BINS)
