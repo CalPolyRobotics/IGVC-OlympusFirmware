@@ -44,6 +44,6 @@ static uint8_t *set_headlights_callback(uint8_t *data){
 
 static uint8_t *set_misc_lights_callback(uint8_t *data){
     errorByte = WR_OK;
-    set_misc_lights(data[0], data[1], data[2]);
+    set_misc_lights(data[0], data[1]);
     return &errorByte;
 }
