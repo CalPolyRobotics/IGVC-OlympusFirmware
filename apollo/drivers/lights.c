@@ -1,7 +1,7 @@
 #include "stm32f0xx_hal.h"
 #include "lights.h"
 
-uint16_t arr[256]={
+uint16_t arr[256] = {
     24000,23905,23811,23717,23623,23529,23435,23341,
     23247,23152,23058,22964,22870,22776,22682,22588,
     22494,22400,22305,22211,22117,22023,21929,21835,
@@ -61,7 +61,7 @@ void init_Timer(){
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
     __HAL_RCC_TIM16_CLK_ENABLE();                                               
-    TIM16 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0);
+    TIM16 -> CCMR1 = (TIM_CCMR1_OC1M_2|TIM_CCMR1_OC1M_1|TIM_CCMR1_OC1M_0);
     TIM16 -> CCER = TIM_CCER_CC1E_Msk;
     TIM16 -> CR1 = TIM_CR1_CEN;
     TIM16 -> ARR = 24000;
@@ -74,14 +74,14 @@ void init_Timer(){
     HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
 
     __HAL_RCC_TIM3_CLK_ENABLE();
-     TIM3 -> CCMR1 = ( TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_0|TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1| TIM_CCMR1_OC2M_0);
+     TIM3 -> CCMR1 = (TIM_CCMR1_OC1M_2|TIM_CCMR1_OC1M_1|TIM_CCMR1_OC1M_0|TIM_CCMR1_OC2M_2|TIM_CCMR1_OC2M_1|TIM_CCMR1_OC2M_0);
      TIM3 -> CCER = (TIM_CCER_CC2E_Msk|TIM_CCER_CC1E_Msk);
      TIM3 -> CR1 = TIM_CR1_CEN;
      TIM3 -> ARR = 24000;
      TIM3 -> CCR1 = 24000;
      TIM3 -> CCR2 = 24000;
      __HAL_RCC_GPIOB_CLK_ENABLE();  
-     GPIO_InitTypeDef.Pin = ( MISC3| MISC4); 
+     GPIO_InitTypeDef.Pin = (MISC3| MISC4); 
      GPIO_InitTypeDef.Pull = GPIO_NOPULL;
      GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
      GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
@@ -105,7 +105,7 @@ void init_Timer(){
     
     __HAL_RCC_GPIOA_CLK_ENABLE();
                                                             
-    GPIO_InitTypeDef.Pin = TURN_SIGNAL_L | TURN_SIGNAL_R; 
+    GPIO_InitTypeDef.Pin =(TURN_SIGNAL_L|TURN_SIGNAL_R); 
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;  
     GPIO_InitTypeDef.Mode = GPIO_MODE_OUTPUT_PP; 
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW; 
