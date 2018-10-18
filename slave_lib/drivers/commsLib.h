@@ -6,6 +6,8 @@
 #define COMMS_START_BYTE ((uint8_t)0xEA)
 #define NUM_MSGS 11
 
+#define BOOT_MSG ((uint8_t)0x0A)
+
 /** Error Response on Writes **/
 typedef uint8_t wrError_t;
 

@@ -13,7 +13,6 @@ typedef struct{
     uint32_t  key;
 }header_t;
 
-static uint8_t errorByte;
 static uint32_t size = 0;
 static uint32_t checksum = 0;
 static bool flashComplete = false;
@@ -24,7 +23,7 @@ static uint8_t *write_data(uint8_t *data);
 static uint8_t *run_checksum(uint8_t *data);
 
 /** tx or rx DataLengths can be no longer than 253(rx) 253(tx) **/
-msgInfo_t msgResp[NUM_MSGS] = {
+const msgInfo_t msgResp[NUM_MSGS] = {
     {0,  1, get_status_callback},      /** 0 Get Status  **/
     {8,  1, write_header},             /** 1 Header      **/
     {64, 1, write_data},               /** 2 Data        **/
@@ -39,21 +38,18 @@ msgInfo_t msgResp[NUM_MSGS] = {
 };
 
 static uint8_t *get_status_callback(uint8_t *data){
-    errorByte = WR_OK;
-    return &errorByte;
+    data[0] = WR_OK;
+    return data;
 }
 
 static uint8_t *write_header(uint8_t *data){
-    header_t header = *((header_t*)data);
+    /** memcpy data to avoid 32-bit address alignment issues **/
+    header_t header;
+    memcpy(&header, data, sizeof(header_t));
 
-    if(header.key != ERASE_FLASH_KEY){
-        errorByte = WR_ERR;
-        return &errorByte;
-    }
-
-    if(header.size > APP_MAX_SIZE){
-        errorByte = WR_ERR;
-        return &errorByte;
+    if(header.key != ERASE_FLASH_KEY || header.size > APP_MAX_SIZE){
+        data[0] = WR_ERR;
+        return data;
     }
 
     /* Initialize static variables */
@@ -64,8 +60,8 @@ static uint8_t *write_header(uint8_t *data){
     /* Initialize Flash */
     writeInit(header.size);
 
-    errorByte = WR_OK;
-    return &errorByte;
+    data[0] = WR_OK;
+    return data;
 }
 
 static uint8_t *write_data(uint8_t *data){
@@ -73,8 +69,8 @@ static uint8_t *write_data(uint8_t *data){
     static uint16_t* addr = (uint16_t*)APP_START_ADDR;
 
     if(size == 0){
-        errorByte = WR_ERR;
-        return &errorByte;
+        data[0] = WR_ERR;
+        return data;
     }
 
     /* Write data 16 bits at a time */
@@ -105,14 +101,14 @@ static uint8_t *write_data(uint8_t *data){
         flashComplete = true;
     }
 
-    errorByte = WR_OK;
-    return &errorByte;
+    data[0] = WR_OK;
+    return data;
 }
 
 static uint8_t *run_checksum(uint8_t *data){
     if(!flashComplete){
-        errorByte = WR_ERR;
-        return &errorByte;
+        data[0] = WR_ERR;
+        return data;
     }
 
     uint32_t hostChecksum = (uint32_t)data[3] << 24u |
@@ -121,17 +117,17 @@ static uint8_t *run_checksum(uint8_t *data){
                             (uint32_t)data[0];
 
     if(hostChecksum != checksum){
-        errorByte = WR_ERR;
-        return &errorByte;
+        data[0] = WR_ERR;
+        return data;
     }
 
     /* Write success since jumpToApp wont return */
-    errorByte = WR_OK;
-    writeResponse(&errorByte, 1u);
+    data[0] = WR_OK;
+    writeResponse(data, 1u);
 
     jumpToApp(APP_START_ADDR);
 
     /* Application should not get to this point because of jump */
-    errorByte = WR_ERR;
-    return &errorByte;
+    data[0] = WR_OK;
+    return data;
 }

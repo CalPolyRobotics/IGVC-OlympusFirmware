@@ -1,12 +1,22 @@
 #ifndef SPI_H_
 #define SPI_H_
 
+#include <stdbool.h>
 #include "commsLib.h"
+
+#define COMMS_SPI SPI1
 
 #define STD_SPI_DELAY ((uint32_t)100u)
 
 void MX_COMMS_SPI_Init();
 void COMMS_SPI_LL_Init();
+void COMMS_SPI_ReInit();
+
+void flushSPIRx();
+void flushSPITx();
+
+void setSPIInt();
+void clearSPIInt();
 
 wrError_t readByte(uint8_t *data);
 wrError_t writeResponse(uint8_t* data, uint16_t length);

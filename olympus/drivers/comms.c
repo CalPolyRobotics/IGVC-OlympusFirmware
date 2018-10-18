@@ -61,7 +61,7 @@ void toggleLED3(Packet_t* packet)
 /** XXX - Remove these when they are reimplemented **/
 static uint8_t status[5] = {0};
 
-static heraData_t heraData;
+extern heraData_t heraData;
 static janusData_t janusData;
 static hephaestusData_t hephaestusData;
 static olympusData_t olympusData;
@@ -79,7 +79,7 @@ static packetResponse_t response[] = {
 
     // Hera
     {0u,    NULL,     4u,   heraData.speed,          NULL},                // (0x02)
-    {0u,    NULL,     2u,   heraData.pedal,          NULL},                // (0x04)
+    {0u,    NULL,     2u,   heraData.steer,          NULL},                // (0x04)
     {0u,    NULL,     8u,   heraData.sonar,          NULL},                // (0x06)
 
     // Apollo

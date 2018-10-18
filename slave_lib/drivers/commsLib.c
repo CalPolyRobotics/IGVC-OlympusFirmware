@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdbool.h>
+#include "stm32f0xx.h"
 #include "comms.h"
 #include "spi.h"
 
@@ -30,20 +32,35 @@ wrError_t runCommsFSM(uint8_t data){
             msgType = data;
             dataSize = msgResp[msgType].rxDataLength;
 
+            if(msgResp[msgType].callback == NULL){
+                state = START_BYTE;
+                break;
+            }
+
             if(dataSize == 0){
-                writeResponse(msgResp[msgType].callback(NULL), msgResp[msgType].txDataLength);
+                if(msgType == BOOT_MSG)
+                {
+                    //Bootload message must be handled seperately since it never returns
+                    buf[0] = WR_OK;
+                    writeResponse(buf, 1u);
+                }
+
+                writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
 
                 state = START_BYTE;
             }else{
                 dataIdx = 0;
                 state = DATA;
             }
+
             break;
 
         case DATA:
             buf[dataIdx++] = data;
-            if(dataIdx == dataSize){
+            if(dataIdx == dataSize)
+            {
                 writeResponse(msgResp[msgType].callback(buf), msgResp[msgType].txDataLength);
+
                 state = START_BYTE;
             }
 

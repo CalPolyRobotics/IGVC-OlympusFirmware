@@ -23,17 +23,6 @@ int main(void)
 
     init_apollo();
 
-    set_headlights(155);
-
-    set_turn_signal(1);
-    
-    set_misc_lights(0,155);
-    set_misc_lights(1,155);
-    set_misc_lights(2,155);
-    set_misc_lights(3,155);
-    set_misc_lights(4,155);
-    set_misc_lights(5,155);
-
     uint8_t data;
     while (1)
     {

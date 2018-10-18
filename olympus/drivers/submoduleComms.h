@@ -8,6 +8,9 @@
 #define NUM_MODULES    5
 #define NUM_SUBMODULES 4
 
+#define STATUS_IDX 0
+#define DATA_IDX 1
+
 /** Error Responses **/
 typedef uint8_t commsStatus_t;
 

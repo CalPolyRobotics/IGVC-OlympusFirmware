@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     serComm = BootSerial('/dev/igvc_comm')
 
-    print('Restarting Device...')
+    print('\nRestarting Device...')
     serComm.resetDevice()
     serComm.close()
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     for i, mcu in enumerate(args.mcu):
         fp, size = openBinary(args.file[i])
-        print('Application size for ' + mcu + ': ' + str(size))
+        print('\nApplication size for ' + mcu + ': ' + str(size))
 
         print('Erasing Flash...')
         resp = serBoot.writeHeader(mcu, size)

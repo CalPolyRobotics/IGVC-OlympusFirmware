@@ -7,12 +7,58 @@
  * Note: all functions expect valid input
  */
 
+#include <string.h>
+
 #include "hera.h"
 #include "spi.h"
 
+heraData_t heraData;
+
 commsStatus_t getHeraStatus()
 {
-    uint8_t data[1];
-    messageSubmodule(HERA, HERA_STATUS, data, 0, 1);
-    return data[0];
+    messageSubmodule(HERA, HERA_STATUS, submoduleCommsBuff, 0u, STATUS_LENGTH);
+    return submoduleCommsBuff[STATUS_IDX];
+}
+
+commsStatus_t updateHeraSpeed()
+{
+    messageSubmodule(HERA, HERA_SPEED, submoduleCommsBuff, 0u, STATUS_LENGTH + SPEED_LENGTH);
+    memcpy(&heraData.speed, &submoduleCommsBuff[DATA_IDX], SPEED_LENGTH);
+    return submoduleCommsBuff[STATUS_IDX];
+}
+
+commsStatus_t updateHeraSteer()
+{
+    messageSubmodule(HERA, HERA_STEER, submoduleCommsBuff, 0u, STATUS_LENGTH + STEER_LENGTH);
+    memcpy(&heraData.steer, &submoduleCommsBuff[DATA_IDX], STEER_LENGTH);
+    return submoduleCommsBuff[STATUS_IDX];
+}
+
+commsStatus_t updateHeraSonar()
+{
+    messageSubmodule(HERA, HERA_SONAR, submoduleCommsBuff, 0u, STATUS_LENGTH + SONAR_LENGTH);
+    memcpy(&heraData.sonar, &submoduleCommsBuff[DATA_IDX], SONAR_LENGTH);
+    return submoduleCommsBuff[STATUS_IDX];
+}
+
+commsStatus_t updateHeraData()
+{
+    commsStatus_t stat;
+
+    if((stat = updateHeraSpeed()) != COMMS_OK)
+    {
+        return stat;
+    }
+
+    if((stat = updateHeraSteer()) != COMMS_OK)
+    {
+        return stat;
+    }
+
+    if((stat = updateHeraSonar()) != COMMS_OK)
+    {
+        return stat;
+    }
+
+    return COMMS_OK;
 }

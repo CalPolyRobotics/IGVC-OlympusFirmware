@@ -28,37 +28,62 @@ static pin_t CS_PINS[NUM_SUBMODULES] = {
     {PORT_SS_JANUS, PIN_SS_JANUS},
 };
 
-static uint8_t statusTimeout(uint32_t timeout)
+static pin_t INT_PINS[NUM_SUBMODULES] = {
+    {PORT_INT_APOLLO, PIN_INT_APOLLO},
+    {PORT_INT_HEPHAESTUS, PIN_INT_HEPHAESTUS},
+    {PORT_INT_HERA, PIN_INT_HERA},
+    {PORT_INT_JANUS, PIN_INT_JANUS},
+};
+
+void SPI_Transmit(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_t timeout)
 {
-    uint8_t header[2] = {SUBMODULE_START_BYTE, 0x00};
-
-    uint32_t timeUp = HAL_GetTick() + timeout;
-    uint8_t resp = 0x00u;
-
-
-    do{
-        HAL_SPI_TransmitReceive(&hspi3, header, dummyData, sizeof(header), SPI_DEFAULT_TIMEOUT);
-
-        /** Clear Possible Write to dummyData **/
-        dummyData[0] = 0u;
-
-        /** Delay to wait for slave response **/
-        int i;
-        for(i = 0; i < 200; i++)
-        {
-            asm("nop");
-        }
-
-        HAL_SPI_TransmitReceive(&hspi3, dummyData, &resp, sizeof(resp), SPI_DEFAULT_TIMEOUT);
-
-    }while(resp != COMMS_OK && HAL_GetTick() < timeUp);
-
-    if(resp != COMMS_OK)
+    if ((pData == NULL) || (size == 0U))
     {
-        return COMMS_ERR_TIMEOUT;
+        return;
     }
 
-    return COMMS_OK;
+    uint32_t tickend = HAL_GetTick() + timeout;
+    __HAL_SPI_1LINE_TX(hspi);
+
+    while (size > 0u && HAL_GetTick() <= tickend)
+    {
+        /* Wait until TXE flag is set to send data */
+        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_TXE))
+        {
+            *((__IO uint8_t *)&hspi->Instance->DR) = (*pData++);
+            size--;
+        }
+    }
+}
+
+
+void SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_t timeout)
+{
+    if ((pData == NULL) || (size == 0U))
+    {
+        return;
+    }
+
+    uint32_t tickend = HAL_GetTick() + timeout;
+
+    /* Transfer loop */
+    while (size > 0u && HAL_GetTick() <= tickend)
+    {
+        __HAL_SPI_1LINE_RX(hspi);
+
+        /* Check the RXNE flag */
+        if (__HAL_SPI_GET_FLAG(hspi, SPI_FLAG_RXNE))
+        {
+            __HAL_SPI_1LINE_TX(hspi);
+
+            /* read the received data */
+            (* (uint8_t *)pData) = *(__IO uint8_t *)&hspi->Instance->DR;
+            pData += sizeof(uint8_t);
+            size--;
+        }
+    }
+
+    __HAL_SPI_1LINE_TX(hspi);
 }
 
 uint8_t writeSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint32_t timeout)
@@ -69,31 +94,27 @@ uint8_t writeSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t
     selectModule(module);
 
     /** Send Start Byte & Message Type **/
-    HAL_SPI_TransmitReceive(&hspi3, header, dummyData, sizeof(header), SPI_DEFAULT_TIMEOUT);
+    SPI_Transmit(&hspi3, header, sizeof(header), timeout);
 
     /** Transmit Data **/
-    HAL_SPI_TransmitReceive(&hspi3, buff, dummyData, tx_size, SPI_DEFAULT_TIMEOUT);
+    SPI_Transmit(&hspi3, buff, tx_size, timeout);
 
-    /** Delay to wait for slave response **/
-    int i;
-    for(i = 0; i < 200; i++)
-    {
-        asm("nop");
-    }
+    /** Wait for slave device to finish processing data **/
+    uint32_t timeUp = HAL_GetTick() + timeout;
+    while(HAL_GPIO_ReadPin(INT_PINS[module].port, INT_PINS[module].pin_mask) != GPIO_PIN_SET &&
+          HAL_GetTick() < timeUp);
 
-    dummyData[0] = 0u;
+    SPI_Receive(&hspi3, buff, 1u, timeout);
 
-    uint8_t resp = 0x00u;
-    HAL_SPI_TransmitReceive(&hspi3, dummyData, &resp, 1u, SPI_DEFAULT_TIMEOUT);
+    /** Wait for slave device to finish sending data back **/
+    timeUp = HAL_GetTick() + timeout;
+    while(HAL_GPIO_ReadPin(INT_PINS[module].port, INT_PINS[module].pin_mask) != GPIO_PIN_RESET &&
+          HAL_GetTick() < timeUp);
 
-    if(resp != COMMS_OK)
-    {
-        resp = statusTimeout(timeout);
-    }
 
     deselectModule(module);
 
-    return resp;
+    return buff[0u];
 }
 
 /** Lower the CS bit for the given module **/
