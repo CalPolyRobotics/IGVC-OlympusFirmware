@@ -67,7 +67,6 @@ static olympusData_t olympusData;
 static void commsSetTurnSignal(uint8_t* data){return;}
 static void commsSetHeadlights(uint8_t* data){return;}
 static void commsSetMiscLights(uint8_t* data){return;}
-static void commsSetSteering(uint8_t* data){return;}
 static void commsSetBrake(uint8_t* data){return;}
 static void commsSetSpeed(uint8_t* data){return;}
 static uint8_t inputBuf[256];
@@ -91,7 +90,7 @@ static packetResponse_t response[] = {
     {1u,    inputBuf, 0u,   NULL,                    commsSetFNR},         // (0x12)
 
     // Hephaestus
-    {2u,    inputBuf, 0u,   NULL,                    commsSetSteering},    // (0x14)
+    {1u,    inputBuf, 0u,   NULL,                    commsSetSteering},    // (0x14)
     {2u,    inputBuf, 0u,   NULL,                    commsSetBrake},       // (0x16)
     {0u,    NULL,     2u,   hephaestusData.steering, NULL},                // (0x18)
 

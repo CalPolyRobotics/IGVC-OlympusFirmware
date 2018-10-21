@@ -1,13 +1,13 @@
 #include <string.h>
 
 #include "stm32f0xx_hal.h"
-
-#define NUM_ADC_CHANNELS ((uint32_t)1u)
-#define ADC_AVG_NUM      ((size_t)8u)
-#define ADC_BUFF_SIZE    (ADC_AVG_NUM * NUM_ADC_CHANNELS)
+#include "adc.h"
 
 static volatile uint16_t adcBuffer[ADC_BUFF_SIZE];
-uint16_t adcChnAvg[NUM_ADC_CHANNELS]; 
+
+uint16_t adcChnAvg[2u][NUM_ADC_CHANNELS];
+int adcChnWriteIdx = 0u;
+int adcChnReadIdx = 1u;
 
 static void ADC1_LL_Init();
 
@@ -87,7 +87,6 @@ static void ADC1_LL_Init()
 }
 
 
-/** TODO - Move to Ping Pong Buffer to avoid use issues **/
 void DMA1_Channel1_IRQHandler()
 {
     /** Transfer Complete **/
@@ -98,19 +97,22 @@ void DMA1_Channel1_IRQHandler()
         DMA1->IFCR |= DMA_IFCR_CTCIF1;
 
         // Clear Data & Calculate Average
-        memset(adcChnAvg, 0u, NUM_ADC_CHANNELS * sizeof(adcChnAvg[0]));
+        memset(adcChnAvg[adcChnWriteIdx], 0u, NUM_ADC_CHANNELS * sizeof(adcChnAvg[0][0]));
 
         int idx;
         for(idx = 0; idx < ADC_BUFF_SIZE; idx++)
         {
-            adcChnAvg[idx % NUM_ADC_CHANNELS] += adcBuffer[idx];
+            adcChnAvg[adcChnWriteIdx][idx % NUM_ADC_CHANNELS] += adcBuffer[idx];
         }
         
         int chn;
         for(chn = 0; chn < NUM_ADC_CHANNELS; chn++)
         {
-            adcChnAvg[chn] /= ADC_AVG_NUM;
+            adcChnAvg[adcChnWriteIdx][chn] /= ADC_AVG_NUM;
         }
+
+        adcChnWriteIdx = (adcChnWriteIdx + 1u) % PING_PONG_SIZE;
+        adcChnReadIdx = (adcChnReadIdx + 1u) % PING_PONG_SIZE;
 
         // Contiue Transfers
         DMA1_Channel1->CCR |= DMA_CCR_EN;

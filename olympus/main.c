@@ -36,6 +36,23 @@ Timer_Return led6Toggle(void* dummy)
     return CONTINUE_TIMER;
 }
 
+Timer_Return updateSteerDataLink(void* dummy)
+{
+    if(updateHeraSteer() != COMMS_OK)
+    {
+        setSevenSeg(HERA_STEER_FAIL);
+        printf("UpdateHeraSteer Failed\r\n");
+    }
+
+    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
+    {
+        setSevenSeg(HEPHAESTUS_STEER_FAIL);
+        printf("UpdateHephaestusSteerPot Failed\r\n");
+    }
+
+    return CONTINUE_TIMER;
+}
+
 void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
 {
     if (status == I2C_ACK)
@@ -86,7 +103,7 @@ int main(void)
     checkAllSubmodules();
 
     addCallbackTimer(1000, led6Toggle, NULL);
-    addCallbackTimer(10, updateHeraSteer, NULL);
+    addCallbackTimer(10, updateSteerDataLink, NULL);
 
     printf("Hello.\r\n");
     while(1)

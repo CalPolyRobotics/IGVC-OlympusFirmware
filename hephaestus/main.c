@@ -1,8 +1,10 @@
 #include "stm32f0xx_hal.h"
+#include "systemClock.h"
 #include "boot.h"
 #include "commsLib.h"
 #include "spi.h"
-#include "systemClock.h"
+#include "gpio.h"
+#include "steer.h"
 
 int main(void)
 {
@@ -18,6 +20,7 @@ int main(void)
     __enable_irq();
 
     MX_COMMS_SPI_Init();
+    MX_GPIO_Init();
 
     uint8_t data;
     while (1)
@@ -26,6 +29,8 @@ int main(void)
         if(status == WR_OK){
             runCommsFSM(data);
         }
+
+        update_steer_control_loop();
     }
 }
 

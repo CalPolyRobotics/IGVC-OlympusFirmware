@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "stm32f0xx_hal.h"
+
 #include "adc.h"
 #include "boot.h"
 #include "comms.h"
@@ -29,6 +31,17 @@ msgInfo_t msgResp[NUM_MSGS] = {
     {0u, 0u, bootload},            // 10 Bootloader
 };
 
+
+void pauseInterruptingPeripherals()
+{
+    DMA1_Channel1->CCR &= ~DMA_CCR_EN;
+}
+
+void restoreInterruptingPeripherals()
+{
+    DMA1_Channel1->CCR |= DMA_CCR_EN;
+}
+
 static uint8_t get_status_callback(uint8_t *data){
     return WR_OK;
 }
@@ -41,7 +54,7 @@ static uint8_t get_speed_callback(uint8_t *data){
 }
 
 static uint8_t get_steer_callback(uint8_t *data){
-    memcpy(data, &adcChnAvg[STEER_AVG_IDX], msgResp[STEER_IDX].txDataLength);
+    memcpy(data, &adcChnAvg[adcChnReadIdx][STEER_AVG_IDX], msgResp[STEER_IDX].txDataLength);
 
     return WR_OK;
 }

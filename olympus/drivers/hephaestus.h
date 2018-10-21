@@ -13,8 +13,9 @@ typedef uint8_t hephaestusMsg_t;
 #define HEPHAESTUS_SET_STEERING ((hephaestusMsg_t)1u)
 #define HEPHAESTUS_UPDATE_POT   ((hephaestusMsg_t)2u)
 
-
+void commsSetSteering(uint8_t *data);
 commsStatus_t getHephaestusStatus();
-commsStatus_t updateHephaestusSteerPot(uint8_t* data);
+commsStatus_t setHephaestusSteering(uint8_t angle);
+commsStatus_t updateHephaestusSteerPot(uint8_t *data);
 
 #endif
