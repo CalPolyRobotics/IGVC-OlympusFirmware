@@ -38,6 +38,6 @@ static uint8_t set_headlights_callback(uint8_t *data){
 }
 
 static uint8_t set_misc_lights_callback(uint8_t *data){
-    set_misc_lights(data[0u], data[1u], data[2u]);
+    set_misc_lights(data[0u], data[1u]);
     return WR_OK;
 }
