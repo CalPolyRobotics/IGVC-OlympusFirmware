@@ -139,5 +139,7 @@
 #define HEPHAESTUS_STATUS_FAIL  'F','C'
 #define HERA_STATUS_FAIL        'F','B'
 #define JANUS_STATUS_FAIL       'F','A'
+#define HERA_STEER_FAIL         'F','9'
+#define HEPHAESTUS_STEER_FAIL   'F','8'
 
 #endif

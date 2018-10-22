@@ -26,14 +26,12 @@ void remapVectorTable()
     __HAL_SYSCFG_REMAPMEMORY_SRAM();
 }
 
-static wrError_t we;
-uint8_t *bootload(uint8_t* data){
+uint8_t bootload(uint8_t *data){
     /* Give time for response to be sent */
     SysTick_Delay(50u);
 
     NVIC_SystemReset();
 
     /** The code should not execute this return because of the Reset **/
-    we = WR_ERR;
-    return &we;
+    return WR_ERR;
 }

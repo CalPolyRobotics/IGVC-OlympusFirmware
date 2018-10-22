@@ -3,13 +3,16 @@
 
 #include <stdint.h>
 
-#define SUBMODULE_START_BYTE 0xEA
+#define SUBMODULE_START_BYTE ((uint8_t)0xEAu)
 
-#define NUM_MODULES    5
-#define NUM_SUBMODULES 4
+#define NUM_MODULES    5u
+#define NUM_SUBMODULES 4u
 
-#define STATUS_IDX 0
-#define DATA_IDX 1
+#define STATUS_IDX 0u
+#define STATUS_LEN 1u
+#define DATA_IDX   1u
+
+#define SPI_TIMEOUT 5u
 
 /** Error Responses **/
 typedef uint8_t commsStatus_t;
@@ -19,7 +22,10 @@ typedef uint8_t commsStatus_t;
 #define COMMS_ERR_INT          ((commsStatus_t)0x02)
 #define COMMS_ERR_GEN          ((commsStatus_t)0x03)
 #define COMMS_ERR_INV_MSG_TYPE ((commsStatus_t)0x04)
+
 #define COMMS_OK               ((commsStatus_t)0xAA)
+
+#define COMMS_ERR_NOT_IMPL     ((commsStatus_t)0xAB)
 
 /** Note Submodules must proceed OLYMPUS **/
 typedef enum module{
@@ -32,9 +38,10 @@ typedef enum module{
 }module_t;
 
 
-extern uint8_t submoduleCommsBuff[256];
+extern uint8_t submoduleCommsBuff[256u];
 
-void messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size, uint8_t rx_size);
+commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size,
+                               uint8_t rx_size, uint32_t timeout);
 
 void checkAllSubmodules();
 

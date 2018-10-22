@@ -22,6 +22,9 @@
 #include "doubleBuffer.h"
 #include "submoduleComms.h"
 
+#include "hephaestus.h"
+#include "hera.h"
+
 #include <stddef.h>
 
 void SystemClock_Config(void);
@@ -29,6 +32,23 @@ void SystemClock_Config(void);
 Timer_Return led6Toggle(void* dummy)
 {
     HAL_GPIO_TogglePin(GPIO_DEBUG_6);
+
+    return CONTINUE_TIMER;
+}
+
+Timer_Return updateSteerDataLink(void* dummy)
+{
+    if(updateHeraSteer() != COMMS_OK)
+    {
+        setSevenSeg(HERA_STEER_FAIL);
+        printf("UpdateHeraSteer Failed\r\n");
+    }
+
+    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
+    {
+        setSevenSeg(HEPHAESTUS_STEER_FAIL);
+        printf("UpdateHephaestusSteerPot Failed\r\n");
+    }
 
     return CONTINUE_TIMER;
 }
@@ -78,13 +98,13 @@ int main(void)
 
     initSpeedDAC();
 
-    addCallbackTimer(1000, led6Toggle, NULL);
-
-
-    setSevenSeg('6', '9');
+    setSevenSeg('4', '2');
 
     checkAllSubmodules();
-    
+
+    addCallbackTimer(1000, led6Toggle, NULL);
+    addCallbackTimer(10, updateSteerDataLink, NULL);
+
     printf("Hello.\r\n");
     while(1)
     {

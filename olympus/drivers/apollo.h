@@ -12,7 +12,8 @@ typedef uint8_t apolloMsg_t;
 #define APOLLO_SET_MISC_LIGHTS ((apolloMsg_t)3u) 
 
 commsStatus_t getApolloStatus();
-void setTurnSignal(bool leftSignal, bool rightSignal);
-void setHeadlights(uint8_t speed);
-void setMiscLights(uint16_t lightMask, uint8_t speed);
+commsStatus_t setTurnSignal(bool leftSignal, bool rightSignal);
+commsStatus_t setHeadlights(uint8_t speed);
+commsStatus_t setMiscLights(uint16_t lightMask, uint8_t speed);
+
 #endif

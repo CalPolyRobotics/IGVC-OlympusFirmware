@@ -13,6 +13,8 @@
 #include "janus.h"
 #include "spi.h"
 
+janusData_t janusData;
+
 void commsSetFNR(uint8_t* data)
 {
     setFNR(data[0]);
@@ -20,32 +22,36 @@ void commsSetFNR(uint8_t* data)
 
 commsStatus_t getJanusStatus()
 {
-    uint8_t data[1];
-    messageSubmodule(JANUS, JANUS_STATUS, data, 0, 1);
-    return data[0];
-}
-
-/**
- * \return state[0,1,2,3]
- */
-fnr_t getFNR()
-{
-    uint8_t message = FNR_INVALID;
-    messageSubmodule(JANUS, JANUS_GET_FNR, &message, 0, 1);
-
-    if (message <= 2)
-    {
-        return message;
-    }
-
-    return FNR_INVALID;
+    return messageSubmodule(JANUS, JANUS_STATUS, NULL, 0u, 0u, SPI_TIMEOUT);
 }
 
 /**
  * \param state[0,1,2]
  */
-void setFNR(fnr_t state)
+commsStatus_t setFNR(fnr_t state)
 {
     uint8_t message = (uint8_t)state;
-    messageSubmodule(JANUS, JANUS_SET_FNR, &message, 1, 0);
+
+    return messageSubmodule(JANUS, JANUS_SET_FNR, &message, sizeof(fnr_t), 0u, SPI_TIMEOUT);
+}
+
+/**
+ * \return state[0,1,2,3]
+ */
+commsStatus_t updateFNR()
+{
+    commsStatus_t status = messageSubmodule(JANUS, JANUS_GET_FNR, submoduleCommsBuff, 0u,
+                                            sizeof(fnr_t), SPI_TIMEOUT);
+
+    uint8_t message = submoduleCommsBuff[0];
+    if (status != COMMS_OK && message <= 2)
+    {
+        *janusData.fnr = message;
+    }
+    else
+    {
+        *janusData.fnr = FNR_INVALID;     
+    }
+
+    return status;
 }

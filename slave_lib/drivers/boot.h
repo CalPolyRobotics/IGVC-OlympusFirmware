@@ -5,6 +5,6 @@
 
 void remapVectorTable();
 
-uint8_t *bootload();
+uint8_t bootload(uint8_t *data);
 
 #endif

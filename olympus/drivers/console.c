@@ -14,6 +14,9 @@
 #include "usb_otg.h"
 #include "adc.h"
 #include "characterMapping.h"
+
+#include "hera.h"
+#include "hephaestus.h"
 #include "janus.h"
 
 #include <stdlib.h>
@@ -58,10 +61,7 @@ static void console_setSpeedTarget(uint32_t, char**);
 static void console_getSpeedTarget(uint32_t, char**);
 
 // Steering Commands
-static void console_setEnableSteer(uint32_t, char**);
 static void console_setSteerTarget(uint32_t, char**);
-static void console_getSteerDir(uint32_t, char**);
-static void console_getSteerTarget(uint32_t, char**);
 static void console_getSteerPot(uint32_t, char**);
 
 // Communication Commands
@@ -84,10 +84,7 @@ static ConsoleCommand commands[] = {
     {"setEnableSpeed", 0, console_setEnableSpeed},
     {"setSpeedTarget", 1, console_setSpeedTarget},
     {"getSpeedTarget", 0, console_getSpeedTarget},
-    {"setEnableSteer", 1, console_setEnableSteer},
     {"setSteerTarget", 1, console_setSteerTarget},
-    {"getSteerDir", 0, console_getSteerDir},
-    {"getSteerTarget", 0, console_getSteerTarget},
     {"getSteerPot", 0, console_getSteerPot},
     {"emulateUSB", 1, console_emulateUSB},
     {"USBWrite", 1, console_USBWrite},
@@ -415,7 +412,7 @@ static void console_setFNR(uint32_t argc, char** argv)
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    printf("%u", getFNR());
+    printf("%u", *janusData.fnr);
 }
 
 /**
@@ -447,29 +444,24 @@ static void console_getSpeedTarget(uint32_t argc, char** argv)
     printf("%u\r\n", getSpeedDAC());
 }
 
-static void console_setEnableSteer(uint32_t argc, char** argv)
-{
-    /** TODO **/
-}
-
 static void console_setSteerTarget(uint32_t argc, char** argv)
 {
-    /** TODO **/
-}
-
-static void console_getSteerDir(uint32_t argc, char** argv)
-{
-    /** TODO **/
-}
-
-static void console_getSteerTarget(uint32_t argc, char** argv)
-{
-    /** TODO **/
+    uint8_t angle = parseUint8(argv[0]);
+    if(!errno && angle < 180)
+    {
+        if(setHephaestusSteering(angle) != COMMS_OK){
+            printf("setHephaestusSteering Failed\r\n");
+        }
+    }
+    else
+    {
+        printf("Invalid Argument");
+    }
 }
 
 static void console_getSteerPot(uint32_t argc, char** argv)
 {
-    /** TODO **/
+    printf("%u", *((uint16_t*)heraData.steer));
 }
 
 static void console_emulateUSB(uint32_t argc, char** argv)
