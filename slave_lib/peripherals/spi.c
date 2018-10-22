@@ -118,7 +118,7 @@ wrError_t writeResponse(uint8_t status, uint8_t *data, uint8_t dataLen)
     if(firstLen != respLen)
     {
         /* Write overflow data */
-        memcpy(txBuffer, data + firstLen, respLen - firstLen);
+        memcpy(txBuffer, data + (firstLen - sizeof(status)), respLen - firstLen);
     }
 
     txBufferLen += respLen;
