@@ -29,7 +29,11 @@ SOURCES += $(DRIVERS)/comms.c
 
 SOURCES += $(PERIPHS)/adc.c
 
+SOURCES += $(DRIVERS)/speed.c
+
 SOURCES += $(PERIPHS)/gpio.c
+
+SOURCES += $(PERIPHS)/tim.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \

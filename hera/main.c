@@ -5,6 +5,7 @@
 #include "spi.h"
 #include "systemClock.h"
 #include "gpio.h"
+#include "tim.h"
 
 int main(void)
 {
@@ -21,6 +22,7 @@ int main(void)
 
     MX_ADC1_Init();
     MX_GPIO_Init();
+    MX_TIM_Init();
     MX_COMMS_SPI_Init();
 
     uint8_t data;
