@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-uint32_t diffCountsToSpeedInMMs(uint32_t diffCounts);
+uint16_t diffCountsToSpeedInMMs(uint32_t diffCounts);
 void checkTimeout(void);
 
 #endif

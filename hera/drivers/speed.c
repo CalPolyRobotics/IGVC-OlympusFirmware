@@ -11,14 +11,14 @@ static uint32_t ch1Count = 0;
 static uint32_t ch1Diff = 0;
 static uint32_t ch1SysCount = 0;
 
-volatile uint32_t ch1Speed[2];
+volatile uint16_t ch1Speed[2];
 volatile int ch1SpeedWr = 0;
 
 static uint32_t ch2Count = 0;
 static uint32_t ch2Diff = 0;
 static uint32_t ch2SysCount = 0;
 
-volatile uint32_t ch2Speed[2];
+volatile uint16_t ch2Speed[2];
 volatile int ch2SpeedWr = 0;
 
 void TIM2_IRQHandler() {
@@ -49,11 +49,11 @@ void TIM2_IRQHandler() {
     }
 }
 
-uint32_t diffCountsToSpeedInMMs(uint32_t diffCounts) {
+uint16_t diffCountsToSpeedInMMs(uint32_t diffCounts) {
     if (diffCounts != 0) {
-        return (MM_PER_INT * CK_FREQ) / diffCounts;
+        return (uint16_t)((MM_PER_INT * CK_FREQ) / diffCounts);
     }
-    return UINT32_MAX;
+    return UINT16_MAX;
 }
 
 void checkTimeout() {

@@ -53,6 +53,17 @@ Timer_Return updateSteerDataLink(void* dummy)
     return CONTINUE_TIMER;
 }
 
+Timer_Return updateSpeed(void* dummy)
+{
+    if(updateHeraSpeed() != COMMS_OK)
+    {
+        setSevenSeg(HERA_SPEED_FAIL);
+        printf("UpdateHeraSpeed Failed\r\n");
+    }
+
+    return CONTINUE_TIMER;
+}
+
 void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
 {
     if (status == I2C_ACK)
@@ -104,6 +115,7 @@ int main(void)
 
     addCallbackTimer(1000, led6Toggle, NULL);
     addCallbackTimer(10, updateSteerDataLink, NULL);
+    addCallbackTimer(5, updateSpeed, NULL);
 
     printf("Hello.\r\n");
     while(1)
