@@ -6,6 +6,7 @@
 #include "systemClock.h"
 #include "gpio.h"
 #include "tim.h"
+#include "speed.h"
 
 int main(void)
 {
@@ -32,6 +33,7 @@ int main(void)
         if(status == WR_OK){
             runCommsFSM(data);
         }
+        checkTimeout();
     }
 }
 
