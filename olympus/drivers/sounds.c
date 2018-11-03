@@ -4,35 +4,35 @@
 #include "timerCallback.h"
 #include <stdint.h>
 
-#define C4 6849
-#define c4 6464
-#define D4 6101
-#define d4 6101
-#define E4 5435
-#define F4 5130
-#define f4 4842
-#define G4 4570
-#define g4 4314
-#define A4 4072
-#define a4 3844
-#define B4 3628
-#define C5 3424
-#define c5 3232
-#define D5 3050
-#define d5 2879
-#define E5 2717
-#define F5 2565
-#define f5 2421
-#define G5 2285
-#define g5 2157
-#define A5 2035
-#define a5 1922
-#define B5 1814
-#define C6 1712
-#define c6 1616
-#define D6 1525
-#define d6 1440
-#define E6 1359 
+#define C4 5707
+#define c4 5386
+#define D4 5084
+#define d4 4798
+#define E4 4529
+#define F4 4275
+#define f4 4035
+#define G4 3808
+#define g4 3595
+#define A4 3393
+#define a4 3202
+#define B4 3023
+#define C5 2853
+#define c5 2693
+#define D5 2542
+#define d5 2399
+#define E5 2265
+#define F5 2138
+#define f5 2017
+#define G5 1904
+#define g5 1797
+#define A5 1696
+#define a5 1601
+#define B5 1511
+#define C6 1426
+#define c6 1346
+#define D6 1271
+#define d6 1199
+#define E6 1132
 
 note sounds[]= {
 {d6, 3},
