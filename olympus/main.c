@@ -21,8 +21,7 @@
 #include "config.h"
 #include "doubleBuffer.h"
 #include "submoduleComms.h"
-
-#include <stddef.h>
+#include "sounds.h"
 
 void SystemClock_Config(void);
 
@@ -84,7 +83,9 @@ int main(void)
     setSevenSeg('6', '9');
 
     checkAllSubmodules();
-    
+    //plays some sort of startup sounds
+    Song();
+
     printf("Hello.\r\n");
     while(1)
     {

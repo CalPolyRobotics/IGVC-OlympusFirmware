@@ -9,7 +9,15 @@ extern "C"{
 
 extern TIM_HandleTypeDef htim1;
 
+typedef struct{
+   int freq;
+   int numnotes;} note;
+
+#define BUZZER GPIO_PIN_8
+
 void Tim_Init(void);
+void playNote(uint16_t fre);
+void Song(void);
 
 #ifdef __cplusplus
 }
