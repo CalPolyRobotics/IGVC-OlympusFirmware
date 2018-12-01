@@ -26,8 +26,7 @@ uint8_t pwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint8_t commsPwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 static volatile uint32_t currADCPeriph;
 
-static const uint8_t adc_cfg = 
-    (1 << ADC_REG) | (0x7 << ADC_SEL) | (1 << ADC_RST); 
+//static const uint8_t adc_cfg = (1 << ADC_REG) | (0x7 << ADC_SEL) | (1 << ADC_RST); 
 
 
 Timer_Return adc_poll_data();

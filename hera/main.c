@@ -33,7 +33,7 @@ int main(void)
         if(status == WR_OK){
             runCommsFSM(data);
         }
-        checkTimeout();
+        //checkTimeout();
     }
 }
 

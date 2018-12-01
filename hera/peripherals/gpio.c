@@ -43,7 +43,7 @@ void MX_GPIO_Init(void)
     //---------------------------------------------------------------------------------
     // Initialize Hall-effect Pins
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitStruct.Pin= GPIO_PIN_0 | GPIO_PIN_1;
+    GPIO_InitStruct.Pin= GPIO_PIN_1 | GPIO_PIN_3;
     GPIO_InitStruct.Pull= GPIO_NOPULL;
     GPIO_InitStruct.Mode=GPIO_MODE_AF_OD;
     GPIO_InitStruct.Speed=GPIO_SPEED_FREQ_HIGH;

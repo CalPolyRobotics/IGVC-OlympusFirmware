@@ -48,8 +48,8 @@ static uint8_t get_status_callback(uint8_t *data){
 }
 
 static uint8_t get_speed_callback(uint8_t *data){
-    memset(data, ch1Speed[(ch1SpeedWr + 1u) % 2u], 2u);
-    memset(data + 2u, ch2Speed[(ch2SpeedWr + 1u) % 2u], 2u);
+    memcpy(data, &ch1Speed[(ch1SpeedWr + 1u) % 2u], 2u);
+    memcpy(data + 2u, &ch2Speed[(ch2SpeedWr + 1u) % 2u], 2u);
 
     return WR_OK;
 }
