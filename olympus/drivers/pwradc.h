@@ -18,7 +18,6 @@ enum adc_periph {
 };
 
 void adc_init();
-void commsPwradcCallback();
-uint16_t adc_read(enum adc_periph periph);
 uint16_t adc_conv(enum adc_periph periph);
+void commsPwradcCallback();
 #endif

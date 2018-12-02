@@ -108,6 +108,8 @@ int main(void)
     MX_DMA_Init();
     MX_SPI3_Init();
 
+    adc_init();
+
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
 
