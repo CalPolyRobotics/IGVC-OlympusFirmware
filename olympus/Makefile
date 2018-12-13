@@ -21,6 +21,7 @@ SOURCES += $(HAL)/source/stm32f2xx_hal_gpio.c \
 		   $(HAL)/source/stm32f2xx_hal_pcd.c \
 		   $(HAL)/source/stm32f2xx_hal_pcd_ex.c \
 		   $(HAL)/source/stm32f2xx_ll_usb.c \
+		   $(HAL)/source/stm32f2xx_hal_eth.c \
 		   $(HAL)/source/stm32f2xx_hal.c
 
 SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
@@ -42,6 +43,32 @@ SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usbd_ctlreq.c \
 		   $(USB)/usbd_desc.c \
 		   $(USB)/usbd_ioreq.c
+
+SOURCES += $(ETH)/app_ethernet.c \
+			$(ETH)/eth.c \
+			$(ETH)/ethernetif.c \
+			$(ETH)/tcp_echoserver.c
+
+SOURCES += $(LWIP)/src/core/mem.c \
+			$(LWIP)/src/core/init.c \
+			$(LWIP)/src/core/memp.c \
+			$(LWIP)/src/core/netif.c \
+			$(LWIP)/src/core/timeouts.c \
+			$(LWIP)/src/core/inet_chksum.c \
+			$(LWIP)/src/core/tcp.c \
+			$(LWIP)/src/core/udp.c \
+			$(LWIP)/src/core/tcp_in.c \
+			$(LWIP)/src/core/tcp_out.c \
+			$(LWIP)/src/core/def.c \
+			$(LWIP)/src/core/pbuf.c \
+			$(LWIP)/src/core/ip.c \
+			$(LWIP)/src/netif/ethernet.c \
+			$(LWIP)/src/core/ipv4/ip4.c \
+			$(LWIP)/src/core/ipv4/icmp.c \
+			$(LWIP)/src/core/ipv4/etharp.c \
+			$(LWIP)/src/core/ipv4/dhcp.c \
+			$(LWIP)/src/core/ipv4/ip4_addr.c \
+			$(LWIP)/src/core/ipv4/ip4_frag.c
 
 SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/console.c \
@@ -72,6 +99,9 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(HAL)/include \
 			-I$(CMSIS)/include \
 			-I$(USB)/include \
+			-I$(ETH) \
+			-I$(LWIP)/src/include \
+			-I$(LWIP)/system \
 			-I$(SYSTEM) \
 			-I$(CONFIG)\
 			-I$(DRIVERS)\

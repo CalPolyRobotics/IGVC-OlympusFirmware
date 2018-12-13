@@ -11,6 +11,7 @@ DRIVERS = drivers
 UTILS = utils
 PERIPH = peripherals
 USB = $(PERIPH)/USB
+ETH = peripherals/ETH
 SYSTEM = system
 
 ELF = $(BUILDDIR)/program.elf

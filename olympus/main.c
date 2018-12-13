@@ -31,7 +31,65 @@
 #include "hephaestus.h"
 #include "janus.h"
 
+#include "lwip/opt.h"
+#include "lwip/init.h"
+#include "lwip/netif.h"
+#include "lwip/timeouts.h"
+#include "netif/etharp.h"
+#include "eth.h"
+#include "ethernetif.h"
+#include "tcp_echoserver.h"
+#include "app_ethernet.h"
+
+#include <stddef.h>
+
 static void SystemClock_Config(void);
+
+void SystemClock_Config(void);
+
+Timer_Return led6Toggle(void* dummy)
+{
+    HAL_GPIO_TogglePin(GPIO_DEBUG_6);
+
+    return CONTINUE_TIMER;
+}
+
+Timer_Return updateSteerDataLink(void* dummy)
+{
+    if(updateHeraSteer() != COMMS_OK)
+    {
+        setSevenSeg(HERA_STEER_FAIL);
+        printf("UpdateHeraSteer Failed\r\n");
+    }
+
+    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
+    {
+        setSevenSeg(HEPHAESTUS_STEER_FAIL);
+        printf("UpdateHephaestusSteerPot Failed\r\n");
+    }
+
+    return CONTINUE_TIMER;
+}
+
+void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
+{
+    if (status == I2C_ACK)
+    {
+        printf("Zeus Data: ");
+        while (len--)
+        {
+            printf("%X ", *data++);
+        }
+        printf("\r\n");
+    } else if (status == I2C_NACK) {
+        printf("Zeus NACK\r\n");
+    } else {
+        printf("Zeus ERR\r\n");
+    }
+}
+
+struct netif gnetif;
+>>>>>>> Implement initial ethernet code for revision 3
 
 int main(void)
 {
@@ -56,6 +114,11 @@ int main(void)
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
 
+    lwip_init();
+    Netif_Config();
+    tcp_echoserver_init();
+    User_notification(&gnetif);
+
     initSpeedDAC();
 
     setSevenSeg("42");
@@ -74,6 +137,9 @@ int main(void)
         serviceTxDma();
         serviceCallbackTimer();
         serviceUSBWrite();
+
+        ethernetif_input(&gnetif);
+        sys_check_timeouts();
 
         consoleProcessBytes();
 

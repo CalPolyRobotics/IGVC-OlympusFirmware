@@ -86,4 +86,14 @@ void WWDG_IRQHandler(void)
     while(1);
 }
 
+/**
+  * @brief  This function handles EXTI15_10
+  * @param  None
+  * @retval None
+  */
+void EXTI15_10_IRQHandler(void) 
+{
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);
+}
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
