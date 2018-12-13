@@ -61,7 +61,6 @@ void toggleLED3(Packet_t* packet)
 /** XXX - Remove these when they are reimplemented **/
 static uint8_t status[5] = {0};
 
-//static hephaestusData_t hephaestusData;
 static olympusData_t olympusData;
 
 static void commsSetTurnSignal(uint8_t* data){return;}
