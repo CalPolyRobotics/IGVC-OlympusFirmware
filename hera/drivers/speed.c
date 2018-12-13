@@ -2,12 +2,13 @@
 #include "stm32f0xx_hal.h"
 #include "systemClock.h"
 #include <stdint.h>
+#include <string.h>
 
 #define PING_PONG_SIZE ((size_t) 2u)
 
 #define MM_PER_INT     ((uint32_t) 220u)
 #define CK_FREQ        ((uint32_t) 48000000u)
-#define MIN_TIMEOUT    ((uint32_t) 2500u)
+#define MIN_TIMEOUT    ((uint32_t) 1500u)
 
 uint16_t ch1Speed[2];
 uint16_t ch2Speed[2];
@@ -28,6 +29,9 @@ volatile int ch2SpeedAvgIdx = 0;
 
 volatile int ch1SpeedWr = 0;
 volatile int ch2SpeedWr = 0;
+
+volatile uint32_t ch1SysCount = 0;
+volatile uint32_t ch2SysCount = 0;
 
 static uint16_t diffCountsToSpeedInMMs(uint32_t diffCounts);
 
@@ -55,6 +59,8 @@ void TIM2_IRQHandler() {
 
         ch1Speed[ch1SpeedWr] = ch1SpeedSum / NUM_IN_AVGS;
         ch1SpeedWr = (ch1SpeedWr + 1) % 2;
+
+        ch1SysCount = systickCount;
     }
 
     if (TIM2->SR & TIM_SR_CC4IF) {
@@ -77,6 +83,8 @@ void TIM2_IRQHandler() {
 
         ch2Speed[ch2SpeedWr] = ch2SpeedSum / NUM_IN_AVGS;
         ch2SpeedWr = (ch2SpeedWr + 1) % 2;
+
+        ch2SysCount = systickCount;
     }
 }
 
@@ -92,25 +100,32 @@ uint16_t diffCountsToSpeedInMMs(uint32_t diffCounts) {
     return UINT16_MAX;
 }
 
-/**
 void checkTimeout() {
     uint32_t currSystick = systickCount;
-    uint32_t curr = TIM2 -> CNT;
 
-   TIM2 -> DIER &= ~TIM_DIER_CC1IE;
+    TIM2 -> DIER &= ~TIM_DIER_CC1IE;
     if (currSystick > (ch1SysCount + MIN_TIMEOUT)) {
-       ch1Speed[ch1SpeedWr] = 0;
-       ch1SysCount = systickCount;
-       ch1Count = curr;
-    }
-   TIM2 -> DIER |= TIM_DIER_CC1IE;
+        ch1SpeedSum = 0;
+        ch1SpeedAvgIdx = 0;
+        memset(ch1SpeedAvg, 0, sizeof(ch1SpeedAvg));
 
-   TIM2 -> DIER &= ~TIM_DIER_CC2IE;
-   if (currSystick > (ch2SysCount + MIN_TIMEOUT)) {
-       ch2Speed[ch2SpeedWr] = 0;
-       ch2SysCount = systickCount;
-       ch2Count = curr;
+        ch1Speed[ch1SpeedWr] = 0;
+        ch1SpeedWr = (ch1SpeedWr + 1) % 2;
+
+        ch1SysCount = systickCount;
     }
-   TIM2 -> DIER |= TIM_DIER_CC2IE;
+    TIM2 -> DIER &= ~TIM_DIER_CC1IE;
+
+    TIM2 -> DIER &= ~TIM_DIER_CC4IE;
+    if (currSystick > (ch2SysCount + MIN_TIMEOUT)) {
+        ch2SpeedSum = 0;
+        ch2SpeedAvgIdx = 0;
+        memset(ch2SpeedAvg, 0, sizeof(ch2SpeedAvg));
+
+        ch2Speed[ch2SpeedWr] = 0;
+        ch2SpeedWr = (ch2SpeedWr + 1) % 2;
+
+        ch2SysCount = systickCount;
+    }
+    TIM2 -> DIER |= TIM_DIER_CC4IE;
 }
-**/
