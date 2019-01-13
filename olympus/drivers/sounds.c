@@ -33,14 +33,22 @@
 #define D6 1271
 #define d6 1199
 #define E6 1132
+#define g7 899
 
-note sounds[]= {
+note windows[]= {
 {d6, 3},
 {d5, 1},
 {a5, 4},
 {g5, 5},
 {d6, 3},
 {a5, 8}
+};
+
+note shutdown[]={
+{g7, 3},
+{d6, 3},
+{g5, 3},
+{a5, 4}
 };
   
 uint8_t idx = 0;
@@ -49,15 +57,15 @@ uint16_t noteslen[13] = {
     0, 107, 214, 321, 428, 535, 642, 750, 857, 964, 1071, 1178, 1285};
     //to calculate length use #16th notes * .25 * (1/tempo)*1000*60
 
-Timer_Return timing(void*dummy)
+Timer_Return startup(void*dummy)
 {
     
-    if (idx < sizeof(sounds)/sizeof(note )){
-    playNote(sounds[idx].freq);
-    addCallbackTimer(noteslen[sounds[idx].numnotes], timing, NULL);
+    if (idx < sizeof(windows)/sizeof(note )){
+    playNote(windows[idx].freq);
+    addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);
     idx+=1 ;
     }
-    else if (idx == sizeof(sounds)/sizeof(note)){
+    else if (idx == sizeof(windows)/sizeof(note)){
     playNote(0);
     }
     return DISABLE_TIMER;
@@ -89,5 +97,21 @@ void Tim_Init(void){
 
 void Song(void){
     Tim_Init();    
-    addCallbackTimer(1, timing, NULL);  
+    addCallbackTimer(1, startup, NULL);  
+}
+
+Timer_Return failure(void*dummy){
+    if (idx < sizeof(shutdown)/sizeof(note )){
+    playNote(shutdown[idx].freq);
+    addCallbackTimer(noteslen[shutdown[idx].numnotes], failure, NULL);
+    idx+=1 ;                                      
+    }                                             
+    else if (idx == sizeof(shutdown)/sizeof(note)){
+    playNote(0);
+    }
+    return DISABLE_TIMER;
+    }
+
+void Error(void){
+    addCallbackTimer(1, failure, NULL);
 }

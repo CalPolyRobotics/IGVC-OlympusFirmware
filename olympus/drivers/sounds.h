@@ -18,6 +18,7 @@ typedef struct{
 void Tim_Init(void);
 void playNote(uint16_t fre);
 void Song(void);
+void Error(void);
 
 #ifdef __cplusplus
 }
