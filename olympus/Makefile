@@ -69,6 +69,7 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/hera.c \
 		   $(DRIVERS)/hephaestus.c\
 			$(DRIVERS)/sounds.c\
+			$(DRIVERS)/error.c\
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
