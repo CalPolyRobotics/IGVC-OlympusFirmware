@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
+
 typedef struct {
     uint8_t startByte[2];
     uint8_t msgType;
@@ -39,6 +40,4 @@ typedef struct olympusData{
 typedef void (*commsCallback)(uint8_t*);
 
 void runCommsFSM(char data);
-
-
 #endif
