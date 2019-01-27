@@ -12,6 +12,7 @@
 
 #include "janus.h"
 #include "spi.h"
+#include "speedDAC.h"
 
 janusData_t janusData;
 
@@ -44,14 +45,54 @@ commsStatus_t updateFNR()
                                             sizeof(fnr_t), SPI_TIMEOUT);
 
     uint8_t message = submoduleCommsBuff[0];
-    if (status != COMMS_OK && message <= 2)
+    if (status == COMMS_OK && message <= 2)
     {
         *janusData.fnr = message;
     }
     else
     {
-        *janusData.fnr = FNR_INVALID;     
+        *janusData.fnr = FNR_INVALID;
     }
 
     return status;
+}
+
+#include <stdio.h>
+/**
+ * \return state[0,1]
+ */
+commsStatus_t updateCTRL()
+{
+    commsStatus_t status = messageSubmodule(JANUS, JANUS_GET_CTRL, submoduleCommsBuff, 0u,
+                                            sizeof(uint8_t), SPI_TIMEOUT);
+
+    uint8_t message = submoduleCommsBuff[0];
+    if (status == COMMS_OK && message <= 1)
+    {
+        *janusData.ctrl = message;
+
+        if(message){
+            enableSpeedDAC();
+        }else{
+            disableSpeedDAC();
+        }
+    }
+
+    printf("The stuff %d\r\n", *janusData.ctrl);
+
+    return status;
+}
+
+commsStatus_t updateJanus(){
+    commsStatus_t stat;
+
+    if((stat = updateCTRL()) != COMMS_OK){
+        return stat;
+    }
+
+    if((stat = updateFNR()) != COMMS_OK){
+        return stat;
+    }
+
+    return COMMS_OK;
 }

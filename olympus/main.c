@@ -24,6 +24,7 @@
 
 #include "hephaestus.h"
 #include "hera.h"
+#include "janus.h"
 
 #include <stddef.h>
 
@@ -116,6 +117,7 @@ int main(void)
     checkAllSubmodules();
 
     addCallbackTimer(1000, led6Toggle, NULL);
+    addCallbackTimer(1000, updateJanus, NULL);
     addCallbackTimer(10, updateSteerDataLink, NULL);
     addCallbackTimer(5, updateSpeed, NULL);
 
