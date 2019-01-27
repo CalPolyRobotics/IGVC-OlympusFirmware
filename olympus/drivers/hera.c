@@ -24,7 +24,10 @@ commsStatus_t updateHeraSpeed()
     commsStatus_t status = messageSubmodule(HERA, HERA_SPEED, submoduleCommsBuff, 0u, SPEED_LENGTH,
                                             SPI_TIMEOUT);
 
-    memcpy(&heraData.speed, submoduleCommsBuff, SPEED_LENGTH);
+    if(status == COMMS_OK){
+        memcpy(&heraData.speed, submoduleCommsBuff, SPEED_LENGTH);
+    }
+
     return status;
 }
 
@@ -32,8 +35,10 @@ commsStatus_t updateHeraSteer()
 {
     commsStatus_t status = messageSubmodule(HERA, HERA_STEER, submoduleCommsBuff, 0u, STEER_LENGTH,
                                             SPI_TIMEOUT);
+    if(status == COMMS_OK){
+        memcpy(&heraData.steer, submoduleCommsBuff, STEER_LENGTH);
+    }
 
-    memcpy(&heraData.steer, submoduleCommsBuff, STEER_LENGTH);
     return status;
 }
 
@@ -42,7 +47,10 @@ commsStatus_t updateHeraSonar()
     commsStatus_t status = messageSubmodule(HERA, HERA_SONAR, submoduleCommsBuff, 0u, SONAR_LENGTH,
                                             SPI_TIMEOUT);
 
-    memcpy(&heraData.sonar, submoduleCommsBuff, SONAR_LENGTH);
+    if(status == COMMS_OK){
+        memcpy(&heraData.sonar, submoduleCommsBuff, SONAR_LENGTH);
+    }
+
     return status;
 }
 

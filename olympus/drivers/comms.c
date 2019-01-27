@@ -61,7 +61,6 @@ void toggleLED3(Packet_t* packet)
 /** XXX - Remove these when they are reimplemented **/
 static uint8_t status[5] = {0};
 
-static hephaestusData_t hephaestusData;
 static olympusData_t olympusData;
 
 static void commsSetTurnSignal(uint8_t* data){return;}
@@ -95,7 +94,7 @@ static packetResponse_t response[] = {
     // Hephaestus
     {1u,    inputBuf, 0u,   NULL,                    commsSetSteering},    // (0x14)
     {2u,    inputBuf, 0u,   NULL,                    commsSetBrake},       // (0x16)
-    {0u,    NULL,     2u,   hephaestusData.steering, NULL},                // (0x18)
+    {0u,    NULL,     0u,   NULL,                    NULL},                // (0x18)
 
     // Olympus
     {2u,    inputBuf, 0u,   NULL,                    commsSetSpeed},       // (0x1A)

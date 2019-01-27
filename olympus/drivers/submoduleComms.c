@@ -79,6 +79,7 @@ void SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_
     uint32_t tickend = HAL_GetTick() + timeout;
 
     /* Transfer loop */
+    __disable_irq();
     while (size > 0u && HAL_GetTick() < tickend)
     {
         __HAL_SPI_1LINE_RX(hspi);
@@ -94,6 +95,7 @@ void SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_
             size--;
         }
     }
+    __enable_irq();
 }
 
 commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size,

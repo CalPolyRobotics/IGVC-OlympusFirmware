@@ -15,6 +15,7 @@ HAL = $(LIBRARIES)/STM32F0xx_HAL_Driver
 BOOT_APP = ../usbFlasher/Boot.py
 
 DRIVERS = drivers
+PERIPHS = peripherals
 
 SOURCES += main.c
 
@@ -27,6 +28,12 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 SOURCES += $(DRIVERS)/comms.c
 
 SOURCES += $(PERIPHS)/adc.c
+
+SOURCES += $(DRIVERS)/speed.c
+
+SOURCES += $(PERIPHS)/gpio.c
+
+SOURCES += $(PERIPHS)/tim.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -46,6 +53,7 @@ OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 INCLUDES += -I$(HAL)/inc \
 			-I$(CMSIS)/inc \
 			-I$(DRIVERS) \
+			-I$(PERIPHS) \
 			-I$(SYSTEM) \
 			-I$(STD_PERIPHS) \
 			-I$(STD_DRIVERS) \

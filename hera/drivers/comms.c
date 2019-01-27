@@ -6,6 +6,7 @@
 #include "adc.h"
 #include "boot.h"
 #include "comms.h"
+#include "speed.h"
 
 static uint8_t get_status_callback(uint8_t *data);
 static uint8_t get_speed_callback(uint8_t *data);
@@ -47,8 +48,8 @@ static uint8_t get_status_callback(uint8_t *data){
 }
 
 static uint8_t get_speed_callback(uint8_t *data){
-    /* TODO - Implement Speed Data */
-    memset(data, 0x55u, msgResp[SPEED_IDX].txDataLength);
+    memcpy(data, &ch1Speed[(ch1SpeedWr + 1u) % 2u], 2u);
+    memcpy(data + 2u, &ch2Speed[(ch2SpeedWr + 1u) % 2u], 2u);
 
     return WR_OK;
 }
