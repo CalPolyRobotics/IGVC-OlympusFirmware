@@ -367,7 +367,7 @@ static void console_setLED(uint32_t argc, char** argv)
 
 static void console_setSegment(uint32_t argc, char** argv)
 {
-    setSevenSeg(*argv[0], *argv[1]);
+    setSevenSeg(*argv);
 }
 
 struct adc_cmd {

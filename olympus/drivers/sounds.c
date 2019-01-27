@@ -113,5 +113,6 @@ Timer_Return failure(void*dummy){
     }
 
 void Error(void){
+    Tim_Init();
     addCallbackTimer(1, failure, NULL);
 }

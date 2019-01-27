@@ -124,9 +124,9 @@ uint8_t charToSevenSeg(char c){
  * A low value in the IODIR register make the GPIO output
  * whatever is in the GPIO register for that pin
  */
-void setSevenSeg(char c1, char c2)
+void setSevenSeg(char* mess)
 {
-    u16_t regVal = uint8ToGPIOReg(charToSevenSeg(c1), charToSevenSeg(c2));
+    u16_t regVal = uint8ToGPIOReg(charToSevenSeg(mess[0]), charToSevenSeg(mess[1]));
 
     uint8_t message[4] = {MCP23C17_WRITE, REG_IODIRA_ADDR, regVal.u8[0], regVal.u8[1]};
 
