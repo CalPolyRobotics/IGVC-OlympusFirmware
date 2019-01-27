@@ -56,7 +56,6 @@ static void console_setFNR(uint32_t, char**);
 static void console_getFNR(uint32_t, char**);
 
 // Speed Commands
-static void console_setEnableSpeed(uint32_t, char**);
 static void console_setSpeedTarget(uint32_t, char**);
 static void console_getSpeedTarget(uint32_t, char**);
 
@@ -81,7 +80,6 @@ static ConsoleCommand commands[] = {
     {"kill", 0, console_kill},
     {"setFNR", 1, console_setFNR},
     {"getFNR", 0, console_getFNR},
-    {"setEnableSpeed", 0, console_setEnableSpeed},
     {"setSpeedTarget", 1, console_setSpeedTarget},
     {"getSpeedTarget", 0, console_getSpeedTarget},
     {"setSteerTarget", 1, console_setSteerTarget},
@@ -413,21 +411,6 @@ static void console_setFNR(uint32_t argc, char** argv)
 static void console_getFNR(uint32_t argc, char** argv)
 {
     printf("%u", *janusData.fnr);
-}
-
-/**
- * A value of zero will disable the speed output,
- * a non-zero value [0,UINT16_MAX] will enable the speed output,
- */
-static void console_setEnableSpeed(uint32_t argc, char** argv){
-    uint16_t num = parseUint16(argv[0]);
-    if(!errno){
-        if(num){
-            enableSpeedDAC();
-        }else{
-            disableSpeedDAC();
-        }
-    }
 }
 
 static void console_setSpeedTarget(uint32_t argc, char** argv)
