@@ -12,53 +12,50 @@
 #include "submoduleComms.h"
 #include "timerCallback.h"
 
-#define ADC_REG_SEL 7 //start of register select
+#define ADC_BUFF_SIZE (ADC_PERIPH_LAST_ENUM * sizeof(uint16_t))
 
 //RESET: 0 0 0 0 RESET X X X
-#define RESET_REG_SEL 0x00 //select write to reset register
+#define RESET_REG_SEL 0x10 //select write to reset register
 
-#define RESET_ALL 0x01 //reset all registers and FIFO buffer
-#define RESET_FIFO 0x00 //reset just FIFO
-
-#define RESET_RES 3 //RESET bit
+#define RESET_ALL 0x00 //reset all registers and FIFO buffer
+#define RESET_FIFO 0x08 //reset just FIFO
 
 //SETUP: 0 1 CKSEL1 CKSEL0 REFSEL1 REFSEL0 X X
-#define SETUP_REG_SEL 0x01 //select write to setup register
+#define SETUP_REG_SEL 0x40 //select write to setup register
 
 #define SETUP_CK_00 0x00 //setup clock mode 0
-#define SETUP_CK_01 0x01 //setup clock mode 1
-#define SETUP_CK_10 0x02 //setup clock mode 2
+#define SETUP_CK_01 0x10 //setup clock mode 1
+#define SETUP_CK_10 0x20 //setup clock mode 2
 
 #define SETUP_REF_00 0x00 //setup reference mode 0
-#define SETUP_REF_01 0x01 //setup reference mode 1
-#define SETUP_REF_10 0x02 //setup reference mode 2
-#define SETUP_REF_11 0x03 //setup reference mode 3
-
-#define SETUP_CK 5
-#define SETUP_REF 3
+#define SETUP_REF_01 0x04 //setup reference mode 1
+#define SETUP_REF_10 0x08 //setup reference mode 2
+#define SETUP_REF_11 0x0C //setup reference mode 3
 
 /* CONVERSION: 0 CHSEL3 CHSEL2 CHSEL1 CHSEL0 SCAN1 SCAN0 X */
-#define CONVERSION_REG_SEL 0x00 //select write to conversion register
-
-static enum adc_periph commsOrder[] = {batt_v, batt_i, twlv_v, twlv_i, fv_v, fv_i, thr_v, thr_i};
+#define CONVERSION_REG_SEL 0x80 //select write to conversion register
 
 #define CONVERSION_SCAN_00 0x00 //one result per channel
-#define CONVERSION_SCAN_01 0x01 //one result per channel
-#define CONVERSION_SCAN_10 0x10 //multiple scans averaged to produce one result
+#define CONVERSION_SCAN_01 0x02 //one result per channel
+#define CONVERSION_SCAN_10 0x04 //multiple scans averaged to produce one result
 
-#define CONVERSION_CH 6
-#define CONVERSION_SCAN 2
+#define CONVERSION_CH 3u
+
+#define MAX_ADC_IDX 7
+
+static enum adc_periph commsOrder[] = {batt_v, batt_i, twlv_v, twlv_i, fv_v, fv_i, thr_v, thr_i};
 
 /* Value index is based off enum set in header */
 static uint32_t muls[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
 static uint32_t divs[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000};
 
-uint8_t pwradcValues[16] = {0};
-static volatile uint32_t currADCPeriph;
+uint8_t pwradcValues[ADC_BUFF_SIZE] = {0};
 
 Timer_Return adc_poll_data();
 
 extern olympusData_t olympusData;
+
+#include <stdio.h>
 
 void adc_init()
 {
@@ -66,17 +63,17 @@ void adc_init()
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
     /* reset all registers to their default values */
-    uint8_t data = (RESET_REG_SEL << ADC_REG_SEL) | (RESET_ALL << RESET_RES);
-    SPI_Transmit(&hspi3, &data, sizeof(data), 10);
+    uint8_t data[2] = {
+        RESET_REG_SEL | RESET_ALL,
+        SETUP_REG_SEL | SETUP_CK_10 | SETUP_REF_10
+    };
 
-    /* configure ADC to use clock mode 2 and the internal reference with no wait time */
-    data = (SETUP_REG_SEL << ADC_REG_SEL) | (SETUP_CK_10 << SETUP_CK) | (SETUP_REF_10 << SETUP_REF);
-    SPI_Transmit(&hspi3, &data, sizeof(data), 10);
+    SPI_Transmit(&hspi3, data, sizeof(data), 10);
 
     /* pull CS pin high */
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
 
-    addCallbackTimer(1000, adc_poll_data, NULL);
+    addCallbackTimer(10, adc_poll_data, NULL);
 }
 
 
@@ -111,12 +108,14 @@ Timer_Return adc_poll_data() {
      * pull CS pin low */
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
-    /* Increment currADCPeriph to next peripheral */
-    currADCPeriph = (currADCPeriph + 1) % ADC_PERIPH_LAST_ENUM;
-    uint8_t data = (CONVERSION_REG_SEL << ADC_REG_SEL) | (currADCPeriph << CONVERSION_CH) | (CONVERSION_SCAN_00 << CONVERSION_SCAN);
-    SPI_Transmit(&hspi3, &data, sizeof(data), 10);
+    uint8_t data = CONVERSION_REG_SEL | (MAX_ADC_IDX << CONVERSION_CH) | CONVERSION_SCAN_00;
+    SPI_Transmit(&hspi3, &data, sizeof(uint8_t), 10);
 
-    SPI_Receive(&hspi3, &pwradcValues[currADCPeriph], sizeof(pwradcValues[currADCPeriph]), 10);
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
+
+    SPI_Receive(&hspi3, pwradcValues, ADC_BUFF_SIZE, 10);
     
     /* pull CS pin high */
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
