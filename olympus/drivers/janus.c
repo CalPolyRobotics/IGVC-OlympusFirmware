@@ -78,8 +78,6 @@ commsStatus_t updateCTRL()
         }
     }
 
-    printf("The stuff %d\r\n", *janusData.ctrl);
-
     return status;
 }
 
