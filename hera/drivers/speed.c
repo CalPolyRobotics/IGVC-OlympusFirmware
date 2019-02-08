@@ -6,9 +6,9 @@
 
 #define PING_PONG_SIZE ((size_t) 2u)
 
-#define MM_PER_INT     ((uint32_t) 220u)
+#define UM_PER_INT     ((uint32_t) 1075u)
 #define CK_FREQ        ((uint32_t) 48000000u)
-#define MIN_TIMEOUT    ((uint32_t) 1500u)
+#define MIN_TIMEOUT    ((uint32_t) 1075u)
 
 uint16_t ch1Speed[2];
 uint16_t ch2Speed[2];
@@ -93,8 +93,8 @@ uint16_t diffCountsToSpeedInMMs(uint32_t diffCounts) {
         // Multiply CK_FREQ by 64 to decrease error of integer division
         uint32_t ckpdiff = ((CK_FREQ * 64) / diffCounts);
 
-        // Remove 64 to get final speed
-        return (uint16_t)((ckpdiff * MM_PER_INT) / 64);
+        // Remove 64 to get final speed and divide by 1000 to get speed in mm/s
+        return (uint16_t)((ckpdiff * UM_PER_INT) / 64000);
     }
 
     return UINT16_MAX;
