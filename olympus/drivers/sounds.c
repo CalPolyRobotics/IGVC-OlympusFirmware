@@ -4,7 +4,7 @@
 #include "timerCallback.h"
 #include <stdint.h>
 
-#define C4 5707
+#define C4 5707  //these are the correct counters for these particular notes
 #define c4 5386
 #define D4 5084
 #define d4 4798
@@ -35,7 +35,7 @@
 #define E6 1132
 #define g7 899
 
-note windows[]= {
+note windows[]= {  //notes and lengths needed to play windows start up sound
 {d6, 3},
 {d5, 1},
 {a5, 4},
@@ -44,39 +44,39 @@ note windows[]= {
 {a5, 8}
 };
 
-note shutdown[]={
+note shutdown[]={   //plays the windows shutdown sound 
 {g7, 3},
 {d6, 3},
 {g5, 3},
 {a5, 4}
 };
   
-uint8_t idx = 0;
+uint8_t idx = 0; //sets the index to 0
 
 uint16_t noteslen[13] = {
     0, 107, 214, 321, 428, 535, 642, 750, 857, 964, 1071, 1178, 1285};
     //to calculate length use #16th notes * .25 * (1/tempo)*1000*60
 
-Timer_Return startup(void*dummy)
+Timer_Return startup(void*dummy)//creates a call-back timer that will check back in
 {
     
     if (idx < sizeof(windows)/sizeof(note )){
-    playNote(windows[idx].freq);
-    addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);
-    idx+=1 ;
+    playNote(windows[idx].freq); //play the note give by the struct
+    addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);//create a new callback timer
+    idx+=1 ;//add one to the index 
     }
     else if (idx == sizeof(windows)/sizeof(note)){
-    playNote(0);
+    playNote(0);// set the output to 0 so that no note plays
     }
-    return DISABLE_TIMER;
+    return DISABLE_TIMER;//kill the current timer
     }
 
-void playNote(uint16_t fre){
-    TIM4 -> ARR = fre*2;
-    TIM4 -> CCR3 = fre;
+void playNote(uint16_t fre){//plays a note 
+    TIM4 -> ARR = fre*2;//set he auto-reload register to 2 the number given
+    TIM4 -> CCR3 = fre;//sets the capture complare register to the number passed in
 }
 
-void Tim_Init(void){
+void Tim_Init(void){//intializes the timer so that a frequency can be assigned to it
     __GPIOB_CLK_ENABLE();
     __TIM4_CLK_ENABLE();
     TIM4 -> PSC = 19;
@@ -95,12 +95,12 @@ void Tim_Init(void){
     HAL_GPIO_Init(GPIOB, &GPIO_InitTypeDef ); 
 }
 
-void Song(void){
+void Song(void){//sets up the timer and starts the callbacks to the windows startup 
     Tim_Init();    
     addCallbackTimer(1, startup, NULL);  
 }
 
-Timer_Return failure(void*dummy){
+Timer_Return failure(void*dummy){//plays the windows shutdown sounds with callback timers
     if (idx < sizeof(shutdown)/sizeof(note )){
     playNote(shutdown[idx].freq);
     addCallbackTimer(noteslen[shutdown[idx].numnotes], failure, NULL);
@@ -112,7 +112,6 @@ Timer_Return failure(void*dummy){
     return DISABLE_TIMER;
     }
 
-void Error(void){
-    Tim_Init();
+void Error(void){//starts the callbacks to the shutdown sounds
     addCallbackTimer(1, failure, NULL);
 }

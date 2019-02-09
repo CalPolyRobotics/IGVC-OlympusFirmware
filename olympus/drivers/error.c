@@ -10,7 +10,7 @@ void assert_failed(uint8_t* file, uint32_t line)
 {
     /*User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    Error();
+    Error();//plays the shutdown noise to tell you something went wrong
 }
 
 
@@ -18,15 +18,16 @@ void ErrorHandler(char* type, THREATLevel severity)
 {
 
     if (severity == KILL) {
-        killBoard();
+        killBoard();//kills all functionality of the board
     }
 
     if (severity == ALERT) {
-        Error();
+        Error();//plays the noise to alert you
     }
 
     if (severity == NOTIFY) {
-        setSevenSeg(type);
+        setSevenSeg(type);//set the sevenseg to the error
+        Error();//plays the song to further alert you
     }
 
 }
