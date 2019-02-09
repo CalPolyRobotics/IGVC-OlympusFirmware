@@ -23,12 +23,46 @@
 #include "submoduleComms.h"
 #include "sounds.h"
 #include "error.h"
+#include "hephaestus.h"
+#include "hera.h"
+#include "janus.h"
+#include <stddef.h>
 
 void SystemClock_Config(void);
 
 Timer_Return led6Toggle(void* dummy)
 {
     HAL_GPIO_TogglePin(GPIO_DEBUG_6);
+
+    return CONTINUE_TIMER;
+}
+
+Timer_Return updateSteerDataLink(void* dummy)
+{
+    if(updateHeraSteer() != COMMS_OK)
+    {
+        setSevenSeg(HERA_STEER_FAIL);
+        printf("UpdateHeraSteer Failed\r\n");
+    }
+
+    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
+    {
+        setSevenSeg(HEPHAESTUS_STEER_FAIL);
+        printf("UpdateHephaestusSteerPot Failed\r\n");
+    }
+
+    return CONTINUE_TIMER;
+}
+
+extern heraData_t heraData;
+Timer_Return updateSpeed(void* dummy)
+{
+    if(updateHeraSpeed() != COMMS_OK)
+    {
+        setSevenSeg(HERA_SPEED_FAIL);
+        printf("UpdateHeraSpeed Failed\r\n");
+    }
+
 
     return CONTINUE_TIMER;
 }
@@ -78,14 +112,18 @@ int main(void)
 
     initSpeedDAC();
 
-    addCallbackTimer(1000, led6Toggle, NULL);
+    setSevenSeg("42");
 
-
-    setSevenSeg("69");
+    checkAllSubmodules();
 
     checkAllSubmodules();
     //plays some sort of startup sounds
     Song();
+
+    addCallbackTimer(1000, led6Toggle, NULL);
+    addCallbackTimer(1000, updateJanus, NULL);
+    addCallbackTimer(10, updateSteerDataLink, NULL);
+    addCallbackTimer(5, updateSpeed, NULL);
 
     printf("Hello.\r\n");
     while(1)

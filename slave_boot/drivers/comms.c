@@ -13,21 +13,21 @@ typedef struct{
     uint32_t  key;
 }header_t;
 
-static uint32_t size = 0;
-static uint32_t checksum = 0;
+static uint32_t size = 0u;
+static uint32_t checksum = 0u;
 static bool flashComplete = false;
 
-static uint8_t *get_status_callback(uint8_t *data);
-static uint8_t *write_header(uint8_t *data);
-static uint8_t *write_data(uint8_t *data);
-static uint8_t *run_checksum(uint8_t *data);
+static uint8_t get_status_callback(uint8_t *data);
+static uint8_t write_header(uint8_t *data);
+static uint8_t write_data(uint8_t *data);
+static uint8_t run_checksum(uint8_t *data);
 
 /** tx or rx DataLengths can be no longer than 253(rx) 253(tx) **/
 const msgInfo_t msgResp[NUM_MSGS] = {
-    {0,  1, get_status_callback},      /** 0 Get Status  **/
-    {8,  1, write_header},             /** 1 Header      **/
-    {64, 1, write_data},               /** 2 Data        **/
-    {4,  1, run_checksum},             /** 3 Checksum    **/
+    {0,  0, get_status_callback},      /** 0 Get Status  **/
+    {8,  0, write_header},             /** 1 Header      **/
+    {64, 0, write_data},               /** 2 Data        **/
+    {4,  0, run_checksum},             /** 3 Checksum    **/
     {0,  0, NULL},                     /** 4 Unused      **/
     {0,  0, NULL},                     /** 5 Unused      **/
     {0,  0, NULL},                     /** 6 Unused      **/
@@ -37,19 +37,17 @@ const msgInfo_t msgResp[NUM_MSGS] = {
     {0,  0, NULL},                     /** 10 Unused     **/
 };
 
-static uint8_t *get_status_callback(uint8_t *data){
-    data[0] = WR_OK;
-    return data;
+static uint8_t get_status_callback(uint8_t *data){
+    return WR_OK;
 }
 
-static uint8_t *write_header(uint8_t *data){
+static uint8_t write_header(uint8_t *data){
     /** memcpy data to avoid 32-bit address alignment issues **/
     header_t header;
     memcpy(&header, data, sizeof(header_t));
 
     if(header.key != ERASE_FLASH_KEY || header.size > APP_MAX_SIZE){
-        data[0] = WR_ERR;
-        return data;
+        return WR_ERR;
     }
 
     /* Initialize static variables */
@@ -60,17 +58,15 @@ static uint8_t *write_header(uint8_t *data){
     /* Initialize Flash */
     writeInit(header.size);
 
-    data[0] = WR_OK;
-    return data;
+    return WR_OK;
 }
 
-static uint8_t *write_data(uint8_t *data){
+static uint8_t write_data(uint8_t *data){
     static uint32_t count = 0;
     static uint16_t* addr = (uint16_t*)APP_START_ADDR;
 
     if(size == 0){
-        data[0] = WR_ERR;
-        return data;
+        return WR_ERR;
     }
 
     /* Write data 16 bits at a time */
@@ -101,14 +97,12 @@ static uint8_t *write_data(uint8_t *data){
         flashComplete = true;
     }
 
-    data[0] = WR_OK;
-    return data;
+    return WR_OK;
 }
 
-static uint8_t *run_checksum(uint8_t *data){
+static uint8_t run_checksum(uint8_t *data){
     if(!flashComplete){
-        data[0] = WR_ERR;
-        return data;
+        return WR_ERR;
     }
 
     uint32_t hostChecksum = (uint32_t)data[3] << 24u |
@@ -117,17 +111,14 @@ static uint8_t *run_checksum(uint8_t *data){
                             (uint32_t)data[0];
 
     if(hostChecksum != checksum){
-        data[0] = WR_ERR;
-        return data;
+        return WR_ERR;
     }
 
     /* Write success since jumpToApp wont return */
-    data[0] = WR_OK;
-    writeResponse(data, 1u);
+    writeResponse(WR_OK, NULL, 0u);
 
     jumpToApp(APP_START_ADDR);
 
     /* Application should not get to this point because of jump */
-    data[0] = WR_OK;
-    return data;
+    return WR_ERR;
 }

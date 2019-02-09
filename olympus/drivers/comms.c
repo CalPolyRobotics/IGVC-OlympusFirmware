@@ -61,17 +61,16 @@ void toggleLED3(Packet_t* packet)
 /** XXX - Remove these when they are reimplemented **/
 static uint8_t status[5] = {0};
 
-extern heraData_t heraData;
-static janusData_t janusData;
-static hephaestusData_t hephaestusData;
 static olympusData_t olympusData;
 
 static void commsSetTurnSignal(uint8_t* data){return;}
 static void commsSetHeadlights(uint8_t* data){return;}
 static void commsSetMiscLights(uint8_t* data){return;}
-static void commsSetSteering(uint8_t* data){return;}
 static void commsSetBrake(uint8_t* data){return;}
-static void commsSetSpeed(uint8_t* data){return;}
+static void commsSetSpeed(uint8_t* data){
+    writeSpeedDAC((( (uint16_t) data[1]) << 8) | data[0]);
+    return;
+}
 static uint8_t inputBuf[256];
 
 static packetResponse_t response[] = {
@@ -93,9 +92,9 @@ static packetResponse_t response[] = {
     {1u,    inputBuf, 0u,   NULL,                    commsSetFNR},         // (0x12)
 
     // Hephaestus
-    {2u,    inputBuf, 0u,   NULL,                    commsSetSteering},    // (0x14)
+    {1u,    inputBuf, 0u,   NULL,                    commsSetSteering},    // (0x14)
     {2u,    inputBuf, 0u,   NULL,                    commsSetBrake},       // (0x16)
-    {0u,    NULL,     2u,   hephaestusData.steering, NULL},                // (0x18)
+    {0u,    NULL,     0u,   NULL,                    NULL},                // (0x18)
 
     // Olympus
     {2u,    inputBuf, 0u,   NULL,                    commsSetSpeed},       // (0x1A)

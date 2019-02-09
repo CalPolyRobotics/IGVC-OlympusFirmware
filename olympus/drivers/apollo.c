@@ -12,22 +12,20 @@
 
 commsStatus_t getApolloStatus()
 {
-    uint8_t data[1];
-    messageSubmodule(APOLLO, APOLLO_STATUS, data, 0, 1);
-    return data[0];
+    return messageSubmodule(APOLLO, APOLLO_STATUS, NULL, 0u, 0u, SPI_TIMEOUT);
 }
 
-void setTurnSignal(bool leftSignal, bool rightSignal)
+commsStatus_t setTurnSignal(bool leftSignal, bool rightSignal)
 {
-    return;
+    return COMMS_ERR_NOT_IMPL;
 }
 
-void setHeadlights(uint8_t speed)
+commsStatus_t setHeadlights(uint8_t speed)
 {
-    return;
+    return COMMS_ERR_NOT_IMPL;
 }
 
-void setMiscLights(uint16_t lightMask, uint8_t speed)
+commsStatus_t setMiscLights(uint16_t lightMask, uint8_t speed)
 {
-    return;
+    return COMMS_ERR_NOT_IMPL;
 }

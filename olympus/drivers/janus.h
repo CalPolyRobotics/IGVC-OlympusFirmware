@@ -16,12 +16,19 @@ typedef uint8_t fnr_t;
 #define FNR_INVALID ((fnr_t)3u)
 
 typedef uint8_t janusMsg_t;
-#define JANUS_STATUS  ((janusMsg_t)0u) 
-#define JANUS_GET_FNR ((janusMsg_t)1u)
-#define JANUS_SET_FNR ((janusMsg_t)2u)
+#define JANUS_STATUS   ((janusMsg_t)0u)
+#define JANUS_GET_FNR  ((janusMsg_t)1u)
+#define JANUS_SET_FNR  ((janusMsg_t)2u)
+#define JANUS_GET_CTRL ((janusMsg_t)3u)
+
+extern janusData_t janusData;
 
 void commsSetFNR(uint8_t* data);
+
 commsStatus_t getJanusStatus();
-fnr_t getFNR();
-void setFNR(fnr_t state);
+commsStatus_t setFNR(fnr_t state);
+commsStatus_t updateFNR();
+commsStatus_t updateCTRL();
+commsStatus_t updateJanus();
+
 #endif

@@ -9,10 +9,25 @@
 
 #include "hephaestus.h"
 #include "spi.h"
+#include "string.h"
+
+void commsSetSteering(uint8_t* data){
+    setHephaestusSteering(*data);
+}
 
 commsStatus_t getHephaestusStatus()
 {
-    uint8_t data[1];
-    messageSubmodule(HEPHAESTUS, HEPHAESTUS_STATUS, data, 0, 1);
-    return data[0];
+    return messageSubmodule(HEPHAESTUS, HEPHAESTUS_STATUS, NULL, 0u, 0u, SPI_TIMEOUT);
+}
+
+commsStatus_t setHephaestusSteering(uint8_t angle)
+{
+    return messageSubmodule(HEPHAESTUS, HEPHAESTUS_SET_STEERING, &angle, sizeof(uint8_t), 0u,
+                            SPI_TIMEOUT);
+}
+
+commsStatus_t updateHephaestusSteerPot(uint8_t* potVal)
+{
+    return messageSubmodule(HEPHAESTUS, HEPHAESTUS_UPDATE_POT, potVal, sizeof(uint16_t), 0u,
+                            SPI_TIMEOUT);
 }

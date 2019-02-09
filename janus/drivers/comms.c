@@ -3,39 +3,53 @@
 #include "comms.h"
 #include "fnr.h"
 
-static uint8_t errorByte = WR_OK;
-
-static uint8_t dataBuf[256];
-
-static uint8_t *get_status_callback(uint8_t *data);
-static uint8_t *get_fnr_callback(uint8_t *data);
-static uint8_t *set_fnr_callback(uint8_t *data);
+static uint8_t get_status_callback(uint8_t *data);
+static uint8_t get_fnr_callback(uint8_t *data);
+static uint8_t set_fnr_callback(uint8_t *data);
+static uint8_t get_control_callback(uint8_t *data);
 
 /** tx or rx DataLengths can be no longer than 253(rx) 253(tx) **/
 msgInfo_t msgResp[NUM_MSGS] = {
-    {0, 1, get_status_callback}, /** 0 Get Status **/
-    {0, 1, get_fnr_callback},    /** 1 Get FNR    **/
-    {1, 0, set_fnr_callback},    /** 2 Set FNR    **/
-    {0, 0, NULL}, /** 3 Unused **/
-    {0, 0, NULL}, /** 4 Unused **/
-    {0, 0, NULL}, /** 5 Unused **/
-    {0, 0, NULL}, /** 6 Unused **/
-    {0, 0, NULL}, /** 7 Unused **/
-    {0, 0, NULL}, /** 8 Unused **/
-    {0, 0, NULL}, /** 9 Unused **/
-    {0, 1, bootload}, /** 10 Reset To Bootloader **/
+    {0u, 0u, get_status_callback},  // 0 Get Status
+    {0u, 1u, get_fnr_callback},     // 1 Get FNR
+    {1u, 0u, set_fnr_callback},     // 2 Set FNR
+    {0u, 1u, get_control_callback}, // 4 Get CTRL
+    {0u, 0u, NULL},                 // 4 Unused
+    {0u, 0u, NULL},                 // 5 Unused
+    {0u, 0u, NULL},                 // 6 Unused
+    {0u, 0u, NULL},                 // 7 Unused
+    {0u, 0u, NULL},                 // 8 Unused
+    {0u, 0u, NULL},                 // 9 Unused
+    {0u, 0u, bootload},             // 10 Bootloader
 };
 
-static uint8_t *get_status_callback(uint8_t *data){
-    return &errorByte;
+static uint8_t get_status_callback(uint8_t *data)
+{
+    return WR_OK;
 }
 
-static uint8_t *set_fnr_callback(uint8_t *data){
-    setFNR(data[0]);
-    return NULL;
+static uint8_t set_fnr_callback(uint8_t *data)
+{
+    fnr_t state = data[0u];
+
+    if(state != FORWARD && state != REVERSE && state != NEUTRAL)
+    {
+        return WR_ERR_INV_ARG;
+    }
+
+    setFNR(state);
+
+    return WR_OK;
 }
 
-static uint8_t *get_fnr_callback(uint8_t *data){
-    dataBuf[0] = getFNR();
-    return dataBuf;
+static uint8_t get_fnr_callback(uint8_t *data)
+{
+    data[0u] = getFNR();
+    return WR_OK;
+}
+
+static uint8_t get_control_callback(uint8_t *data)
+{
+    data[0u] = isMCUCtrlMode();
+    return WR_OK;
 }

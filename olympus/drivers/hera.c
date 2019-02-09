@@ -16,49 +16,62 @@ heraData_t heraData;
 
 commsStatus_t getHeraStatus()
 {
-    messageSubmodule(HERA, HERA_STATUS, submoduleCommsBuff, 0u, STATUS_LENGTH);
-    return submoduleCommsBuff[STATUS_IDX];
+    return messageSubmodule(HERA, HERA_STATUS, NULL, 0u, 0u, SPI_TIMEOUT);
 }
 
 commsStatus_t updateHeraSpeed()
 {
-    messageSubmodule(HERA, HERA_SPEED, submoduleCommsBuff, 0u, STATUS_LENGTH + SPEED_LENGTH);
-    memcpy(&heraData.speed, &submoduleCommsBuff[DATA_IDX], SPEED_LENGTH);
-    return submoduleCommsBuff[STATUS_IDX];
+    commsStatus_t status = messageSubmodule(HERA, HERA_SPEED, submoduleCommsBuff, 0u, SPEED_LENGTH,
+                                            SPI_TIMEOUT);
+
+    if(status == COMMS_OK){
+        memcpy(&heraData.speed, submoduleCommsBuff, SPEED_LENGTH);
+    }
+
+    return status;
 }
 
 commsStatus_t updateHeraSteer()
 {
-    messageSubmodule(HERA, HERA_STEER, submoduleCommsBuff, 0u, STATUS_LENGTH + STEER_LENGTH);
-    memcpy(&heraData.steer, &submoduleCommsBuff[DATA_IDX], STEER_LENGTH);
-    return submoduleCommsBuff[STATUS_IDX];
+    commsStatus_t status = messageSubmodule(HERA, HERA_STEER, submoduleCommsBuff, 0u, STEER_LENGTH,
+                                            SPI_TIMEOUT);
+    if(status == COMMS_OK){
+        memcpy(&heraData.steer, submoduleCommsBuff, STEER_LENGTH);
+    }
+
+    return status;
 }
 
 commsStatus_t updateHeraSonar()
 {
-    messageSubmodule(HERA, HERA_SONAR, submoduleCommsBuff, 0u, STATUS_LENGTH + SONAR_LENGTH);
-    memcpy(&heraData.sonar, &submoduleCommsBuff[DATA_IDX], SONAR_LENGTH);
-    return submoduleCommsBuff[STATUS_IDX];
+    commsStatus_t status = messageSubmodule(HERA, HERA_SONAR, submoduleCommsBuff, 0u, SONAR_LENGTH,
+                                            SPI_TIMEOUT);
+
+    if(status == COMMS_OK){
+        memcpy(&heraData.sonar, submoduleCommsBuff, SONAR_LENGTH);
+    }
+
+    return status;
 }
 
 commsStatus_t updateHeraData()
 {
-    commsStatus_t stat;
+    commsStatus_t status;
 
-    if((stat = updateHeraSpeed()) != COMMS_OK)
+    if((status = updateHeraSpeed()) != COMMS_OK)
     {
-        return stat;
+        return status;
     }
 
-    if((stat = updateHeraSteer()) != COMMS_OK)
+    if((status = updateHeraSteer()) != COMMS_OK)
     {
-        return stat;
+        return status;
     }
 
-    if((stat = updateHeraSonar()) != COMMS_OK)
+    if((status = updateHeraSonar()) != COMMS_OK)
     {
-        return stat;
+        return status;
     }
 
-    return COMMS_OK;
+    return status;
 }

@@ -14,6 +14,9 @@
 #include "usb_otg.h"
 #include "adc.h"
 #include "characterMapping.h"
+
+#include "hera.h"
+#include "hephaestus.h"
 #include "janus.h"
 
 #include <stdlib.h>
@@ -25,6 +28,7 @@ typedef void (*commandCallback)(uint32_t, char**);
 
 typedef struct {
     char* cmdStr;
+    char* argStr;
     uint32_t minArguments;
     commandCallback callback;
 } ConsoleCommand;
@@ -53,20 +57,12 @@ static void console_setFNR(uint32_t, char**);
 static void console_getFNR(uint32_t, char**);
 
 // Speed Commands
-static void console_setEnableSpeed(uint32_t, char**);
 static void console_setSpeedTarget(uint32_t, char**);
 static void console_getSpeedTarget(uint32_t, char**);
 
 // Steering Commands
-static void console_setEnableSteer(uint32_t, char**);
 static void console_setSteerTarget(uint32_t, char**);
-static void console_getSteerDir(uint32_t, char**);
-static void console_getSteerTarget(uint32_t, char**);
 static void console_getSteerPot(uint32_t, char**);
-
-// Communication Commands
-static void console_emulateUSB(uint32_t, char**);
-static void console_USBWrite(uint32_t, char**);
 
 // Console Commands
 static void console_help(uint32_t, char**);
@@ -75,26 +71,21 @@ static void console_setEchoMode(uint32_t, char**);
 
 
 static ConsoleCommand commands[] = {
-    {"setLED", 2, console_setLED},
-    {"setSegment", 2, console_setSegment},
-    {"getPower", 1, console_getPower},
-    {"kill", 0, console_kill},
-    {"setFNR", 1, console_setFNR},
-    {"getFNR", 0, console_getFNR},
-    {"setEnableSpeed", 0, console_setEnableSpeed},
-    {"setSpeedTarget", 1, console_setSpeedTarget},
-    {"getSpeedTarget", 0, console_getSpeedTarget},
-    {"setEnableSteer", 1, console_setEnableSteer},
-    {"setSteerTarget", 1, console_setSteerTarget},
-    {"getSteerDir", 0, console_getSteerDir},
-    {"getSteerTarget", 0, console_getSteerTarget},
-    {"getSteerPot", 0, console_getSteerPot},
-    {"emulateUSB", 1, console_emulateUSB},
-    {"USBWrite", 1, console_USBWrite},
-    {"setEchoMode", 1, console_setEchoMode},
-    {"help", 0, console_help},
-    {"clear", 0, console_clear},
-    {NULL, 0, NULL}
+    /*cmdStr,          argStr                             minArgs callback*/
+    {"setSegment",     "char1<a-f|0-9>, char2<a-f|0-9>" , 2, console_setSegment},
+    {"setLED",         "ledNum<0-5>, state<0-1>",         2, console_setLED},
+    {"setFNR",         "state<0-2>",                      1, console_setFNR},
+    {"setSpeedTarget", "target<0-65535>",                 1, console_setSpeedTarget},
+    {"setSteerTarget", "angle<45-125>",                   1, console_setSteerTarget},
+    {"setEchoMode",    "mode<0-3>",                       1, console_setEchoMode},
+    {"getFNR",         NULL,                              0, console_getFNR},
+    {"getSpeedTarget", NULL,                              0, console_getSpeedTarget},
+    {"getSteerPot",    NULL,                              0, console_getSteerPot},
+    {"getPower",       NULL,                              0, console_getPower},
+    {"kill",           NULL,                              0, console_kill},
+    {"help",           NULL,                              0, console_help},
+    {"clear",          NULL,                              0, console_clear},
+    {NULL,             NULL,                              0, NULL}
 };
 
 static int parseUint8(char* str){
@@ -392,10 +383,7 @@ static void console_getPower(uint32_t argc, char** argv)
     const struct adc_cmd *val;
 
     for (val = adc_dict; val->cmd; val++) {
-        if (!strncmp(val->cmd, argv[0], strlen(val->cmd))) {
-            printf("%s: %d", val->cmd, adc_conv(val->per));
-            break;
-        }
+        printf("%s: %d\r\n", val->cmd, adc_conv(val->per));
     }
 }
 
@@ -415,22 +403,7 @@ static void console_setFNR(uint32_t argc, char** argv)
 
 static void console_getFNR(uint32_t argc, char** argv)
 {
-    printf("%u", getFNR());
-}
-
-/**
- * A value of zero will disable the speed output,
- * a non-zero value [0,UINT16_MAX] will enable the speed output,
- */
-static void console_setEnableSpeed(uint32_t argc, char** argv){
-    uint16_t num = parseUint16(argv[0]);
-    if(!errno){
-        if(num){
-            enableSpeedDAC();
-        }else{
-            disableSpeedDAC();
-        }
-    }
+    printf("%u", *janusData.fnr);
 }
 
 static void console_setSpeedTarget(uint32_t argc, char** argv)
@@ -447,59 +420,24 @@ static void console_getSpeedTarget(uint32_t argc, char** argv)
     printf("%u\r\n", getSpeedDAC());
 }
 
-static void console_setEnableSteer(uint32_t argc, char** argv)
-{
-    /** TODO **/
-}
-
 static void console_setSteerTarget(uint32_t argc, char** argv)
 {
-    /** TODO **/
-}
-
-static void console_getSteerDir(uint32_t argc, char** argv)
-{
-    /** TODO **/
-}
-
-static void console_getSteerTarget(uint32_t argc, char** argv)
-{
-    /** TODO **/
+    uint8_t angle = parseUint8(argv[0]);
+    if(!errno && angle < 180)
+    {
+        if(setHephaestusSteering(angle) != COMMS_OK){
+            printf("setHephaestusSteering Failed\r\n");
+        }
+    }
+    else
+    {
+        printf("Invalid Argument");
+    }
 }
 
 static void console_getSteerPot(uint32_t argc, char** argv)
 {
-    /** TODO **/
-}
-
-static void console_emulateUSB(uint32_t argc, char** argv)
-{
-    uint32_t i;
-    uint32_t numPacketArgs = argc - 1;
-
-    char buf[sizeof(PacketHeader_t)];
-    PacketHeader_t* header = (PacketHeader_t*)buf;
-    header->startByte[0] = 0xF0;
-    header->startByte[1] = 0x5A;
-    header->msgType = atoi(argv[0]);
-    header->seqNumber = 0;
-    header->packetLen = sizeof(PacketHeader_t) + 1 + numPacketArgs;
-
-    for (i = 0; i < sizeof(PacketHeader_t); i++)
-    {
-        runCommsFSM(buf[i]);
-    }
-
-    for (i = 0; i < numPacketArgs; i++)
-    {
-        runCommsFSM(strtol(argv[i + 1], NULL, 16) & 0xFF);
-    }
-}
-
-static void console_USBWrite(uint32_t argc, char** argv)
-{
-    printf("%s", argv[0]);
-    usbWrite((uint8_t*)argv[0], strlen(argv[0]));
+    printf("%u", *((uint16_t*)heraData.steer));
 }
 
 static void console_setEchoMode(uint32_t argc, char** argv)
@@ -510,10 +448,21 @@ static void console_setEchoMode(uint32_t argc, char** argv)
 static void console_help(uint32_t argc, char** argv) 
 {
     uint32_t i = 0;
-    printf("***Command Summary***\r\n");
-    while (commands[i].cmdStr != NULL) {
-        printf("%s", commands[i].cmdStr);
-        printf("\t requires %lu arguments\r\n", commands[i].minArguments);
+    printf("\r\n  \033[2m\033[4mCommand\t\tArgs\033[0m\r\n");
+
+    while (commands[i].cmdStr != NULL)
+    {
+        if(commands[i].argStr == NULL)
+        {
+            printf("  %s\r\n", commands[i].cmdStr);
+        }
+        else
+        {
+            printf("  %s%s[%s]\r\n", commands[i].cmdStr,
+                   strlen(commands[i].cmdStr) >= 12 ? "\t" : "\t\t",
+                   commands[i].argStr);
+        }
+
         i++;
     }
 }
