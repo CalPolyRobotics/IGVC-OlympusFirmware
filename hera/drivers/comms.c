@@ -20,7 +20,7 @@ static uint8_t get_sonar_callback(uint8_t *data);
 /** tx or rx DataLengths can be no longer than 253(rx) 253(tx) **/
 msgInfo_t msgResp[NUM_MSGS] = {
     {0u, 0u, get_status_callback}, // 0 Get Status
-    {0u, 4u, get_speed_callback},  // 1 Get Speed
+    {0u, 2u, get_speed_callback},  // 1 Get Speed
     {0u, 2u, get_steer_callback},  // 2 Get Steer
     {0u, 8u, get_sonar_callback},  // 3 Get Sonar
     {0u, 0u, NULL},                // 4 Unused
@@ -48,8 +48,10 @@ static uint8_t get_status_callback(uint8_t *data){
 }
 
 static uint8_t get_speed_callback(uint8_t *data){
-    memcpy(data, &ch1Speed[(ch1SpeedWr + 1u) % 2u], 2u);
-    memcpy(data + 2u, &ch2Speed[(ch2SpeedWr + 1u) % 2u], 2u);
+    int16_t speed = ch1Speed[(ch1SpeedWr + 1u) % PING_PONG_SIZE];
+
+    data[0] = speed & 0xFF;
+    data[1] = (speed >> 8u) & 0xFF;
 
     return WR_OK;
 }

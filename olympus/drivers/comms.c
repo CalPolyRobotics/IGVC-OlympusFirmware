@@ -77,7 +77,7 @@ static packetResponse_t response[] = {
     {0u,    NULL,     5u,   status,                  NULL},                // (0x00)
 
     // Hera
-    {0u,    NULL,     4u,   heraData.speed,          NULL},                // (0x02)
+    {0u,    NULL,     2u,   heraData.speed,          NULL},                // (0x02)
     {0u,    NULL,     2u,   heraData.steer,          NULL},                // (0x04)
     {0u,    NULL,     8u,   heraData.sonar,          NULL},                // (0x06)
 

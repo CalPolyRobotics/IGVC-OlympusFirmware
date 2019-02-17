@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
-extern uint16_t ch1Speed[2];
-extern uint16_t ch2Speed[2];
+extern int16_t ch1Speed[2];
 extern volatile int ch1SpeedWr;
-extern volatile int ch2SpeedWr;
 
 void checkTimeout(void);
+int16_t diffCountsToSpeedInMMs(uint32_t diffCounts);
+
 
 #endif

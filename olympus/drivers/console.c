@@ -59,6 +59,7 @@ static void console_getFNR(uint32_t, char**);
 // Speed Commands
 static void console_setSpeedTarget(uint32_t, char**);
 static void console_getSpeedTarget(uint32_t, char**);
+static void console_getSpeed(uint32_t, char**);
 
 // Steering Commands
 static void console_setSteerTarget(uint32_t, char**);
@@ -78,6 +79,7 @@ static ConsoleCommand commands[] = {
     {"setSpeedTarget", "target<0-65535>",                 1, console_setSpeedTarget},
     {"setSteerTarget", "angle<45-125>",                   1, console_setSteerTarget},
     {"setEchoMode",    "mode<0-3>",                       1, console_setEchoMode},
+    {"getSpeed",       NULL,                              0, console_getSpeed},
     {"getFNR",         NULL,                              0, console_getFNR},
     {"getSpeedTarget", NULL,                              0, console_getSpeedTarget},
     {"getSteerPot",    NULL,                              0, console_getSteerPot},
@@ -418,6 +420,12 @@ static void console_setSpeedTarget(uint32_t argc, char** argv)
 static void console_getSpeedTarget(uint32_t argc, char** argv)
 {
     printf("%u\r\n", getSpeedDAC());
+}
+
+static void console_getSpeed(uint32_t argc, char** argv)
+{
+    int16_t data = (heraData.speed[1] << 8) | heraData.speed[0];
+    printf("%d\r\n", data);
 }
 
 static void console_setSteerTarget(uint32_t argc, char** argv)
