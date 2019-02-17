@@ -11,7 +11,8 @@ extern TIM_HandleTypeDef htim1;
 
 typedef struct{
    int freq;
-   int numnotes;} note;
+   int numnotes;
+} note;
 
 #define BUZZER_PIN GPIO_PIN_8
 

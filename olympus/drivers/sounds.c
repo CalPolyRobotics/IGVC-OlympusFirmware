@@ -43,14 +43,14 @@ note windows[]= {  //notes and lengths needed to play windows start up sound
     {g5, 5},
     {d6, 3},
     {a5, 8}
-    };
+};
 
 note shutdown[]={   //plays the windows shutdown sound 
     {g7, 3},
     {d6, 3},
     {g5, 3},
     {a5, 4}
-    };
+};
   
 uint8_t idx = 0; //sets the index to 0
 
@@ -61,12 +61,14 @@ uint16_t noteslen[13] = {
 Timer_Return startup(void*dummy)//creates a call-back timer that will check back in
 {
     
-    if (idx < sizeof(windows)/sizeof(note )){
+    if (idx < sizeof(windows)/sizeof(note ))
+    {
         playNote(windows[idx].freq); //play the note give by the struct
-      addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);//create a new callback timer
-      idx+=1 ;//add one to the index 
+        addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);//create a new callback timer
+        idx+=1 ;//add one to the index 
     }
-    else if (idx == sizeof(windows)/sizeof(note)){
+    else if (idx == sizeof(windows)/sizeof(note))
+    {
         playNote(0);// set the output to 0 so that no note plays
     }
     return DISABLE_TIMER;//kill the current timer
@@ -102,12 +104,14 @@ void Song(void){//sets up the timer and starts the callbacks to the windows star
 }
 
 Timer_Return failure(void*dummy){//plays the windows shutdown sounds with callback timers
-    if (idx < sizeof(shutdown)/sizeof(note )){
+    if (idx < sizeof(shutdown)/sizeof(note ))
+    {
         playNote(shutdown[idx].freq);
         addCallbackTimer(noteslen[shutdown[idx].numnotes], failure, NULL);
         idx+=1 ;                                      
     }                                             
-    else if (idx == sizeof(shutdown)/sizeof(note)){
+    else if (idx == sizeof(shutdown)/sizeof(note))
+    {
         playNote(0);
     }
     return DISABLE_TIMER;
