@@ -4,7 +4,8 @@
 #include "timerCallback.h"
 #include <stdint.h>
 
-#define C4 5707  //these are the correct counters for these particular notes
+//these are the correct counts for these particular notes
+#define C4 5707  
 #define c4 5386
 #define D4 5084
 #define d4 4798
@@ -36,20 +37,20 @@
 #define g7 899
 
 note windows[]= {  //notes and lengths needed to play windows start up sound
-{d6, 3},
-{d5, 1},
-{a5, 4},
-{g5, 5},
-{d6, 3},
-{a5, 8}
-};
+    {d6, 3},
+    {d5, 1},
+    {a5, 4},
+    {g5, 5},
+    {d6, 3},
+    {a5, 8}
+    };
 
 note shutdown[]={   //plays the windows shutdown sound 
-{g7, 3},
-{d6, 3},
-{g5, 3},
-{a5, 4}
-};
+    {g7, 3},
+    {d6, 3},
+    {g5, 3},
+    {a5, 4}
+    };
   
 uint8_t idx = 0; //sets the index to 0
 
@@ -61,12 +62,12 @@ Timer_Return startup(void*dummy)//creates a call-back timer that will check back
 {
     
     if (idx < sizeof(windows)/sizeof(note )){
-    playNote(windows[idx].freq); //play the note give by the struct
-    addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);//create a new callback timer
-    idx+=1 ;//add one to the index 
+        playNote(windows[idx].freq); //play the note give by the struct
+      addCallbackTimer(noteslen[windows[idx].numnotes], startup, NULL);//create a new callback timer
+      idx+=1 ;//add one to the index 
     }
     else if (idx == sizeof(windows)/sizeof(note)){
-    playNote(0);// set the output to 0 so that no note plays
+        playNote(0);// set the output to 0 so that no note plays
     }
     return DISABLE_TIMER;//kill the current timer
     }
@@ -87,7 +88,7 @@ void Tim_Init(void){//intializes the timer so that a frequency can be assigned t
     TIM4 -> CCR3 = 24000;
 
     GPIO_InitTypeDef GPIO_InitTypeDef;
-    GPIO_InitTypeDef.Pin = (BUZZER);
+    GPIO_InitTypeDef.Pin = (BUZZER_PIN);
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
     GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_LOW;
@@ -102,12 +103,12 @@ void Song(void){//sets up the timer and starts the callbacks to the windows star
 
 Timer_Return failure(void*dummy){//plays the windows shutdown sounds with callback timers
     if (idx < sizeof(shutdown)/sizeof(note )){
-    playNote(shutdown[idx].freq);
-    addCallbackTimer(noteslen[shutdown[idx].numnotes], failure, NULL);
-    idx+=1 ;                                      
+        playNote(shutdown[idx].freq);
+        addCallbackTimer(noteslen[shutdown[idx].numnotes], failure, NULL);
+        idx+=1 ;                                      
     }                                             
     else if (idx == sizeof(shutdown)/sizeof(note)){
-    playNote(0);
+        playNote(0);
     }
     return DISABLE_TIMER;
     }

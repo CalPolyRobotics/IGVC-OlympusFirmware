@@ -115,8 +115,6 @@ int main(void)
     setSevenSeg("42");
 
     checkAllSubmodules();
-
-    checkAllSubmodules();
     //plays some sort of startup sounds
     Song();
 

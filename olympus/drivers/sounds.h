@@ -13,7 +13,7 @@ typedef struct{
    int freq;
    int numnotes;} note;
 
-#define BUZZER GPIO_PIN_8
+#define BUZZER_PIN GPIO_PIN_8
 
 void Tim_Init(void);
 void playNote(uint16_t fre);

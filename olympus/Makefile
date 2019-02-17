@@ -63,14 +63,14 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/sevenSeg.c \
 		   $(DRIVERS)/speedDAC.c \
 		   $(DRIVERS)/pwradc.c \
-			$(DRIVERS)/error.c \
-			$(DRIVERS)/submoduleComms.c \
+		   $(DRIVERS)/error.c \
+		   $(DRIVERS)/submoduleComms.c \
 		   $(DRIVERS)/apollo.c \
 		   $(DRIVERS)/janus.c \
 		   $(DRIVERS)/hera.c \
 		   $(DRIVERS)/hephaestus.c\
-			$(DRIVERS)/sounds.c
-	  
+		   $(DRIVERS)/sounds.c
+  
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
