@@ -37,17 +37,22 @@
 
 void MX_GPIO_Init(void)
 {
-
     GPIO_InitTypeDef GPIO_InitStruct;
 
     //---------------------------------------------------------------------------------
     // Initialize Hall-effect Pins
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitStruct.Pin= GPIO_PIN_1 | GPIO_PIN_3;
-    GPIO_InitStruct.Pull= GPIO_NOPULL;
-    GPIO_InitStruct.Mode=GPIO_MODE_AF_OD;
-    GPIO_InitStruct.Speed=GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate=GPIO_AF2_TIM2;
-    HAL_GPIO_Init( GPIOA, &GPIO_InitStruct );
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_3;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

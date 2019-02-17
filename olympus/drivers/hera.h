@@ -13,12 +13,12 @@ typedef uint8_t heraMsg_t;
 #define HERA_SONAR   ((heraMsg_t)3u)
 
 #define STATUS_LENGTH ((size_t)1u)
-#define SPEED_LENGTH  ((size_t)4u)
+#define SPEED_LENGTH  ((size_t)2u)
 #define STEER_LENGTH  ((size_t)2u)
 #define SONAR_LENGTH  ((size_t)8u)
 
 typedef struct heraData{
-   uint8_t speed[4];
+   uint8_t speed[2];
    uint8_t steer[2];
    uint8_t sonar[8];
 } __attribute__((packed)) heraData_t;
