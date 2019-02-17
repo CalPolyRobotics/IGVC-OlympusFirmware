@@ -42,13 +42,13 @@ Timer_Return updateSteerDataLink(void* dummy)
     if(updateHeraSteer() != COMMS_OK)
     {
         setSevenSeg(HERA_STEER_FAIL);
-        //printf("UpdateHeraSteer Failed\r\n");
+        printf("UpdateHeraSteer Failed\r\n");
     }
 
     if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
     {
         setSevenSeg(HEPHAESTUS_STEER_FAIL);
-        //printf("UpdateHephaestusSteerPot Failed\r\n");
+        printf("UpdateHephaestusSteerPot Failed\r\n");
     }
 
     return CONTINUE_TIMER;
