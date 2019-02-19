@@ -133,14 +133,13 @@
 #define POLL_FNR_UPDATE_PERIOD (100)
 
 //Error Codes
-#define ERROR_HARD_FAULT        'F','F'
-#define ERROR_WATCH_DOG         'F','E'
-#define APOLLO_STATUS_FAIL      'F','D'
-#define HEPHAESTUS_STATUS_FAIL  'F','C'
-#define HERA_STATUS_FAIL        'F','B'
-#define JANUS_STATUS_FAIL       'F','A'
-#define HERA_STEER_FAIL         'F','9'
-#define HEPHAESTUS_STEER_FAIL   'F','8'
-#define HERA_SPEED_FAIL         'F','7'
+#define ERROR_WATCH_DOG         "FE"
+#define APOLLO_STATUS_FAIL      "FD"
+#define HEPHAESTUS_STATUS_FAIL  "FC"
+#define HERA_STATUS_FAIL        "FB"
+#define JANUS_STATUS_FAIL       "FA"
+#define HERA_STEER_FAIL         "F9"
+#define HEPHAESTUS_STEER_FAIL   "F8"
+#define HERA_SPEED_FAIL         "F7"
 
 #endif

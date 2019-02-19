@@ -13,6 +13,7 @@
 #include "janus.h"
 #include "hera.h"
 #include "hephaestus.h"
+#include "error.h"
 
 #define SPI_DEFAULT_TIMEOUT 100
 #define STATUS_MAX_ATTEMPTS 20
@@ -136,25 +137,25 @@ void checkAllSubmodules()
     if(!checkSubmoduleStatus(APOLLO))
     {
         printf("Status check failed for Apollo\r\n");
-        setSevenSeg(APOLLO_STATUS_FAIL);
+        ErrorHandler(APOLLO_STATUS_FAIL, NOTIFY);
     }
 
     if(!checkSubmoduleStatus(HEPHAESTUS))
     {
         printf("Status check failed for Hephaestus\r\n");
-        setSevenSeg(HEPHAESTUS_STATUS_FAIL);
+        ErrorHandler(HEPHAESTUS_STATUS_FAIL, NOTIFY);
     }
 
     if(!checkSubmoduleStatus(HERA))
     {
         printf("Status check failed for Hera\r\n");
-        setSevenSeg(HERA_STATUS_FAIL);
+        ErrorHandler(HERA_STATUS_FAIL, NOTIFY);
     }
 
     if(!checkSubmoduleStatus(JANUS))
     {
         printf("Status check failed for Janus\r\n");
-        setSevenSeg(JANUS_STATUS_FAIL);
+        ErrorHandler(JANUS_STATUS_FAIL, NOTIFY);
     }
 }
 

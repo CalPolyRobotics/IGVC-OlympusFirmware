@@ -21,11 +21,11 @@
 #include "config.h"
 #include "doubleBuffer.h"
 #include "submoduleComms.h"
-
+#include "sounds.h"
+#include "error.h"
 #include "hephaestus.h"
 #include "hera.h"
 #include "janus.h"
-
 #include <stddef.h>
 
 void SystemClock_Config(void);
@@ -112,9 +112,11 @@ int main(void)
 
     initSpeedDAC();
 
-    setSevenSeg('4', '2');
+    setSevenSeg("42");
 
     checkAllSubmodules();
+    //plays some sort of startup sounds
+    Song();
 
     addCallbackTimer(1000, led6Toggle, NULL);
     addCallbackTimer(1000, updateJanus, NULL);
@@ -205,23 +207,6 @@ void SystemClock_Config(void)
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 #endif
 }
-
-#ifdef USE_FULL_ASSERT
-
-/**
-   * @brief Reports the name of the source file and the source line number
-   * where the assert_param error has occurred.
-   * @param file: pointer to the source file name
-   * @param line: assert_param error line source number
-   * @retval None
-   */
-void assert_failed(uint8_t* file, uint32_t line)
-{
-    /* User can add his own implementation to report the file name and line number,
-    ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-}
-
-#endif
 
 /**
   * @}

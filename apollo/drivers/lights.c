@@ -1,6 +1,7 @@
 #include "stm32f0xx_hal.h"
 #include "lights.h"
 
+//Look up table for PWMing the lights 
 uint16_t arr[256] = {
     24000, 23905, 23811, 23717, 23623, 23529, 23435, 23341,
     23247, 23152, 23058, 22964, 22870, 22776, 22682, 22588,
@@ -39,21 +40,33 @@ uint16_t arr[256] = {
 
 void init_Timer(){
 
+    //sets up Timer 2 both channel 1 and 2
     __HAL_RCC_TIM2_CLK_ENABLE();
+    //sets up the third channel of timer2 by oring bits in the second CCMR register.
     TIM2 -> CCMR2 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0);
+    //sets up the second channel of timer2. OCxM shows the channel number
     TIM2 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0);
+    //sets up the capture/compare enable register to output
     TIM2 -> CCER = (TIM_CCER_CC3E_Msk | TIM_CCER_CC2E_Msk);
+    //sets control register 1 to be enabled
     TIM2 -> CR1 = TIM_CR1_CEN;
+    //initializes the auto-reload register to be 24000
     TIM2 -> ARR = 24000;
+    //initializes capture compare register 2 to be 24000
     TIM2 -> CCR2 = 24000;
+    //''            ''      ''       ''    3 '' ''   ''
     TIM2 -> CCR3 = 24000;
 
+    //intialize GPIOB to be enabled
     __HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitTypeDef;
+    //sets up these pins defined in the header to be outputs
     GPIO_InitTypeDef.Pin = (HEADLIGHTS | MISC5);
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
+    //mode is push- pull
     GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
+    //sets up the pins to be alternate functions as timers
     GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM2;
     HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
 
@@ -65,6 +78,7 @@ void init_Timer(){
     GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM2;
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
+    //sets up timer 16
     __HAL_RCC_TIM16_CLK_ENABLE();
     TIM16 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
     TIM16 -> CCER = TIM_CCER_CC1E_Msk;
