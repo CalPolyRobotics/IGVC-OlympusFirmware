@@ -162,10 +162,10 @@ static void low_level_init(struct netif *netif)
   EthHandle.Init.AutoNegotiation = ETH_AUTONEGOTIATION_ENABLE;
   EthHandle.Init.Speed = ETH_SPEED_100M;
   EthHandle.Init.DuplexMode = ETH_MODE_FULLDUPLEX;
-  EthHandle.Init.MediaInterface = ETH_MEDIA_INTERFACE_MII;
+  EthHandle.Init.MediaInterface = ETH_MEDIA_INTERFACE_RMII;
   EthHandle.Init.RxMode = ETH_RXPOLLING_MODE;
   EthHandle.Init.ChecksumMode = ETH_CHECKSUM_BY_HARDWARE;
-  EthHandle.Init.PhyAddress = DP83848_PHY_ADDRESS;
+  EthHandle.Init.PhyAddress = LAN8742A_PHY_ADDRESS;
   
   /* configure ethernet peripheral (GPIOs, clocks, MAC, DMA) */
   if (HAL_ETH_Init(&EthHandle) == HAL_OK)
