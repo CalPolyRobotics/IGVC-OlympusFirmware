@@ -133,6 +133,7 @@
 #define POLL_FNR_UPDATE_PERIOD (100)
 
 //Error Codes
+#define ERROR_HARD_FAULT        "FF"
 #define ERROR_WATCH_DOG         "FE"
 #define APOLLO_STATUS_FAIL      "FD"
 #define HEPHAESTUS_STATUS_FAIL  "FC"
