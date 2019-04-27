@@ -107,10 +107,10 @@ commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff,
     selectModule(module);
 
     /** Send Start Byte & Message Type **/
-    SPI_Transmit(&hspi3, header, sizeof(header), timeout);
+    HAL_SPI_Transmit(&hspi3, header, sizeof(header), timeout);
 
     /** Transmit Data **/
-    SPI_Transmit(&hspi3, buff, tx_size, timeout);
+    HAL_SPI_Transmit(&hspi3, buff, tx_size, timeout);
 
     /** Wait for slave device to finish processing data **/
     uint32_t timeUp = HAL_GetTick() + timeout;
@@ -119,8 +119,8 @@ commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff,
 
     /** Receive Data **/
     uint8_t status;
-    SPI_Receive(&hspi3, &status, STATUS_LEN, timeout);
-    SPI_Receive(&hspi3, buff, rx_size, timeout);
+    HAL_SPI_Receive(&hspi3, &status, STATUS_LEN, timeout);
+    HAL_SPI_Receive(&hspi3, buff, rx_size, timeout);
 
     /** Wait for slave device to finish sending data back **/
     timeUp = HAL_GetTick() + timeout;

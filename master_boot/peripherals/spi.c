@@ -44,7 +44,7 @@ void MX_SPI3_Init(void)
 {
     hspi3.Instance = SPI3;
     hspi3.Init.Mode = SPI_MODE_MASTER;
-    hspi3.Init.Direction = SPI_DIRECTION_1LINE;
+    hspi3.Init.Direction = SPI_DIRECTION_2LINES;
     hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -56,8 +56,6 @@ void MX_SPI3_Init(void)
     hspi3.Init.CRCPolynomial = 10;
     HAL_SPI_Init(&hspi3);
 
-
-    __HAL_SPI_1LINE_TX(&hspi3);
     __HAL_SPI_ENABLE(&hspi3);
 
     spi3Initialized = true;
