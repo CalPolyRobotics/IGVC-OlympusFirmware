@@ -89,7 +89,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
          *  PC9     ------> SS_IRIS
          *  PC13    ------> SS_JANUS
          */
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
+        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;

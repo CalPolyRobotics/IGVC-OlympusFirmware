@@ -56,8 +56,6 @@ void MX_SPI3_Init(void)
     hspi3.Init.CRCPolynomial = 10;
     HAL_SPI_Init(&hspi3);
 
-    __HAL_SPI_ENABLE(&hspi3);
-
     spi3Initialized = true;
 }
 
@@ -90,7 +88,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
          *  PC8     ------> SS_HEPHAESTUS
          *  PC13    ------> SS_JANUS
          */
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
+        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
