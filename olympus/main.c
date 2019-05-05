@@ -22,6 +22,7 @@
 #include "doubleBuffer.h"
 #include "submoduleComms.h"
 #include "sounds.h"
+#include "status.h"
 #include "error.h"
 #include "hephaestus.h"
 #include "hera.h"

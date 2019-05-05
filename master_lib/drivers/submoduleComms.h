@@ -12,6 +12,9 @@
 #define STATUS_LEN 1u
 #define DATA_IDX   1u
 
+#define BOOT_SUBMODULE_TIMEOUT ((uint16_t)100u)
+#define BOOT_FLASH_TIMEOUT     ((uint16_t)5000u)
+
 #define SPI_TIMEOUT 5u
 
 /** Error Responses **/
@@ -22,6 +25,7 @@ typedef uint8_t commsStatus_t;
 #define COMMS_ERR_INT          ((commsStatus_t)0x02)
 #define COMMS_ERR_GEN          ((commsStatus_t)0x03)
 #define COMMS_ERR_INV_MSG_TYPE ((commsStatus_t)0x04)
+#define COMMS_ERR_TIMEOUT      ((commsStatus_t)0x05)
 
 #define COMMS_OK               ((commsStatus_t)0xAA)
 
@@ -42,7 +46,5 @@ extern uint8_t submoduleCommsBuff[256u];
 
 commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size,
                                uint8_t rx_size, uint32_t timeout);
-
-void checkAllSubmodules();
 
 #endif

@@ -40,6 +40,11 @@
 
 #include "stm32f2xx_hal.h"
 
+typedef struct pin{
+    GPIO_TypeDef* port;
+    uint16_t pin_mask;
+}pin_t;
+
 void MX_GPIO_Init(void);
 
 #ifdef __cplusplus
