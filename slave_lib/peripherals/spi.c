@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include "stm32f0xx.h"
 #include "spi.h"
 #include "systemClock.h"

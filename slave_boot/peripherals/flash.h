@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define PAGE_SIZE      1024u
+#define LOG2_PAGE_SIZE 10u
 #define APP_START_PAGE 5u
 #define BOOT_NUM_PAGES 5u
 #define APP_NUM_PAGES  27u
