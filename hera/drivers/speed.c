@@ -11,6 +11,7 @@
 #define PING_PONG_SIZE ((size_t) 2u)
 
 int16_t ch1Speed[2];
+
 volatile int ch1SpeedWr = 0;
 volatile uint32_t ch1SysCount = 0;
 
