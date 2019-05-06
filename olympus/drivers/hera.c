@@ -9,7 +9,9 @@
 
 #include <string.h>
 
+#include "error.h"
 #include "hera.h"
+#include "hephaestus.h"
 #include "spi.h"
 
 heraData_t heraData;
@@ -74,4 +76,30 @@ commsStatus_t updateHeraData()
     }
 
     return status;
+}
+
+Timer_Return updateSpeed(void* dummy)
+{
+    if(updateHeraSpeed() != COMMS_OK)
+    {
+        ErrorHandler(HERA_SPEED_FAIL, NOTIFY);
+    }
+
+
+    return CONTINUE_TIMER;
+}
+
+Timer_Return updateSteerDataLink(void* dummy)
+{
+    if(updateHeraSteer() != COMMS_OK)
+    {
+        ErrorHandler(HERA_STEER_FAIL, NOTIFY);
+    }
+
+    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
+    {
+        ErrorHandler(HEPHAESTUS_STEER_FAIL, NOTIFY);
+    }
+
+    return CONTINUE_TIMER;
 }

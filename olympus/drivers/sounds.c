@@ -98,7 +98,7 @@ void Tim_Init(void){//intializes the timer so that a frequency can be assigned t
     HAL_GPIO_Init(GPIOB, &GPIO_InitTypeDef ); 
 }
 
-void Song(void){//sets up the timer and starts the callbacks to the windows startup 
+void runStartupSong(void){
     Tim_Init();    
     addCallbackTimer(1, startup, NULL);  
 }
@@ -114,9 +114,10 @@ Timer_Return failure(void*dummy){//plays the windows shutdown sounds with callba
     {
         playNote(0);
     }
-    return DISABLE_TIMER;
-    }
 
-void Error(void){//starts the callbacks to the shutdown sounds
+    return DISABLE_TIMER;
+}
+
+void runErrorSong(void){
     addCallbackTimer(1, failure, NULL);
 }

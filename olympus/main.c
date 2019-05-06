@@ -1,89 +1,39 @@
-
 #include <stdio.h>
+#include <stddef.h>
+
 #include "stm32f2xx_hal.h"
-#include "pwradc.h"
-#include "dac.h"
+
+#include "adc.h"
 #include "dma.h"
-#include "i2c.h"
+#include "gpio.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
-#include "gpio.h"
-#include "timerCallback.h"
-#include "buffer8.h"
-#include "speedDAC.h"
-#include "kill.h"
-#include "sevenSeg.h"
-#include "led.h"
+
 #include "console.h"
-#include "adc.h"
+#include "dac.h"
+#include "error.h"
+#include "kill.h"
+#include "led.h"
+#include "pwradc.h"
+#include "sevenSeg.h"
+#include "sounds.h"
+#include "speedDAC.h"
+#include "status.h"
+
 #include "config.h"
+#include "buffer8.h"
 #include "doubleBuffer.h"
 #include "submoduleComms.h"
-#include "sounds.h"
-#include "status.h"
-#include "error.h"
+#include "timerCallback.h"
+
 #include "hephaestus.h"
 #include "hera.h"
 #include "janus.h"
-#include <stddef.h>
 
-void SystemClock_Config(void);
-
-Timer_Return led6Toggle(void* dummy)
-{
-    HAL_GPIO_TogglePin(GPIO_DEBUG_6);
-
-    return CONTINUE_TIMER;
-}
-
-Timer_Return updateSteerDataLink(void* dummy)
-{
-    if(updateHeraSteer() != COMMS_OK)
-    {
-        setSevenSeg(HERA_STEER_FAIL);
-        //printf("UpdateHeraSteer Failed\r\n");
-    }
-
-    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
-    {
-        setSevenSeg(HEPHAESTUS_STEER_FAIL);
-        //printf("UpdateHephaestusSteerPot Failed\r\n");
-    }
-
-    return CONTINUE_TIMER;
-}
-
-extern heraData_t heraData;
-Timer_Return updateSpeed(void* dummy)
-{
-    if(updateHeraSpeed() != COMMS_OK)
-    {
-        setSevenSeg(HERA_SPEED_FAIL);
-        printf("UpdateHeraSpeed Failed\r\n");
-    }
-
-
-    return CONTINUE_TIMER;
-}
-
-void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
-{
-    if (status == I2C_ACK)
-    {
-        printf("Zeus Data: ");
-        while (len--)
-        {
-            printf("%X ", *data++);
-        }
-        printf("\r\n");
-    } else if (status == I2C_NACK) {
-        printf("Zeus NACK\r\n");
-    } else {
-        printf("Zeus ERR\r\n");
-    }
-}
+static void SystemClock_Config(void);
+static Timer_Return heartbeat(void *dummy);
 
 int main(void)
 {
@@ -92,8 +42,6 @@ int main(void)
     RCC->AHB3ENR |= 0xFFFFFFFF;
     RCC->APB1ENR |= 0xFFFFFFFF;
     RCC->APB2ENR |= 0xFFFFFFFF;
-
-    /* MCU Configuration----------------------------------------------------------*/
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
@@ -116,10 +64,10 @@ int main(void)
     adc_init();
 
     checkAllSubmodules();
-    //plays some sort of startup sounds
-    Song();
 
-    addCallbackTimer(1000, led6Toggle, NULL);
+    runStartupSong();
+
+    addCallbackTimer(1000, heartbeat, NULL);
     addCallbackTimer(1000, updateJanus, NULL);
     addCallbackTimer(10, updateSteerDataLink, NULL);
     addCallbackTimer(5, updateSpeed, NULL);
@@ -144,7 +92,7 @@ int main(void)
 
 /** System Clock Configuration
 */
-void SystemClock_Config(void)
+static void SystemClock_Config(void)
 {
 #ifdef STM32F205xx
     RCC_OscInitTypeDef RCC_OscInitStruct;
@@ -209,12 +157,9 @@ void SystemClock_Config(void)
 #endif
 }
 
-/**
-  * @}
-  */ 
+static Timer_Return heartbeat(void* dummy)
+{
+    HAL_GPIO_TogglePin(GPIO_DEBUG_6);
 
-/**
-  * @}
-*/ 
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+    return CONTINUE_TIMER;
+}

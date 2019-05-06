@@ -3,7 +3,11 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+
+#include "config.h"
+
 #include "submoduleComms.h"
+#include "timerCallback.h"
 
 typedef uint8_t heraMsg_t;
 
@@ -30,5 +34,8 @@ commsStatus_t updateHeraSpeed();
 commsStatus_t updateHeraSteer();
 commsStatus_t updateHeraSonar();
 commsStatus_t updateHeraData();
+
+Timer_Return updateSpeed(void* dummy);
+Timer_Return updateSteerDataLink(void* dummy);
 
 #endif
