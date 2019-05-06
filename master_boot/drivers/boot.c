@@ -84,7 +84,7 @@ void runBootFSM(uint32_t data){
                         memset(submoduleCommsBuff + (count % CHUNK_SIZE), 0u, CHUNK_SIZE - (count % CHUNK_SIZE));
                     }
 
-                    if(writeSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    if(messageSubmodule(module, 0x02, submoduleCommsBuff, CHUNK_SIZE, 0u, BOOT_SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
                         writeResponse(ERR_DATA_WRITE);
                         msg = DMY;
@@ -123,7 +123,7 @@ void runBootFSM(uint32_t data){
             else
             {
                 memcpy(submoduleCommsBuff, &data, sizeof(data));
-                if(writeSubmodule(module, 0x03, submoduleCommsBuff, 4u, SUBMODULE_TIMEOUT) != COMMS_OK)
+                if(messageSubmodule(module, 0x03, submoduleCommsBuff, 4u, 0u, BOOT_SUBMODULE_TIMEOUT) != COMMS_OK)
                 {
                     writeResponse(ERR_CHECKSUM);
                     msg = DMY;
@@ -189,14 +189,14 @@ void runBootFSM(uint32_t data){
                 }
                 else
                 {
-                    if(writeSubmodule(module, 0x00, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    if(messageSubmodule(module, 0x00, submoduleCommsBuff, 0u, 0u, BOOT_SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
                         writeResponse(ERR_REBOOT_FAIL);
                         msg = DMY;
                         break;
                     }
 
-                    if(writeSubmodule(module, 0x0A, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    if(messageSubmodule(module, 0x0A, submoduleCommsBuff, 0u, 0u, BOOT_SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
                         writeResponse(ERR_REBOOT_START);
                         msg = DMY;
@@ -206,7 +206,7 @@ void runBootFSM(uint32_t data){
                     /** Give Time for Restart **/
                     HAL_Delay(200u);
 
-                    if(writeSubmodule(module, 0x00, submoduleCommsBuff, 0, SUBMODULE_TIMEOUT) != COMMS_OK)
+                    if(messageSubmodule(module, 0x00, submoduleCommsBuff, 0u, 0u, BOOT_SUBMODULE_TIMEOUT) != COMMS_OK)
                     {
                         writeResponse(ERR_REBOOT_STATUS);
                         msg = DMY;
@@ -216,7 +216,7 @@ void runBootFSM(uint32_t data){
                     size_t headerSize = sizeof(header.size) + sizeof(header.fkey);
                     memcpy(submoduleCommsBuff, (uint8_t*)&(header.size), headerSize);
 
-                    if(writeSubmodule(module, 0x01, submoduleCommsBuff, headerSize, FLASH_TIMEOUT) != COMMS_OK)
+                    if(messageSubmodule(module, 0x01, submoduleCommsBuff, headerSize, 0u, BOOT_FLASH_TIMEOUT) != COMMS_OK)
                     {
                         writeResponse(ERR_FLASH_ERASE);
                         msg = DMY;

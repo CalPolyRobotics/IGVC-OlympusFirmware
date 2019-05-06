@@ -1,6 +1,5 @@
-#include <stdlib.h>
-#include <stdbool.h>
-#include "stm32f0xx.h"
+#include <stddef.h>
+
 #include "comms.h"
 #include "spi.h"
 
@@ -10,9 +9,6 @@ typedef enum commState{
 
 static uint8_t buff[256];
 
-void pauseInterruptingPeripherals() __attribute__((weak));
-void restoreInterruptingPeripherals() __attribute__((weak));
-
 wrError_t runCommsFSM(uint8_t data){
     static commState_t state = START_BYTE;
     static uint8_t dataSize;
@@ -21,6 +17,7 @@ wrError_t runCommsFSM(uint8_t data){
 
     switch(state){
         case START_BYTE:
+            clearSPIInt();
             if(data == COMMS_START_BYTE){
                 state = MSG_TYPE;
             }
@@ -47,9 +44,7 @@ wrError_t runCommsFSM(uint8_t data){
                     writeResponse(WR_OK, NULL, 0u);
                 }
 
-                pauseInterruptingPeripherals();
                 writeResponse(msgResp[msgType].callback(buff), buff, msgResp[msgType].txDataLength);
-                restoreInterruptingPeripherals();
 
                 state = START_BYTE;
             }else{
@@ -61,11 +56,12 @@ wrError_t runCommsFSM(uint8_t data){
 
         case DATA:
             buff[dataIdx++] = data;
+
             if(dataIdx == dataSize)
             {
-                pauseInterruptingPeripherals();
+
                 writeResponse(msgResp[msgType].callback(buff), buff, msgResp[msgType].txDataLength);
-                restoreInterruptingPeripherals();
+                setSPIInt();
 
                 state = START_BYTE;
             }

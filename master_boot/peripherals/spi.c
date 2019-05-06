@@ -44,7 +44,7 @@ void MX_SPI3_Init(void)
 {
     hspi3.Instance = SPI3;
     hspi3.Init.Mode = SPI_MODE_MASTER;
-    hspi3.Init.Direction = SPI_DIRECTION_1LINE;
+    hspi3.Init.Direction = SPI_DIRECTION_2LINES;
     hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
     hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -55,10 +55,6 @@ void MX_SPI3_Init(void)
     hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
     hspi3.Init.CRCPolynomial = 10;
     HAL_SPI_Init(&hspi3);
-
-
-    __HAL_SPI_1LINE_TX(&hspi3);
-    __HAL_SPI_ENABLE(&hspi3);
 
     spi3Initialized = true;
 }
@@ -92,7 +88,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
          *  PC8     ------> SS_HEPHAESTUS
          *  PC13    ------> SS_JANUS
          */
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
+        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;

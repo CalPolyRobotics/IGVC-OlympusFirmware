@@ -1,6 +1,6 @@
-#include <stdlib.h>
-#include <stdbool.h>
+#include <stddef.h>
 #include <string.h>
+
 #include "boot.h"
 #include "comms.h"
 #include "flash.h"
@@ -15,7 +15,7 @@ typedef struct{
 
 static uint32_t size = 0u;
 static uint32_t checksum = 0u;
-static bool flashComplete = false;
+static int flashComplete = 0;
 
 static uint8_t get_status_callback(uint8_t *data);
 static uint8_t write_header(uint8_t *data);
@@ -53,7 +53,7 @@ static uint8_t write_header(uint8_t *data){
     /* Initialize static variables */
     size = header.size;
     checksum = 0;
-    flashComplete = false;
+    flashComplete = 0;
 
     /* Initialize Flash */
     writeInit(header.size);
@@ -72,7 +72,7 @@ static uint8_t write_data(uint8_t *data){
     /* Write data 16 bits at a time */
     int i;
     uint16_t val;
-    bool high16bit = false;
+    int high16bit = 0;
     for(i = 0; i < msgResp[2].rxDataLength; i += sizeof(uint16_t)){
         memcpy(&val, data + i, sizeof(uint16_t));
 
@@ -94,7 +94,7 @@ static uint8_t write_data(uint8_t *data){
 
     if(count >= size){
         writeComplete();
-        flashComplete = true;
+        flashComplete = 1;
     }
 
     return WR_OK;

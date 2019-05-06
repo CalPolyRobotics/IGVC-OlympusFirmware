@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include "stm32f0xx.h"
 #include "spi.h"
 #include "systemClock.h"
@@ -28,8 +27,8 @@ static void COMMS_SPI_Init()
    
     NVIC_EnableIRQ(COMMS_SPI_IRQn);
 
-    /* Enable SPI as Half-Duplex Slave and Hardware NSS*/
-    COMMS_SPI->CR1 = SPI_CR1_BIDIMODE | SPI_CR1_SPE;
+    /* Enable SPI as Full-Duplex Slave and Hardware NSS*/
+    COMMS_SPI->CR1 = SPI_CR1_SPE;
 }
 
 void MX_COMMS_SPI_Init(){
@@ -51,21 +50,26 @@ void COMMS_SPI_LL_Init(){
      *  PA4 ----------> COMMS_SPI_NSS
      *  PA5 ----------> COMMS_SPI_SCK
      *  PA6 ----------> COMMS_SPI_MISO
+     *  PA7 ----------> COMMS_SPI_MOSI
      *
      *  PB0 ----------> COMMS_SPI_INT
      */
 
     GPIOA->OSPEEDR |=  GPIO_OSPEEDR_OSPEEDR4_Msk |
                        GPIO_OSPEEDR_OSPEEDR5_Msk |
-                       GPIO_OSPEEDR_OSPEEDR6_Msk;
+                       GPIO_OSPEEDR_OSPEEDR6_Msk |
+                       GPIO_OSPEEDR_OSPEEDR7_Msk;
+
 
     GPIOA->AFR[0] |=  (0x00u << GPIO_AFRL_AFSEL4_Pos) |
                       (0x00u << GPIO_AFRL_AFSEL5_Pos) |
-                      (0x00u << GPIO_AFRL_AFSEL6_Pos);
+                      (0x00u << GPIO_AFRL_AFSEL6_Pos) |
+                      (0x00u << GPIO_AFRL_AFSEL7_Pos);
 
     GPIOA->MODER |= GPIO_MODER_MODER4_1 |
                     GPIO_MODER_MODER5_1 |
-                    GPIO_MODER_MODER6_1;
+                    GPIO_MODER_MODER6_1 |
+                    GPIO_MODER_MODER7_1;
 
     GPIOB->OSPEEDR |= GPIO_OSPEEDR_OSPEEDR0_Msk;
     GPIOB->MODER |= GPIO_MODER_MODER0_0;
@@ -84,14 +88,12 @@ void setSPIInt()
 
 void runResponse()
 {
-    COMMS_SPI->CR1 |= SPI_CR1_BIDIOE;
     setSPIInt();
 
     /* Write txBuffer data */
     while(txBufferLen > 0u || (((COMMS_SPI->SR & SPI_SR_FTLVL) >> SPI_SR_FTLVL_Pos) > 0u) ||
           COMMS_SPI->SR & SPI_SR_BSY);
 
-    COMMS_SPI->CR1 &= ~SPI_CR1_BIDIOE;
     clearSPIInt();
 }
 

@@ -13,6 +13,7 @@
 #include "janus.h"
 #include "spi.h"
 #include "speedDAC.h"
+#include "timerCallback.h"
 
 janusData_t janusData;
 
@@ -81,16 +82,9 @@ commsStatus_t updateCTRL()
     return status;
 }
 
-commsStatus_t updateJanus(){
-    commsStatus_t stat;
+Timer_Return updateJanus(){
+    updateCTRL();
+    updateFNR();
 
-    if((stat = updateCTRL()) != COMMS_OK){
-        return stat;
-    }
-
-    if((stat = updateFNR()) != COMMS_OK){
-        return stat;
-    }
-
-    return COMMS_OK;
+    return CONTINUE_TIMER;
 }

@@ -64,12 +64,14 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/speedDAC.c \
 		   $(DRIVERS)/pwradc.c \
 		   $(DRIVERS)/error.c \
-		   $(DRIVERS)/submoduleComms.c \
 		   $(DRIVERS)/apollo.c \
 		   $(DRIVERS)/janus.c \
 		   $(DRIVERS)/hera.c \
 		   $(DRIVERS)/hephaestus.c\
-		   $(DRIVERS)/sounds.c
+		   $(DRIVERS)/sounds.c \
+		   $(DRIVERS)/status.c 
+
+SOURCES += $(MLIB)/drivers/submoduleComms.c
   
 
 SOURCES += $(UTILS)/buffer8.c \
@@ -91,6 +93,7 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(UTILS)\
 			-I$(PERIPHERALS)\
 			-I$(USB)\
+			-I$(MLIB)/drivers/ \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -141,6 +144,7 @@ $(ELF): $(OBJECTS) $(LDSCRIPT)
 	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 
+$(BUILDDIR)/$(HAL)/source/stm32f2xx_ll_usb.o : CFLAGS += -Wno-attributes
 $(BUILDDIR)/%.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@

@@ -40,7 +40,8 @@ SOURCES += $(USB)/usbd_cdc.c \
 
 SOURCES += $(DRIVERS)/boot.c \
 			  $(DRIVERS)/flash.c \
-			  $(DRIVERS)/submoduleComms.c
+
+SOURCES += $(MLIB)/drivers/submoduleComms.c
 
 SOURCES += $(PERIPH)/gpio.c \
            $(PERIPH)/spi.c
@@ -57,6 +58,7 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(PERIPH)\
 			-I$(USB)\
 			-I$(UTILS)\
+			-I$(MLIB)/drivers \
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
@@ -108,6 +110,7 @@ $(ELF): $(OBJECTS) $(LDSCRIPT)
 	$(LD) $(LDFLAGS) -Wl,-Map=$(MAP) -o $@ $(OBJECTS) $(LDLIBS)
 	arm-none-eabi-size $@
 
+$(BUILDDIR)/$(HAL)/source/stm32f2xx_ll_usb.o : CFLAGS += -Wno-attributes
 $(BUILDDIR)/%.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@

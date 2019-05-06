@@ -13,6 +13,11 @@ CMSIS = $(LIBRARIES)/CMSIS
 DRIVERS = drivers
 PERIPHS = peripherals
 
+# This must come before all interrupt handlers to ensure -flto does not
+# optimize out interrupt service routines
+SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
+		   $(SYSTEM)/system_stm32f0xx.c
+
 SOURCES += main.c
 
 SOURCES += $(STD_DRIVERS)/commsLib.c
@@ -24,8 +29,6 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 
 SOURCES += $(PERIPHS)/flash.c
 
-SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
-		   $(SYSTEM)/system_stm32f0xx.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
@@ -47,12 +50,13 @@ LD = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
 
-WARNINGS = -Wall -Werror -Wno-unused-function
+WARNINGS = -Wall -Werror
 
 CFLAGS  = $(INCLUDES) \
 	-Os -g \
    -mcpu=cortex-m0 -mthumb \
    -mfloat-abi=soft \
+	-flto \
    -D STM32F042x6 \
    -D BOOTLOAD \
    -D TINY \
@@ -64,11 +68,13 @@ PPFLAGS = -P -D BOOTLOAD
 LDSCRIPT_PRE = $(BUILD_TOOLS)/stm32f042_32k.ld
 LDSCRIPT = $(BUILDDIR)/linker.ld
 LDFLAGS += -T$(LDSCRIPT) \
+			  --specs=nosys.specs \
+			  -flto \
            -mthumb \
            -mcpu=cortex-m0 \
            -LbuildTools
 
-LDLIBS += -lc -lm -lnosys
+LDLIBS += -lnosys
 
 FLASH_SCRIPT = $(BUILD_TOOLS)/boot.jlink
 

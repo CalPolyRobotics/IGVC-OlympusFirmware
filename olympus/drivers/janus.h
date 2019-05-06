@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "submoduleComms.h"
+#include "timerCallback.h"
 
 typedef struct janusData{
    uint8_t fnr[1];
@@ -29,6 +30,6 @@ commsStatus_t getJanusStatus();
 commsStatus_t setFNR(fnr_t state);
 commsStatus_t updateFNR();
 commsStatus_t updateCTRL();
-commsStatus_t updateJanus();
+Timer_Return updateJanus();
 
 #endif

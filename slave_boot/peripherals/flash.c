@@ -13,7 +13,7 @@ void writeInit(uint32_t progsize)
     uint32_t page;
 
     /* Calculate the minimum number of pages to erase */
-    uint32_t numPages = (progsize / PAGE_SIZE) + (progsize % PAGE_SIZE ? 1 : 0);
+    uint32_t numPages = (progsize >> LOG2_PAGE_SIZE) + (progsize % PAGE_SIZE ? 1 : 0);
     for(page = 0; page < numPages; page++)
     {
         erasePage(APP_START_PAGE + page);
