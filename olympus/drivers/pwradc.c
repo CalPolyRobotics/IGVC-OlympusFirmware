@@ -1,48 +1,81 @@
+/**
+ * This module is designed to work with the MAX11629 ADC chip
+ **/
+
+#include <stdio.h>
+#include <string.h>
+
 #include "config.h"
 #include "comms.h"
 #include "pwradc.h"
 #include "i2c.h"
+#include "submoduleComms.h"
 #include "timerCallback.h"
 
-#define ADC_I2C_ADDR (0x33 << 1)
+#define ADC_BUFF_SIZE (ADC_PERIPH_LAST_ENUM * sizeof(uint16_t))
 
-#define ADC_REG 7
-#define ADC_SEL 4
-#define ADC_RST 1
+//RESET: 0 0 0 0 RESET X X X
+#define RESET_REG_SEL 0x10 //select write to reset register
 
-#define ADC_SCN 5
-#define ADC_CS  1
-#define ADC_SGL 0
+#define RESET_ALL 0x00 //reset all registers and FIFO buffer
+#define RESET_FIFO 0x08 //reset just FIFO
 
-/** TODO - Update to use SPI **/
+//SETUP: 0 1 CKSEL1 CKSEL0 REFSEL1 REFSEL0 X X
+#define SETUP_REG_SEL 0x40 //select write to setup register
 
-/* Value index is based off enum set in header */
-static uint32_t muls[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
-static uint32_t divs[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000};
+#define SETUP_CK_00 0x00 //setup clock mode 0
+#define SETUP_CK_01 0x10 //setup clock mode 1
+#define SETUP_CK_10 0x20 //setup clock mode 2
+
+#define SETUP_REF_00 0x00 //setup reference mode 0
+#define SETUP_REF_01 0x04 //setup reference mode 1
+#define SETUP_REF_10 0x08 //setup reference mode 2
+#define SETUP_REF_11 0x0C //setup reference mode 3
+
+/* CONVERSION: 0 CHSEL3 CHSEL2 CHSEL1 CHSEL0 SCAN1 SCAN0 X */
+#define CONVERSION_REG_SEL 0x80 //select write to conversion register
+
+#define CONVERSION_SCAN_00 0x00 //one result per channel
+#define CONVERSION_SCAN_01 0x02 //one result per channel
+#define CONVERSION_SCAN_10 0x04 //multiple scans averaged to produce one result
+
+#define CONVERSION_CH 3u
+
+#define MAX_ADC_IDX 7
+
+extern olympusData_t olympusData;
 
 static enum adc_periph commsOrder[] = {batt_v, batt_i, twlv_v, twlv_i, fv_v, fv_i, thr_v, thr_i};
 
-uint8_t pwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-uint8_t commsPwradcValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-static volatile uint32_t currADCPeriph;
+/* Value index is based off enum set in header */
+static uint32_t muls[] = {3821,3270,3024,5956,9200,4953,551,1401};
+static uint32_t divs[] = {7800,2393,6025,1447,669,2915,1040,4120};
 
-//static const uint8_t adc_cfg = (1 << ADC_REG) | (0x7 << ADC_SEL) | (1 << ADC_RST); 
+static uint8_t zeros[ADC_BUFF_SIZE * 2] = {0};
 
+static void adc_start_conversion();
+static Timer_Return adc_poll_data();
 
-Timer_Return adc_poll_data();
+uint8_t pwradcValues[ADC_BUFF_SIZE * 2] = {0};
 
 void adc_init()
 {
-    /* Set ADC to internal reference with output */
-    /**
-    i2cAddTxTransaction(ZEUS_ADC_I2C_ADDR,
-                        (uint8_t *)&adc_cfg,
-                        sizeof(uint8_t),
-                        NULL,
-                        NULL);
+    /* pull CS pin low */
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
-    addCallbackTimer(30, adc_poll_data, NULL);
-    **/
+    /* reset all registers to their default values */
+    uint8_t data[1] = {
+        //RESET_REG_SEL | RESET_ALL,
+        SETUP_REG_SEL | SETUP_CK_10 | SETUP_REF_10
+    };
+
+    HAL_SPI_Transmit(&hspi3, data, sizeof(data), 10);
+
+    /* pull CS pin high */
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
+
+    adc_start_conversion();
+    addCallbackTimer(1000, adc_poll_data, NULL);
 }
 
 void commsPwradcCallback(Packet_t* packet)
@@ -53,59 +86,35 @@ void commsPwradcCallback(Packet_t* packet)
     {
         convVal = adc_conv(commsOrder[i]);
 
-        //Convert uint16 to uint8s
-        commsPwradcValues[i*2] = convVal >> 8;
-        commsPwradcValues[(i*2)+1] = convVal & 0xFF;
+        olympusData.power.u8[(i*2) + 1] = convVal >> 8;
+        olympusData.power.u8[i*2] = convVal & 0xFF;
+
     }
-   
 }
 
-void adc_readDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
-{
-    /**
-    if (status == I2C_ACK)
-    {
-        // Convert uint16 to two uint8s
-        pwradcValues[currADCPeriph * 2] = data[0] & 0xF;
-        pwradcValues[(currADCPeriph * 2) + 1] = data[1];
 
-        // Go to the next ADC Periph
-        currADCPeriph = (currADCPeriph + 1) % ADC_PERIPH_LAST_ENUM;
-    } else {
-        printf("ADC Rx NACK\r\n");
-    }
-    **/
-}
-
-void adc_readSetupCallback(void* dummy, I2CStatus status)
-{
-    /**
-    if (status == I2C_ACK)
-    {
-        
-        i2cAddRxTransaction(ZEUS_ADC_I2C_ADDR,
-                            sizeof(uint16_t),
-                            adc_readDataCallback,
-                            NULL);
-
-    } else {
-        printf("ADC Tx NACK\r\n");
-    }
-    **/
-}
-
-Timer_Return adc_poll_data() {
+static void adc_start_conversion(){
     /* Single-channel single-ended scan on selected periph */
-    /**
-    uint8_t adc_cmd = (3 << ADC_SCN) | (currADCPeriph << ADC_CS) | (1 << ADC_SGL);
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
-    i2cAddTxTransaction(ZEUS_ADC_I2C_ADDR,
-                        (uint8_t *)&adc_cmd,
-                        sizeof(uint8_t),
-                        adc_readSetupCallback,
-                        NULL);
+    uint8_t data = CONVERSION_REG_SEL | (7u << CONVERSION_CH);
+    HAL_SPI_Transmit(&hspi3, &data, sizeof(uint8_t), 10);
 
-    **/
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
+}
+
+
+static Timer_Return adc_poll_data() {
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
+
+    HAL_SPI_TransmitReceive(&hspi3, zeros, pwradcValues, ADC_BUFF_SIZE * 2, 10);
+    
+    /* pull CS pin high */
+    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
+
+    /* start conversion for next read */
+    adc_start_conversion();
+
     return CONTINUE_TIMER;
 }
 

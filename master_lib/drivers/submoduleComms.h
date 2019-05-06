@@ -2,6 +2,7 @@
 #define __SUBMODULECOMMS_H__
 
 #include <stdint.h>
+#include "spi.h"
 
 #define SUBMODULE_START_BYTE ((uint8_t)0xEAu)
 
@@ -44,6 +45,8 @@ typedef enum module{
 
 extern uint8_t submoduleCommsBuff[256u];
 
+void SPI_Transmit(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_t timeout);
+void SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t size, uint32_t timeout);
 commsStatus_t messageSubmodule(module_t module, uint8_t msg_type, uint8_t* buff, uint8_t tx_size,
                                uint8_t rx_size, uint32_t timeout);
 

@@ -25,8 +25,6 @@
 #define START_BYTE_1 0xF0
 #define START_BYTE_2 0x5A
 
-extern volatile uint8_t  commsPwradcValues[16];
-
 typedef enum {
     WAITING_FOR_START_1 = 0,
     WAITING_FOR_START_2,
@@ -61,7 +59,7 @@ void toggleLED3(Packet_t* packet)
 /** XXX - Remove these when they are reimplemented **/
 static uint8_t status[5] = {0};
 
-static olympusData_t olympusData;
+olympusData_t olympusData;
 
 static void commsSetTurnSignal(uint8_t* data){return;}
 static void commsSetHeadlights(uint8_t* data){return;}
@@ -99,7 +97,7 @@ static packetResponse_t response[] = {
     // Olympus
     {2u,    inputBuf, 0u,   NULL,                    commsSetSpeed},       // (0x1A)
     {2u,    inputBuf, 0u,   NULL,                    commsSetLeds},        // (0x1C)
-    {0u,    NULL,     16u,  olympusData.power.u8,    NULL},                // (0x1E)
+    {0u,    NULL,     16u,  olympusData.power.u8,    commsPwradcCallback},                // (0x1E)
     {0u,    NULL,     0u,   NULL,                    killBoard},           // (0x20)
     {4u,    inputBuf, 0u,   NULL,                    resetBoard}           // (0x22)
 };
