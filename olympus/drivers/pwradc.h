@@ -6,14 +6,14 @@
 #define ADC_LINES 8
 
 enum adc_periph {
-    batt_i = 0, /* Ain0 */
-    fv_v,       /* Ain1 */
-    thr_v,      /* Ain2 */
-    batt_v,     /* Ain3 */
-    twlv_i,     /* Ain4 */
-    twlv_v,     /* Ain5 */
-    fv_i,       /* Ain6 */
-    thr_i,      /* Ain7 */
+    fv_i = 0, /* Ain0 */
+    thr_v,    /* Ain1 */
+    twlv_i,   /* Ain2 */
+    twlv_v,   /* Ain3 */
+    batt_v,   /* Ain4 */
+    fv_v,     /* Ain5 */
+    thr_i,    /* Ain6 */
+    batt_i,   /* Ain7 */
     ADC_PERIPH_LAST_ENUM
 };
 

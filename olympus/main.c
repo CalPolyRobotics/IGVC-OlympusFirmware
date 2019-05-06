@@ -43,13 +43,13 @@ Timer_Return updateSteerDataLink(void* dummy)
     if(updateHeraSteer() != COMMS_OK)
     {
         setSevenSeg(HERA_STEER_FAIL);
-        printf("UpdateHeraSteer Failed\r\n");
+        //printf("UpdateHeraSteer Failed\r\n");
     }
 
     if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
     {
         setSevenSeg(HEPHAESTUS_STEER_FAIL);
-        printf("UpdateHephaestusSteerPot Failed\r\n");
+        //printf("UpdateHephaestusSteerPot Failed\r\n");
     }
 
     return CONTINUE_TIMER;
@@ -85,7 +85,6 @@ void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status
     }
 }
 
-
 int main(void)
 {
     RCC->AHB1ENR |= 0xFFFFFFFF;
@@ -108,14 +107,13 @@ int main(void)
     MX_DMA_Init();
     MX_SPI3_Init();
 
-    adc_init();
-
     commsUsartInit();
     MX_USB_OTG_FS_USB_Init();
 
     initSpeedDAC();
 
     setSevenSeg("42");
+    adc_init();
 
     checkAllSubmodules();
     //plays some sort of startup sounds

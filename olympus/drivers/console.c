@@ -45,6 +45,7 @@ typedef enum {
     CONSOLE_ECHO_DEBUG
 }EchoState;
 
+extern olympusData_t olympusData;
 
 // Board Commands
 static void console_setLED(uint32_t, char**);
@@ -368,25 +369,25 @@ struct adc_cmd {
     enum adc_periph per;
 };
 
-static const struct adc_cmd adc_dict[] = {
-    {"batt_i", batt_i},
-    {"fv_v",   fv_v},
-    {"thr_v",  thr_v},
-    {"batt_v", batt_v},
-    {"twlv_i", twlv_i},
-    {"twlv_v", twlv_v},
-    {"fv_i",   fv_i},
-    {"thr_i",  thr_i},
-    {0}
-};
-
 static void console_getPower(uint32_t argc, char** argv)
 {
-    const struct adc_cmd *val;
+    commsPwradcCallback(NULL);
 
-    for (val = adc_dict; val->cmd; val++) {
-        printf("%s: %d\r\n", val->cmd, adc_conv(val->per));
-    }
+    // Calculate power in mW
+    int pow = olympusData.power.obj.battVolt * olympusData.power.obj.battCur;
+    pow /= 1000;
+
+    printf("\r\n");
+    printf("Power:\t %d mW\r\n", pow);
+
+    printf("Battery: %d mV %d mA\r\n", olympusData.power.obj.battVolt,
+           olympusData.power.obj.battCur);
+    printf("Twelve:\t %d mV %d mA\r\n", olympusData.power.obj.twlvVolt,
+           olympusData.power.obj.twlvCur);
+    printf("Five:\t %d mV %d mA\r\n", olympusData.power.obj.fiveVolt,
+           olympusData.power.obj.fiveCur);
+    printf("Three:\t %d mV %d mA\r\n", olympusData.power.obj.thrVolt,
+           olympusData.power.obj.thrCur);
 }
 
 static void console_kill(uint32_t argc, char** argv)

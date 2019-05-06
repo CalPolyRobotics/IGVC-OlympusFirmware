@@ -43,19 +43,20 @@
 
 #define MAX_ADC_IDX 7
 
+extern olympusData_t olympusData;
+
 static enum adc_periph commsOrder[] = {batt_v, batt_i, twlv_v, twlv_i, fv_v, fv_i, thr_v, thr_i};
 
 /* Value index is based off enum set in header */
-static uint32_t muls[] = {92306, 5000, 3290, 13716, 92306, 12058, 92306, 92306};
-static uint32_t divs[] = {220000, 3631, 2943, 3373, 220000, 3658, 220000, 220000};
+static uint32_t muls[] = {3821,3270,3024,5956,9200,4953,551,1401};
+static uint32_t divs[] = {7800,2393,6025,1447,669,2915,1040,4120};
 
-uint8_t pwradcValues[ADC_BUFF_SIZE] = {0};
+static uint8_t zeros[ADC_BUFF_SIZE * 2] = {0};
 
-Timer_Return adc_poll_data();
+static void adc_start_conversion();
+static Timer_Return adc_poll_data();
 
-extern olympusData_t olympusData;
-
-#include <stdio.h>
+uint8_t pwradcValues[ADC_BUFF_SIZE * 2] = {0};
 
 void adc_init()
 {
@@ -63,32 +64,19 @@ void adc_init()
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
     /* reset all registers to their default values */
-    uint8_t data[2] = {
-        RESET_REG_SEL | RESET_ALL,
+    uint8_t data[1] = {
+        //RESET_REG_SEL | RESET_ALL,
         SETUP_REG_SEL | SETUP_CK_10 | SETUP_REF_10
     };
 
-    SPI_Transmit(&hspi3, data, sizeof(data), 10);
+    HAL_SPI_Transmit(&hspi3, data, sizeof(data), 10);
 
     /* pull CS pin high */
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
 
-    addCallbackTimer(10, adc_poll_data, NULL);
+    adc_start_conversion();
+    addCallbackTimer(1000, adc_poll_data, NULL);
 }
-
-
-/* TODO
- * Go into comms.c and look for olympusData
-   * This is used when transmitting the power across USB
-   * It uses the u8 attribute of the powerunion_t typedef
- * Read data from ADC over SPI, and then using a changed adc convert function,
-   get the 16 bit value from that data and store it in the olympusData union
-   as an object and the specific type of data specified by the power_t struct
-   * ex. One of the data values is battVolt (36V)
-     * Read this value uint8_t[2]
-     * Since our device is little endian, swap bytes and store:
-       * ex. olympusData.obj.battVolt = (uint16_t)(lowByte << 8 | highByte)
-     * Use mols and divs to adjust the voltage and current appropriately (recallibrate) */
 
 void commsPwradcCallback(Packet_t* packet)
 {
@@ -98,27 +86,34 @@ void commsPwradcCallback(Packet_t* packet)
     {
         convVal = adc_conv(commsOrder[i]);
 
-        olympusData.power.u8[i*2] = convVal >> 8;
-        olympusData.power.u8[(i*2)+1] = convVal & 0xFF;
+        olympusData.power.u8[(i*2) + 1] = convVal >> 8;
+        olympusData.power.u8[i*2] = convVal & 0xFF;
+
     }
 }
 
-Timer_Return adc_poll_data() {
-    /* Single-channel single-ended scan on selected periph
-     * pull CS pin low */
+
+static void adc_start_conversion(){
+    /* Single-channel single-ended scan on selected periph */
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
-    uint8_t data = CONVERSION_REG_SEL | (MAX_ADC_IDX << CONVERSION_CH) | CONVERSION_SCAN_00;
-    SPI_Transmit(&hspi3, &data, sizeof(uint8_t), 10);
+    uint8_t data = CONVERSION_REG_SEL | (7u << CONVERSION_CH);
+    HAL_SPI_Transmit(&hspi3, &data, sizeof(uint8_t), 10);
 
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
-    HAL_Delay(1);
+}
+
+
+static Timer_Return adc_poll_data() {
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
 
-    SPI_Receive(&hspi3, pwradcValues, ADC_BUFF_SIZE, 10);
+    HAL_SPI_TransmitReceive(&hspi3, zeros, pwradcValues, ADC_BUFF_SIZE * 2, 10);
     
     /* pull CS pin high */
     HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
+
+    /* start conversion for next read */
+    adc_start_conversion();
 
     return CONTINUE_TIMER;
 }
