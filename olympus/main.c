@@ -45,51 +45,7 @@
 
 static void SystemClock_Config(void);
 
-void SystemClock_Config(void);
-
-Timer_Return led6Toggle(void* dummy)
-{
-    HAL_GPIO_TogglePin(GPIO_DEBUG_6);
-
-    return CONTINUE_TIMER;
-}
-
-Timer_Return updateSteerDataLink(void* dummy)
-{
-    if(updateHeraSteer() != COMMS_OK)
-    {
-        setSevenSeg(HERA_STEER_FAIL);
-        printf("UpdateHeraSteer Failed\r\n");
-    }
-
-    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
-    {
-        setSevenSeg(HEPHAESTUS_STEER_FAIL);
-        printf("UpdateHephaestusSteerPot Failed\r\n");
-    }
-
-    return CONTINUE_TIMER;
-}
-
-void zeusDataCallback(void* dummy, uint8_t* data, uint32_t len, I2CStatus status)
-{
-    if (status == I2C_ACK)
-    {
-        printf("Zeus Data: ");
-        while (len--)
-        {
-            printf("%X ", *data++);
-        }
-        printf("\r\n");
-    } else if (status == I2C_NACK) {
-        printf("Zeus NACK\r\n");
-    } else {
-        printf("Zeus ERR\r\n");
-    }
-}
-
 struct netif gnetif;
->>>>>>> Implement initial ethernet code for revision 3
 
 int main(void)
 {
