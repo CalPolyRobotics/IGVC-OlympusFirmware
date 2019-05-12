@@ -10,6 +10,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
+#include "comms.h"
 
 #include "console.h"
 #include "dac.h"
@@ -46,6 +47,8 @@
 static void SystemClock_Config(void);
 
 struct netif gnetif;
+
+int usingUSB = 0;
 
 int main(void)
 {
@@ -104,7 +107,7 @@ int main(void)
         uint8_t dataIn;
         while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
         {
-            runCommsFSM((char)dataIn);
+            runCommsFSM((char)dataIn, (void*)0);
         }
     }
 }

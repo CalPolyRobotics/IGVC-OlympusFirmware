@@ -39,6 +39,9 @@
 #include "lwip/stats.h"
 #include "lwip/tcp.h"
 
+#include "tcp_echoserver.h"
+#include "comms.h"
+
 #if LWIP_TCP
 
 static struct tcp_pcb *tcp_echoserver_pcb;
@@ -70,6 +73,7 @@ static err_t tcp_echoserver_poll(void *arg, struct tcp_pcb *tpcb);
 static err_t tcp_echoserver_sent(void *arg, struct tcp_pcb *tpcb, u16_t len);
 static void tcp_echoserver_send(struct tcp_pcb *tpcb, struct tcp_echoserver_struct *es);
 static void tcp_echoserver_connection_close(struct tcp_pcb *tpcb, struct tcp_echoserver_struct *es);
+void handlePayload(struct tcp_pcb *tpcb, struct tcp_echoserver_struct *es);
 
 
 /**
@@ -190,8 +194,8 @@ static err_t tcp_echoserver_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p
       /* acknowledge received packet */
       tcp_sent(tpcb, tcp_echoserver_sent);
       
-      /* send remaining data*/
-      tcp_echoserver_send(tpcb, es);
+      /* instead of sending back received data, run the comms fsm with the data */
+      handlePayload(tpcb, es);
     }
     ret_err = ERR_OK;
   }   
@@ -217,8 +221,8 @@ static err_t tcp_echoserver_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p
     /* initialize LwIP tcp_sent callback function */
     tcp_sent(tpcb, tcp_echoserver_sent);
     
-    /* send back the received data (echo) */
-    tcp_echoserver_send(tpcb, es);
+    /* instead of sending back received data, run the comms fsm with the data */
+    handlePayload(tpcb, es);
     
     ret_err = ERR_OK;
   }
@@ -229,8 +233,8 @@ static err_t tcp_echoserver_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p
     {
       es->p = p;
   
-      /* send back received data */
-      tcp_echoserver_send(tpcb, es);
+      /* instead of sending back received data, run the comms fsm with the data */
+      handlePayload(tpcb, es);
     }
     else
     {
@@ -299,8 +303,8 @@ static err_t tcp_echoserver_poll(void *arg, struct tcp_pcb *tpcb)
     if (es->p != NULL)
     {
       tcp_sent(tpcb, tcp_echoserver_sent);
-      /* there is a remaining pbuf (chain) , try to send data */
-      tcp_echoserver_send(tpcb, es);
+      /* instead of sending back received data, run the comms fsm with the data */
+      handlePayload(tpcb, es);
     }
     else
     {
@@ -341,7 +345,7 @@ static err_t tcp_echoserver_sent(void *arg, struct tcp_pcb *tpcb, u16_t len)
   {
     /* still got pbufs to send */
     tcp_sent(tpcb, tcp_echoserver_sent);
-    tcp_echoserver_send(tpcb, es);
+    handlePayload(tpcb, es);
   }
   else
   {
@@ -352,6 +356,34 @@ static err_t tcp_echoserver_sent(void *arg, struct tcp_pcb *tpcb, u16_t len)
   return ERR_OK;
 }
 
+void handlePayload(struct tcp_pcb *tpcb, struct tcp_echoserver_struct *es) {
+  uint8_t* data = (uint8_t*)es->p->payload;
+  int i;
+  for (i = 0; i < es->p->len; i++)
+      runCommsFSM(data[i], tpcb);
+  //ethWrite(tpcb, data, es->p->len);
+}
+
+void ethWrite(struct tcp_pcb *tpcb, uint8_t* data, uint32_t size) {
+    err_t wr_err = ERR_OK;
+
+    uint32_t i;
+    for (i = 0; i < size && wr_err == ERR_OK; i++)
+    {
+        /* enqueue data for transmission */
+        wr_err = tcp_write(tpcb, &data[i], sizeof(uint8_t), 1);
+        
+        if (wr_err == ERR_OK)
+        {
+            /* we can read more data now */
+            tcp_recved(tpcb, sizeof(uint8_t));
+        }
+        else
+        {
+         /* other problem ?? */
+        }
+    }
+}
 
 /**
   * @brief  This function is used to send data for tcp connection

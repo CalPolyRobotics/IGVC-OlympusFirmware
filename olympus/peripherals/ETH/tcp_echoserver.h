@@ -30,6 +30,9 @@
 #ifndef __TCP_ECHOSERVER_H__
 #define __TCP_ECHOSERVER_H__
 
+#include "lwip/tcp.h"
+
+void ethWrite(struct tcp_pcb *tpcb, uint8_t* data, uint32_t size);
 void tcp_echoserver_init(void);
 
 #endif /* __TCP_ECHOSERVER */
