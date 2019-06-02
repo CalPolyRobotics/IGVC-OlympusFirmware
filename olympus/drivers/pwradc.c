@@ -51,8 +51,6 @@ static enum adc_periph commsOrder[] = {batt_v, batt_i, twlv_v, twlv_i, fv_v, fv_
 static uint32_t muls[] = {3821,3270,3024,5956,9200,4953,551,1401};
 static uint32_t divs[] = {7800,2393,6025,1447,669,2915,1040,4120};
 
-static uint8_t zeros[ADC_BUFF_SIZE * 2] = {0};
-
 static void adc_start_conversion();
 static Timer_Return adc_poll_data();
 
@@ -60,22 +58,7 @@ uint8_t pwradcValues[ADC_BUFF_SIZE * 2] = {0};
 
 void adc_init()
 {
-    /* pull CS pin low */
-    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
-
-    /* reset all registers to their default values */
-    uint8_t data[1] = {
-        //RESET_REG_SEL | RESET_ALL,
-        SETUP_REG_SEL | SETUP_CK_10 | SETUP_REF_10
-    };
-
-    HAL_SPI_Transmit(&hspi3, data, sizeof(data), 10);
-
-    /* pull CS pin high */
-    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
-
-    adc_start_conversion();
-    addCallbackTimer(1000, adc_poll_data, NULL);
+    return;
 }
 
 void commsPwradcCallback(Packet_t* packet)
@@ -94,27 +77,11 @@ void commsPwradcCallback(Packet_t* packet)
 
 
 static void adc_start_conversion(){
-    /* Single-channel single-ended scan on selected periph */
-    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
-
-    uint8_t data = CONVERSION_REG_SEL | (7u << CONVERSION_CH);
-    HAL_SPI_Transmit(&hspi3, &data, sizeof(uint8_t), 10);
-
-    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
+    return;
 }
 
 
 static Timer_Return adc_poll_data() {
-    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_RESET);
-
-    HAL_SPI_TransmitReceive(&hspi3, zeros, pwradcValues, ADC_BUFF_SIZE * 2, 10);
-    
-    /* pull CS pin high */
-    HAL_GPIO_WritePin(PORT_SS_ZADC, PIN_SS_ZADC, GPIO_PIN_SET);
-
-    /* start conversion for next read */
-    adc_start_conversion();
-
     return CONTINUE_TIMER;
 }
 

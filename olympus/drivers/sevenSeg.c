@@ -126,20 +126,6 @@ uint8_t charToSevenSeg(char c){
  */
 void setSevenSeg(char* mess)
 {
-    u16_t regVal = uint8ToGPIOReg(charToSevenSeg(mess[0]), charToSevenSeg(mess[1]));
-
-    uint8_t message[4] = {MCP23C17_WRITE, REG_IODIRA_ADDR, regVal.u8[0], regVal.u8[1]};
-
-    // Set Ouput Direction
-    HAL_GPIO_WritePin(PORT_SS_IRIS, PIN_SS_IRIS, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(&hspi3, message, sizeof(message), 500);
-    HAL_GPIO_WritePin(PORT_SS_IRIS, PIN_SS_IRIS, GPIO_PIN_SET);
-
-    message[1] = REG_GPIOA_ADDR;
-
-    // Set GPIO Pin Value
-    HAL_GPIO_WritePin(PORT_SS_IRIS, PIN_SS_IRIS, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(&hspi3, message, sizeof(message), 500);
-    HAL_GPIO_WritePin(PORT_SS_IRIS, PIN_SS_IRIS, GPIO_PIN_SET);
+    return;
 }
 

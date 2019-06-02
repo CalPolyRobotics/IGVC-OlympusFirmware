@@ -38,12 +38,7 @@ static Timer_Return speedDACCallback(void* dummy);
  * Release CS
  */
 static void writeDataMAX517(uint16_t dacData){
-    uint8_t spiData[2] = {(dacData >> 8u) & 0xFF, dacData & 0xFF};
-
-    /** TODO - Move SPI to DMA **/
-    HAL_GPIO_WritePin(PORT_SS_THDAC, PIN_SS_THDAC, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(&hspi3, spiData, 2, 500);
-    HAL_GPIO_WritePin(PORT_SS_THDAC, PIN_SS_THDAC, GPIO_PIN_SET);
+    return;
 }
 
 static void setSpeedDAC(uint16_t value)
