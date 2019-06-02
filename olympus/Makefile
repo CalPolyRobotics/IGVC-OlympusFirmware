@@ -4,11 +4,11 @@ MLIB = master_lib
 DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
 CMSIS = $(MLIB)/CMSIS
 HAL = $(MLIB)/STM32F2xx_HAL_Driver
+CONFIG = $(MLIB)/config
 BUILD_TOOLS = $(MLIB)/buildTools
 
 UTILS = utils
 DRIVERS = drivers
-CONFIG = config
 PERIPHERALS = peripherals
 USB = peripherals/USB
 SYSTEM = system

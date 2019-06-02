@@ -14,18 +14,20 @@ static void deselectModule(module_t module);
 uint8_t submoduleCommsBuff[256];
 uint8_t dmy[256];
 
-static pin_t CS_PINS[NUM_SUBMODULES] = {
-    {PORT_SS_APOLLO, PIN_SS_APOLLO},
-    {PORT_SS_HEPHAESTUS, PIN_SS_HEPHAESTUS},
-    {PORT_SS_HERA, PIN_SS_HERA},
-    {PORT_SS_JANUS, PIN_SS_JANUS},
+static pin_t CS_PINS[] = {
+    {APOL_SS_PRT, APOL_SS_PIN},
+    {HEPH_SS_PRT, HEPH_SS_PIN},
+    {HERM_SS_PRT, HERM_SS_PIN},
+    {JANU_SS_PRT, JANU_SS_PIN},
+    {ZEUS_SS_PRT, ZEUS_SS_PIN},
 };
 
-static pin_t INT_PINS[NUM_SUBMODULES] = {
-    {PORT_INT_APOLLO, PIN_INT_APOLLO},
-    {PORT_INT_HEPHAESTUS, PIN_INT_HEPHAESTUS},
-    {PORT_INT_HERA, PIN_INT_HERA},
-    {PORT_INT_JANUS, PIN_INT_JANUS},
+static pin_t INT_PINS[] = {
+    {APOL_IT_PRT, APOL_IT_PIN},
+    {HEPH_IT_PRT, HEPH_IT_PIN},
+    {HERM_IT_PRT, HERM_IT_PIN},
+    {JANU_IT_PRT, JANU_IT_PIN},
+    {ZEUS_IT_PRT, ZEUS_IT_PIN},
 };
 
 

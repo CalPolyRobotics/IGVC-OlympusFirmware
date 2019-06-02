@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "spi.h"
+#include "config.h"
 
 #define SUBMODULE_START_BYTE ((uint8_t)0xEAu)
 
@@ -36,9 +37,10 @@ typedef uint8_t commsStatus_t;
 typedef enum module{
    APOLLO     = 0,
    HEPHAESTUS = 1,
-   HERA       = 2,
+   HERMES     = 2,
    JANUS      = 3,
-   OLYMPUS    = 4,
+   ZEUS       = 4,
+   OLYMPUS    = 5,
    NONE       = 255
 }module_t;
 

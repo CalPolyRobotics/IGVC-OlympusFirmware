@@ -132,6 +132,45 @@
 
 #define POLL_FNR_UPDATE_PERIOD (100)
 
+//SPI PINS
+#define SPI3_PRT GPIOB
+#define SPI3_SCK  GPIO_PIN_3
+#define SPI3_MISO GPIO_PIN_4
+#define SPI3_MOSI GPIO_PIN_5
+
+#define APOL_SS_PRT GPIOB
+#define APOL_SS_PIN GPIO_PIN_9
+#define APOL_IT_PRT GPIOC
+#define APOL_IT_PIN GPIO_PIN_15
+
+#define HEPH_SS_PRT GPIOC
+#define HEPH_SS_PIN GPIO_PIN_8
+#define HEPH_IT_PRT GPIOB
+#define HEPH_IT_PIN GPIO_PIN_14
+
+#define HERM_SS_PRT GPIOB
+#define HERM_SS_PIN GPIO_PIN_6
+#define HERM_IT_PRT GPIOB
+#define HERM_IT_PIN GPIO_PIN_7
+
+#define JANU_SS_PRT GPIOC
+#define JANU_SS_PIN GPIO_PIN_13
+#define JANU_IT_PRT GPIOC
+#define JANU_IT_PIN GPIO_PIN_14
+
+#define ZEUS_SS_PRT GPIOA
+#define ZEUS_SS_PIN GPIO_PIN_8
+#define ZEUS_IT_PRT GPIOA
+#define ZEUS_IT_PIN GPIO_PIN_9
+
+#define SPI_CLOCKS_ENABLE() \
+    do{ \
+        __SPI3_CLK_ENABLE(); \
+        __GPIOA_CLK_ENABLE(); \
+        __GPIOB_CLK_ENABLE(); \
+        __GPIOC_CLK_ENABLE(); \
+    }while(0)
+
 //Error Codes
 #define ERROR_HARD_FAULT        "FF"
 #define ERROR_WATCH_DOG         "FE"

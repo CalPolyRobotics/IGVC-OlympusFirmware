@@ -34,6 +34,7 @@
 
 #include "spi.h"
 #include "gpio.h"
+#include "config.h"
 
 SPI_HandleTypeDef hspi3;
 
@@ -61,70 +62,60 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     GPIO_InitTypeDef GPIO_InitStruct;
     if(hspi->Instance==SPI3)
     {
-        /* Peripheral clock enable */
-        __SPI3_CLK_ENABLE();
+        SPI_CLOCKS_ENABLE();
 
-        __GPIOA_CLK_ENABLE();
-        __GPIOB_CLK_ENABLE();
-        __GPIOC_CLK_ENABLE();
-        /**
-         *  SPI3 GPIO Configuration
-         *  PB3     ------> SPI3_SCK
-         *  PB4     ------> SPI3_MISO
-         *  PB5     ------> SPI3_MOSI
-         *
-         *  Active High Interrupt:
-         *  PB10    ------> INT_APOLLO
-         *  PB11    ------> INT_HERA
-         *  PB12    ------> INT_HEPHAESTUS
-         *  PB13    ------> INT_JANUS
-         *
-         *  Active Low Chip Select:
-         *  PA8     ------> SS_ZADC
-         *  PB6     ------> SS_THDAC
-         *  PB7     ------> SS_THADC
-         *  PB9     ------> SS_APOLLO
-         *  PC3     ------> SS_HERA
-         *  PC8     ------> SS_HEPHAESTUS
-         *  PC9     ------> SS_IRIS
-         *  PC13    ------> SS_JANUS
-         */
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+        // SPI3 GPIO Configuration
+        GPIO_InitStruct.Pin = SPI3_SCK | SPI3_MISO | SPI3_MOSI;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+        HAL_GPIO_Init(SPI3_PRT, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
+        // Interrupt  Pins
         GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_8;
+        GPIO_InitStruct.Pin = APOL_IT_PIN;
+        HAL_GPIO_Init(APOL_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = HEPH_IT_PIN;
+        HAL_GPIO_Init(HEPH_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = HERM_IT_PIN;
+        HAL_GPIO_Init(HERM_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = JANU_IT_PIN;
+        HAL_GPIO_Init(JANU_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = ZEUS_IT_PIN;
+        HAL_GPIO_Init(ZEUS_IT_PRT, &GPIO_InitStruct);
+
+        // Slave Select Pins
         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
 
-        HAL_GPIO_WritePin(GPIOA, GPIO_InitStruct.Pin, GPIO_PIN_SET);
-        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+        GPIO_InitStruct.Pin = APOL_SS_PIN;
+        HAL_GPIO_WritePin(APOL_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(APOL_SS_PRT, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_9;
-        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        GPIO_InitStruct.Pin = HEPH_SS_PIN;
+        HAL_GPIO_WritePin(HEPH_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(HEPH_SS_PRT, &GPIO_InitStruct);
 
-        HAL_GPIO_WritePin(GPIOB, GPIO_InitStruct.Pin, GPIO_PIN_SET);
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+        GPIO_InitStruct.Pin = HERM_SS_PIN;
+        HAL_GPIO_WritePin(HERM_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(HERM_SS_PRT, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_13;
-        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        GPIO_InitStruct.Pin = JANU_SS_PIN;
+        HAL_GPIO_WritePin(JANU_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(JANU_SS_PRT, &GPIO_InitStruct);
 
-        HAL_GPIO_WritePin(GPIOC, GPIO_InitStruct.Pin, GPIO_PIN_SET);
-        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+        GPIO_InitStruct.Pin = ZEUS_SS_PIN;
+        HAL_GPIO_WritePin(ZEUS_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(ZEUS_SS_PRT, &GPIO_InitStruct);
     }
 }
 

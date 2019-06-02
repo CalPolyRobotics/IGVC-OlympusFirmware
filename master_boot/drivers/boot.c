@@ -13,10 +13,10 @@
 
 #define OLYMPUS_KEY     ((uint32_t)0x4F4C594D)
 #define APOLLO_KEY      ((uint32_t)0x41504F4C)
-#define HERA_KEY        ((uint32_t)0x48455241)
 #define HEPHAESTUS_KEY  ((uint32_t)0x48455048)
 #define HERMES_KEY      ((uint32_t)0x4845524D)
 #define JANUS_KEY       ((uint32_t)0x4A414E55)
+#define ZEUS_KEY        ((uint32_t)0x5A455553)
 
 #define NO_ERR             ((uint8_t)0x00)
 #define ERR_DATA_WRITE     ((uint8_t)0x01)
@@ -163,11 +163,14 @@ void runBootFSM(uint32_t data){
                     case HEPHAESTUS_KEY:
                         module = HEPHAESTUS;
                         break;
-                    case HERA_KEY:
-                        module = HERA;
+                    case HERMES_KEY:
+                        module = HERMES;
                         break;
                     case JANUS_KEY:
                         module = JANUS;
+                        break;
+                    case ZEUS_KEY:
+                        module = ZEUS;
                         break;
                     default:
                         module = NONE;

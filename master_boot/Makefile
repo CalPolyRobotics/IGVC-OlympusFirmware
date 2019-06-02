@@ -2,6 +2,7 @@ MLIB = master_lib
 DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
 CMSIS = $(MLIB)/CMSIS
 HAL = $(MLIB)/STM32F2xx_HAL_Driver
+CONFIG = $(MLIB)/config
 
 DRIVERS = drivers
 PERIPH = peripherals
@@ -59,6 +60,7 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(USB)\
 			-I$(UTILS)\
 			-I$(MLIB)/drivers \
+			-I$(CONFIG)\
 			-I.
 
 ELF = $(BUILDDIR)/program.elf
