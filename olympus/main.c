@@ -32,7 +32,6 @@
 #include "janus.h"
 
 static void SystemClock_Config(void);
-static Timer_Return heartbeat(void *dummy);
 
 int main(void)
 {
@@ -152,11 +151,4 @@ static void SystemClock_Config(void)
 
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 #endif
-}
-
-static Timer_Return heartbeat(void* dummy)
-{
-    HAL_GPIO_TogglePin(GPIO_DEBUG_6);
-
-    return CONTINUE_TIMER;
 }

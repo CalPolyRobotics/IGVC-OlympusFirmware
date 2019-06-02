@@ -8,7 +8,6 @@
 #include "gpio.h"
 #include "led.h"
 #include "config.h"
-#include "comms.h"
 
 typedef struct 
 {
@@ -17,23 +16,24 @@ typedef struct
 } LED_t;
 
 LED_t LEDtable[] = {{},
-                    {GPIO_DEBUG_1},
-                    {GPIO_DEBUG_2},
-                    {GPIO_DEBUG_3},
-                    {GPIO_DEBUG_4},
-                    {GPIO_DEBUG_5},
-                    {GPIO_DEBUG_6},
-                    {GPIO_DEBUG_7},
-                    {GPIO_DEBUG_8},
-                    {GPIO_DEBUG_9},
-                    {GPIO_DEBUG_10},
-                    {GPIO_DEBUG_11},
-                    {GPIO_DEBUG_12}
+                    {LED_1_PRT, LED_1_PIN},
+                    {LED_2_PRT, LED_2_PIN},
+                    {LED_3_PRT, LED_3_PIN},
+                    {LED_4_PRT, LED_4_PIN},
+                    {LED_5_PRT, LED_5_PIN},
+                    {LED_6_PRT, LED_6_PIN},
                    };
+
+Timer_Return heartbeat(void *dummy){
+    HAL_GPIO_TogglePin(LED_1_PRT, LED_1_PIN);
+
+    return CONTINUE_TIMER;
+}
 
 void writeLED(uint8_t ledNum, LEDState state)
 {
-    if (((state == LED_ON) || (state == LED_OFF)) && (ledNum > 0) && (ledNum <= NUM_DEBUG_PINS))
+    if (((state == LED_ON) || (state == LED_OFF)) && (ledNum > 0) &&
+        (ledNum <= sizeof(LEDtable)/sizeof(LEDtable[0])))
     {
         HAL_GPIO_WritePin(LEDtable[ledNum].port, LEDtable[ledNum].pin, state);
     }

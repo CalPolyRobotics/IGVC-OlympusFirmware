@@ -41,69 +41,35 @@ void MX_GPIO_Init(void)
 
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    /* GPIO Ports Clock Enable */
-    __GPIOC_CLK_ENABLE();
-    __GPIOH_CLK_ENABLE();
-    __GPIOA_CLK_ENABLE();
-    __GPIOB_CLK_ENABLE();
-    __GPIOD_CLK_ENABLE();
-
-    /*
-     * PA9     ------> ZEUS_SHUTDOWN_N
-     *
-     * PA0     ------> LED12_G
-     * PA1     ------> LED11_G
-     * PA2     ------> LED10_G
-     * PA4     ------> LED1_G
-     * PA5     ------> LED2_G
-     * PA6     ------> LED3_G
-     * PA7     ------> LED4_G
-     *
-     * PC0     ------> LED9_G
-     * PC1     ------> LED8_G
-     * PC2     ------> LED7_G
-     *
-     * PC4     ------> LED5_G
-     * PC5     ------> LED6_G
-     *
-     * PA10   ------> USB_OTG_FS_ID
-     * PA11   ------> USB_OTG_FS_DM
-     * PA12   ------> USB_OTG_FS_DP
-     */
-
-    //---------------------------------------------------------------------------------
-    // Initialize Power Kill Pin
-    HAL_GPIO_WritePin(GPIO_BOARD_KILL_PORT, GPIO_BOARD_KILL_PIN, GPIO_PIN_RESET);
+    //Initiialize LEDS
+    LED_CLOCKS_ENABLE();
 
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-    GPIO_InitStruct.Pin = GPIO_BOARD_KILL_PIN;
-    HAL_GPIO_Init(GPIO_BOARD_KILL_PORT, &GPIO_InitStruct);
 
-    //---------------------------------------------------------------------------------
-    // Initialize LED GPIOs
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+    GPIO_InitStruct.Pin =  LED_1_PIN;
+    HAL_GPIO_WritePin(LED_1_PRT, LED_1_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_Init(LED_1_PRT, &GPIO_InitStruct);
 
-    // Port A LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5
-                          |GPIO_PIN_6|GPIO_PIN_7;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin =  LED_2_PIN;
+    HAL_GPIO_WritePin(LED_2_PRT, LED_2_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_Init(LED_2_PRT, &GPIO_InitStruct);
 
-    // Port C LED GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin =  LED_3_PIN;
+    HAL_GPIO_WritePin(LED_3_PRT, LED_3_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_Init(LED_3_PRT, &GPIO_InitStruct);
 
-    //---------------------------------------------------------------------------------
-    // Initialize USB GPIOs
-    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin =  LED_4_PIN;
+    HAL_GPIO_WritePin(LED_4_PRT, LED_4_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_Init(LED_4_PRT, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin =  LED_5_PIN;
+    HAL_GPIO_WritePin(LED_5_PRT, LED_5_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_Init(LED_5_PRT, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin =  LED_6_PIN;
+    HAL_GPIO_WritePin(LED_6_PRT, LED_6_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_Init(LED_6_PRT, &GPIO_InitStruct);
 }
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
