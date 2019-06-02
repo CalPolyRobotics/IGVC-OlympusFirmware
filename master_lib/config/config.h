@@ -183,5 +183,7 @@
 #define HERA_SPEED_FAIL         "F7"
 #define HERA_SONAR_FAIL         "F6"
 #define HEPH_STEER_POT_FAIL     "F5"
+#define HERMES_STATUS_FAIL      "F4"
+#define ZEUS_STATUS_FAIL        "F3"
 
 #endif

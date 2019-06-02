@@ -15,7 +15,6 @@
 #include "adc.h"
 #include "characterMapping.h"
 
-#include "hera.h"
 #include "hephaestus.h"
 #include "janus.h"
 
@@ -418,15 +417,16 @@ static void console_setSpeedTarget(uint32_t argc, char** argv)
 }
 
 
+// TODO - Implement This
 static void console_getSpeedTarget(uint32_t argc, char** argv)
 {
-    printf("%u\r\n", getSpeedDAC());
+    printf("%u\r\n", 0);
 }
 
+// TODO - Implement This
 static void console_getSpeed(uint32_t argc, char** argv)
 {
-    int16_t data = (heraData.speed[1] << 8) | heraData.speed[0];
-    printf("%d\r\n", data);
+    printf("%d\r\n", 0);
 }
 
 static void console_setSteerTarget(uint32_t argc, char** argv)
@@ -444,9 +444,10 @@ static void console_setSteerTarget(uint32_t argc, char** argv)
     }
 }
 
+// TODO - Iplement This
 static void console_getSteerPot(uint32_t argc, char** argv)
 {
-    printf("%u", *((uint16_t*)heraData.steer));
+    printf("%u", 0);
 }
 
 static void console_setEchoMode(uint32_t argc, char** argv)

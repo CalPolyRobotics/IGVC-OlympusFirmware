@@ -52,9 +52,10 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/pwradc.c \
 		   $(DRIVERS)/error.c \
 		   $(DRIVERS)/apollo.c \
-		   $(DRIVERS)/janus.c \
-		   $(DRIVERS)/hera.c \
 		   $(DRIVERS)/hephaestus.c\
+		   $(DRIVERS)/hermes.c \
+		   $(DRIVERS)/janus.c \
+		   $(DRIVERS)/zeus.c \
 		   $(DRIVERS)/sounds.c \
 		   $(DRIVERS)/status.c 
 

@@ -15,7 +15,6 @@
 #include "adc.h"
 #include "apollo.h"
 #include "janus.h"
-#include "hera.h"
 #include "hephaestus.h"
 
 #define HEADER_START_SIZE 2
@@ -75,9 +74,9 @@ static packetResponse_t response[] = {
     {0u,    NULL,     5u,   status,                  NULL},                // (0x00)
 
     // Hera
-    {0u,    NULL,     2u,   heraData.speed,          NULL},                // (0x02)
-    {0u,    NULL,     2u,   heraData.steer,          NULL},                // (0x04)
-    {0u,    NULL,     8u,   heraData.sonar,          NULL},                // (0x06)
+    {0u,    NULL,     2u,   NULL,                    NULL},                // (0x02)
+    {0u,    NULL,     2u,   NULL,                    NULL},                // (0x04)
+    {0u,    NULL,     8u,   NULL,                    NULL},                // (0x06)
 
     // Apollo
     {1u,    inputBuf, 0u,   NULL,                    commsSetTurnSignal},  // (0x08)

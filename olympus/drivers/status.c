@@ -8,8 +8,9 @@
 #include "error.h"
 #include "janus.h"
 #include "hephaestus.h"
-#include "hera.h"
+#include "hermes.h"
 #include "status.h"
+#include "zeus.h"
 
 static int checkSubmoduleStatus(module_t module);
 
@@ -27,10 +28,10 @@ void checkAllSubmodules()
         ErrorHandler(HEPHAESTUS_STATUS_FAIL, NOTIFY);
     }
 
-    if(!checkSubmoduleStatus(HERA))
+    if(!checkSubmoduleStatus(HERMES))
     {
-        printf("Status check failed for Hera\r\n");
-        ErrorHandler(HERA_STATUS_FAIL, NOTIFY);
+        printf("Status check failed for Hermes\r\n");
+        ErrorHandler(HERMES_STATUS_FAIL, NOTIFY);
     }
 
     if(!checkSubmoduleStatus(JANUS))
@@ -38,6 +39,13 @@ void checkAllSubmodules()
         printf("Status check failed for Janus\r\n");
         ErrorHandler(JANUS_STATUS_FAIL, NOTIFY);
     }
+
+    if(!checkSubmoduleStatus(ZEUS))
+    {
+        printf("Status check failed for Zeus\r\n");
+        ErrorHandler(ZEUS_STATUS_FAIL, NOTIFY);
+    }
+
 }
 
 /**
@@ -57,11 +65,14 @@ static int checkSubmoduleStatus(module_t module)
         case HEPHAESTUS:
             getStatus = getHephaestusStatus;
             break;
-        case HERA:
-            getStatus = getHeraStatus;
+        case HERMES:
+            getStatus = getHermesStatus;
             break;
         case JANUS:
             getStatus = getJanusStatus;
+            break;
+        case ZEUS:
+            getStatus = getZeusStatus;
             break;
         default:
             return false;

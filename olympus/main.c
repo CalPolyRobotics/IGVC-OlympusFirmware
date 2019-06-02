@@ -29,7 +29,6 @@
 #include "timerCallback.h"
 
 #include "hephaestus.h"
-#include "hera.h"
 #include "janus.h"
 
 static void SystemClock_Config(void);
@@ -69,8 +68,6 @@ int main(void)
 
     addCallbackTimer(1000, heartbeat, NULL);
     addCallbackTimer(1000, updateJanus, NULL);
-    addCallbackTimer(10, updateSteerDataLink, NULL);
-    addCallbackTimer(5, updateSpeed, NULL);
 
     printf("Hello.\r\n");
     while(1)
