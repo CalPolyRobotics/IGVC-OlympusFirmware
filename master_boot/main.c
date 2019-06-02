@@ -33,11 +33,9 @@ int main(void)
     MX_GPIO_Init();
 
     /*
-     * Start Bootloader if
-     * Software Reset or Boot Btn Pressed
+     * Start Bootloader if Software Reset
      */
-    if((RCC -> CSR & RCC_CSR_SFTRSTF) == 0 &&
-       HAL_GPIO_ReadPin(BOOT_GPIO_PORT, BOOT_GPIO_PIN) == GPIO_PIN_SET)
+    if((RCC -> CSR & RCC_CSR_SFTRSTF) == 0 )
     {
 
         jumpToApp(USER_APP_BASE_PTR);

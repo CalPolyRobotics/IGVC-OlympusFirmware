@@ -16,8 +16,9 @@ from BootError import BootError
 DEVICE_KEY_LUT = {
     'olympus': 0x4F4C594D,
     'apollo': 0x41504F4C,
-    'hera': 0x48455241,
+    'hermes': 0x4845524D,
     'hephaestus': 0x48455048,
+    'zeus': 0x5A455553,
     'janus': 0x4A414E55
 }
 

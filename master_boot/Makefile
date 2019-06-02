@@ -45,12 +45,11 @@ INCLUDES += -I$(DEVICE)/include \
 			-I.
 	
 CFLAGS += -DBOOTLOADER
-
+PPFLAGS += -DBOOTLOADER
 
 .PHONY: all flash dev flash-dev clean tags
 
-all: CFLAGS += -DSTM32F205xx
-all: $(BIN)
+all: $(BIN) $(HEX)
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
@@ -74,14 +73,10 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-flash: CFLAGS += -DSTM32F205xx
-flash: $(BIN)
-	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
+flash: $(HEX)
+	JLinkExe -CommanderScript $(FLASH_SCRIPT)
 
-dev: CFLAGS += -DSTM32F207xx
-dev: $(BIN)
-
-flash-stlink: dev
+flash-stlink: $(BIN)
 	st-flash write $(BIN) 0x8000000
 
 tags:

@@ -1,7 +1,8 @@
-If SWD
+device stm32f207vg
+if swd
 speed 2000
 r
 h
-loadbin build/program.bin, 0x08020000
+loadfile build/program.hex
 r
 q

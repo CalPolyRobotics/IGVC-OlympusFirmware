@@ -1,10 +1,10 @@
 #ifndef __BOOT_H__
 #define __BOOT_H__
 
-#if defined(STM32F207xx)
+#if defined(DEV)
    #define BOOT_GPIO_PORT GPIOC
    #define BOOT_GPIO_PIN  GPIO_PIN_13
-#elif defined(STM32F205xx)
+#else
    #define BOOT_GPIO_PORT GPIOB
    #define BOOT_GPIO_PIN  GPIO_PIN_15
 #endif

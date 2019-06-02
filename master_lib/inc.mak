@@ -41,6 +41,7 @@ CFLAGS  = -O0 -g \
    -mfloat-abi=soft \
    $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
    -DUSE_USB_FS \
+   -DSTM32F207xx \
    $(WARNINGS)
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))

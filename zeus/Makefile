@@ -110,7 +110,7 @@ $(BUILDDIR)/%.o: %.s
 	$(CC) -c $(CFLAGS) $< -o $@
 
 flash: $(BIN)
-	$(BOOT_APP) -m hera -f $(BIN)
+	$(BOOT_APP) -m zeus -f $(BIN)
 
 flash-stlink: $(BIN)
 	st-flash write $(BIN) 0x8001400

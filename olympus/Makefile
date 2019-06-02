@@ -86,8 +86,8 @@ WARNINGS += -Wno-unused-function
 LDFLAGS += -nostdlib -L$(BUILD_TOOLS)
 
 .PHONY: all flash tags dev flash-dev
-all: CFLAGS += -DSTM32F205xx
-all: $(BIN)
+
+all: $(BIN) $(HEX)
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
@@ -111,20 +111,14 @@ $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-# Devices using STM32F205xx
-std: CFLAGS += -DSTM32F205xx
-std: $(BIN)
-
-flash: std
+flash: $(BIN)
 	$(BOOT_APP) -m olympus -f $(BIN)
 
-flash-jlink: std
-	JLinkExe -Device STM32F205RG -CommanderScript $(FLASH_SCRIPT)
+flash-jlink: $(HEX)
+	JLinkExe -CommanderScript $(FLASH_SCRIPT)
 
-
-# Devices using STM32F207xx
-dev: CFLAGS += -DSTM32F207xx
-dev: $(BIN)
+dev: CFLAGS += -DDEV
+dev: $(BIN) $(HEX)
 
 flash-dev: dev
 	$(BOOT_APP) -m olympus -f $(BIN)
@@ -134,6 +128,9 @@ flash-dev-stlink: dev
 
 tags:
 	ctags -R
+
+flash-dev-jlink: std
+	JLinkExe -Device STM32F207VG -CommanderScript $(FLASH_SCRIPT)
 
 clean:
 	rm -rf build
