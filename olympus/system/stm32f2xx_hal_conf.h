@@ -54,7 +54,7 @@
 //#define HAL_CRYP_MODULE_ENABLED   
 #define HAL_DAC_MODULE_ENABLED
 //#define HAL_DCMI_MODULE_ENABLED   
-//#define HAL_ETH_MODULE_ENABLED   
+#define HAL_ETH_MODULE_ENABLED   
 //#define HAL_NAND_MODULE_ENABLED   
 //#define HAL_NOR_MODULE_ENABLED   
 //#define HAL_PCCARD_MODULE_ENABLED   
@@ -137,6 +137,7 @@
   */
 /* #define USE_FULL_ASSERT    1 */
 
+
 /* ################## Ethernet peripheral configuration ##################### */
 
 /* Section 1 : Ethernet peripheral configuration */
@@ -158,6 +159,7 @@
 /* Section 2: PHY configuration section */
 
 /* DP83848 PHY Address*/ 
+#define LAN8742A_PHY_ADDRESS            0x00
 #define DP83848_PHY_ADDRESS             0x01
 /* PHY Reset delay these values are based on a 1 ms Systick interrupt*/ 
 #define PHY_RESET_DELAY                 ((uint32_t)0x000000FF)
@@ -202,6 +204,7 @@
 
 #define PHY_MISR_LINK_INT_EN            ((uint16_t)0x0020)  /*!< Enable Interrupt on change of link status       */
 #define PHY_LINK_INTERRUPT              ((uint16_t)0x2000)  /*!< PHY link status interrupt mask                  */
+
 
 /* Includes ------------------------------------------------------------------*/
 /**

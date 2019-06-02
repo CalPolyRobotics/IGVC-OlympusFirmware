@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "lwip/tcp.h"
+
+extern int usingUSB;
 
 typedef struct {
     uint8_t startByte[2];
@@ -39,5 +42,5 @@ typedef struct olympusData{
 
 typedef void (*commsCallback)(uint8_t*);
 
-void runCommsFSM(char data);
+void runCommsFSM(char data, struct tcp_pcb *tpcb);
 #endif

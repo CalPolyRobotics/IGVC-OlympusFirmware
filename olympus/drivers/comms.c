@@ -17,6 +17,8 @@
 #include "janus.h"
 #include "hephaestus.h"
 
+#include "tcp_echoserver.h"
+
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
 #define MAX_PACKET_SIZE 64
@@ -136,7 +138,7 @@ static void runPacket(Packet_t* packet)
     }
 }
 
-static void sendResponse(Packet_t* packet)
+static void sendResponse(Packet_t* packet, struct tcp_pcb *tcpb)
 {
     static uint8_t packetBuffer[MAX_PACKET_SIZE];
     Packet_t* outPacket = (Packet_t*)packetBuffer;
@@ -158,10 +160,17 @@ static void sendResponse(Packet_t* packet)
 
     outPacket->data[idx] = crc8(outPacket, outPacket->header.packetLen - 1);
 
-    usbWrite(packetBuffer, outPacket->header.packetLen);
+    if (usingUSB)
+    {
+        usbWrite(packetBuffer, outPacket->header.packetLen);
+    }
+    else
+    {
+        ethWrite(tcpb, packetBuffer, outPacket->header.packetLen);
+    }
 }
 
-void runCommsFSM(char data)
+void runCommsFSM(char data, struct tcp_pcb *tpcb)
 {
     static CommsState_t state = WAITING_FOR_START_1;
     static uint8_t packetBuffer[MAX_PACKET_SIZE];
@@ -237,7 +246,7 @@ void runCommsFSM(char data)
             }
 
             runPacket(packet);
-            sendResponse(packet);
+            sendResponse(packet, tpcb);
             state = WAITING_FOR_START_1;
         }
         break;

@@ -54,6 +54,10 @@
 #define SPEED_DAC_INCR_PERIOD   (20)
 #define SPEED_DAC_INCR          (10)
 
+// Comms Select
+#define COM_SEL_PRT GPIOC
+#define COM_SEL_PIN GPIO_PIN_0
+
 //LEDS
 #define LED_1_PRT GPIOB
 #define LED_1_PIN GPIO_PIN_0
@@ -133,5 +137,26 @@
 #define HEPH_STEER_POT_FAIL     "F5"
 #define HERMES_STATUS_FAIL      "F4"
 #define ZEUS_STATUS_FAIL        "F3"
+
+//Ethernet Configuration
+
+/*Static IP ADDRESS: IP_ADDR0.IP_ADDR1.IP_ADDR2.IP_ADDR3 */
+#define IP_ADDR0   (uint8_t) 192
+#define IP_ADDR1   (uint8_t) 168
+#define IP_ADDR2   (uint8_t) 0
+#define IP_ADDR3   (uint8_t) 10
+   
+/*NETMASK*/
+#define NETMASK_ADDR0   (uint8_t) 255
+#define NETMASK_ADDR1   (uint8_t) 255
+#define NETMASK_ADDR2   (uint8_t) 255
+#define NETMASK_ADDR3   (uint8_t) 0
+
+/*Gateway Address*/
+#define GW_ADDR0   (uint8_t) 192
+#define GW_ADDR1   (uint8_t) 168
+#define GW_ADDR2   (uint8_t) 0
+#define GW_ADDR3   (uint8_t) 1
+
 
 #endif

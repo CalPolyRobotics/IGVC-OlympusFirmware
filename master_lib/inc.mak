@@ -11,7 +11,12 @@ DRIVERS = drivers
 UTILS = utils
 PERIPH = peripherals
 USB = $(PERIPH)/USB
+ETH = peripherals/ETH
+LWIP = $(MLIB)/LwIP
 SYSTEM = system
+
+MPERIPH = $(MLIB)/$(PERIPH)
+MDRIVERS =  $(MLIB)/$(DRIVERS)
 
 ELF = $(BUILDDIR)/program.elf
 HEX = $(BUILDDIR)/program.hex
@@ -46,6 +51,8 @@ CFLAGS  = -O0 -g \
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-SOURCES += $(MLIB)/drivers/submoduleComms.c
+SOURCES += $(MDRIVERS)/submoduleComms.c
+SOURCES += $(MPERIPH)/sysclock.c
 
-INCLUDES += -I$(MLIB)/drivers
+INCLUDES += -I$(MDRIVERS) \
+				-I$(MPERIPH)
