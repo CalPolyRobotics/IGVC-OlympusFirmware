@@ -44,7 +44,7 @@ static uint8_t update_steerpot_callback(uint8_t *data)
     uint16_t tmp;
     memcpy(&tmp, data, sizeof(uint16_t));
 
-    if(tmp > MAX_RIGHT_POT || tmp < MAX_LEFT_POT){
+    if(tmp > MAX_RIGHT_POT_CHECK || tmp < MAX_LEFT_POT_CHECK){
         return WR_ERR_INV_ARG;
     }
 

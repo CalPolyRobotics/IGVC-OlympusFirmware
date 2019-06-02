@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include "commsLib.h"
 
+#define MAX_LEFT_POT_CHECK ((uint16_t)900u)
+#define MAX_RIGHT_POT_CHECK ((uint16_t)2100u)
+
 #define MAX_LEFT_POT  ((uint16_t)975u)
 #define MIDDLE_POT    ((uint16_t)1500u)
 #define MAX_RIGHT_POT ((uint16_t)1917u)
