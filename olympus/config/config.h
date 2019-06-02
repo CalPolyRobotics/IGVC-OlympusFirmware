@@ -140,7 +140,9 @@
 #define HERA_STATUS_FAIL        "FB"
 #define JANUS_STATUS_FAIL       "FA"
 #define HERA_STEER_FAIL         "F9"
-#define HEPHAESTUS_STEER_FAIL   "F8"
+#define HEPH_SET_STEER_FAIL     "F8"
 #define HERA_SPEED_FAIL         "F7"
+#define HERA_SONAR_FAIL         "F6"
+#define HEPH_STEER_POT_FAIL     "F5"
 
 #endif

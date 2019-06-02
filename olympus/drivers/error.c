@@ -1,10 +1,10 @@
+#include <stdio.h>
 #include "error.h"
 
 void assert_failed(uint8_t* file, uint32_t line)
 {
     runErrorSong();
 }
-
 
 void ErrorHandler(char* type, THREATLevel severity)
 {
@@ -15,5 +15,8 @@ void ErrorHandler(char* type, THREATLevel severity)
         killBoard();
     }else if(severity == ALERT){
         runErrorSong();
+        printf("ALERT: %s\r\n", type);
+    }else if(severity == NOTIFY){
+        printf("NOTIFY: %s\r\n", type);
     }
 }

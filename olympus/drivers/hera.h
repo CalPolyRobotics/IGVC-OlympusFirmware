@@ -33,7 +33,7 @@ commsStatus_t getHeraStatus();
 commsStatus_t updateHeraSpeed();
 commsStatus_t updateHeraSteer();
 commsStatus_t updateHeraSonar();
-commsStatus_t updateHeraData();
+void updateHeraData();
 
 Timer_Return updateSpeed(void* dummy);
 Timer_Return updateSteerDataLink(void* dummy);

@@ -1,6 +1,7 @@
 #ifndef __error_H
 #define __error_H
 
+#include "config.h"
 #include "gpio.h"
 #include "kill.h"
 #include "sounds.h"

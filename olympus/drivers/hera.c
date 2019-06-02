@@ -8,6 +8,7 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 
 #include "error.h"
 #include "hera.h"
@@ -28,6 +29,8 @@ commsStatus_t updateHeraSpeed()
 
     if(status == COMMS_OK){
         memcpy(&heraData.speed, submoduleCommsBuff, SPEED_LENGTH);
+    }else{
+        ErrorHandler(HERA_SPEED_FAIL, NOTIFY);
     }
 
     return status;
@@ -39,6 +42,8 @@ commsStatus_t updateHeraSteer()
                                             SPI_TIMEOUT);
     if(status == COMMS_OK){
         memcpy(&heraData.steer, submoduleCommsBuff, STEER_LENGTH);
+    }else{
+        ErrorHandler(HERA_STEER_FAIL, NOTIFY);
     }
 
     return status;
@@ -51,55 +56,31 @@ commsStatus_t updateHeraSonar()
 
     if(status == COMMS_OK){
         memcpy(&heraData.sonar, submoduleCommsBuff, SONAR_LENGTH);
+    }else{
+        ErrorHandler(HERA_SONAR_FAIL, NOTIFY);
     }
 
     return status;
 }
 
-commsStatus_t updateHeraData()
+void updateHeraData()
 {
-    commsStatus_t status;
-
-    if((status = updateHeraSpeed()) != COMMS_OK)
-    {
-        return status;
-    }
-
-    if((status = updateHeraSteer()) != COMMS_OK)
-    {
-        return status;
-    }
-
-    if((status = updateHeraSonar()) != COMMS_OK)
-    {
-        return status;
-    }
-
-    return status;
+    updateHeraSpeed();
+    updateHeraSteer();
+    updateHeraSonar();
 }
 
 Timer_Return updateSpeed(void* dummy)
 {
-    if(updateHeraSpeed() != COMMS_OK)
-    {
-        ErrorHandler(HERA_SPEED_FAIL, NOTIFY);
-    }
-
+    updateHeraSpeed(); 
 
     return CONTINUE_TIMER;
 }
 
 Timer_Return updateSteerDataLink(void* dummy)
 {
-    if(updateHeraSteer() != COMMS_OK)
-    {
-        ErrorHandler(HERA_STEER_FAIL, NOTIFY);
-    }
-
-    if(updateHephaestusSteerPot(heraData.steer) != COMMS_OK)
-    {
-        ErrorHandler(HEPHAESTUS_STEER_FAIL, NOTIFY);
-    }
+    updateHeraSteer();
+    updateHephaestusSteerPot(heraData.steer);
 
     return CONTINUE_TIMER;
 }
