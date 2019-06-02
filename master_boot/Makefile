@@ -1,18 +1,4 @@
-MLIB = master_lib
-DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
-CMSIS = $(MLIB)/CMSIS
-HAL = $(MLIB)/STM32F2xx_HAL_Driver
-CONFIG = $(MLIB)/config
-
-DRIVERS = drivers
-PERIPH = peripherals
-SYSTEM = system
-UTILS = utils
-
-USB = $(PERIPH)/USB
-
-BUILDTOOLS = $(MLIB)/buildTools
-BUILDDIR = build
+include master_lib/inc.mak
 
 SOURCES += main.c
 
@@ -42,14 +28,10 @@ SOURCES += $(USB)/usbd_cdc.c \
 SOURCES += $(DRIVERS)/boot.c \
 			  $(DRIVERS)/flash.c \
 
-SOURCES += $(MLIB)/drivers/submoduleComms.c
-
 SOURCES += $(PERIPH)/gpio.c \
            $(PERIPH)/spi.c
 
 SOURCES += $(UTILS)/doubleBuffer.c
-
-OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 INCLUDES += -I$(DEVICE)/include \
 			-I$(HAL)/include \
@@ -59,40 +41,11 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(PERIPH)\
 			-I$(USB)\
 			-I$(UTILS)\
-			-I$(MLIB)/drivers \
 			-I$(CONFIG)\
 			-I.
-
-ELF = $(BUILDDIR)/program.elf
-HEX = $(BUILDDIR)/program.hex
-BIN = $(BUILDDIR)/program.bin
-MAP = $(BUILDDIR)/program.map
-
-CC = arm-none-eabi-gcc
-LD = arm-none-eabi-gcc
-AR = arm-none-eabi-ar
-OBJCOPY = arm-none-eabi-objcopy
-
-WARNINGS = -Wall -Werror
 	
-CFLAGS  = -O0 -g \
-   -mcpu=cortex-m3 -mthumb \
-   -mfloat-abi=soft \
-   $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
-   -DUSE_USB_FS \
-   -DBOOTLOADER \
-   $(WARNINGS)
+CFLAGS += -DBOOTLOADER
 
-PP = cpp
-PPFLAGS = -P -D BOOTLOADER
-
-LDSCRIPT_PRE = $(BUILDTOOLS)/stm32f20.ld
-LDSCRIPT = $(BUILDDIR)/linker.ld
-LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3
-
-LDLIBS += -lc -lm -lnosys
-
-FLASH_SCRIPT = $(BUILDTOOLS)/flash_boot.jlink
 
 .PHONY: all flash dev flash-dev clean tags
 

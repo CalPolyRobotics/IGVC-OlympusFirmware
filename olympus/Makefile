@@ -1,17 +1,4 @@
-BUILDDIR = build
-
-MLIB = master_lib
-DEVICE = $(MLIB)/CMSIS/device/ST/STM32F2xx
-CMSIS = $(MLIB)/CMSIS
-HAL = $(MLIB)/STM32F2xx_HAL_Driver
-CONFIG = $(MLIB)/config
-BUILD_TOOLS = $(MLIB)/buildTools
-
-UTILS = utils
-DRIVERS = drivers
-PERIPHERALS = peripherals
-USB = peripherals/USB
-SYSTEM = system
+include master_lib/inc.mak
 
 BOOT_APP = ../usbFlasher/Boot.py
 
@@ -41,13 +28,13 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCES += $(PERIPHERALS)/dac.c \
-		   $(PERIPHERALS)/dma.c \
-		   $(PERIPHERALS)/gpio.c \
-		   $(PERIPHERALS)/spi.c \
-		   $(PERIPHERALS)/tim.c \
-		   $(PERIPHERALS)/usart.c \
-		   $(PERIPHERALS)/usb_otg.c
+SOURCES += $(PERIPH)/dac.c \
+		   $(PERIPH)/dma.c \
+		   $(PERIPH)/gpio.c \
+		   $(PERIPH)/spi.c \
+		   $(PERIPH)/tim.c \
+		   $(PERIPH)/usart.c \
+		   $(PERIPH)/usb_otg.c
 
 SOURCES += $(USB)/usbd_cdc.c \
 		   $(USB)/usbd_conf.c \
@@ -71,7 +58,6 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/sounds.c \
 		   $(DRIVERS)/status.c 
 
-SOURCES += $(MLIB)/drivers/submoduleComms.c
   
 
 SOURCES += $(UTILS)/buffer8.c \
@@ -81,8 +67,6 @@ SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/crc8.c \
 		   $(UTILS)/doubleBuffer.c
 
-OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
-
 INCLUDES += -I$(DEVICE)/include \
 			-I$(HAL)/include \
 			-I$(CMSIS)/include \
@@ -91,41 +75,14 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(CONFIG)\
 			-I$(DRIVERS)\
 			-I$(UTILS)\
-			-I$(PERIPHERALS)\
+			-I$(PERIPH)\
 			-I$(USB)\
-			-I$(MLIB)/drivers/ \
 			-I.
 
-ELF = $(BUILDDIR)/program.elf
-HEX = $(BUILDDIR)/program.hex
-BIN = $(BUILDDIR)/program.bin
-MAP = $(BUILDDIR)/program.map
 
-CC = arm-none-eabi-gcc
-LD = arm-none-eabi-gcc
-AR = arm-none-eabi-ar
-OBJCOPY = arm-none-eabi-objcopy
+WARNINGS += -Wno-unused-function
 
-WARNINGS = -Wall -Werror -Wno-unused-function
-
-CFLAGS  = -O0 -g \
-   -mcpu=cortex-m3 -mthumb \
-   -mfloat-abi=soft \
-   $(INCLUDES) -DUSE_STDPERIPH_DRIVER \
-   -DUSE_USB_FS \
-   $(WARNINGS)
-
-PP = cpp
-PPFLAGS = -P
-
-LDSCRIPT_PRE = $(BUILD_TOOLS)/stm32f20.ld
-LDSCRIPT = $(BUILDDIR)/linker.ld
-LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m3 -nostdlib -L$(BUILD_TOOLS)
-
-LDLIBS += -lc -lm -lnosys
-
-FLASH_SCRIPT = $(BUILD_TOOLS)/flash.jlink
-
+LDFLAGS += -nostdlib -L$(BUILD_TOOLS)
 
 .PHONY: all flash tags dev flash-dev
 all: CFLAGS += -DSTM32F205xx
