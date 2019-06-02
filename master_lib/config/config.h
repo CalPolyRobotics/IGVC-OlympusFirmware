@@ -54,6 +54,10 @@
 #define SPEED_DAC_INCR_PERIOD   (20)
 #define SPEED_DAC_INCR          (10)
 
+// Comms Select
+#define COM_SEL_PRT GPIOC
+#define COM_SEL_PIN GPIO_PIN_0
+
 //LEDS
 #define LED_1_PRT GPIOB
 #define LED_1_PIN GPIO_PIN_0

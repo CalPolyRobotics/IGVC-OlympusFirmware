@@ -47,7 +47,7 @@
 
 struct netif gnetif;
 
-int usingUSB = 0;
+int usingUSB;
 
 int main(void)
 {
@@ -70,14 +70,22 @@ int main(void)
     MX_SPI3_Init();
 
     commsUsartInit();
-    MX_USB_OTG_FS_USB_Init();
 
-    ethernetif_init(&gnetif);
+    usingUSB = HAL_GPIO_ReadPin(COM_SEL_PRT, COM_SEL_PIN) == GPIO_PIN_SET;
 
-    lwip_init();
-    Netif_Config();
-    tcp_echoserver_init();
-    User_notification(&gnetif);
+    if(usingUSB)
+    {
+        MX_USB_OTG_FS_USB_Init();
+    }
+    else
+    {
+        ethernetif_init(&gnetif);
+
+        lwip_init();
+        Netif_Config();
+        tcp_echoserver_init();
+        User_notification(&gnetif);
+    }
 
     initSpeedDAC();
 

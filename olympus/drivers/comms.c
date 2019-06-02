@@ -159,10 +159,15 @@ static void sendResponse(Packet_t* packet, struct tcp_pcb *tcpb)
     }
 
     outPacket->data[idx] = crc8(outPacket, outPacket->header.packetLen - 1);
+
     if (usingUSB)
+    {
         usbWrite(packetBuffer, outPacket->header.packetLen);
+    }
     else
+    {
         ethWrite(tcpb, packetBuffer, outPacket->header.packetLen);
+    }
 }
 
 void runCommsFSM(char data, struct tcp_pcb *tpcb)

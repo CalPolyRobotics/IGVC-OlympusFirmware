@@ -71,5 +71,13 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Pin =  LED_6_PIN;
     HAL_GPIO_WritePin(LED_6_PRT, LED_6_PIN, GPIO_PIN_RESET);
     HAL_GPIO_Init(LED_6_PRT, &GPIO_InitStruct);
+
+    // Initialize Communication Select
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+
+    GPIO_InitStruct.Pin = COM_SEL_PIN;
+    HAL_GPIO_Init(COM_SEL_PRT, &GPIO_InitStruct);
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
