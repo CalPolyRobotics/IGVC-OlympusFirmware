@@ -1,7 +1,8 @@
 MODDIRS = apollo \
           hephaestus \
-          hera \
+			 hermes \
           janus \
+			 zeus \
           olympus
 
 MODDIR_BINS = $(addsuffix /build/program.bin, $(MODDIRS))
