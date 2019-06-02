@@ -7,6 +7,9 @@ typedef enum commState{
     START_BYTE=0, MSG_TYPE, DATA
 }commState_t;
 
+void pauseInterruptingPeripherals() __attribute__((weak));
+void restoreInterruptingPeripherals() __attribute__((weak));
+
 static uint8_t buff[256];
 
 wrError_t runCommsFSM(uint8_t data){
@@ -44,7 +47,11 @@ wrError_t runCommsFSM(uint8_t data){
                     writeResponse(WR_OK, NULL, 0u);
                 }
 
-                writeResponse(msgResp[msgType].callback(buff), buff, msgResp[msgType].txDataLength);
+                pauseInterruptingPeripherals();
+                uint8_t status = msgResp[msgType].callback(buff);
+                restoreInterruptingPeripherals();
+
+                writeResponse(status, buff, msgResp[msgType].txDataLength);
 
                 state = START_BYTE;
             }else{
@@ -59,9 +66,11 @@ wrError_t runCommsFSM(uint8_t data){
 
             if(dataIdx == dataSize)
             {
+                pauseInterruptingPeripherals();
+                uint8_t status = msgResp[msgType].callback(buff);
+                restoreInterruptingPeripherals();
 
-                writeResponse(msgResp[msgType].callback(buff), buff, msgResp[msgType].txDataLength);
-                setSPIInt();
+                writeResponse(status, buff, msgResp[msgType].txDataLength);
 
                 state = START_BYTE;
             }
