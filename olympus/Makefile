@@ -31,8 +31,6 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 
 SOURCES += $(PERIPH)/dac.c \
 		   $(PERIPH)/dma.c \
-		   $(PERIPH)/gpio.c \
-		   $(PERIPH)/spi.c \
 		   $(PERIPH)/tim.c \
 		   $(PERIPH)/usart.c \
 		   $(PERIPH)/usb_otg.c

@@ -52,7 +52,9 @@ CFLAGS  = -O0 -g \
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 SOURCES += $(MDRIVERS)/submoduleComms.c
-SOURCES += $(MPERIPH)/sysclock.c
+SOURCES += $(MPERIPH)/sysclock.c \
+			$(MPERIPH)/spi.c \
+			$(MPERIPH)/gpio.c
 
 INCLUDES += -I$(MDRIVERS) \
 				-I$(MPERIPH)

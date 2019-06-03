@@ -28,9 +28,6 @@ SOURCES += $(USB)/usbd_cdc.c \
 SOURCES += $(DRIVERS)/boot.c \
 			  $(DRIVERS)/flash.c \
 
-SOURCES += $(PERIPH)/gpio.c \
-           $(PERIPH)/spi.c
-
 SOURCES += $(UTILS)/doubleBuffer.c
 
 INCLUDES += -I$(DEVICE)/include \

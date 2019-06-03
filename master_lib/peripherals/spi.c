@@ -31,13 +31,12 @@
   *
   ******************************************************************************
   */
-#include <stdbool.h>
 
 #include "spi.h"
 #include "gpio.h"
+#include "config.h"
 
 SPI_HandleTypeDef hspi3;
-static bool spi3Initialized = false;
 
 /* SPI1 init function */
 void MX_SPI3_Init(void)
@@ -49,14 +48,12 @@ void MX_SPI3_Init(void)
     hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
     hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
     hspi3.Init.NSS = SPI_NSS_SOFT;
-    hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+    hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
     hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
     hspi3.Init.TIMode = SPI_TIMODE_DISABLED;
     hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
     hspi3.Init.CRCPolynomial = 10;
     HAL_SPI_Init(&hspi3);
-
-    spi3Initialized = true;
 }
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
@@ -65,74 +62,61 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     GPIO_InitTypeDef GPIO_InitStruct;
     if(hspi->Instance==SPI3)
     {
-        /* Peripheral clock enable */
-        __SPI3_CLK_ENABLE();
+        SPI_CLOCKS_ENABLE();
 
-        __GPIOB_CLK_ENABLE();
-        __GPIOC_CLK_ENABLE();
-        /**
-         *  SPI3 GPIO Configuration
-         *  PB3     ------> SPI3_SCK
-         *  PB4     ------> SPI3_MISO
-         *  PB5     ------> SPI3_MOSI
-         *
-         *  Active High Interrupt:
-         *  PB10    ------> INT_APOLLO
-         *  PB11    ------> INT_HERA
-         *  PB12    ------> INT_HEPHAESTUS
-         *  PB13    ------> INT_JANUS
-         *
-         *  Active Low Chip Select:
-         *  PB9     ------> SS_APOLLO
-         *  PC3     ------> SS_HERA
-         *  PC8     ------> SS_HEPHAESTUS
-         *  PC13    ------> SS_JANUS
-         */
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+        // SPI3 GPIO Configuration
+        GPIO_InitStruct.Pin = SPI3_SCK | SPI3_MISO | SPI3_MOSI;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+        HAL_GPIO_Init(SPI3_PRT, &GPIO_InitStruct);
 
-        GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
+        // Interrupt  Pins
         GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_SET);
-        GPIO_InitStruct.Pin = GPIO_PIN_9;
+        GPIO_InitStruct.Pin = APOL_IT_PIN;
+        HAL_GPIO_Init(APOL_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = HEPH_IT_PIN;
+        HAL_GPIO_Init(HEPH_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = HERM_IT_PIN;
+        HAL_GPIO_Init(HERM_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = JANU_IT_PIN;
+        HAL_GPIO_Init(JANU_IT_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = ZEUS_IT_PIN;
+        HAL_GPIO_Init(ZEUS_IT_PRT, &GPIO_InitStruct);
+
+        // Slave Select Pins
         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-#ifdef STM32F205xx
-        GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_8|GPIO_PIN_13;
-        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-        HAL_GPIO_WritePin(GPIOC, GPIO_InitStruct.Pin, GPIO_PIN_SET);
-#endif
+        GPIO_InitStruct.Pin = APOL_SS_PIN;
+        HAL_GPIO_WritePin(APOL_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(APOL_SS_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = HEPH_SS_PIN;
+        HAL_GPIO_WritePin(HEPH_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(HEPH_SS_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = HERM_SS_PIN;
+        HAL_GPIO_WritePin(HERM_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(HERM_SS_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = JANU_SS_PIN;
+        HAL_GPIO_WritePin(JANU_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(JANU_SS_PRT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = ZEUS_SS_PIN;
+        HAL_GPIO_WritePin(ZEUS_SS_PRT, GPIO_InitStruct.Pin, GPIO_PIN_SET);
+        HAL_GPIO_Init(ZEUS_SS_PRT, &GPIO_InitStruct);
     }
 }
 
-void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
-{
-    if(spi3Initialized && hspi->Instance==SPI3)
-    {
-        /* Peripheral clock disable */
-        __SPI3_CLK_DISABLE();
-
-        /**
-        *  SPI3 GPIO Configuration
-        *  PB3     ------> SPI3_SCK
-        *  PB4     ------> SPI3_MISO
-        *  PB5     ------> SPI3_MOSI
-        */
-        HAL_GPIO_DeInit(GPIOB, GPIO_PIN_3|GPIO_PIN_5);
-    }
-}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
