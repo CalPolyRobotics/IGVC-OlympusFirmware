@@ -141,13 +141,10 @@ flash-dev: dev
 	$(BOOT_APP) -m olympus -f $(BIN)
 
 flash-dev-stlink: dev
-	st-flash write $(BIN) 0x8020000
+	st-flash --format ihex write $(HEX)
 
 tags:
 	ctags -R
-
-flash-dev-jlink: std
-	JLinkExe -Device STM32F207VG -CommanderScript $(FLASH_SCRIPT)
 
 clean:
 	rm -rf build

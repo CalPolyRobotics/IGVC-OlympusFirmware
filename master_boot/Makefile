@@ -64,8 +64,9 @@ $(BUILDDIR)/%.o: %.s
 flash: $(HEX)
 	JLinkExe -CommanderScript $(FLASH_SCRIPT)
 
-flash-stlink: $(BIN)
-	st-flash write $(BIN) 0x8000000
+flash-stlink: CFLAGS += -DDEV
+flash-stlink: $(HEX)
+	st-flash --format ihex write $(HEX)
 
 tags:
 	ctags -R

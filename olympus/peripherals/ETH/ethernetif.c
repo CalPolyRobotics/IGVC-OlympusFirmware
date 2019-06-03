@@ -97,7 +97,6 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
   __GPIOA_CLK_ENABLE();
   __GPIOB_CLK_ENABLE();
   __GPIOC_CLK_ENABLE();
-  __GPIOG_CLK_ENABLE();
 
 /* Ethernet pins configuration ************************************************/
   /*
@@ -107,10 +106,16 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
         RMII_MII_CRS_DV -------------------> PA7
         RMII_MII_RXD0 ---------------------> PC4
         RMII_MII_RXD1 ---------------------> PC5
-        RMII_MII_RXER ---------------------> PG2
-        RMII_MII_TX_EN --------------------> PG11
-        RMII_MII_TXD0 ---------------------> PG13
         RMII_MII_TXD1 ---------------------> PB13
+
+        Dev Board
+        RMII_MII_RXER ---------------------> PG2
+        RMII_MII_TXD0 ---------------------> PG13
+        RMII_MII_TX_EN --------------------> PG11
+
+        Olympus
+        RMII_MII_TX_EN --------------------> PB11
+        RMII_MII_TXD0 ---------------------> PB12
   */
 
   /* Configure PA1, PA2 and PA7 */
@@ -129,9 +134,17 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
   GPIO_InitStructure.Pin = GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-  /* Configure PG2, PG11, PG13 and PG14 */
+#ifdef DEV
+  __GPIOG_CLK_ENABLE();
+
+  /* Configure PG2, PG11, PG13 */
   GPIO_InitStructure.Pin =  GPIO_PIN_2 | GPIO_PIN_11 | GPIO_PIN_13;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStructure);
+#else
+  /* Configure PB12 */
+  GPIO_InitStructure.Pin =  GPIO_PIN_11 | GPIO_PIN_12;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+#endif
   
   /* Enable the Ethernet global Interrupt */
   HAL_NVIC_SetPriority(ETH_IRQn, 0x7, 0);

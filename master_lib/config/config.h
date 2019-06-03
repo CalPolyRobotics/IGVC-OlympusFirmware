@@ -55,8 +55,22 @@
 #define SPEED_DAC_INCR          (10)
 
 // Comms Select
+#ifdef DEV
+#define COM_SEL_PRT GPIOA
+#define COM_SEL_PIN GPIO_PIN_0
+#define COMSEL_CLOCKS_ENABLE() \
+    do{ \
+        __GPIOA_CLK_ENABLE(); \
+    }while(0)
+#else
 #define COM_SEL_PRT GPIOC
 #define COM_SEL_PIN GPIO_PIN_0
+#define COMSEL_CLOCKS_ENABLE() \
+    do{ \
+        __GPIOC_CLK_ENABLE(); \
+    }while(0)
+#endif
+
 
 //LEDS
 #define LED_1_PRT GPIOB

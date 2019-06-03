@@ -73,6 +73,8 @@ void MX_GPIO_Init(void)
     HAL_GPIO_Init(LED_6_PRT, &GPIO_InitStruct);
 
     // Initialize Communication Select
+    COMSEL_CLOCKS_ENABLE();
+
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_LOW;

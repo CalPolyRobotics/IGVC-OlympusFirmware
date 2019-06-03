@@ -37,7 +37,6 @@ int main(void)
      */
     if((RCC -> CSR & RCC_CSR_SFTRSTF) == 0 )
     {
-
         jumpToApp(USER_APP_BASE_PTR);
     }
 
