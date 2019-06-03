@@ -32,15 +32,7 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 SOURCES += $(PERIPH)/dac.c \
 		   $(PERIPH)/dma.c \
 		   $(PERIPH)/tim.c \
-		   $(PERIPH)/usart.c \
-		   $(PERIPH)/usb_otg.c
-
-SOURCES += $(USB)/usbd_cdc.c \
-		   $(USB)/usbd_conf.c \
-		   $(USB)/usbd_core.c \
-		   $(USB)/usbd_ctlreq.c \
-		   $(USB)/usbd_desc.c \
-		   $(USB)/usbd_ioreq.c
+		   $(PERIPH)/usart.c
 
 SOURCES += $(ETH)/app_ethernet.c \
 			$(ETH)/eth.c \
@@ -84,7 +76,6 @@ SOURCES += $(DRIVERS)/comms.c \
 		   $(DRIVERS)/sounds.c \
 		   $(DRIVERS)/status.c 
 
-  
 
 SOURCES += $(UTILS)/buffer8.c \
 		   $(UTILS)/newlib_hooks.c \
@@ -96,7 +87,6 @@ SOURCES += $(UTILS)/buffer8.c \
 INCLUDES += -I$(DEVICE)/include \
 			-I$(HAL)/include \
 			-I$(CMSIS)/include \
-			-I$(USB)/include \
 			-I$(ETH) \
 			-I$(LWIP)/src/include \
 			-I$(LWIP)/system \
@@ -105,7 +95,6 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(DRIVERS)\
 			-I$(UTILS)\
 			-I$(PERIPH)\
-			-I$(USB)\
 			-I.
 
 

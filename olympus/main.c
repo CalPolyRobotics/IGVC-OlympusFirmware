@@ -10,6 +10,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
+#include "usbd_def.h"
 #include "comms.h"
 
 #include "console.h"
@@ -110,8 +111,6 @@ int main(void)
         uint8_t dataIn;
         if(usingUSB)
         {
-            serviceUSBWrite();
-
             while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
             {
                 runCommsFSM((char)dataIn, NULL);

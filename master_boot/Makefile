@@ -17,14 +17,6 @@ SOURCES += $(SYSTEM)/startup_stm32f2xx.s \
 		   $(SYSTEM)/stm32f2xx_it.c \
 		   $(SYSTEM)/system_stm32f2xx.c
 
-SOURCES += $(USB)/usbd_cdc.c \
-		   $(USB)/usbd_conf.c \
-		   $(USB)/usbd_core.c \
-		   $(USB)/usbd_ctlreq.c \
-		   $(USB)/usbd_ioreq.c \
-		   $(USB)/usbd_desc.c \
-		   $(USB)/usb_otg.c
-
 SOURCES += $(DRIVERS)/boot.c \
 			  $(DRIVERS)/flash.c \
 
@@ -36,7 +28,6 @@ INCLUDES += -I$(DEVICE)/include \
 			-I$(SYSTEM) \
 			-I$(DRIVERS)\
 			-I$(PERIPH)\
-			-I$(USB)\
 			-I$(UTILS)\
 			-I$(CONFIG)\
 			-I.

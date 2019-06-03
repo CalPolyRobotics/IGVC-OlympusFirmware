@@ -10,7 +10,7 @@ BUILDDIR = build
 DRIVERS = drivers
 UTILS = utils
 PERIPH = peripherals
-USB = $(PERIPH)/USB
+USB = $(MPERIPH)/USB
 ETH = peripherals/ETH
 LWIP = $(MLIB)/LwIP
 SYSTEM = system
@@ -56,5 +56,14 @@ SOURCES += $(MPERIPH)/sysclock.c \
 			$(MPERIPH)/spi.c \
 			$(MPERIPH)/gpio.c
 
+SOURCES += $(USB)/usbd_cdc.c \
+		   $(USB)/usbd_conf.c \
+		   $(USB)/usbd_core.c \
+		   $(USB)/usbd_ctlreq.c \
+		   $(USB)/usbd_ioreq.c \
+		   $(USB)/usbd_desc.c \
+		   $(USB)/usb_otg.c
+
 INCLUDES += -I$(MDRIVERS) \
-				-I$(MPERIPH)
+				-I$(MPERIPH) \
+				-I$(USB)

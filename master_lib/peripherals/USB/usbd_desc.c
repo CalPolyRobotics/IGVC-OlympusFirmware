@@ -37,7 +37,13 @@
 #define USBD_LANGID_STRING            0x409
 #define USBD_MANUFACTURER_STRING      "IGVC"
 #define USBD_PRODUCT_HS_STRING        "STM32 Virtual ComPort in HS Mode"
-#define USBD_PRODUCT_FS_STRING        "IGVC USB Bootloader"
+
+#ifdef BOOTLOADER
+    #define USBD_PRODUCT_FS_STRING        "IGVC USB Bootloader"
+#else
+    #define USBD_PRODUCT_FS_STRING        "IGVC USB ComPort"
+#endif
+
 #define USBD_CONFIGURATION_HS_STRING  "VCP Config"
 #define USBD_INTERFACE_HS_STRING      "VCP Interface"
 #define USBD_CONFIGURATION_FS_STRING  "VCP Config"
