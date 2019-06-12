@@ -35,8 +35,3 @@ void setFNR(fnr_t state){
     }
 
 }
-
-uint8_t isMCUCtrlMode(){
-    // MCU Ctrl mode when low, manual ctrl mode when high
-    return HAL_GPIO_ReadPin(GPIO_CTRL_MODE_PORT, GPIO_CTRL_MODE_PIN) == GPIO_PIN_RESET;
-}

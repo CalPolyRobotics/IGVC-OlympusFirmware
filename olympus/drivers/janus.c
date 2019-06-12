@@ -58,32 +58,7 @@ commsStatus_t updateFNR()
     return status;
 }
 
-#include <stdio.h>
-/**
- * \return state[0,1]
- */
-commsStatus_t updateCTRL()
-{
-    commsStatus_t status = messageSubmodule(JANUS, JANUS_GET_CTRL, submoduleCommsBuff, 0u,
-                                            sizeof(uint8_t), SPI_TIMEOUT);
-
-    uint8_t message = submoduleCommsBuff[0];
-    if (status == COMMS_OK && message <= 1)
-    {
-        *janusData.ctrl = message;
-
-        if(message){
-            enableSpeedDAC();
-        }else{
-            disableSpeedDAC();
-        }
-    }
-
-    return status;
-}
-
 Timer_Return updateJanus(){
-    updateCTRL();
     updateFNR();
 
     return CONTINUE_TIMER;

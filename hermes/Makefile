@@ -13,6 +13,8 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 
 SOURCES += $(DRIVERS)/comms.c
 
+SOURCES += $(PERIPHS)/gpio.c
+
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
 			$(HAL)/src/stm32f0xx_hal_flash.c \

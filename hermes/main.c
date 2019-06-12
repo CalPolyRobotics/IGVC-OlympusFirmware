@@ -2,6 +2,7 @@
 #include "boot.h"
 #include "commsLib.h"
 #include "spi.h"
+#include "gpio.h"
 #include "systemClock.h"
 
 int main(void)
@@ -10,6 +11,8 @@ int main(void)
 
     HAL_StatusTypeDef status;
     HAL_Init();
+
+    MX_GPIO_Init();
 
     /* Configure the system clock to 48 MHz */
     SystemClock_Config();
