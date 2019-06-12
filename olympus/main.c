@@ -89,6 +89,7 @@ int main(void)
     }
 
     initSpeedDAC();
+    initSevenSeg();
 
     setSevenSeg("42");
     adc_init();
@@ -98,7 +99,7 @@ int main(void)
     runStartupSong();
 
     addCallbackTimer(1000, heartbeat, NULL);
-    addCallbackTimer(1000, updateJanus, NULL);
+    //addCallbackTimer(1000, updateJanus, NULL);
 
     printf("Hello.\r\n");
     while(1)
