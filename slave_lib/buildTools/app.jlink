@@ -1,7 +1,8 @@
 If SWD
+Device stm32f042k6
 speed 2000
 r
 h
-loadbin slave_lib/buildTools/program.bin, 0x08001400
+loadfile slave_lib/buildTools/program.hex
 r
 q

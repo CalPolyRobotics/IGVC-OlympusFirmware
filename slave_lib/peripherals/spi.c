@@ -42,7 +42,8 @@ void MX_COMMS_SPI_Init(){
 void COMMS_SPI_LL_Init(){
     /* Enable GPIO and SPI Clocks */
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+    RCC->AHBENR |= RCC_AHBENR_GPIOFEN;
+
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
 
     /** COMMS_SPI GPIO Configuration
@@ -52,7 +53,7 @@ void COMMS_SPI_LL_Init(){
      *  PA6 ----------> COMMS_SPI_MISO
      *  PA7 ----------> COMMS_SPI_MOSI
      *
-     *  PB0 ----------> COMMS_SPI_INT
+     *  PF0 ----------> COMMS_SPI_INT
      */
 
     GPIOA->OSPEEDR |=  GPIO_OSPEEDR_OSPEEDR4_Msk |
@@ -71,19 +72,19 @@ void COMMS_SPI_LL_Init(){
                     GPIO_MODER_MODER6_1 |
                     GPIO_MODER_MODER7_1;
 
-    GPIOB->OSPEEDR |= GPIO_OSPEEDR_OSPEEDR0_Msk;
-    GPIOB->MODER |= GPIO_MODER_MODER0_0;
-    GPIOB->ODR &= ~GPIO_ODR_0;
+    GPIOF->OSPEEDR |= GPIO_OSPEEDR_OSPEEDR0_Msk;
+    GPIOF->MODER |= GPIO_MODER_MODER0_0;
+    GPIOF->ODR &= ~GPIO_ODR_0;
 }
 
 void clearSPIInt()
 {
-    GPIOB->ODR &= ~GPIO_ODR_0;
+    GPIOF->ODR &= ~GPIO_ODR_0;
 }
 
 void setSPIInt()
 {
-    GPIOB->ODR |= GPIO_ODR_0;
+    GPIOF->ODR |= GPIO_ODR_0;
 }
 
 void runResponse()
