@@ -25,7 +25,7 @@ commsStatus_t getHermesStatus()
 /**
  * state[0,1]
  */
-commsStatus_t getAutoman()
+commsStatus_t updateHermesAutoman()
 {
     commsStatus_t status = messageSubmodule(HERMES, HERMES_GET_AMAN,
                                             submoduleCommsBuff, 0u,
@@ -35,6 +35,21 @@ commsStatus_t getAutoman()
     if (status == COMMS_OK && message <= 1)
     {
         *hermesData.aman = message;
+    }
+
+    return status;
+}
+
+commsStatus_t updateHermesSpeed()
+{
+    commsStatus_t status = messageSubmodule(HERMES, HERMES_GET_SPEED,
+                                            submoduleCommsBuff, 0u,
+                                            SPEED_LENGTH, SPI_TIMEOUT);
+
+    if(status == COMMS_OK){
+        memcpy(&hermesData.speed, submoduleCommsBuff, SPEED_LENGTH);
+    }else{
+        ErrorHandler(HERMES_GET_SPEED_FAIL, NOTIFY);
     }
 
     return status;

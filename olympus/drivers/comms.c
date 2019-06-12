@@ -15,6 +15,7 @@
 #include "adc.h"
 #include "apollo.h"
 #include "janus.h"
+#include "hermes.h"
 #include "hephaestus.h"
 
 #include "tcp_echoserver.h"
@@ -75,10 +76,10 @@ static uint8_t inputBuf[256];
 static packetResponse_t response[] = {
     {0u,    NULL,     5u,   status,                  NULL},                // (0x00)
 
-    // Hera
-    {0u,    NULL,     2u,   NULL,                    NULL},                // (0x02)
+    // Hermes 
+    {0u,    NULL,     2u,   hermesData.speed,        NULL},                // (0x02)
     {0u,    NULL,     2u,   NULL,                    NULL},                // (0x04)
-    {0u,    NULL,     8u,   NULL,                    NULL},                // (0x06)
+    {0u,    NULL,     0u,   NULL,                    NULL},                // (0x06)
 
     // Apollo
     {1u,    inputBuf, 0u,   NULL,                    commsSetTurnSignal},  // (0x08)
@@ -86,8 +87,8 @@ static packetResponse_t response[] = {
     {2u,    inputBuf, 0u,   NULL,                    commsSetMiscLights},  // (0x0C)
 
     // Janus
-    {0u,    NULL,     1u,   janusData.fnr,           NULL},                // (0x0E)
-    {0u,    NULL,     1u,   janusData.ctrl,          NULL},                // (0x10)
+    {0u,    NULL,     1u,   NULL,                    NULL},                // (0x0E)
+    {0u,    NULL,     1u,   NULL,                    NULL},                // (0x10)
     {1u,    inputBuf, 0u,   NULL,                    commsSetFNR},         // (0x12)
 
     // Hephaestus
