@@ -41,7 +41,7 @@
 #include "netif/etharp.h"
 #include "eth.h"
 #include "ethernetif.h"
-#include "tcp_echoserver.h"
+#include "tcp_server.h"
 #include "app_ethernet.h"
 
 #include <stddef.h>
@@ -84,7 +84,7 @@ int main(void)
 
         lwip_init();
         Netif_Config();
-        tcp_echoserver_init();
+        tcp_server_init();
         User_notification(&gnetif);
     }
 

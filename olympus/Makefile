@@ -37,7 +37,7 @@ SOURCES += $(PERIPH)/dac.c \
 SOURCES += $(ETH)/app_ethernet.c \
 			$(ETH)/eth.c \
 			$(ETH)/ethernetif.c \
-			$(ETH)/tcp_echoserver.c
+			$(ETH)/tcp_server.c
 
 SOURCES += $(LWIP)/src/core/mem.c \
 			$(LWIP)/src/core/init.c \

@@ -27,12 +27,11 @@
  * This file is part of the lwIP TCP/IP stack.
  * 
  */
-#ifndef __TCP_ECHOSERVER_H__
-#define __TCP_ECHOSERVER_H__
+#ifndef __TCP_SERVER_H__
+#define __TCP_SERVER_H__
 
 #include "lwip/tcp.h"
 
-void ethWrite(struct tcp_pcb *tpcb, uint8_t* data, uint32_t size);
-void tcp_echoserver_init(void);
+void tcp_server_init(void);
 
 #endif /* __TCP_ECHOSERVER */

@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "comms.h"
+#include "error.h"
 #include "submoduleComms.h"
 #include "led.h"
 #include "usart.h"
@@ -17,7 +18,7 @@
 #include "janus.h"
 #include "hephaestus.h"
 
-#include "tcp_echoserver.h"
+#include "tcp_server.h"
 
 #define HEADER_START_SIZE 2
 #define COMMS_START_BYTE 0xF0
@@ -98,7 +99,7 @@ static packetResponse_t response[] = {
     // Olympus
     {2u,    inputBuf, 0u,   NULL,                    commsSetSpeed},       // (0x1A)
     {2u,    inputBuf, 0u,   NULL,                    commsSetLeds},        // (0x1C)
-    {0u,    NULL,     16u,  olympusData.power.u8,    commsPwradcCallback},                // (0x1E)
+    {0u,    NULL,     16u,  olympusData.power.u8,    commsPwradcCallback}, // (0x1E)
     {0u,    NULL,     0u,   NULL,                    killBoard},           // (0x20)
     {4u,    inputBuf, 0u,   NULL,                    resetBoard}           // (0x22)
 };
@@ -138,7 +139,7 @@ static void runPacket(Packet_t* packet)
     }
 }
 
-static void sendResponse(Packet_t* packet, struct tcp_pcb *tcpb)
+static void sendResponse(Packet_t* packet, struct tcp_pcb *tpcb)
 {
     static uint8_t packetBuffer[MAX_PACKET_SIZE];
     Packet_t* outPacket = (Packet_t*)packetBuffer;
@@ -166,7 +167,10 @@ static void sendResponse(Packet_t* packet, struct tcp_pcb *tcpb)
     }
     else
     {
-        ethWrite(tcpb, packetBuffer, outPacket->header.packetLen);
+        err_t err = tcp_write(tpcb, outPacket, outPacket->header.packetLen, TCP_WRITE_FLAG_COPY);
+        if(err != ERR_OK){
+            ErrorHandler("TCP Write", NOTIFY);
+        }
     }
 }
 
