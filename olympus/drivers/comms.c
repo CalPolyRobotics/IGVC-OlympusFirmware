@@ -20,21 +20,6 @@
 
 #include "tcp_server.h"
 
-#define HEADER_START_SIZE 2
-#define COMMS_START_BYTE 0xF0
-#define MAX_PACKET_SIZE 64
-
-#define START_BYTE_1 0xF0
-#define START_BYTE_2 0x5A
-
-typedef enum {
-    WAITING_FOR_START_1 = 0,
-    WAITING_FOR_START_2,
-    WAITING_FOR_HEADER,
-    WAITING_FOR_DATA,
-    WAITING_FOR_CRC
-} CommsState_t;
-
 typedef struct {
     uint32_t inputDataLen;
     uint8_t* inputData;
@@ -139,7 +124,7 @@ static void runPacket(Packet_t* packet)
     }
 }
 
-static void sendResponse(Packet_t* packet, struct tcp_pcb *tpcb)
+static void sendResponse(CommsHandler_t *hdl, Packet_t* packet)
 {
     static uint8_t packetBuffer[MAX_PACKET_SIZE];
     Packet_t* outPacket = (Packet_t*)packetBuffer;
@@ -167,99 +152,103 @@ static void sendResponse(Packet_t* packet, struct tcp_pcb *tpcb)
     }
     else
     {
-        err_t err = tcp_write(tpcb, outPacket, outPacket->header.packetLen, TCP_WRITE_FLAG_COPY);
-        if(err != ERR_OK){
-            ErrorHandler("TCP Write", NOTIFY);
+        struct tcp_pcb *tpcb = (struct tcp_pcb *)(hdl->arg);
+        tcp_server_send(tpcb, (char *)outPacket, outPacket->header.packetLen);
+    }
+}
+
+void runCommsFSM(CommsHandler_t *hdl, char *buff, size_t len)
+{
+    Packet_t *packet = (Packet_t *)hdl->packetBuffer;
+
+    for(int i = 0; i < len; i++){
+        char data = buff[i];
+
+        switch(hdl->state)
+        {
+            case WAITING_FOR_START_1:
+            {
+                hdl->packetIdx = 0;
+                if (data == START_BYTE_1)
+                {
+                    hdl->state = WAITING_FOR_START_2;
+                    hdl->packetBuffer[0] = data;
+                    hdl->packetIdx = 1;
+                }
+            }
+            break;
+
+            case WAITING_FOR_START_2:
+            {
+                if (data == START_BYTE_2)
+                {
+                    hdl->state = WAITING_FOR_HEADER;
+                    hdl->packetBuffer[1] = data;
+                    hdl->packetIdx = 2;
+                } else {
+                    hdl->state = WAITING_FOR_START_1;
+                }
+            }
+            break;
+
+            case WAITING_FOR_HEADER:
+            {
+                hdl->packetBuffer[hdl->packetIdx++] = data;
+
+                if (hdl->packetIdx == sizeof(PacketHeader_t) - 1)
+                {
+                    // There must be 1 byte of space available for CRC
+                    if (hdl->packetIdx == packet->header.packetLen - 1)
+                    {
+                        hdl->state = WAITING_FOR_CRC;
+                    } else {
+                        hdl->state = WAITING_FOR_DATA;
+                    }
+                }
+            }
+            break;
+
+            case WAITING_FOR_DATA:
+            {
+                hdl->packetBuffer[hdl->packetIdx++] = data;
+
+                // There must be 1 byte of space available for CRC
+                if (hdl->packetIdx == packet->header.packetLen - 1)
+                {
+                    hdl->state = WAITING_FOR_CRC;
+                } else if (hdl->packetIdx >= MAX_PACKET_SIZE - 1) {
+                    hdl->state = WAITING_FOR_START_1;
+                }
+            }
+            break;
+
+            case WAITING_FOR_CRC:
+            {
+                hdl->packetBuffer[hdl->packetIdx] = data;
+
+                if(!checkPacket(packet))
+                {
+                    hdl->state = WAITING_FOR_START_1;
+                    break;
+                }
+
+                runPacket(packet);
+                sendResponse(hdl, packet);
+                hdl->state = WAITING_FOR_START_1;
+            }
+            break;
+
+            default:
+            {
+                hdl->state = WAITING_FOR_START_1;
+            }
+            break;
         }
     }
 }
 
-void runCommsFSM(char data, struct tcp_pcb *tpcb)
-{
-    static CommsState_t state = WAITING_FOR_START_1;
-    static uint8_t packetBuffer[MAX_PACKET_SIZE];
-    static Packet_t* packet = (Packet_t*)packetBuffer;
-    static uint32_t packetIdx;
-
-    switch(state)
-    {
-        case WAITING_FOR_START_1:
-        {
-            packetIdx = 0;
-            if (data == START_BYTE_1)
-            {
-                state = WAITING_FOR_START_2;
-                packetBuffer[0] = data;
-                packetIdx = 1;
-            }
-        }
-        break;
-
-        case WAITING_FOR_START_2:
-        {
-            if (data == START_BYTE_2)
-            {
-                state = WAITING_FOR_HEADER;
-                packetBuffer[1] = data;
-                packetIdx = 2;
-            } else {
-                state = WAITING_FOR_START_1;
-            }
-        }
-        break;
-
-        case WAITING_FOR_HEADER:
-        {
-            packetBuffer[packetIdx++] = data;
-
-            if (packetIdx == sizeof(PacketHeader_t) - 1)
-            {
-                // There must be 1 byte of space available for CRC
-                if (packetIdx == packet->header.packetLen - 1)
-                {
-                    state = WAITING_FOR_CRC;
-                } else {
-                    state = WAITING_FOR_DATA;
-                }
-            }
-        }
-        break;
-
-        case WAITING_FOR_DATA:
-        {
-            packetBuffer[packetIdx++] = data;
-
-            // There must be 1 byte of space available for CRC
-            if (packetIdx == packet->header.packetLen - 1)
-            {
-                state = WAITING_FOR_CRC;
-            } else if (packetIdx >= MAX_PACKET_SIZE - 1) {
-                state = WAITING_FOR_START_1;
-            }
-        }
-        break;
-
-        case WAITING_FOR_CRC:
-        {
-            packetBuffer[packetIdx] = data;
-
-            if(!checkPacket(packet))
-            {
-                state = WAITING_FOR_START_1;
-                break;
-            }
-
-            runPacket(packet);
-            sendResponse(packet, tpcb);
-            state = WAITING_FOR_START_1;
-        }
-        break;
-
-        default:
-        {
-            state = WAITING_FOR_START_1;
-        }
-        break;
-    }
-
+void initCommsHandler(CommsHandler_t *hdl, void *arg){
+    hdl->state = WAITING_FOR_START_1;
+    hdl->packetIdx = 0;
+    hdl->arg = arg;
 }

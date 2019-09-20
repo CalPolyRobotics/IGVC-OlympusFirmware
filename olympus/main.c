@@ -74,12 +74,18 @@ int main(void)
 
     usingUSB = HAL_GPIO_ReadPin(COM_SEL_PRT, COM_SEL_PIN) == GPIO_PIN_SET;
 
+    CommsHandler_t chdl;
     if(usingUSB)
     {
+        initCommsHandler(&chdl, NULL);
         MX_USB_OTG_FS_USB_Init();
     }
     else
     {
+        /** Ethernet dynamically allocates handler on accept
+         * thus nothing needs to be done with the commsHandler
+         */
+
         ethernetif_init(&gnetif);
 
         lwip_init();
@@ -114,7 +120,7 @@ int main(void)
         {
             while (doubleBuffer_read(&usbReceiveBuffer, &dataIn, 1))
             {
-                runCommsFSM((char)dataIn, NULL);
+                runCommsFSM(&chdl, (char *)&dataIn, 1);
             }
         }
         else
