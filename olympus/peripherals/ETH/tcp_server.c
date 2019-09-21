@@ -2,7 +2,7 @@
  * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, 
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice,
@@ -45,7 +45,7 @@
 
 #if LWIP_TCP
 
-#define TCP_SERVER_PORT 7
+#define TCP_SERVER_PORT 9485
 
 static struct tcp_pcb *server_pcb;
 
@@ -120,14 +120,13 @@ static err_t tcp_server_accept(void *arg, struct tcp_pcb *newpcb, err_t err) {
     goto err_mem;
   }
 
-  CommsHandler_t *hdl = (CommsHandler_t *)mem_malloc(sizeof(CommsHandler_t));
-  if(hdl == NULL){
+  conn->hdl = (CommsHandler_t *)mem_malloc(sizeof(CommsHandler_t));
+  if(conn->hdl == NULL){
     mem_free(conn);
     goto err_mem;
   }
 
-  initCommsHandler(hdl, newpcb);
-
+  initCommsHandler(conn->hdl, newpcb);
   conn->state = SRV_CONNECTED;
 
   /* pass newly allocated es structure as argument to newpcb */
@@ -185,15 +184,22 @@ static err_t tcp_server_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, er
     return ERR_OK;
   }
 
+  /* Loop till end condition of pbuf chain (totLen == len)
+   * p is already confirmed to be non-null
+   */
   struct pbuf *curp = p;
-
-  /* Loop till end condition of pbuf chain (totLen == len) */
-  while(curp != NULL && curp->tot_len != curp->len){
+  do{
     runCommsFSM(conn->hdl, (char *)(curp->payload), curp->len);
     tcp_recved(tpcb, curp->len);
 
-    curp = curp->next;
-  }
+    if(curp->next == NULL){
+      if(curp->tot_len == curp->len){
+        break;
+      }
+    } else {
+      curp = curp->next;
+    }
+  }while(1);
 
   /** This will free the entire chain */
   pbuf_free(p);

@@ -159,7 +159,7 @@ static void sendResponse(CommsHandler_t *hdl, Packet_t* packet)
 
 void runCommsFSM(CommsHandler_t *hdl, char *buff, size_t len)
 {
-    Packet_t *packet = (Packet_t *)hdl->packetBuffer;
+    Packet_t *packet = (Packet_t *)(hdl->packetBuffer);
 
     for(int i = 0; i < len; i++){
         char data = buff[i];
