@@ -122,11 +122,11 @@ $(ELF): $(OBJECTS) $(LDSCRIPT)
 $(BUILDDIR)/$(HAL)/source/stm32f2xx_ll_usb.o : CFLAGS += -Wno-attributes
 $(BUILDDIR)/%.o: %.c
 	mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) -std=c99 $< -o $@
 
 $(BUILDDIR)/%.o: %.s
 	mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) -std=c99 $< -o $@
 
 flash: $(BIN)
 	$(BOOT_APP) -m olympus -f $(BIN)
@@ -134,7 +134,7 @@ flash: $(BIN)
 flash-jlink: $(HEX)
 	JLinkExe -CommanderScript $(FLASH_SCRIPT)
 
-dev: CFLAGS += -DDEV
+dev: CFLAGS += -DDEV 
 dev: $(BIN) $(HEX)
 
 flash-dev: dev
