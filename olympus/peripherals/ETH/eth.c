@@ -57,7 +57,6 @@
 #include "netif/etharp.h"
 #include "ethernetif.h"
 #include "app_ethernet.h"
-#include "tcp_echoserver.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
