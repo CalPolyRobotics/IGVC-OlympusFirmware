@@ -150,7 +150,9 @@
 #define HERA_SONAR_FAIL         "F6"
 #define HEPH_STEER_POT_FAIL     "F5"
 #define HERMES_STATUS_FAIL      "F4"
-#define ZEUS_STATUS_FAIL        "F3"
+#define HERMES_GET_SPEED_FAIL   "F3"
+#define HERMES_GET_AMAN_FAIL    "F2"
+#define ZEUS_STATUS_FAIL        "F1"
 
 //Ethernet Configuration
 

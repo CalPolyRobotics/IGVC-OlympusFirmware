@@ -7,7 +7,6 @@
 
 typedef struct janusData{
    uint8_t fnr[1];
-   uint8_t ctrl[1];
 } __attribute__((packed)) janusData_t;
 
 typedef uint8_t fnr_t;
@@ -29,7 +28,6 @@ void commsSetFNR(uint8_t* data);
 commsStatus_t getJanusStatus();
 commsStatus_t setFNR(fnr_t state);
 commsStatus_t updateFNR();
-commsStatus_t updateCTRL();
 Timer_Return updateJanus();
 
 #endif

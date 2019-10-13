@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : gpio.c
+  * File Name          : tim.c
   * Description        : This file provides code for the configuration
-  *                      of all used GPIO pins.
+  *                      of timer modules.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -32,33 +32,45 @@
   ******************************************************************************
   */
 
-#include "gpio.h"
+#include "tim.h"
+#include "stm32f0xx_hal.h"
 
-
-void MX_GPIO_Init(void)
+void MX_TIM2_Init(void)
 {
+    // Initialize Hall-effect GPIOs
+    __HAL_RCC_GPIOA_CLK_ENABLE();
 
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    /* GPIO Ports Clock Enable */
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-
-    /* FNR Control */
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8|GPIO_PIN_10, GPIO_PIN_RESET);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_10;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    // Encoder Channel A
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    /* FNR Sense */
-    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    // Encoder Channel B
+    GPIO_InitStruct.Pin = GPIO_PIN_2;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-}
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+    // Initializes TIM2 settings
+    __HAL_RCC_TIM2_CLK_ENABLE();
+
+    TIM2->CCMR1 = TIM_CCMR1_CC2S_0 | TIM_CCMR1_IC2F_3 |TIM_CCMR1_IC2F_2 |
+                  TIM_CCMR1_IC2F_1 | TIM_CCMR1_IC2F_0;
+
+    TIM2->CCER = TIM_CCER_CC2E;
+    TIM2->DIER = TIM_DIER_CC2IE;
+
+    TIM2->ARR = 0xFFFFFFFF;
+
+    NVIC_SetPriority(TIM2_IRQn, 0);
+    NVIC_EnableIRQ(TIM2_IRQn);
+
+    TIM2->CR1 = TIM_CR1_CEN;
+}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

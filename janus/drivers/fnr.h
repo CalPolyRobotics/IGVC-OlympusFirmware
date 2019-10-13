@@ -25,6 +25,5 @@ typedef enum fnr{
 
 fnr_t getFNR();
 void setFNR(fnr_t state);
-uint8_t isMCUCtrlMode();
 
 #endif

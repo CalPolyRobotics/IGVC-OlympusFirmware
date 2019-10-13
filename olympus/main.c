@@ -32,6 +32,7 @@
 #include "sysclock.h"
 
 #include "hephaestus.h"
+#include "hermes.h"
 #include "janus.h"
 
 #include "lwip/opt.h"
