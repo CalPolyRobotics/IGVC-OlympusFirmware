@@ -3,8 +3,10 @@
 #include "boot.h"
 #include "commsLib.h"
 #include "spi.h"
+#include "tim.h"
 #include "gpio.h"
 #include "steer.h"
+#include "steer_speed.h"
 
 int main(void)
 {
@@ -21,6 +23,7 @@ int main(void)
 
     MX_COMMS_SPI_Init();
     MX_GPIO_Init();
+    MX_TIM2_Init();
 
     uint8_t data;
     while (1)
@@ -31,6 +34,7 @@ int main(void)
         }
 
         update_steer_control_loop();
+        check_steer_speed_timeout();
     }
 }
 

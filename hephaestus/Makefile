@@ -12,9 +12,11 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 			$(STD_PERIPHS)/systemClock.c
 
 SOURCES += $(DRIVERS)/comms.c \
-			$(DRIVERS)/steer.c
+			$(DRIVERS)/steer.c \
+			$(DRIVERS)/steer_speed.c
 
-SOURCES += $(PERIPHS)/gpio.c
+SOURCES += $(PERIPHS)/gpio.c \
+			$(PERIPHS)/tim.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
