@@ -3,6 +3,7 @@
 #include "boot.h"
 #include "commsLib.h"
 #include "spi.h"
+#include "adc.h"
 #include "tim.h"
 #include "gpio.h"
 #include "steer.h"
@@ -24,6 +25,7 @@ int main(void)
     MX_COMMS_SPI_Init();
     MX_GPIO_Init();
     MX_TIM2_Init();
+    MX_ADC1_Init();
 
     uint8_t data;
     while (1)

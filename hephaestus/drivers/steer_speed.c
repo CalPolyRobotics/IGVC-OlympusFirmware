@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#define PING_PONG_SIZE (2u)
+
 #define UM_PER_INT     ((uint32_t) 1075u)
 #define CK_FREQ        ((uint32_t) 48000000u)
 // TODO - verify this number

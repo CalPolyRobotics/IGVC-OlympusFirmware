@@ -16,7 +16,8 @@ SOURCES += $(DRIVERS)/comms.c \
 			$(DRIVERS)/steer_speed.c
 
 SOURCES += $(PERIPHS)/gpio.c \
-			$(PERIPHS)/tim.c
+			$(PERIPHS)/tim.c \
+			$(PERIPHS)/adc.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
