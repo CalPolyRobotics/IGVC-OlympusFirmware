@@ -141,7 +141,7 @@
 #define ERROR_HARD_FAULT        "FF"
 #define ERROR_WATCH_DOG         "FE"
 #define APOLLO_STATUS_FAIL      "FD"
-#define HEPHAESTUS_STATUS_FAIL  "FC"
+#define HEPH_STATUS_FAIL        "FC"
 #define HERA_STATUS_FAIL        "FB"
 #define JANUS_STATUS_FAIL       "FA"
 #define HERA_STEER_FAIL         "F9"
@@ -153,6 +153,9 @@
 #define HERMES_GET_SPEED_FAIL   "F3"
 #define HERMES_GET_AMAN_FAIL    "F2"
 #define ZEUS_STATUS_FAIL        "F1"
+#define HEPH_GET_STR_POT_FAIL   "F0"
+#define HEPH_GET_STR_SPEED_FAIL "EF"
+#define HEPH_GET_BRK_POT_FAIL   "EE"
 
 //Ethernet Configuration
 

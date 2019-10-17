@@ -25,7 +25,7 @@ void checkAllSubmodules()
     if(!checkSubmoduleStatus(HEPHAESTUS))
     {
         printf("Status check failed for Hephaestus\r\n");
-        ErrorHandler(HEPHAESTUS_STATUS_FAIL, NOTIFY);
+        ErrorHandler(HEPH_STATUS_FAIL, NOTIFY);
     }
 
     if(!checkSubmoduleStatus(HERMES))
