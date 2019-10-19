@@ -43,7 +43,7 @@ class BootSerial(Serial):
     STM Microcontroller
     """
 
-    def __init__(self, port, readTimeout=15, connectTimeout=2):
+    def __init__(self, port, readTimeout=15, connectTimeout=5):
         self.checksum = 0
         count = 0
 
