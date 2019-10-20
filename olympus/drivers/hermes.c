@@ -54,3 +54,17 @@ commsStatus_t updateHermesSpeed()
 
     return status;
 }
+
+commsStatus_t updateHermesSetSpeedTarget(uint16_t speedTargetMMs)
+{
+    uint8_t speed[2] = {(speedTargetMMs >> 8u), speedTargetMMs};
+
+    commsStatus_t status = messageSubmodule(HERMES, HERMES_SET_SPEED_TARGET,
+                                            speed, SPEED_TARGET_LENGTH,
+                                            0u, SPI_TIMEOUT);
+    if(status != COMMS_OK){
+        ErrorHandler(HERMES_SET_SPD_TAR_FAIL, NOTIFY);
+    }
+
+    return status;
+}

@@ -5,6 +5,7 @@
 
 void setThrottle(uint8_t *data)
 {
-    data[0] = data[0]&0x0F;
+    // Protect against invalid command that could cause I2C DAC to shutdown
+    data[0] = data[0] & 0x0F;
     HAL_I2C_Master_Transmit(&hi2c1, MCP4726, data, 2 , 10);
 }

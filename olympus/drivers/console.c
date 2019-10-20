@@ -17,6 +17,7 @@
 
 #include "hephaestus.h"
 #include "janus.h"
+#include "hermes.h"
 
 #include <stdlib.h>
 
@@ -76,7 +77,7 @@ static ConsoleCommand commands[] = {
     {"setSegment",     "char1<a-f|0-9>, char2<a-f|0-9>" , 2, console_setSegment},
     {"setLED",         "ledNum<0-5>, state<0-1>",         2, console_setLED},
     {"setFNR",         "state<0-2>",                      1, console_setFNR},
-    {"setSpeedTarget", "target<0-65535>",                 1, console_setSpeedTarget},
+    {"setSpeedTarget", "target<0-5000>",                  1, console_setSpeedTarget},
     {"setSteerTarget", "angle<45-125>",                   1, console_setSteerTarget},
     {"setEchoMode",    "mode<0-3>",                       1, console_setEchoMode},
     {"getSpeed",       NULL,                              0, console_getSpeed},
@@ -412,7 +413,9 @@ static void console_setSpeedTarget(uint32_t argc, char** argv)
 {
     uint16_t num = parseUint16(argv[0]);
     if(!errno){
-        writeSpeedDAC(num);
+        printf("sent %d", num);
+        updateHermesSetSpeedTarget(num);
+        //writeSpeedDAC(num);
     }
 }
 

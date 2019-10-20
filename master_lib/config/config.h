@@ -156,6 +156,7 @@
 #define HEPH_GET_STR_POT_FAIL   "F0"
 #define HEPH_GET_STR_SPEED_FAIL "EF"
 #define HEPH_GET_BRK_POT_FAIL   "EE"
+#define HERMES_SET_SPD_TAR_FAIL "ED"
 
 //Ethernet Configuration
 
