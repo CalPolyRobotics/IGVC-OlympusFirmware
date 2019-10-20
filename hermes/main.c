@@ -5,6 +5,8 @@
 #include "tim.h"
 #include "gpio.h"
 #include "systemClock.h"
+#include "throttle.h"
+#include "i2c.h"
 
 int main(void)
 {
@@ -22,6 +24,9 @@ int main(void)
     MX_GPIO_Init();
     MX_TIM2_Init();
     MX_COMMS_SPI_Init();
+    MX_I2C1_Init();
+    uint8_t stop[2] = {0,0};
+    setThrottle(stop);
 
     uint8_t data;
     while (1)

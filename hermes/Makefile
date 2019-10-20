@@ -12,10 +12,13 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 			$(STD_PERIPHS)/systemClock.c
 
 SOURCES += $(DRIVERS)/comms.c\
-			$(DRIVERS)/speed.c
+			$(DRIVERS)/speed.c\
+			$(DRIVERS)/throttle.c
 
 SOURCES += $(PERIPHS)/gpio.c \
-			$(PERIPHS)/tim.c
+			$(PERIPHS)/tim.c\
+			$(PERIPHS)/i2c.c\
+			$(PERIPHS)/adc.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
@@ -23,6 +26,9 @@ SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_flash_ex.c \
 			$(HAL)/src/stm32f0xx_hal_gpio.c \
 			$(HAL)/src/stm32f0xx_hal_cortex.c \
+			$(HAL)/src/stm32f0xx_hal_i2c.c\
+			$(HAL)/src/stm32f0xx_hal_i2c_ex.c\
+			$(HAL)/src/stm32f0xx_hal_dma.c\
 			$(HAL)/src/stm32f0xx_hal.c
 
 SOURCES += $(SYSTEM)/startup_stm32f042x6.s \

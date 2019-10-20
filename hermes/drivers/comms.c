@@ -65,6 +65,7 @@ static uint8_t get_starg_callback(uint8_t *data){
 }
 
 static uint8_t set_starg_callback(uint8_t *data){
+
     return WR_OK;
 }
 
