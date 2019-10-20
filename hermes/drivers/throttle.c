@@ -5,5 +5,6 @@
 
 void setThrottle(uint8_t *data)
 {
-    HAL_I2C_Master_Transmit(&hi2c1, MCP4726, data, sizeof(data), 10);
+    data[0] = data[0]&0x0F;
+    HAL_I2C_Master_Transmit(&hi2c1, MCP4726, data, 2 , 10);
 }
