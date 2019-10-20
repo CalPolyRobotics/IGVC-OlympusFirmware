@@ -7,6 +7,7 @@
 #include "comms.h"
 #include "gpio.h"
 #include "speed.h"
+#include "throttle.h"
 
 static uint8_t get_status_callback(uint8_t *data);
 static uint8_t get_aman_callback(uint8_t *data);
@@ -63,9 +64,13 @@ static uint8_t get_pedal_callback(uint8_t *data){
 static uint8_t get_starg_callback(uint8_t *data){
     return WR_OK;
 }
-
 static uint8_t set_starg_callback(uint8_t *data){
-
+    uint8_t dacval[2];
+    uint32_t mms = data[1] | (data[0]<<8);
+    uint32_t dacout = (mms*0xFFF)/MAX_THROTTLE;
+    dacval[0] = (dacout>>8) & 0x0F ;
+    dacval[1] = dacout & 0xFF;
+    setThrottle(dacval);
     return WR_OK;
 }
 
