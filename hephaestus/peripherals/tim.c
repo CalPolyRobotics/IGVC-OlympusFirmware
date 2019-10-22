@@ -35,10 +35,10 @@
 #include "tim.h"
 #include "stm32f0xx_hal.h"
 
-void MX_TIM2_Init(void)
+void MX_TIM2_Init()
 {
     // Initialize Hall-effect GPIOs
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
 
     GPIO_InitTypeDef GPIO_InitStruct;
 
