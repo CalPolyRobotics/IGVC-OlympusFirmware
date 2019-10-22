@@ -1,19 +1,22 @@
 #include <stdbool.h>
-#include "gpio.h"
 #include "steer.h"
+#include "tim.h"
+#include "adc.h"
 
 #define DEADZONE      ((uint16_t)50u)
 
 #define POT_DEG_SLOPE     ((MAX_RIGHT_POT - MAX_LEFT_POT)/(MAX_RIGHT_DEG - MAX_LEFT_DEG))
 #define POT_DEG_INTERCEPT (MAX_LEFT_POT - (MAX_LEFT_DEG * POT_DEG_SLOPE))
 
+#define BANG_BANG_DUTY ((uint8_t)50u)
+
 uint16_t steeringPot = 0u;
 uint16_t targetSteerValue = 0u;
 
 static uint16_t deg_to_pot(uint8_t deg);
 
-static void steer_left();
-static void steer_right();
+static void steer_left(uint8_t duty);
+static void steer_right(uint8_t duty);
 static void steer_stop();
 
 static bool enableSteering = false;
@@ -21,14 +24,7 @@ static bool enableSteering = false;
 void set_steer_target(uint8_t angle)
 {
     targetSteerValue = deg_to_pot(angle);
-
-    /* Only run control loop if steeringPotValue is set */
-    if(steeringPot != 0u)
-    {
-        enableSteering = true;
-    }
 }
-
 
 void update_steer_control_loop()
 {
@@ -37,12 +33,15 @@ void update_steer_control_loop()
 
     if(enableSteering)
     {
+        // Get latest steeringPot value
+        steeringPot =  adcChnAvg[adcChnReadIdx][STEER_AVG_IDX];
+
         if(steeringPot < (targetSteerValue - DEADZONE))
         {
             /* Steering is too far left */
             if(!motorOnRight)
             {
-                steer_right();
+                steer_right(BANG_BANG_DUTY);
                 motorOnRight = true;
                 motorOnLeft = false;
             }
@@ -53,7 +52,7 @@ void update_steer_control_loop()
             /* Steering is too far right */
             if(!motorOnLeft)
             {
-                steer_left();
+                steer_left(BANG_BANG_DUTY);
                 motorOnLeft = true;
                 motorOnRight = false;
             }
@@ -73,19 +72,21 @@ static uint16_t deg_to_pot(uint8_t deg)
     return (deg * POT_DEG_SLOPE) + POT_DEG_INTERCEPT;
 }
 
-static void steer_left()
+// TODO - verify these are the proper drive directions
+static void steer_left(uint8_t duty)
 {
-    HAL_GPIO_WritePin(STEER_PORT, STEER_PINR, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(STEER_PORT, STEER_PINL, GPIO_PIN_SET);
+    tim1_set_channel_duty(1, 0);
+    tim1_set_channel_duty(2, duty);
 }
 
-static void steer_right()
+static void steer_right(uint8_t duty)
 {
-    HAL_GPIO_WritePin(STEER_PORT, STEER_PINL, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(STEER_PORT, STEER_PINR, GPIO_PIN_SET);
+    tim1_set_channel_duty(2, 0);
+    tim1_set_channel_duty(1, duty);
 }
 
 static void steer_stop()
 {
-    HAL_GPIO_WritePin(STEER_PORT, STEER_PINL | STEER_PINR, GPIO_PIN_RESET);
+    tim1_set_channel_duty(1, 0);
+    tim1_set_channel_duty(2, 0);
 }

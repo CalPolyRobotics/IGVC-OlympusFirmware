@@ -35,6 +35,10 @@
 #ifndef __tim_H
 #define __tim_H
 
+#include <stdint.h>
+
+void MX_TIM1_Init(void);
+void tim1_set_channel_duty(uint8_t chn, uint8_t duty);
 void MX_TIM2_Init(void);
 
 #endif /*__ pinoutConfig_H */
