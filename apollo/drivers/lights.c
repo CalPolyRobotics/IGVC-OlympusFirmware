@@ -39,42 +39,69 @@ uint16_t arr[256] = {
 
 void init_Timer(){
 
+    /* enable GPIOA and GPIOB clocks */
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
 
+    /* enable TIM2 clock */
     __HAL_RCC_TIM2_CLK_ENABLE();
+    /* set output compare modes for compare 1, 2, and 3 to '111' (PWM mode 2) */
+    TIM2 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) |
+                    (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0);
     TIM2 -> CCMR2 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0);
-    TIM2 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0 |
-                     TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    /* enable capture/compare output for compare 1, 2, and 3 */
     TIM2 -> CCER = (TIM_CCER_CC3E_Msk | TIM_CCER_CC2E_Msk | TIM_CCER_CC1E_Msk);
+    /* enable counter */
     TIM2 -> CR1 = TIM_CR1_CEN;
+    /* set auto-reload to 24000 (max. PWM value) */
     TIM2 -> ARR = 24000;
+    /* initialize capture/compare registers for channel 1 and 2 to 24000 */
     TIM2 -> CCR1 = 24000;
     TIM2 -> CCR2 = 24000;
 
+    /* enable TIM3 clock */
     __HAL_RCC_TIM3_CLK_ENABLE();
-    TIM3 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0) |
-                    (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    /* set output compare modes for compare 1 and 2 to '111' (PWM mode 2) */
+    TIM3 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) |
+                    (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0);
+    /* enable capture/compare output for compare 1 and 2 */
     TIM3 -> CCER = (TIM_CCER_CC2E_Msk | TIM_CCER_CC1E_Msk);
+    /* enable counter */
     TIM3 -> CR1 = TIM_CR1_CEN;
+    /* set auto-reload to 24000 (max. PWM value) */
     TIM3 -> ARR = 24000;
+    /* initialize capture/compare registers for channel 1 and 2 to 24000 */
     TIM3 -> CCR1 = 24000;
     TIM3 -> CCR2 = 24000;
 
+    /* enable TIM16 clock */
     __HAL_RCC_TIM16_CLK_ENABLE();
+    /* set output compare mode for compare 1 to '111' (PWM mode 2) */
     TIM16 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    /* enable main output in break and dead-time register */
     TIM16 -> BDTR = TIM_BDTR_MOE_Msk;
+    /* enable capture/compare and complementary output for compare 1 */
     TIM16 -> CCER = TIM_CCER_CC1E_Msk | TIM_CCER_CC1NE_Msk;
+    /* enable counter */
     TIM16 -> CR1 = TIM_CR1_CEN;
+    /* set auto-reload to 24000 (max. PWM value) */
     TIM16 -> ARR = 24000;
+    /* initialize capture/compare registers for channel 1 to 24000 */
     TIM16 -> CCR1 = 24000;
 
+    /* enable TIM17 clock */
     __HAL_RCC_TIM17_CLK_ENABLE();
+    /* set output compare mode for compare 1 to '111' (PWM mode 2) */
     TIM17 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    /* enable main output in break and dead-time register */
     TIM17 -> BDTR = TIM_BDTR_MOE_Msk;
+    /* enable capture/compare and complementary output for compare 1 */
     TIM17 -> CCER = TIM_CCER_CC1E_Msk | TIM_CCER_CC1NE_Msk;
+    /* enable counter */
     TIM17 -> CR1 = TIM_CR1_CEN;
+    /* set auto-reload to 24000 (max. PWM value) */
     TIM17 -> ARR = 24000;
+    /* initialize capture/compare registers for channel 1 to 24000 */
     TIM17 -> CCR1 = 24000;
 
     GPIO_InitTypeDef GPIO_InitTypeDef;
@@ -158,32 +185,32 @@ void set_turn_signal(uint8_t state){
 }
 
 void set_headlights( uint8_t speed){
-    TIM2 -> CCR1 = arr[255 - speed];
+    TIM2 -> CCR1 = arr[speed];
 }
 
 void set_misc_lights(uint8_t light, uint8_t speed){
     if (light == 0){
-        TIM2 -> CCR1 = arr[255 - speed];
+        TIM2 -> CCR1 = arr[speed];
     }
 
     if (light == 1){
-        TIM2 -> CCR2 = arr[255 - speed];
+        TIM2 -> CCR2 = arr[speed];
     }
 
     if (light == 2){
-        TIM3 -> CCR1 = arr[255 - speed];
+        TIM3 -> CCR1 = arr[speed];
     }
 
     if (light == 3){
-        TIM3 -> CCR2 = arr[255 - speed];
+        TIM3 -> CCR2 = arr[speed];
     }
 
     if (light == 4){
-        TIM16 -> CCR1 = arr[speed];
+        TIM16 -> CCR1 = arr[255 - speed]; /* inverted to correct PWM */
     }
 
     if (light == 5){
-        TIM17 -> CCR1 = arr[speed];
+        TIM17 -> CCR1 = arr[255 - speed]; /* inverted to correct PWM */
     }
 }
 
