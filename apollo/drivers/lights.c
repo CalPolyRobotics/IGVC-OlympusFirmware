@@ -40,99 +40,93 @@ uint16_t arr[256] = {
 
 void init_Timer(){
 
-    //sets up Timer 2 both channel 1 and 2
-    __HAL_RCC_TIM2_CLK_ENABLE();
-    //sets up the third channel of timer2 by oring bits in the second CCMR register.
-    TIM2 -> CCMR2 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0);
-    //sets up the second channel of timer2. OCxM shows the channel number
-    TIM2 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0);
-    //sets up the capture/compare enable register to output
-    TIM2 -> CCER = (TIM_CCER_CC3E_Msk | TIM_CCER_CC2E_Msk);
-    //sets control register 1 to be enabled
-    TIM2 -> CR1 = TIM_CR1_CEN;
-    //initializes the auto-reload register to be 24000
-    TIM2 -> ARR = 24000;
-    //initializes capture compare register 2 to be 24000
-    TIM2 -> CCR2 = 24000;
-    //''            ''      ''       ''    3 '' ''   ''
-    TIM2 -> CCR3 = 24000;
-
-    //intialize GPIOB to be enabled
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    GPIO_InitTypeDef GPIO_InitTypeDef;
-    //sets up these pins defined in the header to be outputs
-    GPIO_InitTypeDef.Pin = (HEADLIGHTS | MISC5);
-    GPIO_InitTypeDef.Pull = GPIO_NOPULL;
-    //mode is push- pull
-    GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
-    //sets up the pins to be alternate functions as timers
-    GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM2;
-    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
-
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef.Pin = (HEADLIGHTS | MISC5);
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+
+    __HAL_RCC_TIM2_CLK_ENABLE();
+    TIM2 -> CCMR2 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0);
+    TIM2 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0 |
+                     TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    TIM2 -> CCER = (TIM_CCER_CC3E_Msk | TIM_CCER_CC2E_Msk | TIM_CCER_CC1E_Msk);
+    TIM2 -> CR1 = TIM_CR1_CEN;
+    TIM2 -> ARR = 24000;
+    TIM2 -> CCR1 = 24000;
+    TIM2 -> CCR2 = 24000;
+
+    __HAL_RCC_TIM3_CLK_ENABLE();
+    TIM3 -> CCMR1 = (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0) |
+                    (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    TIM3 -> CCER = (TIM_CCER_CC2E_Msk | TIM_CCER_CC1E_Msk);
+    TIM3 -> CR1 = TIM_CR1_CEN;
+    TIM3 -> ARR = 24000;
+    TIM3 -> CCR1 = 24000;
+    TIM3 -> CCR2 = 24000;
+
+    __HAL_RCC_TIM16_CLK_ENABLE();
+    TIM16 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    TIM16 -> BDTR = TIM_BDTR_MOE_Msk;
+    TIM16 -> CCER = TIM_CCER_CC1E_Msk | TIM_CCER_CC1NE_Msk;
+    TIM16 -> CR1 = TIM_CR1_CEN;
+    TIM16 -> ARR = 24000;
+    TIM16 -> CCR1 = 24000;
+
+    __HAL_RCC_TIM17_CLK_ENABLE();
+    TIM17 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
+    TIM17 -> BDTR = TIM_BDTR_MOE_Msk;
+    TIM17 -> CCER = TIM_CCER_CC1E_Msk | TIM_CCER_CC1NE_Msk;
+    TIM17 -> CR1 = TIM_CR1_CEN;
+    TIM17 -> ARR = 24000;
+    TIM17 -> CCR1 = 24000;
+
+    GPIO_InitTypeDef GPIO_InitTypeDef;
+
+    GPIO_InitTypeDef.Pin = HEADLIGHTS;
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
     GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM2;
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
-    //sets up timer 16
-    __HAL_RCC_TIM16_CLK_ENABLE();
-    TIM16 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
-    TIM16 -> CCER = TIM_CCER_CC1E_Msk;
-    TIM16 -> CR1 = TIM_CR1_CEN;
-    TIM16 -> ARR = 24000;
-    TIM16 -> CCR1 = 24000;
+    GPIO_InitTypeDef.Pin = MISC1;
+    GPIO_InitTypeDef.Pull = GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM2;
+    HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
 
     GPIO_InitTypeDef.Pin = MISC2;
+    GPIO_InitTypeDef.Pull = GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM2;
+    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
+
+    GPIO_InitTypeDef.Pin = (MISC3 | MISC4);
+    GPIO_InitTypeDef.Pull = GPIO_NOPULL;
+    GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitTypeDef.Alternate = GPIO_AF1_TIM3;
+    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
+
+    GPIO_InitTypeDef.Pin = MISC5;
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
     GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM16;
     HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
 
-    __HAL_RCC_TIM3_CLK_ENABLE();
-     TIM3 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0 | TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0);
-     TIM3 -> CCER = (TIM_CCER_CC2E_Msk | TIM_CCER_CC1E_Msk);
-     TIM3 -> CR1 = TIM_CR1_CEN;
-     TIM3 -> ARR = 24000;
-     TIM3 -> CCR1 = 24000;
-     TIM3 -> CCR2 = 24000;
-
-     __HAL_RCC_GPIOB_CLK_ENABLE();
-     GPIO_InitTypeDef.Pin = (MISC3 | MISC4);
-     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
-     GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
-     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
-     GPIO_InitTypeDef.Alternate = GPIO_AF1_TIM3;
-     HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
-
-    __HAL_RCC_TIM1_CLK_ENABLE();
-    TIM1 -> CCMR2 = (TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1 | TIM_CCMR2_OC4M_0);
-    TIM1 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0);
-    TIM1 -> CCER = (TIM_CCER_CC4E_Msk | TIM_CCER_CC1E_Msk);
-    TIM1 -> CR1 = TIM_CR1_CEN;
-    TIM1 -> ARR = 24000;
-    TIM1 -> CCR4 = 24000;
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef.Pin = (MISC6 | MISC1);
+    GPIO_InitTypeDef.Pin = MISC6;
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
     GPIO_InitTypeDef.Mode = GPIO_MODE_AF_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
-    GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM1;
-    HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
+    GPIO_InitTypeDef.Alternate = GPIO_AF2_TIM17;
+    HAL_GPIO_Init( MISC_PORT, &GPIO_InitTypeDef );
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef.Pin =(TURN_SIGNAL_L | TURN_SIGNAL_R);
+    GPIO_InitTypeDef.Pin = (TURN_SIGNAL_L | TURN_SIGNAL_R);
     GPIO_InitTypeDef.Pull = GPIO_NOPULL;
     GPIO_InitTypeDef.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitTypeDef.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init( TURN_SIGNAL_PORT, &GPIO_InitTypeDef );
-
-    //GPIOA ->BSRR |=GPIO_PIN_
     //Start with turn signals off
     TURN_SIGNAL_PORT -> ODR &= ~(TURN_SIGNAL_L | TURN_SIGNAL_R);
 
@@ -159,32 +153,32 @@ void set_turn_signal(uint8_t state){
 }
 
 void set_headlights( uint8_t speed){
-    TIM2 -> CCR3 = arr[speed];
+    TIM2 -> CCR1 = arr[255 - speed];
 }
 
 void set_misc_lights(uint8_t light, uint8_t speed){
     if (light == 0){
-        TIM17 -> CCR1 = arr[speed];
+        TIM2 -> CCR1 = arr[255 - speed];
     }
 
     if (light == 1){
-        TIM16 -> CCR1 = arr[speed];
+        TIM2 -> CCR2 = arr[255 - speed];
     }
 
     if (light == 2){
-        TIM3 -> CCR2 = arr[speed];
+        TIM3 -> CCR1 = arr[255 - speed];
     }
 
     if (light == 3){
-        TIM3 -> CCR1 = arr[speed];
+        TIM3 -> CCR2 = arr[255 - speed];
     }
 
     if (light == 4){
-        TIM2 -> CCR2 = arr[speed];
+        TIM16 -> CCR1 = arr[speed];
     }
 
     if (light == 5){
-        TIM1 -> CCR4 = arr[speed];
+        TIM17 -> CCR1 = arr[speed];
     }
 }
 
