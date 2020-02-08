@@ -12,7 +12,7 @@ SOURCES += $(STD_PERIPHS)/spi.c \
 			$(STD_PERIPHS)/systemClock.c
 
 SOURCES += $(DRIVERS)/comms.c \
-			$(DRIVERS)/lights.c
+		   $(DRIVERS)/lights.c
 
 SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_rcc_ex.c \
