@@ -5,6 +5,7 @@ PERIPHS = peripherals
 
 SOURCES += main.c
 
+
 SOURCES += $(STD_DRIVERS)/commsLib.c \
 			$(STD_DRIVERS)/boot.c \
 
@@ -25,6 +26,9 @@ SOURCES += $(HAL)/src/stm32f0xx_hal_rcc.c \
 			$(HAL)/src/stm32f0xx_hal_flash_ex.c \
 			$(HAL)/src/stm32f0xx_hal_gpio.c \
 			$(HAL)/src/stm32f0xx_hal_cortex.c \
+			$(HAL)/src/stm32f0xx_hal_tim.c \
+			$(HAL)/src/stm32f0xx_hal_tim_ex.c \
+			$(HAL)/src/stm32f0xx_hal_dma.c \
 			$(HAL)/src/stm32f0xx_hal.c
 
 SOURCES += $(SYSTEM)/startup_stm32f042x6.s \
@@ -52,6 +56,7 @@ LDFLAGS += -T$(LDSCRIPT) \
 LDLIBS += -lc -lm -lnosys
 
 START_ADDR = 0x8001400
+#START_ADDR = 0x8000000
 
 .PHONY: flash
 

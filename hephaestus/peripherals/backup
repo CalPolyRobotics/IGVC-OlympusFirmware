@@ -1,0 +1,157 @@
+void init_Timer(){
+
+    GPIO_InitTypeDef GPIO_InitStruct;
+
+
+
+    /* Enable TIM1 clock */
+    /*
+     * Initialize Timer
+     * Up counter PWM compare with CCR
+     * A larger CCR value corresponds with a greater duty cycle
+     *
+     * Note:
+     * ADRV and BDRV should not be driven at the same time. If one has a duty
+     * cycle greater than 0, than the other should be set to a duty cycl of
+     * zero. Changing ADRV or BDRV allows control over the direction of the
+     * motor
+     */
+    __HAL_RCC_TIM1_CLK_ENABLE();
+    /* Set output compare modes for compare 1, 2, and 3 to '111' (PWM mode 2) */
+    TIM1 -> CCMR1 = (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) |
+                    (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0);
+    TIM1 -> CCMR1 = (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0) |
+                    (TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1 | TIM_CCMR2_OC4M_0);
+    /* Enable capture/compare output for compare 1, 2, and 3 */
+    TIM1 -> CCER = (TIM_CCER_CC4E_Msk | TIM_CCER_CC3E_Msk | TIM_CCER_CC2E_Msk | TIM_CCER_CC1E_Msk);
+    /* Enable counter */
+    TIM1 -> CR1 = TIM_CR1_CEN;
+    /* Set auto-reload to 24000 (max. PWM value) */
+    TIM1 -> ARR = 24000;
+    /* Initialize capture/compare registers for channel 1 and 2 to 24000 */
+    TIM1 -> CCR1 = 12000;
+    TIM1 -> CCR2 = 12000;
+    TIM1 -> CCR3 = 12000;
+    TIM1 -> CCR4 = 12000;
+
+    /* Enable GPIOA clocks */
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF2_TIM1;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+
+}
+
+
+void MX_TIM1_Init()
+{
+    //init_Timer();
+    //return;
+    /*
+     * Initialize Motor GPIOs
+     * PA8  -> TIM1_CH1 -> BDRV
+     * PA9  -> TIM1_CH2 -> ADRV
+     * PA10 -> TIM1_CH3 -> BRK_BDRV
+     * PA11 -> TIM1_CH4 -> BRK_ADRV
+     */
+
+    GPIO_InitTypeDef GPIO_InitStruct;
+
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+
+    GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF2_TIM1;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    /* 
+     * Initialize Timer
+     * Up counter PWM compare with CCR
+     * A larger CCR value corresponds with a greater duty cycle
+     *
+     * Note:
+     * ADRV and BDRV should not be driven at the same time. If one has a duty
+     * cycle greater than 0, than the other should be set to a duty cycl of
+     * zero. Changing ADRV or BDRV allows control over the direction of the
+     * motor
+     */
+    __HAL_RCC_TIM1_CLK_ENABLE();
+
+    /*
+     * TIM1_CH1: Ouput Compare Mode 111
+     * OUT = 0 TIMx_CNT < TIMx_CCR1 else 1 (when upcounting [default])
+     * The same is applied to CH2, CH3, and CH4
+     */
+    TIM1->CCMR1 = TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0 |
+                  TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0;
+
+    TIM1->CCMR2 = TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0 |
+                  TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1 | TIM_CCMR2_OC4M_0;
+
+    // Enable compare output
+    TIM1->CCER = TIM_CCER_CC1E | TIM_CCER_CC2E | TIM_CCER_CC3E | TIM_CCER_CC4E;
+
+    // Enable timer
+    TIM1->CR1 = TIM_CR1_CEN;
+
+    TIM1->ARR = ARR_DEFAULT;
+
+    // Initialize drive frequency
+    TIM1->ARR = ARR_DEFAULT;
+
+    // Set outputs to be 0% duty 
+    TIM1->CCR1 = ARR_DEFAULT;
+    TIM1->CCR2 = ARR_DEFAULT;
+    TIM1->CCR3 = ARR_DEFAULT;
+    TIM1->CCR4 = ARR_DEFAULT;
+
+/*
+    // TODO: Some input mode
+
+    TIM1->CCMR1 = 0;
+    TIM1->CCMR1 |= TIM_CCMR1_CC1S | TIM_CCMR1_CC2S;
+
+    TIM1->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0 |
+                  TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_0;
+
+    // TODO
+    TIM1->CCMR1 &= ~(TIM_CCMR1_CC1S | TIM_CCMR1_CC2S);
+
+    TIM1->CCMR2 = TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0 |
+                  TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1 | TIM_CCMR2_OC4M_0;
+
+    // TODO: Moved lower
+    // Enable compare output
+    //TIM1->CCER = TIM_CCER_CC1E | TIM_CCER_CC2E | TIM_CCER_CC3E | TIM_CCER_CC4E;
+
+    // TODO: Moved down lower
+    // Enable timer
+    //TIM1->CR1 = TIM_CR1_CEN;
+
+    //TIM1->ARR = ARR_DEFAULT;
+
+    // Initialize drive frequency
+    TIM1->ARR = ARR_DEFAULT;
+
+    // Set outputs to be 0% duty 
+    TIM1->CCR1 = ARR_DEFAULT;
+    TIM1->CCR2 = ARR_DEFAULT;
+    TIM1->CCR3 = ARR_DEFAULT;
+    TIM1->CCR4 = ARR_DEFAULT;
+
+    // Enable compare output
+    TIM1->CCER = TIM_CCER_CC1E | TIM_CCER_CC2E | TIM_CCER_CC3E | TIM_CCER_CC4E;
+
+    // Enable timer
+    TIM1->CR1 = TIM_CR1_CEN;
+    */
+
+}
+
+

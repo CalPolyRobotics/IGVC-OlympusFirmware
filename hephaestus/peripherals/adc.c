@@ -102,6 +102,8 @@ void DMA1_Channel1_IRQHandler()
         // Pause Transfers
         DMA1_Channel1->CCR &= ~DMA_CCR_EN;
         DMA1->IFCR |= DMA_IFCR_CTCIF1;
+        //Put ADC in idle state
+        ADC1->CR |= ADC_CR_ADSTP;
 
         // Clear Data & Calculate Average
         memset(adcChnAvg[adcChnWriteIdx], 0u, NUM_ADC_CHANNELS * sizeof(adcChnAvg[0][0]));
@@ -123,6 +125,8 @@ void DMA1_Channel1_IRQHandler()
 
         // Contiue Transfers
         DMA1_Channel1->CCR |= DMA_CCR_EN;
+        // Put ADC out of idle state
+        ADC1->CR |= ADC_CR_ADSTART;
     }
 
     /** Transfer Error **/

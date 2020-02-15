@@ -37,7 +37,10 @@
 
 #include <stdint.h>
 
+void Error_Handler();
+void MX_TIMER_1_INIT();
 void MX_TIM1_Init(void);
+void init_Timer();
 void tim1_set_channel_duty(uint8_t chn, uint8_t duty);
 void MX_TIM2_Init(void);
 

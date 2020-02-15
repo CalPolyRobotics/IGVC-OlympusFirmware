@@ -9,7 +9,7 @@ int main(void)
 {
     remapVectorTable();
 
-    HAL_StatusTypeDef status;
+    //HAL_StatusTypeDef status;
     HAL_Init();
 
 
@@ -23,13 +23,17 @@ int main(void)
 
     init_apollo();
 
-    uint8_t data;
+    //uint8_t data;
     while (1)
     {
+        TIM1->CCR1 = 12000;
+        TIM1->CCR2 = 12000;
+        /*
         status = readByte(&data);
         if(status == WR_OK){
             runCommsFSM(data);
         }
+        */
     }
 }
 

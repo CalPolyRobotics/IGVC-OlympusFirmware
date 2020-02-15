@@ -9,8 +9,8 @@
 #define ADC_AVG_NUM      ((size_t)8u)
 #define ADC_BUFF_SIZE    (ADC_AVG_NUM * NUM_ADC_CHANNELS)
 
-#define BRAKE_AVG_IDX    ((uint32_t)0u)
-#define STEER_AVG_IDX    ((uint32_t)1u)
+#define BRAKE_AVG_IDX    ((uint32_t)1u) // TODO: Swapped indexes (was originally 0)
+#define STEER_AVG_IDX    ((uint32_t)0u)
 
 extern uint16_t adcChnAvg[PING_PONG_SIZE][NUM_ADC_CHANNELS];
 extern int adcChnReadIdx;
