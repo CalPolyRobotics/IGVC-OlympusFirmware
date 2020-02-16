@@ -25,9 +25,8 @@ int main(void)
     MX_I2C1_Init();
     MX_TIM2_Init();
     MX_COMMS_SPI_Init();
-    uint8_t stop[2] = {0x0,0x0};
 
-    setThrottle(stop);
+    setThrottle(0);
     uint8_t data;
     while (1)
     {
@@ -35,6 +34,7 @@ int main(void)
         if(status == WR_OK){
             runCommsFSM(data);
         }
+        updateThrottle();
     }
 }
 

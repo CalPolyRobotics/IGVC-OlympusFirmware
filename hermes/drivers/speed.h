@@ -10,6 +10,6 @@ extern volatile int ch1SpeedWr;
 
 void checkTimeout(void);
 int16_t diffCountsToSpeedInMMs(uint32_t diffCounts);
-
+int16_t getSpeed(void);
 
 #endif

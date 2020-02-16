@@ -35,6 +35,10 @@ void TIM2_IRQHandler() {
     }
 }
 
+int16_t getSpeed(void) {
+    return ch1Speed[ch1SpeedWr];
+}
+
 int16_t diffCountsToSpeedInMMs(uint32_t diffCounts) {
     // diffCounts of 0 is mapped to 0 speed
     int16_t direction = 1;

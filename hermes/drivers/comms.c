@@ -65,7 +65,6 @@ static uint8_t get_starg_callback(uint8_t *data){
     return WR_OK;
 }
 static uint8_t set_starg_callback(uint8_t *data){
-    uint8_t dacval[2];
     uint32_t mms = data[1] | (data[0] << 8u);
     
     // TODO: Possibly send back error instead of bounding
@@ -76,13 +75,7 @@ static uint8_t set_starg_callback(uint8_t *data){
         mms = 0;
     }
 
-    uint32_t dacout = (mms * 0xFFF) / MAX_THROTTLE;
-
-    // Top bits are MSB
-    dacval[0] = (dacout >> 8u) & 0x0F ;
-    dacval[1] = dacout & 0xFF;
-
-    setThrottle(dacval);
+    setThrottle(mms);
 
     return WR_OK;
 }
