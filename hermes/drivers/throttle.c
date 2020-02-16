@@ -26,14 +26,18 @@ void updateThrottle(void) {
     dError = error - prevError;
     prevError = error;
 
-    nextSpeed = 0.5 * error + 0.5 * dError; /* Kp = 0.5, Kd = 0.5 */
+    nextSpeed =  0.75* (0.5 * error + 0.5 * dError); /* Kp = 0.5, Kd = 0.5 */
 
     /* convert speed in mm/s to a DAC value (0 -> 4096) */
     dacout = (nextSpeed * 0xFFF) / MAX_THROTTLE;
 
+    if (dacout < 0){
+        dacout=0;
+    }
+
     // Top bits are MSB
     dacval[0] = (dacout >> 8u) & 0x0F ;
-    dacval[1] = dacout & 0xFF;
+    dacval[1] = dacout;
 
     HAL_I2C_Master_Transmit(&hi2c1, MCP4726, dacval, 2 , 10);
 }
