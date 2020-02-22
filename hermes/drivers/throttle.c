@@ -12,30 +12,22 @@ void setThrottle(int32_t mms)
 }
 
 void updateThrottle(void) {
-    static uint16_t prevError = 0;
+    static int32_t prevError = 0;
 
-    uint8_t dacval[2] = {0x0, 0x0};
-    uint16_t error, dError;
-    uint32_t dacout;
+    int16_t currentSpeed = getSpeed();
 
-    int16_t currentSpeed, nextSpeed;
-
-    currentSpeed = getSpeed();
-
-    error = goalSpeed - currentSpeed;
-    dError = error - prevError;
+    int32_t error  = goalSpeed - currentSpeed;
+    int32_t dError = prevError - error;
     prevError = error;
 
-    nextSpeed =  0.75* (0.5 * error + 0.5 * dError); /* Kp = 0.5, Kd = 0.5 */
+    /* Kp = 0.125, Kd = 0.875 */
+    int32_t nextSpeed = currentSpeed + ((125 * error) / 100 - (875 * dError) / 100);
 
     /* convert speed in mm/s to a DAC value (0 -> 4096) */
-    dacout = (nextSpeed * 0xFFF) / MAX_THROTTLE;
-
-    if (dacout < 0){
-        dacout=0;
-    }
+    uint32_t dacout = (nextSpeed * 0xFFF) / MAX_THROTTLE;
 
     // Top bits are MSB
+    uint8_t dacval[2] = {0x0, 0x0};
     dacval[0] = (dacout >> 8u) & 0x0F ;
     dacval[1] = dacout;
 

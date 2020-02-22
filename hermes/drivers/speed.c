@@ -36,7 +36,7 @@ void TIM2_IRQHandler() {
 }
 
 int16_t getSpeed(void) {
-    return ch1Speed[ch1SpeedWr];
+    return ch1Speed[(ch1SpeedWr + 1u) % PING_PONG_SIZE];
 }
 
 int16_t diffCountsToSpeedInMMs(uint32_t diffCounts) {

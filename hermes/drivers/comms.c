@@ -49,7 +49,7 @@ static uint8_t get_aman_callback(uint8_t *data){
 }
 
 static uint8_t get_speed_callback(uint8_t *data){
-    int16_t speed = ch1Speed[(ch1SpeedWr + 1u) % PING_PONG_SIZE];
+    int16_t speed = getSpeed(); 
 
     data[0] = speed & 0xFF;
     data[1] = (speed >> 8u) & 0xFF;
@@ -64,6 +64,7 @@ static uint8_t get_pedal_callback(uint8_t *data){
 static uint8_t get_starg_callback(uint8_t *data){
     return WR_OK;
 }
+
 static uint8_t set_starg_callback(uint8_t *data){
     uint32_t mms = data[1] | (data[0] << 8u);
     
