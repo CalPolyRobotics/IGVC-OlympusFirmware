@@ -27,6 +27,7 @@ typedef struct hermesData{
 
 extern hermesData_t hermesData;
 
+void commsSetSpeed(uint8_t* data);
 commsStatus_t getHermesStatus();
 commsStatus_t updateHermesAutoman();
 commsStatus_t updateHermesSpeed();
