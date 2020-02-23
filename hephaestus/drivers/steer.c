@@ -7,11 +7,12 @@
 
 #define POT_DEG_SLOPE     ((MAX_RIGHT_POT - MAX_LEFT_POT)/(MAX_RIGHT_DEG - MAX_LEFT_DEG))
 #define POT_DEG_INTERCEPT (MAX_LEFT_POT - (MAX_LEFT_DEG * POT_DEG_SLOPE))
+#define CORRECTION_OFFSET ((uint8_t)100u)
 
-#define BANG_BANG_DUTY ((uint8_t)75u) // TODO: changed from 50
+#define BANG_BANG_DUTY ((uint8_t)85u) // TODO: changed from 50
 
 uint16_t steeringPot = 0u;
-uint16_t targetSteerValue = 0u;
+uint16_t targetSteerValue = MIDDLE_POT;
 
 static uint16_t deg_to_pot(uint8_t deg);
 
@@ -58,7 +59,7 @@ void update_steer_control_loop()
 
         // TODO: For Testing
         //targetSteerValue = 2048u;
-        targetSteerValue = MAX_LEFT_POT;//MIDDLE_POT;
+        //targetSteerValue = MAX_RIGHT_POT -  100;
 
         if(steeringPot < (targetSteerValue - DEADZONE))
         {
@@ -94,7 +95,7 @@ void update_steer_control_loop()
 
 static uint16_t deg_to_pot(uint8_t deg)
 {
-    return (deg * POT_DEG_SLOPE) + POT_DEG_INTERCEPT;
+    return (deg * POT_DEG_SLOPE) + POT_DEG_INTERCEPT + CORRECTION_OFFSET;
 }
 
 // TODO - verify these are the proper drive directions

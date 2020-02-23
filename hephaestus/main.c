@@ -17,7 +17,7 @@ int main(void)
 {
     remapVectorTable();
 
-    //HAL_StatusTypeDef status;
+    HAL_StatusTypeDef status;
     HAL_Init();
 
     /* Configure the system clock to 48 MHz */
@@ -34,18 +34,21 @@ int main(void)
     MX_ADC1_Init();
     //init_Timer();
 
-    //uint8_t data;
+    uint8_t data;
 
-    uint32_t DELAY_CNT = 100000;
+    //uint32_t DELAY_CNT = 100000;
     //uint8_t duty_cycle = 0;
     //uint8_t direction = 0;
     while (1)
     {
 
+        /*
         for(int i = 0; i < DELAY_CNT; i++) {
             i++;
         }
-        /*
+        */
+        
+        /* // COOL PWM
         if(direction == 1) {
             duty_cycle = (duty_cycle + 1) % 101;
             if(duty_cycle >= 100) {
@@ -64,12 +67,10 @@ int main(void)
         tim1_set_channel_duty(4, duty_cycle);
         */
 
-        /*
         status = readByte(&data);
         if(status == WR_OK){
             runCommsFSM(data);
         }
-        */
 
         //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
         //TIM1->CCR1 = 12000;

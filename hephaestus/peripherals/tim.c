@@ -6,7 +6,7 @@
 #include "stm32f0xx_hal_tim_ex.h"
 
 // TODO - Need to figure out the exact value for the proper drive frequency
-#define ARR_20KHZ ((uint16_t)4545)   //24000)
+#define ARR_20KHZ ((uint16_t)5545)   //24000)
 #define ARR_DEFAULT ARR_20KHZ
 
 
