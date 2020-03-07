@@ -53,10 +53,7 @@ static void commsSetTurnSignal(uint8_t* data){return;}
 static void commsSetHeadlights(uint8_t* data){return;}
 static void commsSetMiscLights(uint8_t* data){return;}
 static void commsSetBrake(uint8_t* data){return;}
-static void commsSetSpeed(uint8_t* data){
-    writeSpeedDAC((( (uint16_t) data[1]) << 8) | data[0]);
-    return;
-}
+
 static uint8_t inputBuf[256];
 
 static packetResponse_t response[] = {

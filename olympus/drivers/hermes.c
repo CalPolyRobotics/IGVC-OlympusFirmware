@@ -16,6 +16,11 @@
 
 hermesData_t hermesData;
 
+void commsSetSpeed(uint8_t* data){
+    uint16_t targetSpeed = (((uint16_t) data[1]) << 8u) | data[0];
+    updateHermesSetSpeedTarget(targetSpeed);
+}
+
 commsStatus_t getHermesStatus()
 {
     return messageSubmodule(HERMES, HERMES_STATUS, NULL, 0u, 0u, SPI_TIMEOUT);
