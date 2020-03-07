@@ -429,7 +429,9 @@ static void console_getSpeedTarget(uint32_t argc, char** argv)
 // TODO - Implement This
 static void console_getSpeed(uint32_t argc, char** argv)
 {
-    printf("%d\r\n", 0);
+    updateHermesSpeed();
+    int16_t speed = (hermesData.speed[0] <<8) | hermesData.speed[1];
+    printf("%d is the current speed\n", speed);
 }
 
 static void console_setSteerTarget(uint32_t argc, char** argv)
